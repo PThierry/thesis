@@ -17,6 +17,7 @@ LATEX=pdflatex
 LATEXOPT=
 RM=rm
 RMFLAGS=-rf
+MAKE=make
 
 #############################################################################
 ## project's source and generated files
@@ -30,7 +31,19 @@ TODEL	     = tags *~ .*.swp
 ## rules
 #############################################################################
 
-all :
+help :
+	@echo "- all 		: this help message"
+	@echo "- pdf		: compile the document"
+	@echo "- view		: display the compiled document if present"
+	@echo "- clean		: cleanup temporary files"
+	@echo "- distclean 	: cleanup all files but sources"
+	@echo "- install	: install the document"
+
+
+
+all : help
+
+pdf :
 	$(LATEX) $(LATEXOPT) $(SOURCE)
 	$(LATEX) $(LATEXOPT) $(SOURCE)
 	$(LATEX) $(LATEXOPT) $(SOURCE)
@@ -50,5 +63,5 @@ install : $(TARGET)
 
 view:
 	if [ ! -f $(TARGET) ]; then make all; fi
-	okular $(TARGET)
+	xpdf $(TARGET)
 
