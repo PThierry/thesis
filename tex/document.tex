@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  mar. 24 nov. 2009 19:46:57 CET Philippe THIERRY
-%% Last update lun. 07 déc. 2009 23:21:41 CET Philippe THIERRY
+%% Last update Fri Mar 12 15:27:37 2010 Philippe THIERRY
 %%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -21,13 +21,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage[hundred]{vrsion}				% versioning support
-\usepackage[utf8]{inputenc}				% char format
+\usepackage[latin1]{inputenc}				% char format
 \usepackage{listings}					% lists support. Used for code
 \usepackage{color}					% basic color support
 \usepackage[T1]{fontenc} 				% caracteres norme iso-8859.
 			 				% risque de ne pas marcher avec les fichiers crees
                          				% sous windows.
-\usepackage[francais]{babel}				% french support
+\usepackage[english,francais]{babel}				% french support
 \usepackage{amsfonts}					% special fonts support (math, etc)
 \usepackage{amssymb}					% special symbols support
 \usepackage{graphicx}					% graphics integration support
@@ -88,7 +88,8 @@
 
 %\input{macros/myminitoc.sty}
 
-
+% add these dynamic configuration
+\input{config/config.tex}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -125,7 +126,7 @@
 } 							%
 
 
-\input{includes/titlepage.tex}
+\input{includes/\lang/titlepage.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Headers and footers configuration
@@ -142,9 +143,15 @@
 %opening
 \begin{document}
 
+\ifthenelse{\equal{\lang}{fr}} {
+  \selectlanguage{francais}
+}{
+  \selectlanguage{english}
+}
+
+
 \renewcommand{\headrulewidth}{0pt}			% disactive header bar
-\renewcommand{\mtctitle}{Sommaire}
-\renewcommand\bibname{Bibliographie}
+
 
 \fancyhead{}
 \fancyfoot{}
@@ -157,7 +164,7 @@
 \cleardoublepage					% double blank page
 \frontmatter						% out of TOC chapterss
 
-\input{includes/resume.tex}				% insert abstracts
+\input{includes/\lang/resume.tex}				% insert abstracts
 
 \backmatter						% starting TOC chapters
 
@@ -190,29 +197,32 @@
 
 \setcounter{chapter}{1}
 
-\input{includes/introduction.tex}
+\input{includes/\lang/intro/introduction.tex}
 \setcounter{chapter}{2}
 
-\input{includes/problematique.tex}
+\input{includes/\lang/intro/problematique.tex}
 \setcounter{chapter}{3}
 
-% first part : state of art
-\part{État de l'art des solutions d'ordonnancement}
-\input{includes/state_of_art_WCET.tex}
+% part 1 title
+\input{includes/\lang/part1/title.tex}
+
+\input{includes/\lang/part1/state_of_art_WCET.tex}
 \setcounter{chapter}{4}
-\input{includes/state_of_art_IOSCHED.tex}
+\input{includes/\lang/part1/state_of_art_IOSCHED.tex}
 \setcounter{chapter}{5}
-\input{includes/state_of_art_RTSCHED.tex}
+\input{includes/\lang/part1/state_of_art_RTSCHED.tex}
 \setcounter{chapter}{6}
-\input{includes/state_of_art_SMPSCHED.tex}
+\input{includes/\lang/part1/state_of_art_SMPSCHED.tex}
 \setcounter{chapter}{7}
 
-\part{État de l'art des solutions de traitement de flux temps réel}
-\input{includes/state_of_art_XENOMAI.tex}
+% part 2 title
+\input{includes/\lang/part2/title.tex}
+
+\input{includes/\lang/part2/state_of_art_XENOMAI.tex}
 \setcounter{chapter}{8}
-\input{includes/state_of_art_RTAI.tex}
+\input{includes/\lang/part2/state_of_art_RTAI.tex}
 \setcounter{chapter}{9}
-\input{includes/state_of_art_LITMUSRT.tex}
+\input{includes/\lang/part2/state_of_art_LITMUSRT.tex}
 \setcounter{chapter}{10}
 
 % bibliographie
