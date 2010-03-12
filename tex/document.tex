@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  mar. 24 nov. 2009 19:46:57 CET Philippe THIERRY
-%% Last update Fri Mar 12 15:27:37 2010 Philippe THIERRY
+%% Last update Fri Mar 12 16:53:14 2010 Philippe THIERRY
 %%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -122,8 +122,8 @@
  breakautoindent=true, % 				%
  captionpos=b,% 					%
  xrightmargin=0.5cm, % 					%
- xleftmargin=0.5cm 					%
-} 							%
+     xleftmargin=0.5cm 					%
+    } 							%
 
 
 \input{includes/\lang/titlepage.tex}
@@ -206,24 +206,23 @@
 % part 1 title
 \input{includes/\lang/part1/title.tex}
 
-\input{includes/\lang/part1/state_of_art_WCET.tex}
 \setcounter{chapter}{4}
-\input{includes/\lang/part1/state_of_art_IOSCHED.tex}
+\input{includes/\lang/part1/definitions_of_inputs.tex}
+
 \setcounter{chapter}{5}
-\input{includes/\lang/part1/state_of_art_RTSCHED.tex}
+\input{includes/\lang/part1/scheduling_policies.tex}
+
 \setcounter{chapter}{6}
-\input{includes/\lang/part1/state_of_art_SMPSCHED.tex}
+\input{includes/\lang/part1/measurements_testability.tex}
+
 \setcounter{chapter}{7}
+\input{includes/\lang/part1/hardware_impacts.tex}
+
+\setcounter{chapter}{8}
+\input{includes/\lang/part1/software_impacts.tex}
 
 % part 2 title
 \input{includes/\lang/part2/title.tex}
-
-\input{includes/\lang/part2/state_of_art_XENOMAI.tex}
-\setcounter{chapter}{8}
-\input{includes/\lang/part2/state_of_art_RTAI.tex}
-\setcounter{chapter}{9}
-\input{includes/\lang/part2/state_of_art_LITMUSRT.tex}
-\setcounter{chapter}{10}
 
 % bibliographie
 %\input{includes/bibliography.tex}
