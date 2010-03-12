@@ -22,10 +22,11 @@ MAKE=make
 #############################################################################
 ## project's source and generated files
 #############################################################################
-TARGET	     = these_doctorat.pdf
+TARGET	     = these_doctorat
 SOURCE	     = document.tex
 OBJS	     = $(SOURCE:.tex=.aux) $(SOURCE:.tex=.log) $(SOURCE:.tex=.out) $(SOURCE:.tex=.toc) $(SOURCE:.tex=.ist) $(SOURCE:.tex=.glo) $(SOURCE:.tex=.idx) $(SOURCE:.tex=.lof)
 TODEL	     = tags *~ .*.swp
+LANG	     = $(shell cat config/config.tex|grep "newcommand.*lang"|sed -re "s:.*\{([fe][rn])\}$$:\1:")
 
 #############################################################################
 ## rules
@@ -47,7 +48,7 @@ pdf :
 	$(LATEX) $(LATEXOPT) $(SOURCE)
 	$(LATEX) $(LATEXOPT) $(SOURCE)
 	$(LATEX) $(LATEXOPT) $(SOURCE)
-	mv $(SOURCE:.tex=.pdf) $(TARGET)
+	mv $(SOURCE:.tex=.pdf) $(TARGET)_$(LANG).pdf
 
 clean : 
 	$(RM) $(RMFLAGS) $(OBJS) $(TODEL)

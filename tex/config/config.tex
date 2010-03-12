@@ -1,0 +1,22 @@
+%%
+%%
+%% config.tex for these in /doctorat/these/tex/config
+%%
+%% Made by Philippe THIERRY
+%% Login   <Philippe THIERRYreseau-libre.net>
+%%
+%% Started on  Fri Mar 12 14:59:59 2010 Philippe THIERRY
+%% Last update Fri Mar 12 21:58:39 2010 Philippe THIERRY
+%%
+
+\newcommand{\lang}{fr}
+
+\newcommand{\DocLastPage}{\pageref{LastPage}}
+
+\ifthenelse{\equal{\lang}{fr}}{
+  \renewcommand{\mtctitle}{Sommaire}
+  \renewcommand\bibname{Bibliographie}
+}{
+  \renewcommand{\mtctitle}{Summary}
+  \renewcommand\bibname{Bibliography}
+}
