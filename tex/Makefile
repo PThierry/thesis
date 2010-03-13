@@ -65,5 +65,5 @@ install : $(TARGET)
 
 view:
 	if [ ! -f $(TARGET) ]; then make all; fi
-	xpdf $(TARGET)
+	xpdf $(TARGET)_$(LANG).pdf
 
