@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  mar. 24 nov. 2009 19:46:57 CET Philippe THIERRY
-%% Last update Fri Mar 12 21:52:48 2010 Philippe THIERRY
+%% Last update Sat Mar 13 12:19:25 2010 Philippe THIERRY
 %%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -57,6 +57,8 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{alltt}
+\usepackage[sectionbib]{natbib}
+\usepackage{chapterbib}
 
 % charts support
 \usepackage{pstricks}
@@ -135,7 +137,7 @@
 \pagestyle{fancy}					% specify page style
 \pagenumbering{roman}					% specify page numbering
 \fancyhf{}						% clear previous headers
-\addtolength{\headheight}{48pt}				% update header height
+%\addtolength{\headheight}{48pt}				% update header height
 
 %\usepackage[first]{draftcopy}				% mark doc as 'draft'
 
@@ -149,6 +151,9 @@
   \selectlanguage{english}
 }
 
+\dominitoc
+\dominilot
+\dominilof
 
 \renewcommand{\headrulewidth}{0pt}			% disactive header bar
 
@@ -166,7 +171,7 @@
 
 \input{includes/\lang/resume.tex}				% insert abstracts
 
-\backmatter						% starting TOC chapters
+\mainmatter						% starting TOC chapters
 
 \cleardoublepage					% double blank page
 %\dominitoc
@@ -195,30 +200,30 @@
 % chapter. To be fixed in the future.
 %
 
-\setcounter{chapter}{1}
+%\setcounter{chapter}{1}
 
 \input{includes/\lang/intro/introduction.tex}
-\setcounter{chapter}{2}
+%\setcounter{chapter}{2}
 
 \input{includes/\lang/intro/problematique.tex}
-\setcounter{chapter}{3}
+%\setcounter{chapter}{3}
 
 % part 1 title
 \input{includes/\lang/part1/title.tex}
 
-\setcounter{chapter}{4}
+%\setcounter{chapter}{4}
 \input{includes/\lang/part1/definitions_of_inputs.tex}
 
-\setcounter{chapter}{5}
+%\setcounter{chapter}{5}
 \input{includes/\lang/part1/scheduling_policies.tex}
 
-\setcounter{chapter}{6}
+%\setcounter{chapter}{6}
 \input{includes/\lang/part1/measurements_testability.tex}
 
-\setcounter{chapter}{7}
+%\setcounter{chapter}{7}
 \input{includes/\lang/part1/hardware_impacts.tex}
 
-\setcounter{chapter}{8}
+%\setcounter{chapter}{8}
 \input{includes/\lang/part1/software_impacts.tex}
 
 % part 2 title
@@ -226,6 +231,8 @@
 
 % bibliographie
 %\input{includes/\lang/bibliography.tex}
+
+\backmatter
 
 \printindex
 

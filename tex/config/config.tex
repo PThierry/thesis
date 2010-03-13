@@ -6,11 +6,15 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 14:59:59 2010 Philippe THIERRY
-%% Last update Fri Mar 12 21:58:39 2010 Philippe THIERRY
+%% Last update Sat Mar 13 16:21:41 2010 Philippe THIERRY
 %%
 
-\newcommand{\lang}{fr}
+\newcommand{\lang}{fr}	% lang of the document
+\newcommand{\mtoc}{y}	% minitoc ? y/n
 
+%%
+%% specific command
+%%
 \newcommand{\DocLastPage}{\pageref{LastPage}}
 
 \ifthenelse{\equal{\lang}{fr}}{
@@ -20,3 +24,8 @@
   \renewcommand{\mtctitle}{Summary}
   \renewcommand\bibname{Bibliography}
 }
+
+\newcommand{\doMinitoc}{
+\ifthenelse{\equal{\mtoc}{y}}{
+\minitoc
+}{}}

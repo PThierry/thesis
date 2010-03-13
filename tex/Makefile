@@ -46,6 +46,7 @@ all : help
 
 pdf :
 	$(LATEX) $(LATEXOPT) $(SOURCE)
+	makeindex $(SOURCE:.tex=.idx)
 	$(LATEX) $(LATEXOPT) $(SOURCE)
 	$(LATEX) $(LATEXOPT) $(SOURCE)
 	mv $(SOURCE:.tex=.pdf) $(TARGET)_$(LANG).pdf
