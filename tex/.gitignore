@@ -12,3 +12,9 @@
 *.mtc*
 *.mlf*
 *.mlt*
+*.bmt
+*.ilg
+*.ind
+document-fig*.tex
+document-fig*.pdf
+document-fig*.ps

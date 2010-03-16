@@ -14,7 +14,7 @@
 #############################################################################
 
 LATEX=pdflatex
-LATEXOPT=
+LATEXOPT=-shell-escape
 RM=rm
 RMFLAGS=-rf
 MAKE=make
@@ -26,7 +26,7 @@ TARGET	     = these_doctorat
 SOURCE	     = document.tex
 OBJS	     = $(SOURCE:.tex=.aux) $(SOURCE:.tex=.log) $(SOURCE:.tex=.out) $(SOURCE:.tex=.toc) $(SOURCE:.tex=.ist) $(SOURCE:.tex=.glo) $(SOURCE:.tex=.idx) $(SOURCE:.tex=.lof)
 TODEL	     = tags *~ .*.swp
-LANG	     = $(shell cat config/config.tex|grep "newcommand.*lang"|sed -re "s:.*\{([fe][rn])\}$$:\1:")
+LANG	     = $(shell cat config/config.tex|grep "newcommand.*lang"|sed -re "s:.*\{([fe][rn])\}.*:\1:")
 
 #############################################################################
 ## rules
@@ -45,10 +45,10 @@ help :
 all : help
 
 pdf :
-	$(LATEX) $(LATEXOPT) $(SOURCE)
+	$(LATEX) $(LATEXOPT) $(LATEXOPT) $(SOURCE)
 	makeindex $(SOURCE:.tex=.idx)
-	$(LATEX) $(LATEXOPT) $(SOURCE)
-	$(LATEX) $(LATEXOPT) $(SOURCE)
+	$(LATEX) $(LATEXOPT) $(LATEXOPT) $(SOURCE)
+	$(LATEX) $(LATEXOPT) $(LATEXOPT) $(SOURCE)
 	mv $(SOURCE:.tex=.pdf) $(TARGET)_$(LANG).pdf
 
 clean : 

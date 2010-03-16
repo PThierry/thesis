@@ -6,13 +6,20 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
-%% Last update Sat Mar 13 16:16:13 2010 Philippe THIERRY
+%% Last update Tue Mar 16 11:49:55 2010 Philippe THIERRY
 %%
 
 \chapter{Impact des éléments matériels sur le temps réel}
 \doMinitoc
 
 \section{Éléments matériels en jeu dans les architectures modernes}
+
+\begin{figure}
+\input{figures/gal_hw_diag.tex}
+\caption{Schéma général des composants matériels impactant le temps réel}
+\end{figure}
+
+
 
 \section{Les contrôleurs d'entrée/sortie}
 
@@ -25,6 +32,96 @@
 \section{Les processeurs}
 
 \subsection{Les algorithmes de gestion de cache}
+
+\paragraph{}
+Le cache est une mémoire à accès rapide, permettant d'accélérer les accès mémoire du CPU, en mettant en cache
+les données (code et data) \cite{cachalgo}.\\
+Les algorithmes de cache ont divers niveaux d'associativité :
+\begin{itemize}
+\item Les algotithmes de type {\textit one-way associative} associent une cellule mémoire à une et une seule
+cellule de cache. Il s'agit d'un algorithme surjectif, du fait de la taille du cache.
+\item Les algorithmes de type {\textit 2-way associative} et supérieur associe une cellule mémoire avec deux (resp. 3, 4, ...)
+cellules de cache. Cette associativité permet d'optimiser l'écrasement des cellules du cache en donnant un choix de positionnement
+à la cellule mémoire à mettre en cache. Les algorithmes de ce type se différencient par leur politique de choix de la cellule à remplacer.
+\end{itemize}
+Il existe plusieurs algorithmes de gestion du cache, tous de type probabiliste, ce qui les rend malheureusement incompatibles avec les
+besoins du temps réel dur.
+\paragraph{}
+En conséquence, les systèmes temps réel très contraints, comme dans l'aviation ou le spacial, utilisent des architectures
+avec cache désactivé.
+\paragraph{}
+Cette section fournit une courte description des différents algorithmes de gestion de cache. Les problématiques matérielles ne sont
+pas pris en compte ici.
+
+\subsubsection{Least Recently Used}
+\paragraph{}
+L'algorithme LRU s'appuie sur les dates d'accès aux items du cache. En cas de cache-miss, c'est l'élément qui a été accédé
+il y a le plus longtemps qui est remplacé.\\
+Pour des processus faisant des accès fréquents à un même espace mémoire, comme dans le cas de processus calculatoires par
+exemple, LRU est efficace.
+\subsubsection{Most Recently Used}
+\paragraph{}
+L'algorithme MRU, à l'opposé du LRU, remplace l'élément dont l'accès est le plus récent. Il considère l'hypothèse selon laquelle un
+élément accédé très récement ne le sera plus avant une certaine durée.\\
+MRU est plus efficace pour des processus faisant des accès mémoire cycliques.
+
+\subsubsection{Pseudo-LRU}
+\paragraph{}
+L'algorithme Pseudo-LRU utilise un arbre binaire représentant l'ensemble des cellules de caches pouvant être remplacées. Chaque cellule possédant un
+tag fournissant une indication sur l'emplacement (branche droite, branche gauche) de la cellule qui sera remplacée. Ce tag est mis à jour à
+chaque traversée de l'arbre.\\
+Il s'agit d'un algorithme jugé efficace en comparaison au LRU pour les caches dont l'associativité est supérieure à 4. Il est utilisé dans les
+architectures Intel 486, et dans les architecture PowerPC, comme le PowerPC G4 de Freescale \cite{plru}.
+
+\subsubsection{Segmented LRU}
+
+\paragraph{}
+L'algorithme SLRU utilise deux segments de caches complémentaires, dont les cellules sont ordonnées de la dernière utilisée (MRU) à la plus anciènement utilisée (LRU) :\\
+Le premier segment, nommé {\it probationary segment}, est celui sur lequel sont mises les données
+mémoire, en cas de cache miss. C'est également le seul segment où des données peuvent être retirées du cache.\\
+Le second segment, nommé {\it protected segment}, contient la liste des cellules de cache ayant été accédées au moins
+deux fois.
+
+\begin{figure}
+\input{figures/slru_1.tex}
+\input{figures/slru_2.tex}
+\caption{Intégration et déplacement des données accédées féquement}
+\end{figure}
+
+
+\paragraph{}
+En effet, lorsqu'une cellule est accédée une seconde fois, après un premier cache miss, celle-ci est transférée sur le segment protégé,
+en tête de liste coté MRU (Most Recently Used).\\
+Cela a pour conséquence, si le segment protégé est plein, de faire descendre la cellule la plus anciènement accédée sur le segment probatoire, en tête de
+liste coté MRU, ceci afin de donner une deuxième chance à toute donnée accédée au moins deux fois. Lorsque le segment probatoire est plein et que de nouvelles
+données y sont intégrées, que ce soit via un déplacement d'une cellule du segment protégé ou du fait d'un cache miss, la cellule la moins récement utilisée et écrasée.
+
+\begin{figure}
+\input{figures/slru_3.tex}
+\caption{Principe de deuxième chance du SLRU}
+\end{figure}
+
+\paragraph{}
+Cet algorithme fait donc une diifférence entre les données accédées souvent (au moins deux fois) et les données accédées rarement (une fois) pendant leur durée de vie en cache.
+Il permet donc d'optimiser la gestion du cache lors d'accès mémoire peu fréquents.\\
+La taille des deux segments est dépendante dynamiquement du schéma d'entrée soortie.
+
+\subsubsection{2-Way Set Associative}
+
+Cet algorithme permet, pour chaque élément mémoire à charger en cache, de pouvoir se placer à deux endroits dans
+le cache. Ces deux positions sont dépendantes de l'adresse physique en mémoire centrale de la donnée.\\
+La cellule choisie est celle étant la moins récement utilisée, cela implique, pour chaque paire de cellules du chache,
+un champ indiquant laquelle est la moins récement utilisée.
+
+\subsubsection{Direct Mapped}
+
+L'algorithme Direct Mapped est un algorithme simple, optimisant le coût d'exécution du choix de la cellule.
+Un élément mémoire n'est placé qu'à un seul endroit dans le cache, en fonction de son adresse physique, quelle que soit la donnée précédement présente.
+
+\subsubsection{Least Frequently Used}
+
+Lors d'un cache miss, la cellule utilisée pour charger les données mémoire est celle dont le contenu est utilisé le moins fréquement. En cas d'égalité de fréquence, l'algorithme LRU est utilisé pour départager les cellules.
+
 
 \subsection{Les pipelines}
 
