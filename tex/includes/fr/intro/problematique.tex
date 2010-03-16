@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  mer. 25 nov. 2009 20:37:12 CET Philippe THIERRY
-%% Last update Tue Mar 16 13:40:14 2010 Philippe THIERRY
+%% Last update Tue Mar 16 17:03:30 2010 Philippe THIERRY
 %%
 
 
@@ -14,6 +14,22 @@
 \doMinitoc
 
 \section{Besoins en terme de flux temps réels}
+
+\subsection{Rappels}
+\paragraph{}
+Aujourd'hui, la plupart des réseaux s'appuient sur des protocoles asynchrones de type
+{\it best effort} comme \index{Protocole!IP}\useglosentry{*}IP.
+Il existe des cependant des cas particuliers (réseaux hertziens, réseaux très contraints,
+réseaux avec forte garantie de latence de bout en bout), où il est nécessaire de fournir
+des solutions systèmes permettant, tant au niveau protocolaire qu'au niveau noeud de
+communication, de fournir des garanties fortes sur la traversée des données.
+
+\paragraph{}
+De plus, avec l'accroissement des bandes passantes, il devient impératif de considérer
+la problématique de temps de traversée au niveau des routeurs.\\
+La coût du traitement logiciel qu'implique le routage d'un paquet au sein d'un noeud de
+communication, impacte directement ces performances en terme de bande passante supportée,
+et donc sa capacité à s'intégrer en c{\oe}ur de réseau.
 
 \subsection{Les besoins en terme de latences garanties}
 

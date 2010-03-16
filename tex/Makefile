@@ -50,6 +50,7 @@ all : help
 pdf :
 	$(LATEX) $(LATEXOPT) $(LATEXOPT) $(SOURCE)
 	makeindex $(SOURCE:.tex=.idx)
+	makeindex -s $(SOURCE:.tex=.ist) -o $(SOURCE:.tex=.gls) $(SOURCE:.tex=.glo)
 	$(LATEX) $(LATEXOPT) $(LATEXOPT) $(SOURCE)
 	$(LATEX) $(LATEXOPT) $(LATEXOPT) $(SOURCE)
 	mv $(SOURCE:.tex=.pdf) $(TARGET)_$(LANG).pdf
