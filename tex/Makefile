@@ -69,5 +69,5 @@ install : $(TARGET)
 
 view:
 	if [ ! -f $(TARGET) ]; then make all; fi
-	xpdf $(TARGET)_$(LANG).pdf
+	acroread $(TARGET)_$(LANG).pdf
 

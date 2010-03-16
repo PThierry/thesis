@@ -6,26 +6,26 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  mer. 25 nov. 2009 20:37:12 CET Philippe THIERRY
-%% Last update Tue Mar 16 17:29:23 2010 Philippe THIERRY
+%% Last update Tue Mar 16 22:06:57 2010 Philippe THIERRY
 %%
 
 
 \chapter{PROBLÉMATIQUE}
 \doMinitoc
 
-\section{Besoins en terme de flux temps réels}
+\section{Besoins en terme de temps réels}
 
 \subsection{Rappels}
 \paragraph{}
 Aujourd'hui, la plupart des réseaux s'appuient sur des protocoles asynchrones de type
-{\it best effort} comme \index{Protocole!IP}\gls{ip}IP.
-Il existe des cependant des cas particuliers (réseaux hertziens, réseaux très contraints,
+{\it best effort} comme \index{Protocole!IP}\gls{ip}.
+Il existe cependant des cas particuliers (réseaux hertziens, réseaux très contraints,
 réseaux avec forte garantie de latence de bout en bout), où il est nécessaire de fournir
 des solutions systèmes permettant, tant au niveau protocolaire qu'au niveau noeud de
 communications, de fournir des garanties fortes sur la traversée des données.
 
 \paragraph{}
-De plus, avec l'accroissement des bandes passantes, il devient impératif de considérer
+L'accroissement des bandes passantes est aujourd'hui tel qu'il devient impératif de considérer
 la problématique de temps de traversée au niveau des routeurs.\\
 La coût du traitement logiciel qu'implique le routage d'un paquet au sein d'un noeud de
 communications, impacte directement ces performances en terme de bande passante supportée,
@@ -41,7 +41,30 @@ La finesse de la répartition temporelle croît avec le besoin en terme de bande p
 Tous ces éléments ont comme besoin la définition d'une latence de traversée maximum garantie,
 que ce soit au niveau n{\oe}ud de communications ou au niveau traversée de réseau.
 
-La section suivante décrit plus en avant les origines de ce besoin.
+\subsection{De la gestion de flux à l'ordonnancement}
+
+En considérant le schéma suivant :
+
+\begin{figure}[h]
+\input{figures/problematique_fw_base.tex}
+\caption{Routage de flux : modèle macroscopique générique}
+\end{figure}
+
+On peut définir rapidement, pour un échantillon $E$ de mesure de flux donné, un coût maximum de traversée $f$ qui est le suivant :
+
+$$\forall i \in E, \delta t_i = t_{in,i} - t_{out,i}), f = max_{i \in E}(\delta t_i), $$
+
+Pour une charge processeur maximum $U$ accordé au traitement de flux réseau, on doit s'assurer de
+l'hypothèse suivante :
+$$\sum_{i \in n} f(i) < U$$
+
+\paragraph{}
+Malheureusement, on reste ici dans un environement idéal, où non seulement la charge processeur qu'on
+alloue au traitement réseau est garantie, mais également ou le flux réseau est considéré comme une tache
+au profil unique.\\
+Lorsqu'un traitement à valeur ajoutée est exécuté dans le cadre d'un routage de flux, ce dernier est
+un des éléments d'entrée impactant le coût de son routage, comme par exemple dans le cadre de règle de
+filtrage, ce qui rend ce modèle caduque.
 
 \section{Cas d'usage}
 
