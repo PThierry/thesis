@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  mar. 24 nov. 2009 19:46:57 CET Philippe THIERRY
-%% Last update Wed Mar 17 10:26:26 2010 Philippe THIERRY
+%% Last update Wed Mar 17 15:30:53 2010 Philippe THIERRY
 %%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -27,7 +27,7 @@
 \usepackage[T1]{fontenc} 				% caracteres norme iso-8859.
 			 				% risque de ne pas marcher avec les fichiers crees
                          				% sous windows.
-\usepackage[english,francais]{babel}				% french support
+\usepackage[english,francais]{babel}			% french support
 \usepackage{amsfonts}					% special fonts support (math, etc)
 \usepackage{amssymb}					% special symbols support
 \usepackage{graphicx}					% graphics integration support
@@ -49,6 +49,7 @@
             linkcolor=blue
            ]{hyperref}					% allow interal links
            						% and doc content list 
+\usepackage[all]{hypcap}
 \usepackage{multirow}
 \usepackage{multicol}
 \usepackage{times}
@@ -60,7 +61,7 @@
 \usepackage[sectionbib]{natbib}
 \usepackage{chapterbib}
 
-\usepackage[Glenn]{fncychap}				% 'lenny' chapter titles
+\usepackage[Glenn]{fncychap}				% 'Glenn' chapter titles
 
 % charts support
 \usepackage{pdftricks}
@@ -229,16 +230,21 @@
 \input{includes/\lang/part1/software_impacts.tex}
 
 % part 2 title
-%\input{includes/\lang/part2/title.tex}
+\input{includes/\lang/part2/title.tex}
 
-% bibliographie
-%\input{includes/\lang/bibliography.tex}
+\input{includes/\lang/part2/state_of_art_hardware_solutions.tex}
+
+\input{includes/\lang/part2/state_of_art_software_solutions.tex}
 
 \backmatter
 
 \input{includes/\lang/appendix/title.tex}
 
 \printglossary
+
+% bibliographie
+%\input{includes/\lang/bibliography.tex}
+
 \printindex
 
 \end{document}

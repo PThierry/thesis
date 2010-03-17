@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:23:03 2010 Philippe THIERRY
-%% Last update Tue Mar 16 17:34:46 2010 Philippe THIERRY
+%% Last update Wed Mar 17 12:53:23 2010 Philippe THIERRY
 %%
 
 \chapter{DÉFINITION DES DONNÉES D'ENTRÉE}
@@ -29,11 +29,20 @@ Dans un environnement idéal, l'exécution d'une tache est garantie inférieure à c
 
 \subsection{Les ensembles périodiques}
 
+Les taches sont créées à une période fixe.
+
 \subsection{Les ensembles sporadiques}
+
+Les taches sont créées avec une période \textit{minimum} fixe, aucun maximum n'est définit.
 
 \subsection{Les ensembles apériodiques}
 
+La création de tache se fait de manière aléatoire dans le temps.
+
 \subsection{Les ensembles fenêtrés}
+
+Une fenêtre de temps ${\Delta}t$ est définie, et on lui associe un nombre d'interruptions
+maximum. Cette valeur est utilisée en entrée de la mesure du WCET.
 
 \section{La dynamique des ensembles de taches}
 
