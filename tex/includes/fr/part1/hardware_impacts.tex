@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
-%% Last update Wed Mar 17 17:50:22 2010 Philippe THIERRY
+%% Last update Thu Mar 18 11:07:59 2010 Philippe THIERRY
 %%
 
 \chapter{IMPACT DES ÉLÉMENTS MATÉRIELS SUR LE TEMPS RÉEL}
@@ -120,6 +120,17 @@ cellule de cache. Il s'agit d'un algorithme surjectif, du fait de la taille du c
 cellules de cache. Cette associativité permet d'optimiser l'écrasement des cellules du cache en donnant un choix de positionnement
 à la cellule mémoire à mettre en cache. Les algorithmes de ce type se différencient par leur politique de choix de la cellule à remplacer.
 \end{itemize}
+On a ainsi :
+\paragraph{2-Way Set Associative}
+Cet algorithme permet, pour chaque élément mémoire à charger en cache, de pouvoir se placer à deux endroits dans
+le cache. Ces deux positions sont dépendantes de l'adresse physique en mémoire centrale de la donnée.\\
+La cellule choisie est celle étant la moins récement utilisée, cela implique, pour chaque paire de cellules du chache,
+un champ indiquant laquelle est la moins récement utilisée.
+
+\paragraph{Direct Mapped}
+L'algorithme Direct Mapped est un algorithme simple, optimisant le coût d'exécution du choix de la cellule.
+Un élément mémoire n'est placé qu'à un seul endroit dans le cache, en fonction de son adresse physique, quelle que soit la donnée précédement présente.
+
 
 \paragraph{}
 Lorsqu'une donnée n'est pas en cache, on parle de {\it cache-miss}. Le processeur va successivement vérifier les caches L1, L2 et L3 (si
@@ -200,35 +211,41 @@ recopie à partir de la mémoire centrale.
 Le snarfing consiste à associer la détection d'une modification d'une donnée en cache à l'espionnage du bus de donnée. En espionnant
 le bus, il est capable à tout instant de mettre à jour la cellule impactée, et de maintenir la consistance.
 
+\subsubsection{Syncrhonisation caches/mémoire centrale}
 \paragraph{}
 Lorsque des données sont modifiées en local sur le cache, il est nécessaire de mettre à jour la mémoire centrale afin de prendre
-en compte ce changement.\\
+en compte ce changement.
+
+\paragraph{write-back}
 Le cache garde en mémoire, pour chaque cellule, sont état. Lorsque la cellule est écrasée, ou que le cache est vidé, les données
 modifiées localement sont synchronisées avec la mémoire centrale.\\
 La mise à jour de la mémoire centrale n'est pas synchrone avec la modification locale. Cela implique, au niveau logiciel, de prévoir
 les problèmes d'incohérence sur les architectures multi-c{\oe}urs, au travers de l'usage des {\it \index{Memory barrier}memory barriers}.
 
+\paragraph{write-through}
+Une écriture sur cache implique une remontée de la mise à jour de la donnée, afin de maintenir une cohésion.
+
 \subsubsection{Les algorithmes de gestion de cache}
 
-\paragraph{Least Recently Used}
+\paragraph{\index{Cache!LRU}Least Recently Used}
 L'algorithme LRU s'appuie sur les dates d'accès aux items du cache. En cas de cache-miss, c'est l'élément qui a été accédé
 il y a le plus longtemps qui est remplacé.\\
 Pour des processus faisant des accès fréquents à un même espace mémoire, comme dans le cas de processus calculatoires par
 exemple, LRU est efficace.
 
-\paragraph{Most Recently Used}
+\paragraph{\index{Cache!MRU}Most Recently Used}
 L'algorithme MRU, à l'opposé du LRU, remplace l'élément dont l'accès est le plus récent. Il considère l'hypothèse selon laquelle un
 élément accédé très récement ne le sera plus avant une certaine durée.\\
 MRU est plus efficace pour des processus faisant des accès mémoire cycliques.
 
-\paragraph{Pseudo-LRU}
+\paragraph{\index{Cache!Pseudo-LRU}Pseudo-LRU}
 L'algorithme Pseudo-LRU utilise un arbre binaire représentant l'ensemble des cellules de caches pouvant être remplacées. Chaque cellule possédant un
 tag fournissant une indication sur l'emplacement (branche droite, branche gauche) de la cellule qui sera remplacée. Ce tag est mis à jour à
 chaque traversée de l'arbre.\\
 Il s'agit d'un algorithme jugé efficace en comparaison au LRU pour les caches dont l'associativité est supérieure à 4. Il est utilisé dans les
 architectures Intel 486, et dans les architecture PowerPC, comme le PowerPC G4 de Freescale \cite{plru}.
 
-\paragraph{Segmented LRU}
+\paragraph{\index{Cache!Segmented-LRU}Segmented LRU}
 L'algorithme SLRU utilise deux segments de caches complémentaires, dont les cellules sont ordonnées de la dernière utilisée (MRU) à la plus anciènement utilisée (LRU) :
 
 \begin{itemize}
@@ -268,19 +285,7 @@ Cet algorithme fait donc une diifférence entre les données accédées souvent (au 
 Il permet donc d'optimiser la gestion du cache lors d'accès mémoire peu fréquents.\\
 La taille des deux segments est dépendante dynamiquement du schéma d'entrée soortie.
 
-\paragraph{2-Way Set Associative}
-
-Cet algorithme permet, pour chaque élément mémoire à charger en cache, de pouvoir se placer à deux endroits dans
-le cache. Ces deux positions sont dépendantes de l'adresse physique en mémoire centrale de la donnée.\\
-La cellule choisie est celle étant la moins récement utilisée, cela implique, pour chaque paire de cellules du chache,
-un champ indiquant laquelle est la moins récement utilisée.
-
-\paragraph{Direct Mapped}
-
-L'algorithme Direct Mapped est un algorithme simple, optimisant le coût d'exécution du choix de la cellule.
-Un élément mémoire n'est placé qu'à un seul endroit dans le cache, en fonction de son adresse physique, quelle que soit la donnée précédement présente.
-
-\paragraph{Least Frequently Used}
+\paragraph{\index{Cache!LFU}Least Frequently Used}
 
 Lors d'un cache miss, la cellule utilisée pour charger les données mémoire est celle dont le contenu est utilisé le moins fréquement. En cas d'égalité de fréquence, l'algorithme LRU est utilisé pour départager les cellules.
 
