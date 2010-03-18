@@ -1,0 +1,51 @@
+%%
+%%
+%% proposition_hardware.tex for thesis in /doctorat/these/tex
+%%
+%% Made by Philippe THIERRY
+%% Login   <Philippe THIERRYreseau-libre.net>
+%%
+%% Started on  Thu Mar 18 17:20:20 2010 Philippe THIERRY
+%% Last update Thu Mar 18 17:32:53 2010 Philippe THIERRY
+%%
+
+\chapter{PROPOSITION D'UNE ARCHITECTURE MATÉRIELLE CONFORME DU TEMPS RÉEL DUR}
+
+\section{Les processeurs}
+
+\subsection{Les caches}
+
+\paragraph{}
+Proposition d'une première version de cache prédictible, au travers de la définition
+d'un vecteur de cache.
+
+\paragraph{}
+Le but est de fournir un cache prédictif en cas de préemption. Il s'agit d'un cache qui serait
+compatible d'un ordonnanceur temps réel non préemptif comme EDF, où la préemption d'une tache
+ne puisse être dûe qu'à l'arriver d'une tache plus prioritaire.
+
+\paragraph{}
+Le cache est alors considéré comme un vecteur, dont la taille totale est nécessairement fixe, mais
+qui est divisé en contextes. Le nombre de contextes que supporte le cache se définit au travers
+l'écriture dans un registre. Plus il y a de contexte, moins la taille d'un contexte est grande.
+Cette taille correspond au nombre maximum de préemption pouvant avoir lieu.\\
+Cela implique donc qu'à un taskset est associé un nombre de préemption maximum connu. Cet élément
+se détermine plus aisément dans le cadre d'un ordonnancement non préemptif type EDF.
+
+\paragraph{}
+A chaque instance de tache est associée un contexte qui lui est propre. Si la tache en cours d'exécution
+est préempté, le pointeur de contexte s'incrémente. En cas de fin de tache, le pointeur de contexte
+se décrémente, permettant de revenir naturellement au contexte de la tache précédente.\\
+A l'intérieur d'un contexte, le cache utilise un algorithme standard tel que définit dans la première partie.
+Le schéma \ref{fig:cache_predictible_reg_vs} décrit le fonctionnement du cache :
+
+\begin{figure}
+\input{figures/cache_predictible_reg_vs.tex}
+\label{fig:cache_predictible_reg_vs}
+\caption{Premier modèle de cache prédictible}
+\end{figure}
+
+\paragraph{}
+L'avantage de cet algorithme est la simplicité. L'inconvéniant est la taille homogène des contextes,
+diminuant les performances des taches à forte empreinte mémoire par rapport aux taches à petite empreinte
+mémoire.
