@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Wed Mar 17 13:38:08 2010 Philippe THIERRY
-%% Last update Thu Mar 18 10:44:52 2010 Philippe THIERRY
+%% Last update Thu Mar 18 14:58:32 2010 Philippe THIERRY
 %%
 
 \chapter{ÉLÉMENTS MATÉRIEL POUR RÉPONDRE AU BESOIN TEMPS RÉEL}
@@ -25,11 +25,12 @@
 \subsubsection{Principe}
 
 \paragraph{}
-La {\it scratchpad} est une capacité du cache à autoriser une réservation d'une partie de sa mémoire, anciènement dédiée
-au cache code, afin de maintenir une section de code sans risque d'écrasement.\\
+La {\it scratchpad} est une capacité du cache à autoriser une réservation d'une partie de sa mémoire, anciennement dédiée
+au cache code (cache L1), afin de maintenir une section de code sans risque d'écrasement.\\
 Il s'agit, par exemple, de placer une section de code correspondant à l'algorithme d'ordonnancement en cache code, et de
 bloquer cette mémoire pour une durée maîtrisée par le logiciel, pouvant aller jusqu'au reset matériel.
 
+FIXME: scratchpad contient .code ou .code,.mss,.rodata,.data... ?
 \begin{figure}
 \input{figures/cache_scratchpad_simple.tex}
 \caption{Réservation d'une scratchpad dans le cache}
@@ -48,7 +49,7 @@ en conséquence la taille du cache code dédié aux autres applications, provoquant
 
 \subsection{Les locks de cache}
 
-\subsubsection{Principe}
+
 
 \subsubsection{Mise en {\oe}uvre}
 

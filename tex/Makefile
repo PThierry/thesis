@@ -15,6 +15,8 @@
 
 LATEX=pdflatex
 LATEXOPT=-shell-escape
+BIBTEX=bibtex
+
 RM=rm
 RMFLAGS=-rf
 MAKE=make
@@ -24,6 +26,7 @@ MAKE=make
 #############################################################################
 TARGET	     = these_doctorat
 SOURCE	     = document.tex
+SOURCE_PREFIX= document
 OBJS	     = $(SOURCE:.tex=.aux) $(SOURCE:.tex=.log) $(SOURCE:.tex=.out) $(SOURCE:.tex=.toc) \
                $(SOURCE:.tex=.ist) $(SOURCE:.tex=.glo) $(SOURCE:.tex=.idx) $(SOURCE:.tex=.lof) \
                $(SOURCE:.tex=.brf) $(SOURCE:.tex=.bmt) $(SOURCE:.tex=.ind) $(SOURCE:.tex=.ilg) \
@@ -48,7 +51,9 @@ help :
 all : help
 
 pdf :
+	cp includes/$(LANG)/bibliography.bib .
 	$(LATEX) $(LATEXOPT) $(LATEXOPT) $(SOURCE)
+	$(BIBTEX) $(SOURCE_PREFIX)
 	makeindex $(SOURCE:.tex=.idx)
 	makeindex -s $(SOURCE:.tex=.ist) -o $(SOURCE:.tex=.gls) $(SOURCE:.tex=.glo)
 	$(LATEX) $(LATEXOPT) $(LATEXOPT) $(SOURCE)
