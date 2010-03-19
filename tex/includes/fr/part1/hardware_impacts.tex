@@ -1,4 +1,4 @@
-:%%
+%%
 %%
 %% hardware_impacts.tex for thesis in /doctorat/these/tex
 %%
@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
-%% Last update Thu Mar 18 15:52:01 2010 Philippe THIERRY
+%% Last update Fri Mar 19 15:56:13 2010 Philippe THIERRY
 %%
 
 \chapter{IMPACT DES ÉLÉMENTS MATÉRIELS SUR LE TEMPS RÉEL}
@@ -50,7 +50,7 @@ en mémoire centrale.
 
 \paragraph{}
 À ces deux organes du micro-processeur sont associés des éléments comme le \index{TLB}TLB ({\it Table Lookahead Buffer}),
-permettant d'accélérer la translation d'adresse, entre logique et physique.\\
+permettant d'accélérer la translation d'adresse entre logique et physique.\\
 L'ensemble des accès du processeur vers la mémoire passe par la \gls{mmu}. L'ensemble des accès des contrôleurs d'I/O passe par l'\gls{iommu}.
 
 \paragraph{}
@@ -77,13 +77,13 @@ s'agisse de la mémoire centrale ou de la mémoire internes au périphériques d'ent
 \section{Les interruptions}
 
 \paragraph{}
-Les interruptions matérielle sont des évènements asyncrhones émis par le matériel pour générer de manière synchrone l'exécution d'un
+Les interruptions matérielles sont des évènements asynchrones émis par le matériel pour générer de manière synchrone l'exécution d'un
 élément logiciel. Il peut s'agir d'un timer (un ordonnancement en mode {\it time-driven} s'appuie sur ce dernier pour gérer
 sa période d'exécution), d'une frappe clavier, ou de toute information dont la fréquence n'est pas trop élevée.
 
 \paragraph{}
 Les interruptions sont gérés par un contrôleur matériel, l'\index{APIC}APIC ({\it Advanced Programable Interruption Controler}),
-qui les relaie au processeur. Ce dernier stop sont cycle d'exécution courrant, pour exécuter un {\it handler d'IRQ}, que le noyau
+qui les relaie au processeur. Ce dernier stoppe sont cycle d'exécution courrant, pour exécuter un {\it handler d'IRQ}, que le noyau
 à préalablement enregistré auprès du processeur (e.g. sur les architectures ia32, cela se fait via le registre IDTR).
 
 \paragraph{}
@@ -92,7 +92,7 @@ Les interruptions matérielles ont deux propriétés :
 \item Elles ne sont pas prédictibles car sont la conséquence d'un évènement matériel lié à l'environnement, comme un signal de
 remplissage de la mémoire interne d'une carte Ethernet, ou une frappe clavier.
 \item Elles sont exécutées par le processeur en l'absence de contrôle logiciel. Seule la désactivation des interruptions peut
-empécher leur exécution.
+empécher leur exécution (hors \index{NMI}NMI).
 \end{itemize}
 
 \paragraph{}
@@ -123,11 +123,11 @@ d'un transfert sur le bus\cite{cachalgo}.
 \paragraph{}
 Il existe dans les processeurs modernes plusieurs niveaux de cache :
 \begin{enumerate}
-\item Cache level 1, le plus petit et accessible le plus rapidement, ce cache est spécialisé : il définit un conteneur dit {\it cache code},
+\item Cache niveau 1, le plus petit et accessible le plus rapidement. Ce cache est spécialisé : il définit un conteneur dit {\it cache code},
 pour les éléments de code (section {\texttt .code} des binaires), et un conteneur dit {\it cache data}, pour le reste des données
 ({\texttt .bss}, {\texttt .rodata}, ...).
-\item Cache level 2, de taille plus conséquente, mais dont l'accès est moins rapide que le cache L1.
-\item Cache level 3, de taille plus grande encore. Partagé entre les c{\oe}urs sur les architectures multi-c{\oe}urs.
+\item Cache niveau 2, de taille plus conséquente, mais dont l'accès est moins rapide que le cache L1. Ce cache n'est pas spécialisé.
+\item Cache niveau 3, de taille plus grande encore. Partagé entre les c{\oe}urs sur les architectures multi-c{\oe}urs. Ce cache n'est pas spécialisé.
 Ce dernier n'est pas toujours présent.
 \end{enumerate}
 
@@ -162,11 +162,11 @@ cellules de cache. Cette associativité permet d'optimiser l'écrasement des cellu
 à la cellule mémoire à mettre en cache. Les algorithmes de ce type se différencient par leur politique de choix de la cellule à remplacer.
 \end{itemize}
 On a ainsi :
-\paragraph{2-Way Set Associative}
-Cet algorithme permet, pour chaque élément mémoire à charger en cache, de pouvoir se placer à deux endroits dans
-le cache. Ces deux positions sont dépendantes de l'adresse physique en mémoire centrale de la donnée.\\
-La cellule choisie est celle étant la moins récemment utilisée, cela implique, pour chaque paire de cellules du cache,
-un champ indiquant laquelle est la moins récemment utilisée.
+\paragraph{{\it N}-Way Set Associative}
+Cet algorithme permet, pour chaque élément mémoire à charger en cache, de pouvoir se placer à {\it N} endroits dans
+le cache. Ces {\it N} positions sont dépendantes de l'adresse physique en mémoire centrale de la donnée.\\
+Le choix de la cellule parmis la liste des cellules admissibles se fait au travers d'un algorithme de gestion de cache tel que
+décrit plus loin.
 
 \paragraph{Direct Mapped}
 L'algorithme Direct Mapped est un algorithme simple, optimisant le coût d'exécution du choix de la cellule.
@@ -192,7 +192,7 @@ Le principe de fonctionnement est le suivant :
 \renewcommand{\labelitemi}{\textbullet}
 \item Le processeur démarre un cycle de lecture
 \item Si le cache possède la donnée en local (cache hit), il répond au CPU, et clôture le cycle de lecture sur le bus.
-\item Si le cache ne possède pas la donnée (cache miss), il laisse la mémoire centrale répondre au processeur, et sniffe les
+\item Si le cache ne possède pas la donnée (cache miss), il laisse la mémoire centrale répondre au processeur, et espionne les
 données transitant sur le bus afin de se mettre à jour.
 \end{itemize}
 
@@ -226,8 +226,8 @@ le cache indépendamment des autres processeurs (pour un cache local).
 \subsubsection{\index{Cache!Consistance}Consistance du cache}
 
 \paragraph{}
-Du fait que le cache contient des duplicata d'une partie de la mémoire, il est important de s'assurer que la copie est l'originale restent
-identique. À défaut, cela peut entraîner des bugs logiciels, difficilement détectables.
+Du fait que le cache contient des duplicatas d'une partie de la mémoire, il est important de s'assurer que la copie est l'originale restent
+identique. À défaut, cela peut entraîner des bogues logiciels, difficilement détectables.
 
 \paragraph{}
 La consistance du cache peut être impactée de différentes manières, dont voici une liste non-exhaustive :
@@ -256,7 +256,7 @@ recopie à partir de la mémoire centrale.
 Le snarfing consiste à associer la détection d'une modification d'une donnée en cache à l'espionnage du bus de donnée. En espionnant
 le bus, il est capable à tout instant de mettre à jour la cellule impactée, et de maintenir la consistance.
 
-\subsubsection{Syncrhonisation caches/mémoire centrale}
+\subsubsection{Synchronisation caches/mémoire centrale}
 \paragraph{}
 Lorsque des données sont modifiées en local sur le cache, il est nécessaire de mettre à jour la mémoire centrale afin de prendre
 en compte ce changement.
@@ -268,7 +268,7 @@ La mise à jour de la mémoire centrale n'est pas synchrone avec la modification l
 les problèmes d'incohérence sur les architectures multi-c{\oe}urs, au travers de l'usage des {\it \index{Memory barrier}memory barriers}.
 
 \paragraph{write-through}
-Une écriture sur cache implique une remontée de la mise à jour de la donnée, afin de maintenir une cohésion.
+Une écriture sur cache implique une remontée synchrone de la mise à jour de la donnée, afin de maintenir une cohésion.
 
 \subsubsection{Les algorithmes de gestion de cache}
 
@@ -284,7 +284,7 @@ L'algorithme MRU, à l'opposé du LRU, remplace l'élément dont l'accès est le plus
 MRU est plus efficace pour des processus faisant des accès mémoire cycliques.
 
 \paragraph{\index{Cache!Pseudo-LRU}Pseudo-LRU}
-L'algorithme Pseudo-LRU utilise un arbre binaire représentant l'ensemble des cellules de caches pouvant être remplacées. Chaque cellule possédant un
+L'algorithme Pseudo-LRU utilise un arbre binaire représentant l'ensemble des cellules de caches pouvant être remplacées. Chaque ensemble de cellules posséde un
 tag fournissant une indication sur l'emplacement (branche droite, branche gauche) de la cellule qui sera remplacée. Ce tag est mis à jour à
 chaque traversée de l'arbre.
 

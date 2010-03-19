@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:23:03 2010 Philippe THIERRY
-%% Last update Wed Mar 17 12:53:23 2010 Philippe THIERRY
+%% Last update Fri Mar 19 15:43:03 2010 Philippe THIERRY
 %%
 
 \chapter{DÉFINITION DES DONNÉES D'ENTRÉE}
@@ -16,14 +16,60 @@ Descriptions des éléments de base des problématiques temps réel.
 
 \section{WCET : premier élément dimensionnant}
 
+\subsection{Définition du WCET}
+
 \paragraph{}
 Le \gls{wcet} ({\it Worst Case Execution Time}) est la valeur mesurée ou construite permettant de qualifier, pour
 une tache donnée, le temps maximum nécessaire à son exécution.\\
 Dans un environnement idéal, l'exécution d'une tache est garantie inférieure à cette valeur.
 
-\subsection{Définition du WCET}
-
 \subsection{Mesure du WCET}
+
+\paragraph{}
+Il existe plusieurs manières de mesurer le \gls{wcet} :
+
+\subsubsection{Mesure empirique}
+
+\paragraph{}
+On peut construire un ensemble de mesures de l'exécution d'une tache, et considérer la mesure la plus élevée comme
+le \gls{wcet}. Plus cet ensemble est généré à partir de comportements représentatifs du mode nominal d'exécution,
+plus la valeur maximum mesurée est proche du véritable \gls{wcet}.
+
+\paragraph{}
+La difficulté consiste à définir un ensemble représentatif du comportement de la tache en terme de dynamique d'exécution
+(branchements, consommation mémoire, lecture/écriture de donnée). Cette dynamique dépendant le plus souvent de données
+d'entrée dont la maîtrise n'est pas toujours garantie, seule la définition d'un pannel représentatif des données d'entrée
+peut permettre de fournir une valeur au plus proche du \gls{wcet}.
+
+\paragraph{}
+Là où les outils de tests unitaires en mode MC/DC permettent de définir une représentation exhaustive de tous les comportement
+d'une fonction, un outil de mesure du \gls{wcet} s'appuiant sur une définition formelle de toutes les entrées possibles
+d'une tache permettrait alors de garantir, en terme de chemin d'exécution, la traversée du chemin le plus long. Une telle définition
+est malheureusement spécifique à chaque tache, est devient alors très coûteuse.
+
+\subsubsection{Mesure par étude du code}
+
+\paragraph{}
+Un autre type de mesure correspond à l'étude du code assembleur d'une tache, afin d'en extraire un arbre d'exécution. La
+branche la plus coûteuse de cet arbre correspondrait alors à la dynamique d'exécution du \gls{wcet}.
+
+\paragraph{}
+La difficulté devient alors de s'assurer que cette dynamique d'exécution est cohérente avec l'algorithmie de la tache et
+correspond donc bien à un comportement dynamique possible. En effet, lorsque les branchement dépendent d'éléments environnementaux
+de la tache, il devient difficile de différencier une branche d'exécution impossible d'une branche d'exécution envisageable.
+
+\subsection{Les éléments non-mesurés}
+
+\paragraph{}
+Ces deux manières de définir le \gls{wcet} nécessite ensuite l'évaluation des impacts du matériel (temps d'accès mémoire,
+impacts de l'ordonnancement du bus, impacts d'un changement de c{\oe}ur, mise à jour du cache TLB, etc), ainsi que de
+l'évaluation des impacts du logiciel (impact de la préemption sur le rechargement du contexte, coût d'exécution du système
+d'exploitation, de l'ordonnanceur, des allocateurs mémoire, etc).
+
+\paragraph{}
+Afin de se rapprocher du véritable \gls{wcet}, ses mesures ajoutent un pourcentage de consommation des différents éléments
+(logiciels et matériel), afin de prendre en compte ces divers éléments.\\
+FIXME: Laurent: comment est définit ce pourcentage
 
 \section{Comportement des ensembles de taches}
 
@@ -41,7 +87,7 @@ La création de tache se fait de manière aléatoire dans le temps.
 
 \subsection{Les ensembles fenêtrés}
 
-Une fenêtre de temps ${\Delta}t$ est définie, et on lui associe un nombre d'interruptions
+Une fenêtre glissante de temps ${\Delta}t$ est définie, et on lui associe un nombre d'interruptions
 maximum. Cette valeur est utilisée en entrée de la mesure du WCET.
 
 \section{La dynamique des ensembles de taches}

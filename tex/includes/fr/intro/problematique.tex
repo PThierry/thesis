@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  mer. 25 nov. 2009 20:37:12 CET Philippe THIERRY
-%% Last update Thu Mar 18 14:23:30 2010 Philippe THIERRY
+%% Last update Fri Mar 19 15:41:56 2010 Philippe THIERRY
 %%
 
 
@@ -19,17 +19,17 @@
 
 \paragraph{}
 Jusqu'aux années 1990,  les réseaux utilisaient des protocoles basés sur de la commutation de
-circuit, avec des propriétés temps réel fortes. C'était le cas de l'\index{Protocoles!ATM}\gls{atm}, ou encore du
-\index{Protocoles!X25}\gls{x25}.\\
-Avec l'avènement d'\index{Protocoles!IP}\gls{ip} et de la commutation de trame, les protocole réseaux ont perdu leur capacité
+circuit (eg. RNIS), de cellules (eg. \index{Protocoles!ATM}\gls{atm}) offrant des propriétés temps réel fortes.
+%\index{Protocoles!X25}\gls{x25}.\\
+Avec l'avènement d'\index{Protocoles!IP}\gls{ip} et de la commutation de trame, les protocoles réseaux ont perdu leur capacité
 temps réel pour un modèle de type {\it best effort}, moins complexe, mais qui aujourd'hui, avec l'avènement
 des flux audio et vidéo sur \gls{ip} et la disparition petit à petit du RNIS, montrent leur limitation.
 
 \paragraph{}
-Un certain nombre de \gls{rfc} fournissent des capacités supplémentaires à \gls{ip}, comme le \index{diffserv}\gls{diffserv} et la \index{QoS}\gls{qos},
-ainsi qu'au niveau liaison avec le \index{802.1q}\gls{8021q}. Cela permet de définir une priorisation des flux au niveau
+Un certain nombre de \gls{rfc} fournissent des capacités supplémentaires à \gls{ip}, comme le \index{diffserv}\gls{diffserv} et la \index{QoS}\gls{qos}
+au niveau liaison avec le \index{802.1q}\gls{8021q}. Cela permet de définir une priorisation des flux au niveau
 des n{\oe}uds de communications, mais ne fournissant pas un respect du temps réel aussi fort que
-les anciens protocole {\it legacy}.
+les anciens protocoles {\it legacy}.
 
 \paragraph{}
 Il existe cependant des cas particuliers (réseaux hertziens, réseaux très contraints,
@@ -39,7 +39,7 @@ communications, de fournir des garanties fortes sur la traversée des données.
 
 \paragraph{}
 La coût du traitement logiciel qu'implique le routage d'un paquet au sein d'un n{\oe}ud de
-communications, impacte directement ces performances en terme de nombre de flux supporté,
+communications impacte directement ces performances en terme de nombre de flux supporté,
 et donc sa capacité à s'intégrer en c{\oe}ur de réseau.
 
 \paragraph{}
@@ -50,8 +50,8 @@ La finesse de la répartition temporelle croît avec le besoin en terme de débit e
 
 \paragraph{}
 Tous ces éléments ont comme besoin la définition d'une latence de traversée maximum garantie,
-que ce soit au niveau n{\oe}ud de communications ou au niveau traversée de réseau.
-
+que ce soit au niveau n{\oe}ud de communications ou de bout en bout.
+==<<
 \subsection{De la gestion de flux à l'ordonnancement}
 
 En considérant le schéma suivant :
@@ -76,8 +76,8 @@ Malheureusement, on reste ici dans un environnement souvent idéal, où non seulem
 alloue au traitement réseau est garantie, mais également ou le flux réseau est considéré comme une tache
 au profil unique.\\
 Lorsqu'un traitement à valeur ajoutée est exécuté dans le cadre d'un routage de flux, ce dernier est
-un des éléments d'entrée impactant le coût de son routage, comme par exemple dans le cadre de règle de
-filtrage, ce qui rend ce modèle caduque.
+un des éléments d'entrée impactant le coût de son routage (comme par exemple dans le cadre de règles de
+filtrage), ce qui rend ce modèle caduque.
 
 \paragraph{}
 On a donc la problématique suivante : comment, dans le cadre d'un n{\oe}ud de communications évolué, reposant à la fois sur un
@@ -89,7 +89,7 @@ traitement matériel est logiciel,  peut-on définir un modèle de mesure du coût d
 
 \paragraph{}
 On retrouve ces réseaux partout où il est nécessaire de pouvoir émettre à une très grande portée, ou là ou
-les architectures réseaux classiques sont inexistantes. C'est le cas par exemple en aéronautique, dans le satellitaire, ou dans des pays
+les architectures réseaux classiques sont inexistantes. C'est le cas par exemple en aéronautique, da@@@@AAAAAAAns le satellitaire, ou dans des pays
 n'ayant pas encore l'infrastructure nécessaire pour permettre l'emploi de réseaux câblés ou \index{Wifi}\index{WiMax}\index{3G}WiFi/WiMax/3G.
 
 \subsection{Les architectures réseaux temps réel}
@@ -105,5 +105,5 @@ ARINC 664 Part 7
 Le traitement de flux temps réel possède un besoin premier qui est la capacité à fournir une garantie en terme de latence de
 traversée. Cette garantie s'obtient, dans le cadre d'un traitement logiciel, au travers d'une gestion de l'exécution temps réel.\\
 Le but dans ce document, est de définir l'ensemble des élément impactant sur l'exécution du traitement temps réel, d'isoler chaque élément
-et de définir au mieux un système complet qui, pourrait alors exécuter une tache de n{\oe}ud de communication avec le plus de garanties
+et de définir au mieux un système complet qui pourrait alors exécuter une tache de n{\oe}ud de communication avec le plus de garanties
 possibles.

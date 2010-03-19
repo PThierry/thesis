@@ -6,14 +6,14 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:28:03 2010 Philippe THIERRY
-%% Last update Wed Mar 17 13:10:27 2010 Philippe THIERRY
+%% Last update Fri Mar 19 15:48:34 2010 Philippe THIERRY
 %%
 
 \chapter{LES FAMILLES D'ORDONNANCEURS TEMPS RÉEL}
 \doMinitoc
 
 \paragraph{}
-Les différents ordonnanceurs temps réel possèdent plusieures propriétés quant à la gestion des taches.
+Les différents ordonnanceurs temps réel possèdent plusieurs propriétés quant à la gestion des taches.
 Ce chapitre définit séparément chaque propriété, construisant ainsi un ensemble homogène. Chaque
 ordonnanceur se situe à l'intersection des ensembles décrivant toutes ses propriétés.
 
@@ -28,37 +28,40 @@ priorités, durée d'exécution).
 \subsection{L'ordonnancement hors ligne}
 
 \paragraph{}
-La politique d'ordonnancement est définie par avance. Elle est donc optimisée pour un cas particulier de set
-de taches, mais pose problème en cas d'impact non prévu sur la dynamique d'exécution (effets de caches, de surcharge
+La politique d'ordonnancement est définie par avance. Elle est donc optimisée pour un cas particulier de jeu
+de taches ({\it taskset}), mais pose problème en cas d'impact non prévu sur la dynamique d'exécution (effets de caches, de surcharge
 de bus, WCET trop grand ou trop faible, etc).
 
 \section{Par schéma d'exécution}
 
-\subsection{Les ordonnanceurs non préemptifs}
-
 \paragraph{}
-Les taches sont préemptées à une période prédéfinie, fixe ou dynamique, nommée {\it \index{quantum}quantum}.  En conséquence,
-une tache s'exécute en plusieurs fois. Cela a pour conséquence que l'ordonnanceur s'exécute plus souvent que
-dans le cadre du mode non préemptif. La plupart du temps, l'ordonnanceur est de type {\it \index{time-driven}time-driven} (il s'appuie
-sur une horloge pour régler sa période d'éxection). C'est le cas par exemple du Round-Robin, qui préempte les taches sur quantum.\\
-L'ordonnanceur peut également être de type {\it \index{event-driven}event-driven}, comme dans le cadre de préemption sur arrivée d'une tache
-de priorité supérieure à celle en cours d'exécution. C'est le cas par exemple de l'EDF, qui ne préempte que sur l'arrivée d'une
-tache plus prioritaire.
-
-\subsection{Les ordonnanceurs préemptifs}
-
-\paragraph{}
-Le schéma suivant décrit l'automate générique caractérisant les différents états d'une tache, dans le cadre d'un ordonnancement préemptif :
+Le schéma suivant décrit l'automate générique caractérisant les différents états d'une tache :
 \begin{figure}[h]
 \input{figures/sched_graph.tex}
 \caption{Schéma générique de la dynamique d'ordonnancement}
 \end{figure}
+
+
+\subsection{Les ordonnanceurs préemptifs}
+
+\paragraph{}
+Les taches sont préemptées à une période prédéfinie, fixe ou dynamique, nommée {\it \index{quantum}quantum}.  En conséquence,
+une tache s'exécute en plusieurs fois. Cela implique que l'ordonnanceur s'exécute plus souvent que
+dans le cadre du mode non préemptif. La plupart du temps, l'ordonnanceur est de type {\it \index{time-driven}time-driven} (il s'appuie
+sur une horloge pour régler sa période d'éxection). C'est le cas par exemple du Round-Robin, qui préempte les taches sur quantum.\\
+
+\subsection{Les ordonnanceurs non préemptifs}
 
 \paragraph{}
 Une fois élue, chaque tache est exécutée dans son intégralité. Cela écarte les problématiques de rechargement
 du cache lié à la préemption de tache, et les algorithmes d'ordonnancement ont l'avantage de la simplicité.\\
 Cependant, il est plus difficile de garantir le {\it \index{WCET}\gls{wcet}} que dans le cadre du mode préemptif. Un ordonnancement en mode
 FIFO s'exécute sans préemption, faisant s'exécuter les taches les unes à la suite des autres, dans l'ordre d'arrivée.
+
+\paragraph{}
+L'ordonnanceur peut également être de type {\it \index{event-driven}event-driven}, comme dans le cadre de préemption sur arrivée d'une tache
+de priorité supérieure à celle en cours d'exécution. C'est le cas par exemple de l'EDF, qui ne préempte que sur l'arrivée d'une
+tache plus prioritaire.
 
 \subsection{Les ordonnanceurs mixtes}
 
@@ -105,7 +108,7 @@ Les grandes familles d'ordonnanceurs SMP temps-réel sont les suivantes :\\
 
 \paragraph{}
 Il y a autant de queues de processus que de c{\oe}urs. La répartition des tâches se fait
-statiquement. Cela pose cependant la problématique de l'impact des locks (besoin de
+statiquement. Cela pose cependant la problématique de l'impact des synchronisations et des locks (besoin de
 précédance entre les tâches).
 
 \subsection{Global scheduling}
@@ -146,7 +149,7 @@ nombre de c{\oe}urs \textit{actifs}.\\
 À chaque fin de bloc, le processus migre d'un c{\oe}ur au suivant.
 Cela a pour conséquence de consommer le moins de c{\oe}urs possible, tout
 en les chargeant au maximum. C'est à double tranchant dans le sens où
-tout variation des hypothèses (inexactitude de WCET, surcharge temporelle) impacte violemment
+toute variation des hypothèses (inexactitude de WCET, surcharge temporelle) impacte violemment
 la capacité d'ordonnancement des tâches.\\
 
 
