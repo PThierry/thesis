@@ -6,27 +6,127 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:23:03 2010 Philippe THIERRY
-%% Last update Fri Mar 19 15:43:03 2010 Philippe THIERRY
+%% Last update Thu Mar 25 16:26:45 2010 Philippe THIERRY
 %%
 
-\chapter{DÉFINITION DES DONNÉES D'ENTRÉE}
+\chapter{ÉTAT DE L'ART DE LA MESURE ET DE L'EMPLOI DU WCET}
 \doMinitoc
 
-Descriptions des éléments de base des problématiques temps réel.
+{\it
+Il existe deux types de système temps réel :
+\begin{itemize}
+\item Les systèmes temps réel durs, où les taches doivent possèdent une date limite de fin d'exécution
+dont le dépassement peut avoir un impact fort sur le bon fonctionnement du système. Il peut s'agit par exemple de
+systèmes de gestion des commandes de bord, des systèmes satélitaires ou militaires.
+\item Les systèmes temps réel souples, où le dépassement de la date limite de fin d'exécution est acceptable
+à partir du moment où sa fréquence reste faible. Dans ce cadre, le respect du temps limite d'exécution correspond
+à une qualité de service fournie par le système.
+\end{itemize}
+}
 
-\section{WCET : premier élément dimensionnant}
+\section{Définitions préliminaires}
 
 \subsection{Définition du WCET}
 
 \paragraph{}
-Le \gls{wcet} ({\it Worst Case Execution Time}) est la valeur mesurée ou construite permettant de qualifier, pour
-une tache donnée, le temps maximum nécessaire à son exécution.\\
-Dans un environnement idéal, l'exécution d'une tache est garantie inférieure à cette valeur.
-
-\subsection{Mesure du WCET}
+Le \gls{wcet} ({\it Worst Case Execution Time}) définit la durée d'exécution maximum d'une tache. Associée à une {\it deadline},
+elle permet, pour une liste de taches donnée :
+\begin{itemize}
+\item de connaître à l'avance si cette liste est ordonnançable ou si certaines taches ne pourront pas
+être terminées à temps.
+\item de définir une répartition temporelle des taches pour respecter la {\it deadline} de chacune.
+\end{itemize}
 
 \paragraph{}
-Il existe plusieurs manières de mesurer le \gls{wcet} :
+Le temps maximum $T_{m}(\tau_{i})$ pouvant se dérouler entre l'arrivée d'une tache $\tau_{i}$
+et sa terminaison se décompose comme suit :
+$$T_{m}(\tau_{i}) = T_{e}(\tau_{i}) + \Delta T$$
+
+$\Delta T$ est la marge que possède l'ordonnanceur entre le coût d'exécution de la tache proprement dite, et la durée
+qu'il possède pour l'exécuter.
+
+\paragraph{}
+Un système en mode batch, exécutant chaque tache d'un ensemble de taches $E_{\tau}$ l'une après l'autre sans intelligence,
+doit respecter uniquement la règle suivante pour s'assurer que chaque tache est ordonnançable à temps :
+
+$$\forall \tau_{i} \in E_{\tau}, B_{\tau} \textrm{ contenant toutes les taches précédantes à } \tau_{i},$$
+$$T_{m}(\tau_{i}) > T_{e}(\tau_{i}) + \sum_{\tau_{b} \in B_{\tau}} T_{e}(\tau_{b})$$
+
+Ainsi, lors de l'arrivée d'une nouvelle tache $\tau_{i}$, il est possible de définir son ordonnançabilité, et
+au besoin de la refuser.
+
+\paragraph{}
+Les algorithmes en mode batch sont aujourd'hui révolus, du fait de leur manque d'optimisation de la gestion des taches.
+Ainsi, là où un ordonnanceur intelligent pourrait, pour une nouvelle instance $\tau_{i}$ urgente, essayer de la
+placer plus en aval dans sa liste tout en s'assurant du maintient de l'ordonnançabilité des autres taches, un ordonnanceur
+en mode batch la refuserait.
+
+\paragraph{}
+La prise en compte de l'impact de l'exécution de chaque tache sur l'ordonnançabilité de toutes les autres est à la base
+de la définition des ordonnanceurs temps réel. Il devient nécessaire, à partir de ce moment, de définir ce qu'est un
+ensemble de taches.
+
+\subsection{Définition des tasksets}
+
+\paragraph{}
+Pour aborder la problématique temps réel, on définit un profil d'environnement logiciel, nommé ensemble de taches ({\it
+taskset}). Cet ensemble se définit comme suit :
+\begin{itemize}
+\item Une liste de taches $\tau$, chaque tache possédant un {\it WCET} et une {\it deadline} qui lui est propre
+\item Chaque tache se matérialise sous la forme d'une {\it instance de tache}, correspondant à un processus logiciel.
+\item Un profil d'arrivée des instances de tache (arrivée périodique, sporadique ou apériodique)
+\end{itemize}
+
+\paragraph{}
+On parle alors de l'ordonnançabilité d'une tache, au travers de la capacité d'exécution de toutes ses instances.\\
+Un ensemble de tache est nécessairement finit, et possède des caractéristiques fixes dans le temps.
+
+\section{État de l'art de l'estimation du WCET}
+
+\paragraph{}
+La mesure du \gls{wcet} est complexe pour de multiples raisons. En effet, pour définir la charge processeur maximum nécessaire à
+l'exécution d'une tache, il faut connaître l'ensemble des variables impactant le fonctionnement de celle-ci, tant en terme
+d'algorithmique qu'en terme d'environnement logiciel et matériel.
+
+\paragraph{}
+En mesurant le coût d'exécution d'une tache indépendament des autres taches présentes sur le système, on rend cette
+mesure plus accessible. En effet, définir l'environnement logiciel d'exécution est hasardeux, voire impossible lorsque la liste des
+instances de taches présentes varie au fur et à mesure de l'exécution de l'ensemble de tache. C'est le cas dès que l'ensemble
+de tache n'est pas périodique.
+
+\paragraph{}
+Cependant, en retirant l'impact de l'environnement logiciel d'exécution, on soustrait de la mesure du \gls{wcet} l'impact
+des préemptions. Ainsi, même en considérant les caches désactivés, les évènements de sauvegarde de contexte processeur et
+les évènements de {\it page miss} du TLB lié à l'exécution d'une autre tache ne sont pas pris en compte.\\
+De la même manière, surtout dans le cas d'architectures avec caches désactivés, les accès mémoire fait par des éléments environnementaux
+comme un processus sur un autre c{\oe}ur, un controlleur DMA ou encore le coût d'accès aux données en mémoire, dépendant
+directement de la technologie employée au niveau matériel, ont un impact non négligeable sur le coût d'exécution d'une
+tache.\\
+Malheureusement, plus on considère les éléments matériels dans la mesure du \gls{wcet}, moins cette mesure est évolutive. En effet,
+la mesure de \gls{wcet} devient alors spécifique au matériel employé, au profil évènemenciel utilisé (profil des évènements asyncrhones
+comme les interruptions et les DMA), et implique en conséquence de maîtriser complètement la cible d'exécution matérielle, logicielle et
+évènemencielle de la tache.
+
+\paragraph{}
+Il existe cependant un certain nombre de solutions pour mesurer le \gls{wcet} d'une tache. Ces solutions sont diverses, et
+leur résultat plus ou moins précis.
+
+\subsection{Mesure statique}
+
+\subsubsection{Mesure par étude du code}
+
+\paragraph{}
+Un autre type de mesure correspond à l'étude du code assembleur d'une tache, afin d'en extraire un arbre d'exécution. La
+branche la plus coûteuse de cet arbre correspondrait alors à la dynamique d'exécution du \gls{wcet}.
+
+\paragraph{}
+La difficulté devient alors de s'assurer que cette dynamique d'exécution est cohérente avec l'algorithmie de la tache et
+correspond donc bien à un comportement dynamique possible. En effet, lorsque les branchement dépendent d'éléments environnementaux
+de la tache, il devient difficile de différencier une branche d'exécution impossible d'une branche d'exécution envisageable.
+
+
+
+\subsection{Mesure dynamique}
 
 \subsubsection{Mesure empirique}
 
@@ -47,18 +147,7 @@ d'une fonction, un outil de mesure du \gls{wcet} s'appuiant sur une définition f
 d'une tache permettrait alors de garantir, en terme de chemin d'exécution, la traversée du chemin le plus long. Une telle définition
 est malheureusement spécifique à chaque tache, est devient alors très coûteuse.
 
-\subsubsection{Mesure par étude du code}
-
-\paragraph{}
-Un autre type de mesure correspond à l'étude du code assembleur d'une tache, afin d'en extraire un arbre d'exécution. La
-branche la plus coûteuse de cet arbre correspondrait alors à la dynamique d'exécution du \gls{wcet}.
-
-\paragraph{}
-La difficulté devient alors de s'assurer que cette dynamique d'exécution est cohérente avec l'algorithmie de la tache et
-correspond donc bien à un comportement dynamique possible. En effet, lorsque les branchement dépendent d'éléments environnementaux
-de la tache, il devient difficile de différencier une branche d'exécution impossible d'une branche d'exécution envisageable.
-
-\subsection{Les éléments non-mesurés}
+\section{Les éléments non-mesurés}
 
 \paragraph{}
 Ces deux manières de définir le \gls{wcet} nécessite ensuite l'évaluation des impacts du matériel (temps d'accès mémoire,
@@ -71,7 +160,7 @@ Afin de se rapprocher du véritable \gls{wcet}, ses mesures ajoutent un pourcenta
 (logiciels et matériel), afin de prendre en compte ces divers éléments.\\
 FIXME: Laurent: comment est définit ce pourcentage
 
-\section{Comportement des ensembles de taches}
+\section{État de l'art de l'emploi du WCET}
 
 \subsection{Les ensembles périodiques}
 
@@ -95,4 +184,9 @@ maximum. Cette valeur est utilisée en entrée de la mesure du WCET.
 \subsection{Les ensembles concrets}
 
 \subsection{Les ensembles non concrets}
+
+\section{Conclusion}
+
+\paragraph{}
+FIXME: difficultés de prise en compte des impacts matériels et environementaux sur la mesure du WCET
 

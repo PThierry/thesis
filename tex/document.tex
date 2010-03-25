@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  mar. 24 nov. 2009 19:46:57 CET Philippe THIERRY
-%% Last update Wed Mar 24 15:03:50 2010 Philippe THIERRY
+%% Last update Thu Mar 25 14:29:47 2010 Philippe THIERRY
 %%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -29,6 +29,7 @@
                          				% sous windows.
 \usepackage[english,francais]{babel}			% french support
 \usepackage{amsfonts}					% special fonts support (math, etc)
+\usepackage{amsmath}
 \usepackage{amssymb}					% special symbols support
 \usepackage{graphicx}					% graphics integration support
 \usepackage{fancyhdr}					% beautiful headers support
@@ -226,21 +227,24 @@
 
 \input{includes/\lang/part1/measurements_testability.tex}
 
-\input{includes/\lang/part1/hardware_impacts.tex}
-
-\input{includes/\lang/part1/software_impacts.tex}
-
 % part 2 title
 \input{includes/\lang/part2/title.tex}
 
-\input{includes/\lang/part2/state_of_art_hardware_solutions.tex}
+\input{includes/\lang/part2/hardware_impacts.tex}
 
-\input{includes/\lang/part2/state_of_art_software_solutions.tex}
+\input{includes/\lang/part2/software_impacts.tex}
 
 % part 3 title
 \input{includes/\lang/part3/title.tex}
 
-\input{includes/\lang/part3/proposition_hardware.tex}
+\input{includes/\lang/part3/state_of_art_hardware_solutions.tex}
+
+\input{includes/\lang/part3/state_of_art_software_solutions.tex}
+
+% part 4 title
+\input{includes/\lang/part4/title.tex}
+
+\input{includes/\lang/part4/proposition_hardware.tex}
 
 \backmatter
 
