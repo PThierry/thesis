@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
-%% Last update Fri Mar 19 15:56:13 2010 Philippe THIERRY
+%% Last update Mon Mar 22 17:36:47 2010 Philippe THIERRY
 %%
 
 \chapter{IMPACT DES ÉLÉMENTS MATÉRIELS SUR LE TEMPS RÉEL}
@@ -64,7 +64,6 @@ Clients du contrôleur DMA primaire, ils font des requêtes de recopie mémoire à c
 \section{Les contrôleurs DMA}
 
 \subsection{Principe de fonctionnement}
-
 Mono ou multi-canaux, ils se comportent comme un coprocesseur dont le travail correspond à faire de la recopie de mémoire à mémoire, qu'il
 s'agisse de la mémoire centrale ou de la mémoire internes au périphériques d'entrée/sortie.
 
@@ -73,6 +72,12 @@ s'agisse de la mémoire centrale ou de la mémoire internes au périphériques d'ent
 \subsubsection{Le mode {\it burst}}
 
 \section{Les arbitreurs de bus}
+
+\begin{figure}[h]
+\input{figures/bus_decomp.tex}
+\caption{Décomposition des lignes de bus}
+\end{figure}
+
 
 \section{Les interruptions}
 
@@ -156,8 +161,9 @@ Les algorithmes de cache ont divers niveaux d'associativité :
 \begin{itemize}
 \renewcommand{\labelitemi}{\textbullet}
 \item Les algorithmes de type {\textit one-way associative} associent une cellule mémoire à une et une seule
-cellule de cache. Il s'agit d'un algorithme surjectif, du fait de la taille du cache.
-\item Les algorithmes de type {\textit 2-way associative} et supérieur associe une cellule mémoire avec deux (resp. 3, 4, ...)
+cellule de cache. Il s'agit d'un algorithme surjectif, du fait de la taille du cache. Le choix de remplacement étant de type $1:1$, aucun
+algorithme spécifique n'est utilisé. Les données sont écrites au seul emplacement possible en cache.
+\item Les algorithmes de type {\textit N-way associative} et supérieur associe une cellule mémoire avec {\it N} (resp. 2, 3, 4, ...)
 cellules de cache. Cette associativité permet d'optimiser l'écrasement des cellules du cache en donnant un choix de positionnement
 à la cellule mémoire à mettre en cache. Les algorithmes de ce type se différencient par leur politique de choix de la cellule à remplacer.
 \end{itemize}

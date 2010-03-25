@@ -52,13 +52,14 @@ all : help
 
 pdf :
 	cp includes/$(LANG)/bibliography.bib .
+	cp styles/these.sty .
 	$(LATEX) $(LATEXOPT) $(LATEXOPT) $(SOURCE)
 	$(BIBTEX) $(SOURCE_PREFIX)
 	makeindex $(SOURCE:.tex=.idx)
 	makeindex -s $(SOURCE:.tex=.ist) -o $(SOURCE:.tex=.gls) $(SOURCE:.tex=.glo)
-	$(LATEX) $(LATEXOPT) $(LATEXOPT) $(SOURCE)
-	$(LATEX) $(LATEXOPT) $(LATEXOPT) $(SOURCE)
+	while [ `cat $(SOURCE:.tex=.log) | grep 'may have changed.' | wc -l` -ge 1 ]; do $(LATEX) $(LATEXOPT) $(LATEXOPT) $(SOURCE); done
 	mv $(SOURCE:.tex=.pdf) $(TARGET)_$(LANG).pdf
+	rm these.sty
 
 clean : 
 	$(RM) $(RMFLAGS) $(OBJS) $(TODEL)
