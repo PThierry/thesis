@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  mar. 24 nov. 2009 19:46:57 CET Philippe THIERRY
-%% Last update Thu Mar 25 14:29:47 2010 Philippe THIERRY
+%% Last update Tue Mar 30 11:07:43 2010 Philippe THIERRY
 %%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -75,7 +75,23 @@
 \end{psinputs}
 \usepackage{these}
 
+%\usepackage{draftcopy}				% mark doc as 'draft'
+%\draftcopyName{Provisoire}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Document configuration
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{config/config.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Watermark for draft versions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ifthenelse{\equal{\draftmode}{y}}{
+  \usepackage{graphics,color} %
+  \usepackage{eso-pic} % Required for Draft (\AddToShipoutPicture)
+  \AddToShipoutPicture{\resizebox{0.7\pdfpagewidth}{0.7\pdfpageheight}%
+  {\rotatebox{60}{\color[gray]{0.8}\hspace*{2.5cm}ÉBAUCHE}}}
+}{}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Macro definition
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -100,8 +116,6 @@
 
 %\input{macros/myminitoc.sty}
 
-% add these dynamic configuration
-\input{config/config.tex}
 
 % Add glossary
 \input{includes/\lang/glossary.tex}
@@ -151,8 +165,6 @@
 \pagenumbering{roman}					% specify page numbering
 \fancyhf{}						% clear previous headers
 %\addtolength{\headheight}{48pt}				% update header height
-
-%\usepackage[first]{draftcopy}				% mark doc as 'draft'
 
 
 %opening
