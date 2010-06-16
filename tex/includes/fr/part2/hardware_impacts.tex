@@ -6,10 +6,10 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
-%% Last update Tue Jun 15 17:42:25 2010 Philippe THIERRY
+%% Last update Wed Jun 16 14:49:06 2010 Philippe THIERRY
 %%
 
-\chapter{IMPACT DES ÉLÉMENTS MATÉRIELS SUR LE TEMPS RÉEL}
+\chapter{IMPACT DES \'{E}L\'{E}MENTS MAT\'{E}RIELS SUR LE TEMPS R\'{E}EL}
 \doMinitoc
 
 \section{Rappels}
@@ -133,6 +133,14 @@ ont tendance à diminuer au profit du DMA et du polling, les interruptions devena
 Le \index{Cache}cache est une mémoire statique à accès rapide, permettant d'accélérer les accès mémoire du CPU, en copiant
 les données (code et data) de manière à ce qu'elles soient accessibles directement par le CPU, sans la lourdeur
 d'un transfert sur le bus\cite{cachalgo}.
+
+\paragraph{}
+La figure \ref{fig:cache_soa} montre une architecture mémoire générique, avec plusieurs niveaux de cache, suivis d'un bus d'accès mémoire et du controlleur mémoire principale (DDR en général).
+
+\begin{figure}
+\input{figures/cache_architecture.tex}
+\caption{Architecture en couche générique\label{fig:cache_soa}}
+\end{figure}
 
 \paragraph{}
 Il existe dans les processeurs modernes plusieurs niveaux de cache :

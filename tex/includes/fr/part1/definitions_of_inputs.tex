@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:23:03 2010 Philippe THIERRY
-%% Last update Tue Mar 30 18:01:35 2010 Philippe THIERRY
+%% Last update Wed Jun 16 13:51:58 2010 Philippe THIERRY
 %%
 
 \chapter{DE LA MESURE ET DE L'EMPLOI DU WCET}
@@ -59,9 +59,16 @@ elle permet, pour une liste de taches donnée :
 \end{itemize}
 
 \paragraph{}
-Le temps maximum $T_{m}(\tau_{i})$ pouvant se dérouler entre l'arrivée d'une tache $\tau_{i}$
-et sa terminaison se décompose comme suit :
-$$T_{m}(\tau_{i}) = T_{e}(\tau_{i}) + \Delta T$$
+Sont définies les valeurs $R_{i}$, $D_{i}$ et $U_{i}$, avec les propriétés définies dans les équations FIXME:
+
+\begin{eqnarray}
+\forall i, R_{i} \le D_{i}\\
+\forall i, R_{i} \ge C_{i}\\
+\label{eqn:Ri}
+U_{i}, \displaystyle{\sum_{i \in [1, n]}} U_{i} \le 1
+\label{eqn:Ui}
+\end{eqnarray}
+
 
 $\Delta T$ est la marge que possède l'ordonnanceur entre le coût d'exécution de la tache proprement dite, et la durée
 qu'il possède pour l'exécuter.
