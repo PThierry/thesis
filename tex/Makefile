@@ -30,7 +30,7 @@ SOURCE_PREFIX= document
 OBJS	     = $(SOURCE:.tex=.aux) $(SOURCE:.tex=.log) $(SOURCE:.tex=.out) $(SOURCE:.tex=.toc) \
                $(SOURCE:.tex=.ist) $(SOURCE:.tex=.glo) $(SOURCE:.tex=.idx) $(SOURCE:.tex=.lof) \
                $(SOURCE:.tex=.brf) $(SOURCE:.tex=.bmt) $(SOURCE:.tex=.ind) $(SOURCE:.tex=.ilg) \
-	       $(SOURCE:.tex=.lot) *.ps *.mlf* *.mlt* *.mtc* document-fig*.tex *.log document-fig*.pdf tmp.inputs
+	       $(SOURCE:.tex=.lot) *.ps *.mlf* *.mlt* *.mtc* document-fig*.tex *.log document-fig*.pdf tmp.inputs document.tex
 TODEL	     = tags *~ .*.swp
 LANG	     = $(shell cat config/config.tex|grep "newcommand.*lang"|sed -re "s:.*\{([fe][rn])\}.*:\1:")
 
@@ -53,6 +53,7 @@ all : help
 pdf :
 	cp includes/$(LANG)/bibliography.bib .
 	cp styles/these.sty .
+	/bin/bash scripts/generate_toc.sh
 	$(LATEX) $(LATEXOPT) $(LATEXOPT) $(SOURCE)
 	$(BIBTEX) $(SOURCE_PREFIX)
 	makeindex $(SOURCE:.tex=.idx)

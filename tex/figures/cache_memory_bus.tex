@@ -1,0 +1,43 @@
+%%
+%%
+%% cache_memory_bus.tex for  in /doctorat/these/tex
+%%
+%% Made by Philippe THIERRY
+%% Login   <Philippe THIERRYreseau-libre.net>
+%%
+%% Started on  Tue Jun 22 13:13:33 2010 Philippe THIERRY
+%% Last update Tue Jun 22 13:48:41 2010 Philippe THIERRY
+%%
+
+\begin{pdfpic}
+\scalebox{1}
+{
+\begin{pspicture}(0,0)(11,8)
+\psset{fillstyle=solid}
+% cache look aside architecture
+\psframe[linewidth=0.04cm](1,1)(4,2)% cpu
+\rput(2.5,1.5){CPU Core}
+\psframe[linewidth=0.04cm](3,3)(4,5)% cache
+\rput{-90}(3.5,4){cache}
+\psframe[linewidth=0.04cm](1,6)(4,7)% memory controller
+\rput(2.5,6.5){Memory}
+% cache look through architecture
+\psframe[linewidth=0.04cm](7,1)(10,2)% cpu
+\rput(8.5,1.5){CPU Core}
+\psframe[linewidth=0.04cm](7.5,3)(9.5,4)% cache
+\rput(8.5,3.5){cache}
+\psframe[linewidth=0.04cm](7,6)(10,7)% memory controller
+\rput(8.5,6.5){Memory}
+% arrows
+\psset{arrowsize=0.2cm 1.5}
+\psset{arrowlength=1.2}
+\psset{arrowinset=0}
+% arrows for cache lookaside
+\psline[linewidth=0.2cm]{->}(2.5,2)(2.5,6)
+\psline[linewidth=0.2cm]{->}(2.5,4)(3,4)
+% arrows for cache look through
+\psline[linewidth=0.2cm](8.5,2)(8.5,3)
+\psline[linewidth=0.2cm]{->}(8.5,4)(8.5,6)
+\end{pspicture}
+}
+\end{pdfpic}
