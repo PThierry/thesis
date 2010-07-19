@@ -6,128 +6,150 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Thu Mar 18 17:20:20 2010 Philippe THIERRY
-%% Last update Thu Jul 15 18:09:34 2010 Philippe THIERRY
+%% Last update Mon Jul 19 15:24:01 2010 Philippe THIERRY
 %%
 
-\chapter{Définition d'une plateforme matérielle}
+\chapter{Définition d'une plateforme matérielle prédictible et sécurisée}
 
-\section{Les processeurs}
+\section{Proposition d'implémentation processeur}
 
-\subsection{Les caches}
+\subsection{Définition d'un algorithme de gestion mémoire pour le cache de données}
+
+\subsection{Pipelining et hyperthreading}
+
+\section{Les accesseurs mémoire tiers}
+
+\subsection{Choix de l'algorithme d'ordonnancement du bus mémoire}
+
+\subsection{Contrôle du DMA master par cross-layering}
+
+Le traitement DMA devient une tache à ordonnancer sur un coprocesseur spécifique : le contrôleur DMA. Les taches
+de traitement de données d'I/O comme l'implémentation d'une pile réseau aurait une dépendance à la tache DMA de remontée
+du flux réseau.
+
+\subsection{Proposition d'implémentation noyau du gestionnaire d'interruption}
+
+Implémentation d'un gestionnaire à mémoire avec capacité de blocage sur seuil et de période d'endormissement
+minimum. Cette implémentation s'appuie sur la connaissance de son propre coût d'exécution, par routine d'interruption.
 
 
-\subsubsection{Proposition de solution}
-\paragraph{Hypothèses}
-
-Les hypothèses suivantes permettent de définir les prérequis à un cache prédictible :\\
-
-\begin{hypo}{H.1}
-Le cache doit être capable de différencier des données mémoire accédées fréquemment de données mémoire accédées faiblement.
-\end{hypo}
-
-\begin{hypo}{H.2}
-Le cache doit être capable de définir un nombre maximum de données présente en cache en même temps.
-\end{hypo}
-
-\begin{hypo}{H.3}
-Afin de ne pas être impacté par un cache miss sur cache code, la tache doit pouvoir s'exécuter sur une scratchpad.
-\end{hypo}
-
-\begin{hypo}{H.4}
-Le logiciel doit pouvoir informer le cache du positionnement de ses données devant être mise en cache.
-\end{hypo}
-
-\paragraph{}
-On peut ainsi considérer le point suivant :\\
-une instance de tache procède par une phase d'initialisation du cache, en précisant le positionnement mémoire des
-données devant être mises en cache. Cette phase a le profil suivant :
-\begin{enumerate}
-\item définition de la surface mémoire centrale correspondant à des données mises en cache fréquemment.
-Cette définition ne peut être faite que lorsque le cache est informé de l'initialisation d'une nouvelle tache.
-\item activation et chargement du cache. Le cache charge l'intégralité des données, ce qui permet :
-	\begin{itemize}
-	\item d'optimiser le chargement, en faisant une phase de lecture en mode burst (si possible)
-	\item de garantir que pour la suite du traitement, toutes les données sont déjà en cache (pas de prefetch, etc)
-	\end{itemize}
-\item initiation de la séquence "normale" de l'instance de tache, s'appuyant sur le cache fraîchement chargé.
-\end{enumerate}
-
-\begin{hypo}{H.5}
-Une instance de tache doit positionner dans un seul emplacement mémoire (emplacement mémoire physique contiguë) l'ensemble de ses données à
-mettre en cache. L'emploi d'un pool préalloué de mémoire permet de répondre à ce besoin.
-\end{hypo}
-
-Cela permet d'optimiser la phase de chargement du cache en s'appuyant sur le mode burst de la lecture sur la DRAM,
-évitant ainsi le coût des requêtes de positionnement des lignes et des colonnes.
-
-Le schéma \ref{fig:cache_predictible_profil_definition} décrit la décomposition temporelle de l'usage du cache :\\
-À la fin d'une tache, le cache est désactivé par l'ordonnanceur. Ce dernier pourrait cependant avoir la possibilité
-d'employer un algorithme de cache probabiliste durant cette période. Une nouvelle tache est élue. Afin de garantir la
-présence des données en cache pendant son exécution, une première phase d'initialisation du cache s'exécute. Cette phase :
-\begin{itemize}
-\item définit l'emplacement en mémoire centrale des données à mettre en cache, en fournissant l'adresse physique de la base de ces
-données
-\item spécifie la taille des données à charger en cache.
-\item charge l'ensemble des données en cache.
-\item active le cache. Les données présentes en cache sont garanties présentes pour la durée d'exécution de l'instance de tache (jusqu'à
-la prochaine exécution de l'ordonnanceur).
-\item initie l'exécution effective de la tache
-\end{itemize}
-
-La durée de ce {\it pied d'exécution} est mesurable, en s'appuyant sur la taille et la répartition des données en mémoire centrale. En effet,
-le coût principal de ce pied d'exécution correspond à la phase de chargement du cache. On est cependant obligé de s'appuyer sur le coût de
-chargement {\it pire cas} du cache (accès mémoire centrale pire cas), du fait des autres acteurs jouant sur la réservation du bus (e.g. DMA).
-
-\begin{figure}
-\label{fig:cache_predictible_profil_definition}
-\input{figures/cache_predictible_profil_definition.tex}
-\caption{Principe de pré-enregistrement des données à mettre en cache par le logiciel}
-\end{figure}
-
-\paragraph{Optimisations possibles}
-Un certain nombre d'optimisations sont envisageables pour l'algorithme ci-dessus.
-
-\begin{itemize}
-\item l'adresse de base (physique) des données mémoire à dupliquer dans le cache doit être multiple de la taille d'une ligne de cache.
-\item l'adresse de base (physique) doit être multiple d'une taille de page, afin de réduire le coût engendré par le TLB.
-\item la réservation du pool mémoire pour les données à mettre en cache doit se faire au travers d'une API du noyau, lui seul étant informé
-des données comme la taille du cache ou des lignes de cache.
-\item la demande de chargement des données en cache ne peut se faire que lorsque le cache possède le drapeau CACHE\_OFF. Seul l'ordonnanceur peut
-mettre le cache en mode CACHE\_OFF (Cela permet de fournir une séparation des droits entre ordonnanceur et taches)).
-\end{itemize}
-
-\subsubsection{Définition d'un cache lock simple}
-\paragraph{}
-Proposition d'une première version de cache prédictible, au travers de la définition
-d'un vecteur de cache.
-
-\paragraph{}
-Le but est de fournir un cache prédictif en cas de préemption. Il s'agit d'un cache qui serait
-compatible d'un ordonnanceur temps réel non préemptif comme EDF, où la préemption d'une tache
-ne puisse être dûe qu'à l'arriver d'une tache plus prioritaire.
-
-\paragraph{}
-Le cache est alors considéré comme un vecteur, dont la taille totale est nécessairement fixe, mais
-qui est divisé en contextes. Le nombre de contextes que supporte le cache se définit au travers
-l'écriture dans un registre. Plus il y a de contexte, moins la taille d'un contexte est grande.
-Cette taille correspond au nombre maximum de préemption pouvant avoir lieu.\\
-Cela implique donc qu'à un taskset est associé un nombre de préemption maximum connu. Cet élément
-se détermine plus aisément dans le cadre d'un ordonnancement non préemptif type EDF.
-
-\paragraph{}
-A chaque instance de tache est associée un contexte qui lui est propre. Si la tache en cours d'exécution
-est préempté, le pointeur de contexte s'incrémente. En cas de fin de tache, le pointeur de contexte
-se décrémente, permettant de revenir naturellement au contexte de la tache précédente.\\
-A l'intérieur d'un contexte, le cache utilise un algorithme standard tel que définit dans la première partie.
-Le schéma \ref{fig:cache_predictible_reg_vs} décrit le fonctionnement du cache :
-
-\begin{figure}
-\input{figures/cache_predictible_reg_vs.tex}
-\label{fig:cache_predictible_reg_vs}
-\caption{Premier modèle de cache prédictible}
-\end{figure}
-
-\paragraph{}
-L'avantage de cet algorithme est la simplicité. L'inconvéniant est la taille homogène des contextes,
-diminuant les performances des taches à forte empreinte mémoire par rapport aux taches à petite empreinte
-mémoire.
+%\section{Les processeurs}
+%
+%\subsection{Les caches}
+%
+%
+%\subsubsection{Proposition de solution}
+%\paragraph{Hypothèses}
+%
+%Les hypothèses suivantes permettent de définir les prérequis à un cache prédictible :\\
+%
+%\begin{hypo}{H.1}
+%Le cache doit être capable de différencier des données mémoire accédées fréquemment de données mémoire accédées faiblement.
+%\end{hypo}
+%
+%\begin{hypo}{H.2}
+%Le cache doit être capable de définir un nombre maximum de données présente en cache en même temps.
+%\end{hypo}
+%
+%\begin{hypo}{H.3}
+%Afin de ne pas être impacté par un cache miss sur cache code, la tache doit pouvoir s'exécuter sur une scratchpad.
+%\end{hypo}
+%
+%\begin{hypo}{H.4}
+%Le logiciel doit pouvoir informer le cache du positionnement de ses données devant être mise en cache.
+%\end{hypo}
+%
+%\paragraph{}
+%On peut ainsi considérer le point suivant :\\
+%une instance de tache procède par une phase d'initialisation du cache, en précisant le positionnement mémoire des
+%données devant être mises en cache. Cette phase a le profil suivant :
+%\begin{enumerate}
+%\item définition de la surface mémoire centrale correspondant à des données mises en cache fréquemment.
+%Cette définition ne peut être faite que lorsque le cache est informé de l'initialisation d'une nouvelle tache.
+%\item activation et chargement du cache. Le cache charge l'intégralité des données, ce qui permet :
+%	\begin{itemize}
+%	\item d'optimiser le chargement, en faisant une phase de lecture en mode burst (si possible)
+%	\item de garantir que pour la suite du traitement, toutes les données sont déjà en cache (pas de prefetch, etc)
+%	\end{itemize}
+%\item initiation de la séquence "normale" de l'instance de tache, s'appuyant sur le cache fraîchement chargé.
+%\end{enumerate}
+%
+%\begin{hypo}{H.5}
+%Une instance de tache doit positionner dans un seul emplacement mémoire (emplacement mémoire physique contiguë) l'ensemble de ses données à
+%mettre en cache. L'emploi d'un pool préalloué de mémoire permet de répondre à ce besoin.
+%\end{hypo}
+%
+%Cela permet d'optimiser la phase de chargement du cache en s'appuyant sur le mode burst de la lecture sur la DRAM,
+%évitant ainsi le coût des requêtes de positionnement des lignes et des colonnes.
+%
+%Le schéma \ref{fig:cache_predictible_profil_definition} décrit la décomposition temporelle de l'usage du cache :\\
+%À la fin d'une tache, le cache est désactivé par l'ordonnanceur. Ce dernier pourrait cependant avoir la possibilité
+%d'employer un algorithme de cache probabiliste durant cette période. Une nouvelle tache est élue. Afin de garantir la
+%présence des données en cache pendant son exécution, une première phase d'initialisation du cache s'exécute. Cette phase :
+%\begin{itemize}
+%\item définit l'emplacement en mémoire centrale des données à mettre en cache, en fournissant l'adresse physique de la base de ces
+%données
+%\item spécifie la taille des données à charger en cache.
+%\item charge l'ensemble des données en cache.
+%\item active le cache. Les données présentes en cache sont garanties présentes pour la durée d'exécution de l'instance de tache (jusqu'à
+%la prochaine exécution de l'ordonnanceur).
+%\item initie l'exécution effective de la tache
+%\end{itemize}
+%
+%La durée de ce {\it pied d'exécution} est mesurable, en s'appuyant sur la taille et la répartition des données en mémoire centrale. En effet,
+%le coût principal de ce pied d'exécution correspond à la phase de chargement du cache. On est cependant obligé de s'appuyer sur le coût de
+%chargement {\it pire cas} du cache (accès mémoire centrale pire cas), du fait des autres acteurs jouant sur la réservation du bus (e.g. DMA).
+%
+%\begin{figure}
+%\label{fig:cache_predictible_profil_definition}
+%\input{figures/cache_predictible_profil_definition.tex}
+%\caption{Principe de pré-enregistrement des données à mettre en cache par le logiciel}
+%\end{figure}
+%
+%\paragraph{Optimisations possibles}
+%Un certain nombre d'optimisations sont envisageables pour l'algorithme ci-dessus.
+%
+%\begin{itemize}
+%\item l'adresse de base (physique) des données mémoire à dupliquer dans le cache doit être multiple de la taille d'une ligne de cache.
+%\item l'adresse de base (physique) doit être multiple d'une taille de page, afin de réduire le coût engendré par le TLB.
+%\item la réservation du pool mémoire pour les données à mettre en cache doit se faire au travers d'une API du noyau, lui seul étant informé
+%des données comme la taille du cache ou des lignes de cache.
+%\item la demande de chargement des données en cache ne peut se faire que lorsque le cache possède le drapeau CACHE\_OFF. Seul l'ordonnanceur peut
+%mettre le cache en mode CACHE\_OFF (Cela permet de fournir une séparation des droits entre ordonnanceur et taches)).
+%\end{itemize}
+%
+%\subsubsection{Définition d'un cache lock simple}
+%\paragraph{}
+%Proposition d'une première version de cache prédictible, au travers de la définition
+%d'un vecteur de cache.
+%
+%\paragraph{}
+%Le but est de fournir un cache prédictif en cas de préemption. Il s'agit d'un cache qui serait
+%compatible d'un ordonnanceur temps réel non préemptif comme EDF, où la préemption d'une tache
+%ne puisse être dûe qu'à l'arriver d'une tache plus prioritaire.
+%
+%\paragraph{}
+%Le cache est alors considéré comme un vecteur, dont la taille totale est nécessairement fixe, mais
+%qui est divisé en contextes. Le nombre de contextes que supporte le cache se définit au travers
+%l'écriture dans un registre. Plus il y a de contexte, moins la taille d'un contexte est grande.
+%Cette taille correspond au nombre maximum de préemption pouvant avoir lieu.\\
+%Cela implique donc qu'à un taskset est associé un nombre de préemption maximum connu. Cet élément
+%se détermine plus aisément dans le cadre d'un ordonnancement non préemptif type EDF.
+%
+%\paragraph{}
+%A chaque instance de tache est associée un contexte qui lui est propre. Si la tache en cours d'exécution
+%est préempté, le pointeur de contexte s'incrémente. En cas de fin de tache, le pointeur de contexte
+%se décrémente, permettant de revenir naturellement au contexte de la tache précédente.\\
+%A l'intérieur d'un contexte, le cache utilise un algorithme standard tel que définit dans la première partie.
+%Le schéma \ref{fig:cache_predictible_reg_vs} décrit le fonctionnement du cache :
+%
+%\begin{figure}
+%\input{figures/cache_predictible_reg_vs.tex}
+%\label{fig:cache_predictible_reg_vs}
+%\caption{Premier modèle de cache prédictible}
+%\end{figure}
+%
+%\paragraph{}
+%L'avantage de cet algorithme est la simplicité. L'inconvéniant est la taille homogène des contextes,
+%diminuant les performances des taches à forte empreinte mémoire par rapport aux taches à petite empreinte
+%mémoire.

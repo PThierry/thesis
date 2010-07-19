@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Thu Jul 15 17:46:14 2010 Philippe THIERRY
-%% Last update Thu Jul 15 17:50:28 2010 Philippe THIERRY
+%% Last update Mon Jul 19 10:01:07 2010 Philippe THIERRY
 %%
 
 \chapter{Précisions du champ d'étude de la sécurité}
@@ -19,4 +19,27 @@ Sont ainsi pris en compte les élements comme la gestion de la mémoire, des proce
 
 \doMinitoc
 
-\section{}
+\section{Introduction}
+
+\paragraph{}
+Dans le cadre de ce document, il n'est adressé, sous le terme sécurité, que la partie {\it security of Information \& Technology},
+excluant la partie sureté de fonctionnement, et résistance au fautes. Bien que non considéré en terme de sécurité, l'apport d'exigences
+de prédictibilité du temps réel au design du système traite, en partie, ces deux derniers points.
+
+\paragraph{}
+Le terme {\it security of Information \& Technology} reste également très vaste. Ce document traite des élément de sécurité intrinsèque
+du système (matériel + logiciel), dans le cadre de sa définition. Il n'est donc pas considéré les élements tels que les firewalls, les
+honeypots ou encore la détection d'attaque réseaux. Ces différents éléments, bien qu'impératifs à la définition d'un système sécurisés,
+sont hors sujet dans le cadre de ce document.
+
+\paragraph{}
+On définit donc, sous le terme de sécurité, les éléments de sécurisation et de validation du système d'exploitation, comme la gestion des
+rôles, la séparation mémoire, la restriction des accès au matériel, ainsi que la réduction des différents canaux cachés, tant logiciels que
+matériels.
+
+\section{Définition du vecteur d'étude de la sécurité}
+
+\paragraph{}
+L'étude des éléments de sécurité (et de non-sécurité) du système se fait via une approche bottom-up, en parallèle de l'étude des éléments
+impactant la prédictibilité du système. Ce document va donc prendre en compte en premier lieu les problématique de sécurité au niveau matériel,
+sur les différents composants problématiques, afin de pouvoir remonter vers le logiciel en s'appuyant sur une base connue et maîtrisée.

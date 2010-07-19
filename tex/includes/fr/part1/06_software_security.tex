@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Thu Jul 15 16:04:45 2010 Philippe THIERRY
-%% Last update Thu Jul 15 16:08:37 2010 Philippe THIERRY
+%% Last update Mon Jul 19 15:14:28 2010 Philippe THIERRY
 %%
 
 \chapter{Principes généraux de la sécurité logicielle}
@@ -18,7 +18,22 @@ Présentation rapide...
 \doMinitoc
 
 \section{Définir une gestion sécurisée de la mémoire}
+
+\subsection{Garantir une ségrégation des accès mémoire des taches}
+
 \paragraph{}
+
+\subsection{À propos du déploiement d'un processus en mémoire}
+
+\paragraph{}
+Un applicatif, construit dans un fichier binaire lors de l'édition de lien, possède un certain nombre de sections
+servant de conteneur à des données différentes, et ayant en conséquence des propriétés de sécurité (en terme d'accès)
+également différente. De ce fait, lors du déploiement de ces différentes section en mémoire vive, il est nécessaire
+de considérer pour chacune de ces section des propriétés d'accès spécifiques.
+
+\paragraph{}
+De plus, le positionnement de ces sections en mémoire ne doit pas être prédictible, sous peine de simplifier les
+attaques par réécriture sur des sections fragiles comme la pile.
 
 \section{De l'intérer de cloisonner les taches}
 \paragraph{}
