@@ -1,0 +1,33 @@
+%%
+%%
+%% real_time_lines.tex for  in /doctorat/these/tex
+%%
+%% Made by Philippe THIERRY
+%% Login   <Philippe THIERRYreseau-libre.net>
+%%
+%% Started on  Thu Jun 17 15:13:04 2010 Philippe THIERRY
+%% Last update Thu Jun 17 18:47:36 2010 Philippe THIERRY
+%%
+
+\begin{pdfpic}
+\scalebox{1}{
+\begin{pspicture}(-1,-1)(6,3)
+\psaxes{->}(0,0)(5,2)
+% no RT
+\psline[linecolor=red](0,1)(5,1)
+\rput(3,1.1){\textcolor{red}{\small No real-time requirement}}
+% hard RT
+\psline[linecolor=green](0,1)(1,1)(1,0)(5,0)
+\rput(4.5,0.2){\textcolor{green}{\small hard real time requirements}}
+% soft RT
+\psline[linecolor=blue](0,1)(1,1)
+\pscurve[linecolor=blue](1,1)(1.1,0.8)(1.9,0.2)(2.9,0)
+\rput(3.5,0.6){\textcolor{blue}{\small Soft real time requirements}}
+%
+\psline[linecolor=black]{->}(1,2)(1,1)
+\rput(1,2.5){\small Deadline}
+\rput{90}(-0.7,1){task results's interest}
+\rput(5,-0.5){time}
+\end{pspicture}
+}
+\end{pdfpic}

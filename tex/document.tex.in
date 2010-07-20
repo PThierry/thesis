@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  mar. 24 nov. 2009 19:46:57 CET Philippe THIERRY
-%% Last update Wed Mar 31 10:51:18 2010 Philippe THIERRY
+%% Last update Thu Jul 15 15:52:48 2010 Philippe THIERRY
 %%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -23,7 +23,7 @@
 \usepackage[hundred]{vrsion}				% versioning support
 \usepackage[latin1]{inputenc}				% char format
 \usepackage{listings}					% lists support. Used for code
-\usepackage{color}					% basic color support
+\usepackage[usenames,dvipsnames]{color}					% basic color support
 \usepackage[T1]{fontenc} 				% caracteres norme iso-8859.
 			 				% risque de ne pas marcher avec les fichiers crees
                          				% sous windows.
@@ -156,7 +156,8 @@
 
 \input{includes/\lang/titlepage.tex}
 
-
+% Set chaptername lowercase
+\ChNameLowerCase
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Headers and footers configuration
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -230,46 +231,4 @@
 
 \input{includes/\lang/intro/problematique.tex}
 
-% part 1 title
-\input{includes/\lang/part1/title.tex}
 
-\input{includes/\lang/part1/definitions_of_inputs.tex}
-
-\input{includes/\lang/part1/scheduling_policies.tex}
-
-\input{includes/\lang/part1/measurements_testability.tex}
-
-% part 2 title
-\input{includes/\lang/part2/title.tex}
-
-\input{includes/\lang/part2/hardware_impacts.tex}
-
-\input{includes/\lang/part2/software_impacts.tex}
-
-% part 3 title
-\input{includes/\lang/part3/title.tex}
-
-\input{includes/\lang/part3/state_of_art_hardware_solutions.tex}
-
-\input{includes/\lang/part3/state_of_art_software_solutions.tex}
-
-% part 4 title
-%\input{includes/\lang/part4/title.tex}
-
-%\input{includes/\lang/part4/proposition_hardware.tex}
-
-\backmatter
-
-\input{includes/\lang/appendix/title.tex}
-
-\printglossary
-
-% bibliographie
-%\input{includes/\lang/bibliography.tex}
-\nocite{*}
-\bibliography{bibliography}
-\bibliographystyle{plain}
-
-\printindex
-
-\end{document}

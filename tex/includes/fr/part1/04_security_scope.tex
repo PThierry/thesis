@@ -1,0 +1,60 @@
+%%
+%%
+%% 01_scope_definition.tex for thesis in /doctorat/these/tex
+%%
+%% Made by Philippe THIERRY
+%% Login   <Philippe THIERRYreseau-libre.net>
+%%
+%% Started on  Thu Jul 15 17:46:14 2010 Philippe THIERRY
+%% Last update Tue Jul 20 10:06:53 2010 Philippe THIERRY
+%%
+
+\chapter{Précisions du champ d'étude de la sécurité}
+
+{\it
+La sécurité est un domaine très large. Dans le cadre de cette thèse, le focus est fait sur
+les problématique de sécurité de l'environnement d'exécution.\\
+Sont ainsi pris en compte les élements comme la gestion de la mémoire, des processus et des rôles.
+}
+
+\doMinitoc
+
+\section{Introduction}
+
+\paragraph{}
+Dans le cadre de ce document, il n'est adressé, sous le terme sécurité, que la partie {\it security of Information \& Technology},
+excluant la partie sûreté de fonctionnement, et résistance au fautes. Bien que non considéré en terme de sécurité, l'apport d'exigences
+de prédictibilité du temps réel au design du système traite, en partie, ces deux derniers points.
+
+\paragraph{}
+Le terme {\it security of Information \& Technology} reste également très vaste. Ce document traite des élément de sécurité intrinsèque
+du système (matériel + logiciel), dans le cadre de sa définition. Il n'est donc pas considéré les éléments tels que les firewalls, les
+honey-pots ou encore la détection d'attaque réseaux. Ces différents éléments, bien qu'impératifs à la définition d'un système sécurisés,
+sont hors sujet dans le cadre de ce document.
+
+\paragraph{}
+On définit donc, sous le terme de sécurité, les éléments de sécurisation et de validation du système d'exploitation, comme la gestion des
+rôles, la séparation mémoire, la restriction des accès au matériel, ainsi que la réduction des différents canaux cachés, tant logiciels que
+matériels. Ces différents éléments correspondent au support de la classe FDP des critères communs, décrite dans la Section \ref{sec:cc_fdp}.
+
+\section{Définition des fonctions de sécurité considérées dans ce document}
+\label{sec:cc_fdp}
+
+\paragraph{}
+Dans le cadre de ce document, on s'intéresse au support des fonctions de sécurité de la classe FDP des critères communs
+\footnote{bibliography:\FIXME: CCPART2V3.1R3.pdf}. Cette classe définit les fonctions de protection des données utilisateurs. Celles-ci
+sont séparée en quatre parties :
+
+\begin{enumerate}
+\item Politique de protection des données utilisateur
+\item Architecture de protection des données utilisateur
+\item Sauvegarde hors-ligne des données, import et export des données
+\item Sécurité des communications de données utilisateur entre systèmes de confiance. Cet item n'est pas considéré dans ce document.
+\end{enumerate}
+
+\section{Définition du vecteur d'étude de la sécurité}
+
+\paragraph{}
+L'étude des éléments de sécurité (et de non-sécurité) du système se fait via une approche bottom-up, en parallèle de l'étude des éléments
+impactant la prédictibilité du système. Ce document va donc prendre en compte en premier lieu les problématique de sécurité au niveau matériel,
+sur les différents composants problématiques, afin de pouvoir remonter vers le logiciel en s'appuyant sur une base connue et maîtrisée.

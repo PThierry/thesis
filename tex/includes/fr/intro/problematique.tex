@@ -6,11 +6,11 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  mer. 25 nov. 2009 20:37:12 CET Philippe THIERRY
-%% Last update Mon Mar 22 14:40:41 2010 Philippe THIERRY
+%% Last update Mon Jul 19 10:07:22 2010 Philippe THIERRY
 %%
 
 
-\chapter{PROBLÉMATIQUE}
+\chapter{Problématique}
 \doMinitoc
 
 \section{Besoins en terme de temps réel}
@@ -61,13 +61,21 @@ En considérant le schéma suivant :
 \caption{Routage de flux : modèle macroscopique générique}
 \end{figure}
 
-On peut définir rapidement, pour un échantillon $E$ de mesures d'un flux donné, un coût maximum de traversée $f$ qui est le suivant :
+L'équation \ref{eqn:traversal_cost} définit, pour un échantillon $E$ de mesures d'un flux donné, un coût
+maximum de traversée $f$ :
 
-$$\forall i \in E, \delta t_i = t_{in,i} - t_{out,i}), f = max_{i \in E}(\delta t_i), $$
+\begin{eqnarray}
+\forall i \in E, \delta t_i = t_{in,i} - t_{out,i}), f = max_{i \in E}(\delta t_i)
+\label{eqn:traversal_cost}
+\end{eqnarray}
 
 Pour une charge processeur maximum $U$ accordée au traitement de $n$ flux réseau en parallèle, on doit s'assurer de
-l'hypothèse suivante :
-$$\sum_{j \in n} f_{j} < U$$
+l'hypothèse \ref{eqn:hyp_total_cost} :
+
+\begin{eqnarray}
+\sum_{j \in n} f_{j} < U
+\label{eqn:hyp_total_cost}
+\end{eqnarray}
 
 \paragraph{}
 Dans le cadre d'un {\it \index{switch}\gls{switch}}, où le traitement est fait au niveau matériel, ce modèle est valide,
@@ -100,6 +108,10 @@ Ce type de réseau est utilisé pour des besoin de type temps réel dur, comme les 
 \subsubsection{Les réseaux \index{Protocoles!AFDX}AFDX}
 
 ARINC 664 Part 7
+
+\subsubsection{Les réseau radio TDMA}
+
+Réseaux à répartition temporelle d'accès stricte et synchrone.
 
 \section{Définition d'une réponse au besoin}
 Le traitement de flux temps réel possède un besoin premier qui est la capacité à fournir une garantie en terme de latence de

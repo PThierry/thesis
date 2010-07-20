@@ -1,0 +1,93 @@
+%%
+%%
+%% hw_std.tex for thesis in /doctorat/these/tex
+%%
+%% Made by Philippe THIERRY
+%% Login   <Philippe THIERRYreseau-libre.net>
+%%
+%% Started on  Mon Jul 19 10:51:11 2010 Philippe THIERRY
+%% Last update Mon Jul 19 13:36:13 2010 Philippe THIERRY
+%%
+
+\begin{pdfpic}
+\scalebox{0.75}
+{
+\begin{pspicture}(0,0)(21,14.5)
+\psset{fillstyle=solid}%
+% main bus
+\psline[linewidth=0.04cm](1,10)(20,10)%
+\psline[linewidth=0.04cm](1,10.5)(20,10.5)%
+\psline[linewidth=0.04cm](1,11)(20,11)%
+\psline[linewidth=0.1cm](1,9.8)(1,11.2)%
+\psline[linewidth=0.1cm](20,9.8)(20,11.2)%
+\rput(18.8,11.3){{\it Memory bus}}%
+% bus controller
+\psframe[linewidth=0.04cm](2,14)(5.5,12)%
+\psline[linewidth=0.04cm]{-*}(3,12)(3,10)%
+\psline[linewidth=0.04cm]{-*}(3.5,12)(3.5,10.5)%
+\psline[linewidth=0.04cm]{-*}(4,12)(4,11)%
+\rput(3.75,13.2){bus}%
+\rput(3.75,12.8){controller}%
+% CPU
+\psframe[linewidth=0.04cm](2,6.5)(6,9)%
+\psline[linewidth=0.04cm]{-*}(4.5,9)(4.5,10)%
+\psline[linewidth=0.04cm]{-*}(5,9)(5,10.5)%
+\psline[linewidth=0.04cm]{-*}(5.5,9)(5.5,11)%
+\psframe[linewidth=0.02cm](2.2,7.5)(3.8,8.8)%
+\rput(3,8.2){Caches}%
+\psframe[linewidth=0.02cm](4,7.5)(5.8,8.8)%
+\rput(4.9,8.2){MMU \&}%
+\rput(4.9,7.8){I/OMMU}%
+\rput(4,7){CPU core(s)}%
+% APIC
+\psframe[linewidth=0.04cm](7.5,8)(10.5,9)%
+\psline[linewidth=0.04cm]{-*}(8.5,9)(8.5,10)%
+\psline[linewidth=0.04cm]{-*}(9,9)(9,10.5)%
+\psline[linewidth=0.04cm]{-*}(9.5,9)(9.5,11)%
+\rput(9,8.5){(A)PIC}%
+% DMA
+\psframe[linewidth=0.04cm](11,8)(13,9)%
+\psline[linewidth=0.04cm]{-*}(11.5,9)(11.5,10)%
+\psline[linewidth=0.04cm]{-*}(12,9)(12,10.5)%
+\psline[linewidth=0.04cm]{-*}(12.5,9)(12.5,11)%
+\rput(12,8.5){DMA}%
+% Memory
+%% Memory controller
+\psframe[linewidth=0.04cm](8.5,12)(12.5,12.5)%
+\psline[linewidth=0.04cm]{-*}(10,12)(10,10)%
+\psline[linewidth=0.04cm]{-*}(10.5,12)(10.5,10.5)%
+\psline[linewidth=0.04cm]{-*}(11,12)(11,11)%
+\rput(10.5,12.25){mem. controller}%
+%
+\psframe[linewidth=0.04cm](8.8,13.3)(12.3,14.3)%
+\psframe[linewidth=0.04cm,fillstyle=plain,fillcolor=white](8.5,13)(12,14)%
+\psline[linewidth=0.1cm]{->}(10.2,12.5)(10.2,13)%
+\psline[linewidth=0.1cm]{->}(10.8,13)(10.8,12.5)%
+% Child bus Controller (e.g. PCI controller)
+\psframe[linewidth=0.04cm](13.5,8)(16.5,9)%
+\psline[linewidth=0.04cm]{-*}(14.5,9)(14.5,10)%
+\psline[linewidth=0.04cm]{-*}(15,9)(15,10.5)%
+\psline[linewidth=0.04cm]{-*}(15.5,9)(15.5,11)%
+\rput(15,8.5){Child bus ctrl}%
+%
+\psline[linewidth=0.04cm]{-*}(14.5,8)(14.5,6)%
+\psline[linewidth=0.04cm]{-*}(15,8)(15,6.5)%
+\psline[linewidth=0.04cm]{-*}(15.5,8)(15.5,7)%
+% PCI (child) bus
+\psline[linewidth=0.04cm]{-*}(13,6)(19,6)%
+\psline[linewidth=0.04cm]{-*}(13,6.5)(19,6.5)%
+\psline[linewidth=0.04cm]{-*}(13,7)(19,7)%
+\psline[linewidth=0.1cm](13,5.8)(13,7.2)%
+\psline[linewidth=0.1cm](19,5.8)(19,7.2)%
+\rput(18,7.3){{\it Child bus}}%
+% PCI interrupt mode device
+\psframe[linewidth=0.04cm](15.5,3.5)(18.5,5)%
+\psline[linewidth=0.04cm]{-*}(16.5,5)(16.5,6)%
+\psline[linewidth=0.04cm]{-*}(17,5)(17,6.5)%
+\psline[linewidth=0.04cm]{-*}(17.5,5)(17.5,7)%
+\rput(17,4.5){{\it Interrupt}-based}%
+\rput(17,4){active device}%
+% END
+\end{pspicture}
+}
+\end{pdfpic}

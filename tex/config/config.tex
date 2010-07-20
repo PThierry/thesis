@@ -6,12 +6,12 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 14:59:59 2010 Philippe THIERRY
-%% Last update mar. 15 juin 2010 19:19:40 CEST Philippe THIERRY
+%% Last update mar. 20 juil. 2010 14:14:08 CEST Philippe THIERRY
 %%
 
 \newcommand{\lang}{fr}		% lang of the document
 \newcommand{\mtoc}{y}		% minitoc ? y/n
-\newcommand{\draftmode}{y}	% draftmode (watermark) ? y/n
+\newcommand{\draftmode}{n}	% draftmode (watermark) ? y/n
 
 %%
 %% specific command
@@ -30,3 +30,7 @@
 \ifthenelse{\equal{\mtoc}{y}}{
 \minitoc
 }{}}
+
+% Defining a visible FIXME mark in doc
+\definecolor{darkRed}{rgb}{0.8,0,0}
+\newcommand{\FIXME}{\colorbox{GreenYellow}{\color{darkRed}{FIXME}}}

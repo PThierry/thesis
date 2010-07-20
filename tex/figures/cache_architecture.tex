@@ -1,0 +1,58 @@
+%%
+%%
+%% soa_cache_architecture.tex for article_cache in /doctorat/articles
+%%
+%% Made by Philippe THIERRY
+%% Login   <Philippe THIERRYreseau-libre.net>
+%%
+%% Started on  Wed Apr 28 12:35:12 2010 Philippe THIERRY
+%% Last update Wed Jun 16 14:43:08 2010 Philippe THIERRY
+%%
+
+\begin{pdfpic}
+\scalebox{0.5} % Change this value to rescale the drawing.
+{
+\begin{pspicture}(0,0)(8.1,8)
+% CPU core/register
+\psline[linewidth=0.06cm](3,2.8)(11.2,2.8)
+\psline[linewidth=0.06cm,linestyle=dashed](3,0.8)(3,2.8)
+\psline[linewidth=0.06cm,linestyle=dashed](11.2,0.8)(11.2,2.8)
+\rput(7.1,1.8){\large{\textbf{\it{CPU core and registers}}}}
+% cache L1
+%% data
+\rput(5,4){\large{\textbf{L1 data cache}}}
+\psline[linewidth=0.04cm](3,3)(7,3)(7,5)(3,5)(3,3)
+%% code
+\rput(9.2,4){\large{\textbf{L1 code cache}}}
+\psline[linewidth=0.04cm](7.2,3)(11.2,3)(11.2,5)(7.2,5)(7.2,3)
+% cache L2 (unspecialized
+\rput(7,6.2){\large{\textbf{L2 unspecialized cache}}}
+\psline[linewidth=0.04cm](3,5.2)(11.2,5.2)(11.2,7.2)(3,7.2)(3,5.2)
+% potential L3 cache
+\rput(7.1,8.4){\large{\textbf{Potential L3 cache}}}
+\psline[linewidth=0.04cm,linestyle=dashed](0.8,3)(0.8,9.4)(13.4,9.4)(13.4,3)(11.4,3)(11.4,7.4)(2.8,7.4)(2.8,3)(0.8,3)
+% interconnect
+\psline[linewidth=0.04cm](0.8,9.6)(13.4,9.6)
+\psline[linewidth=0.04cm](0.8,10.6)(13.4,10.6)
+\rput(7.1,10){\large{Interconnect/bus controller (BC)}}
+% memory bus
+\rput(12,12){\large{\it{Bus}}}
+%\rput(12,11.4){\large{\it{(data, address, control)}}}
+%% data bus
+\psline[linewidth=0.06cm](3.5,10.6)(3.5,12.6)
+\psline[linewidth=0.04cm](2.9,11)(4.1,12.2)
+\rput(4.5,12){$data$}
+%% address bus
+\psline[linewidth=0.06cm](7.5,10.6)(7.5,12.6)
+\psline[linewidth=0.04cm](6.9,11)(8.1,12.2)
+\rput(8.6,12){$address$}
+%% control bus
+\psline[linewidth=0.06cm](9.5,10.6)(9.5,12.6)
+\psline[linewidth=0.04cm](8.9,11)(10.1,12.2)
+\rput(10.6,12){$control$}
+%% memory
+\psline[linewidth=0.1cm](2.5,12.6)(10.5,12.6)
+\rput(7.1,13){\large{DRAM controller}}
+\end{pspicture}
+}
+\end{pdfpic}
