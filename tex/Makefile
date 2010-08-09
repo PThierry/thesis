@@ -46,6 +46,8 @@ help :
 	@echo "- distclean 	: cleanup all files but sources"
 	@echo "- install	: install the document"
 
+images:
+	if [ ! -d images ]; then mkdir images; fi; for file in *-fig*.ps; do convert -trim +repage $$file images/$${file%%.ps}.png; done
 
 
 all : help
