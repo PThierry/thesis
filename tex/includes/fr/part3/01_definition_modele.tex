@@ -1,0 +1,52 @@
+%%
+%%
+%% 01_definition_modele.tex for thesis in /doctorat/these/tex
+%%
+%% Made by Philippe THIERRY
+%% Login   <Philippe THIERRYreseau-libre.net>
+%%
+%% Started on  Tue Aug 31 13:12:11 2010 Philippe THIERRY
+%% Last update Tue Aug 31 18:03:30 2010 Philippe THIERRY
+%%
+
+\chapter{Définition d'un modèle de système}
+
+\section{Définition des exigences d'entrée auxquelles les modèles logiciels et matériels doivent
+répondre}
+
+
+
+\section{Définition d'un premier modèle macroscopique d'une solution logicielle}
+
+\subsection{Introduction}
+
+Cette partie se concentre sur la définition d'un premier modèle de solution logicielle.
+
+\begin{enumerate}
+\item Le logiciel se définit comme une association entre une base fournissant une interface
+d'abstraction du matériel, et un ensemble de logiciels ayant une tache unique et indépendante à
+exécuter.
+\item On définit le logiciel de base sous le nom micro-noyau
+\item Le micro-noyau définit les politiques d'accès au matériel des autres logiciels
+\item Seul le micro-noyau peut définir ces politiques d'accès
+\item Le micro-noyau n'apporte aucune valeur ajoutée autre que la capacité de gérer les autres
+logiciels et leur politique d'accès au matériel
+\item Le logiciel de base doit interférer le moins possible dans l'exécution des autres logiciels
+\item Le logiciel de base garantie un ordonnancement des autres logiciels
+\item L'ordonnancement des autres logiciels doit permettre le respect des hypothèses nécessaires au temps réel dur
+\item Le micro-noyau doit fournir une interface aux autres logiciels indépendante du matériel
+sous-jacent
+\end{enumerate}
+
+\section{Définition d'un modèle mathématique ensembliste du système logiciel}
+
+\paragraph{}
+On définit en premier lieu une instance de noyau, nommé $k_{i}$, appartenant à l'ensemble $K_{n}$ (où
+$n$ est le cardinal de l'ensemble) des noyaux pouvant être générés à partir de sources $S_{k}$ associées
+à l'ensemble $K_{n}$.
+
+
+
+Les éléments $k_{i}$ de l'ensemble $K_{n}$ doivent respecter un certain nombre de propriétés.
+
+
