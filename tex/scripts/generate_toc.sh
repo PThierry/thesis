@@ -17,9 +17,9 @@ done
 echo '
 
 %\input{includes/\lang/appendix/title.tex}
-\appendix
 
 \part{Annexes}
+\begin{appendices}
 ' >> document.tex
 
 appendices=`find includes/fr -type d -name "appendix*" -exec basename {} \;`;
@@ -36,6 +36,7 @@ for appendix in $appendices; do
 done
 
 echo '
+\end{appendices}
 \backmatter
 
 \printglossary
