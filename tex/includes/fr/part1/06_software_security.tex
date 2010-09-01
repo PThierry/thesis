@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Thu Jul 15 16:04:45 2010 Philippe THIERRY
-%% Last update Mon Jul 19 15:14:28 2010 Philippe THIERRY
+%% Last update Wed Sep  1 12:15:28 2010 Philippe THIERRY
 %%
 
 \chapter{Principes généraux de la sécurité logicielle}
@@ -29,14 +29,79 @@ Présentation rapide...
 Un applicatif, construit dans un fichier binaire lors de l'édition de lien, possède un certain nombre de sections
 servant de conteneur à des données différentes, et ayant en conséquence des propriétés de sécurité (en terme d'accès)
 également différente. De ce fait, lors du déploiement de ces différentes section en mémoire vive, il est nécessaire
-de considérer pour chacune de ces section des propriétés d'accès spécifiques.
+de   considérer   pour   chacune   de   ces   section   des    propriétés    d'accès    spécifiques.
 
 \paragraph{}
 De plus, le positionnement de ces sections en mémoire ne doit pas être prédictible, sous peine de simplifier les
-attaques par réécriture sur des sections fragiles comme la pile.
+attaques par réécriture sur des sections attaquable comme la pile.
 
-\section{De l'intérer de cloisonner les taches}
+\section{De l'intérêt de cloisonner les taches}
+
 \paragraph{}
+Il existe plusieurs niveau d'abstraction de la mémoire physique :
+\begin{itemize}
+\item Sans aucune abstraction, on est en mode dit  {\it  flat  memory}.   L'ensemble  des  logiciels
+s'exécutant en mémoire traite des adresses physiques.   Ainsi,  ils  connaissent  leur  position  en
+mémoire,   et    ont    une    visibilité    sur    l'ensemble    de    la    mémoire    physique.\\
+De ce fait, il leur est possible d'accéder au contenu des autres applicatifs en  cours  d'exécution.
+Il devient ainsi aisé d'espionner les sections d'autres logiciels, comme les section data ou rodata,
+dans  lesquelles   il   est   possible   de   récupérer   par   exemple   des   mots   de   passe.\\
+Autre risque : l'accès à la pile des autres applicatifs peut permettre de dériver son exécution vers
+un bloc de code spécifique, en remplaçant l'adresse de la fonction parente par une adresse  dont  on
+maîtrise le contenu. Du fait que la pile est par essence accessible en écriture, tous les processus
+peuvent modifier les champs d'un processus donné en mode {\it flat memory}, à partir  du  moment  où
+l'adresse physique de la pile est connue.
+\item En s'appuyant sur une abstraction de la mémoire physique, appellé {\it mémoire virtuelle}. On
+parle alors de mode dit de  {\it  pagination  mémoire}.   Un  processus  donné  possède  son  propre
+environnement mémoire, dont la taille correspond à la valeur maximum d'un mot mémoire (e.g. dans un
+processeur 32 bits, l'environnement  mémoire  virtuelle  à  une  taille  de  quatre  giga-octets).\\
+Cet environnement mémoire est appellé AS (Address Space).  Le processus, lors de son  exécution,  ne
+traîte alors que des adresses virtuelles, dont la  translation  en  adresses  physique  se  fait  au
+travers d'un élément matériel nommé MMU.   La  conséquence  directe  est  que  le  coeur  processeur
+travaille en adressage virtuel.
+\item Décomposition de la mémoire physique en segment.  Il s'agit du mode  de  segmentation  présent
+uniquement sur les processeur de la famille Intel IA32.  Ce mode étant aujourd'hui remplacé  par  le
+système de pagination, il ne sera pas décrit ici.
+\end{itemize}
+
+\paragraph{}
+Le   principe   de   fonctionnement   de   la   pagination    fournit    plusieurs    avantages    :
+\begin{itemize}
+\item Tout d'abord, à chaque processus est associé un AS (espace d'adressage) qui  lui  est  propre.
+Ainsi, il se voit seul en mémoire et il ne possède plus la capacité d'accéder aux autres  processus.
+En effet, l'accès à la mémoire physique se fait via un accès à une adresse  virtuelle.   Pour  qu'un
+processus y accède, une association entre adresse physique et adresse virtuelle, locale à cet espace
+d'adressage, doit avoir été faite par le noyau en préalable, via configuration de la MMU. Lors de la
+création d'un processus, seules les adresses physiques correspondant  à  ces  propres  données  sont
+intégrées à l'espace d'adressage, interdisant à ce dernier  d'accéder  aux  données  de  tout  autre
+processus.
+\item De plus, la gestion de la fragmentation de la mémoire centrale, dépendant des  allocations  et
+désallocations successives de la mémoire, est rendue opaque en mémoire virtuelle. Des espace mémoire
+physiques disjoints peuvent être positionnés de manière contigüe dans l'espace d'adressage,  faisant
+croire  au  processus  que  ses  données  sont  contigüe  sans  pour  autant  qu'elles  le   soient.
+\end{itemize}
+
+\section{Droits d'accès mémoire et détection de comportement invalides}
+
+\paragraph{}
+Les attaques entre les différents processus ne sont pas les  seules  possibles.   Il  est  également
+possible de corrompre le comportement d'un processus donné, pour lui faire faire un  traitement  non
+prévu.\\
+Une des attaques les plus classiques est l'injection  de  {\it  shellcode}.   L'attaque  consiste  à
+intégrer quelque part dans l'espace d'adressage du processus  une  suite  d'instructions,  avant  de
+corrompre   la   pile   pour   provoquer   un   branchement   vers   ce    bloc    d'instructions.\\
+Cette attaque est donc faite en deux temps, en positionnant des instructions en  mémoire,  avant  de
+forcer un branchement.  Cela implique de pouvoir écrire des données  dans  une  partie  de  l'espace
+mémoire qui soit exécutable.  Cela implique de pouvoir écraser des données déjà présente  sans  pour
+autant provoquer un plantage du processus.  En général, les shellcodes sont placés dans la pile,  en
+amont du positionnement courant du pointeur de pile. Il convient, pour éviter ce type d'attaque, de
+rendre l'espace mémoire utilisé pour la pile non-exécutable.  A l'inverse, l'espace  mémoire  où  se
+situe le code du processus doit lui être exécutable, mais ne doit pas  être  écrivable,  ce  dernier
+étant immuable durant l'exécution du processus.\\
+On définit ici des droits d'accès à des  espace  mémoire  (lecture,  écriture,  exécution)  variants
+selon le type de données qui y sont hébergé. Les MMU modernes, lors de la création d'une association
+entre mémoire physique et mémoire virtuelles,  définissent  ces  trois  propriétés,  fournissant  un
+durcissement   supplémentaire   pour   réduire   les   risques   de   corruption   d'un   processus.
 
 \section{Les problématiques de sécurité des noyaux}
 \paragraph{}
