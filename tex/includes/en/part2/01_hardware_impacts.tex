@@ -1,0 +1,426 @@
+%%
+%%
+%% hardware_impacts.tex for thesis in /doctorat/these/tex
+%%
+%% Made by Philippe THIERRY
+%% Login   <Philippe THIERRYreseau-libre.net>
+%%
+%% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
+%% Last update Fri Feb  4 13:34:03 2011 Philippe THIERRY
+%%
+
+\chapter{Hardware impacts}
+\doMinitoc
+
+\section{Reminders}
+
+\subsection{Modern hardware architectures in embedded systems}
+
+Une   architecture   matérielle   type   est   proche    de    la    figure    \ref{fig:gal_hw_diag}
+\begin{figure}[h]
+\input{figures/hw_std.tex}
+\label{fig:gal_hw_diag}
+\caption{Schéma général des composants matériels impactant le temps réel}
+\end{figure}
+
+L'élément central est le  bus,  dont  l'accès  est  contrôlé  par  le  {\it  contrôleur  de  bus}.\\
+C'est  ce  dernier  qui  permet  la  communication  entre  les  différents   organes   matériel,   y
+compris   le   processeur\footnote{Le   terme   processeur    définit    ici    un    \index{GPP}GPP
+(General Purpose Unit)}.
+
+\subsection{Managing memory access}
+
+\paragraph{}
+Les processeurs modernes sont équipés d'une \index{MMU}\gls{mmu}  ({\it  Memory  Management  Unit}),
+voire, selon les familles de
+processeurs, d'une \index{I/OMMU}I/OMMU.
+Ces deux éléments jouent un rôle de filtre permettant  de  fournir  des  capacités  de  sécurisation
+des accès mémoire, ainsi qu'un service d'abstraction de  celle-ci,  au  travers  de  la  pagination.
+
+\paragraph{}
+La pagination permet de fournir au logiciel une vue logique de  la  mémoire,  permettant  ainsi  une
+gestion de l'adressage physique plus aisée car invisible  au  niveau  logiciel.   Elle  définit  des
+{\it \index{Espace  d'adressage}espaces  d'adressage}  pour  chaque  processus,  s'appuyant  sur  un
+adressage logique, lui donnant l'impression d'être seul à s'exécuter.
+
+\begin{figure}[h]
+\input{figures/mmu_as.tex}
+\caption{Translation d'adresse - vue générale}
+\end{figure}
+
+\paragraph{}
+À l'inverse, les éléments matériels utilisent  tous  un  adressage  physique.   Ainsi,  une  recopie
+\index{DMA}DMA  se   fait   directement   vers   une   adresse   physique   en   mémoire   centrale.
+
+\paragraph{}
+À ces deux organes du micro-processeur sont associés des éléments comme le \index{TLB}TLB ({\it Table
+Lookahead   Buffer}),   permettant   d'accélérer   la   translation    d'adresse    entre    logique
+et    physique.\\
+L'ensemble des accès du processeur vers la mémoire passe par la \gls{mmu}. L'ensemble des accès des
+contrôleurs d'I/O passe par l'\gls{iommu}.
+
+\paragraph{}
+La configuration de ces éléments matériels se fait par le logiciel. C'est le noyau qui est en charge
+de veiller à la gestion de la  mémoire,  et  donc  de  maintenir  à  jour  les  informations  de  la
+\gls{mmu}   et   de   l'\gls{iommu}
+
+\section{I/O controllers}
+
+Clients du contrôleur DMA primaire, ils font des requêtes de recopie mémoire à ce dernier, en fonction
+de leurs besoins.
+
+\section{DMA controllers}
+
+\subsection{General principle}
+
+Mono ou multi-canaux, ils se comportent comme un coprocesseur dont le travail correspond à faire de la
+recopie de mémoire à mémoire, qu'il s'agisse de la mémoire centrale ou de  la  mémoire  internes  au
+périphériques  d'entrée/sortie.
+
+\subsection{Data transfers}
+
+\subsubsection{Memory access using burst mode}
+
+\section{Memory controllers}
+
+\begin{figure}[h]
+\input{figures/ddr_memory_access.tex}
+\caption{Décomposition  des  lignes  de  bus  d'un   controleur   DDR1\label{fig:ddr_memory_access}}
+\end{figure}
+
+
+
+\section{Bus and interconnects policies}
+
+\section{Interrupt controllers (ICU)}
+
+\paragraph{}
+Les interruptions matérielles sont des évènements asynchrones émis  par  le  matériel  pour  générer
+de manière synchrone l'exécution d'un élément logiciel. Il peut s'agir d'un timer (un ordonnancement
+en mode {\it time-driven} s'appuie sur ce dernier pour gérer sa période d'exécution),  d'une  frappe
+clavier,   ou   de   toute   information   dont   la    fréquence    n'est    pas    trop    élevée.
+
+\paragraph{}
+Les  interruptions  sont  gérés  par  un  contrôleur  matériel,  l'\index{APIC}APIC  ({\it  Advanced
+Programable Interruption Controler}),  qui  les  relaie  au  processeur.   Ce  dernier  stoppe  sont
+cycle d'exécution courrant, pour exécuter un {\it handler  d'IRQ},  que  le  noyau  à  préalablement
+enregistré auprès du processeur (e.g. sur les architectures ia32, cela se fait via le registre IDTR).
+
+\paragraph{}
+Les interruptions matérielles ont deux propriétés :
+\begin{itemize}
+\item Elles ne sont pas  prédictibles  car  sont  la  conséquence  d'un  évènement  matériel  lié  à
+l'environnement,  comme  un  signal   de   remplissage   de   la   mémoire   interne   d'une   carte
+Ethernet,   ou   une   frappe   clavier.
+\item Elles sont exécutées par le processeur en l'absence de contrôle logiciel. Seule la désactivation
+des interruptions peut empécher leur exécution (hors \index{NMI}NMI).
+\end{itemize}
+
+\paragraph{}
+L'exécution des handlers d'interruptions se faisant directement par le processeur sans  en  informer
+la   couche   logicielle   font   de    ces    dernières    des    {\it    voleurs    de    cycles}.
+
+\paragraph{}
+Comme le montre la figure \ref{fig:pic_cascade}, il peut y avoir  un  grand  nombre  d'interruptions
+matérielles différentes. Aujourd'hui, elles ont tendance à diminuer au profit du DMA et du polling,
+les interruptions devenant trop fréquente et donc trop coûteuses.
+
+\begin{figure}[h]
+\input{figures/pic_cascade.tex}
+\label{fig:pic_cascade}
+\caption{Schéma général du PIC 8259 des architectures 8086}
+\end{figure}
+
+\section{Processors architecture}
+
+\subsection{Cache controllers and architecture}
+
+\subsubsection{General description}
+
+\paragraph{}
+Le \index{Cache}cache est une mémoire statique à accès  rapide,  permettant  d'accélérer  les  accès
+mémoire du CPU, en copiant les données (code et data) de manière à ce  qu'elles  soient  accessibles
+directement  par  le  CPU,  sans   la   lourdeur   d'un   transfert   sur   le   bus\cite{cachalgo}.
+
+\paragraph{}
+La figure \ref{fig:cache_soa} montre une architecture mémoire générique, avec plusieurs  niveaux  de
+cache, suivis d'un bus d'accès mémoire et  du  controlleur  mémoire  principale  (DDR  en  général).
+
+\begin{figure}
+\input{figures/cache_architecture.tex}
+\caption{Architecture en couche générique\label{fig:cache_soa}}
+\end{figure}
+
+\paragraph{}
+Il existe dans les processeurs modernes plusieurs niveaux de cache :
+\begin{enumerate}
+\item Cache niveau 1, le plus petit et accessible le plus rapidement.  Ce  cache  est  spécialisé  :
+il définit un conteneur dit {\it cache code},
+pour les éléments de code (section {\texttt .code} des binaires), et un  conteneur  dit  {\it  cache
+data},   pour   le   reste   des    données    ({\texttt    .bss},    {\texttt    .rodata},    ...).
+\item Cache niveau 2, de taille plus  conséquente,  mais  dont  l'accès  est  moins  rapide  que  le
+cache L1. Ce cache n'est pas spécialisé.
+\item Cache niveau  3,  de  taille  plus  grande  encore.   Partagé  entre  les  c{\oe}urs  sur  les
+architectures multi-c{\oe}urs. Ce cache n'est pas spécialisé. Ce dernier n'est pas toujours présent.
+\end{enumerate}
+
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+{\textbf{Niveau de mémoire}} & {\textbf{Temps d'accès}} \\
+\hline
+Cache L1 & 2-8 nano secondes \\
+Cache L2 (partagé) & 5-12 nano secondes \\
+Mémoire centrale & 10-60 nano secondes \\
+\hline
+\end{tabular}
+\end{center}
+\label{tab:cache_access_time}
+\caption{Temps d'accès mémoire sur un Intel Core 2 duo}
+\end{table}
+
+\paragraph{}
+Le tableau \ref{tab:cache_access_time}\footnote{confer \url{http://expertester.wordpress.com/2008/05/30/core-2-duo-vs-pentium-dual-core/}} fournit
+une  comparaison  du  coût  d'accès  à   une   donnée   selon   son   positionnement   en   mémoire.
+
+\paragraph{}
+Les algorithmes de cache ont divers niveaux d'associativité :
+\begin{itemize}
+\renewcommand{\labelitemi}{\textbullet}
+\item Les algorithmes de type {\textit one-way associative} associent  une  cellule  mémoire  à  une
+et une seule cellule de cache.  Il s'agit d'un algorithme surjectif, du fait de la taille du  cache.
+Le choix de remplacement étant de type $1:1$, aucun algorithme spécifique n'est utilisé. Les données
+sont écrites au seul emplacement possible en cache.
+\item Les algorithmes de type {\textit N-way associative} et supérieur associe une cellule mémoire avec
+{\it N} (resp. 2, 3, 4, ...)
+cellules de cache. Cette associativité permet d'optimiser l'écrasement des cellules du cache en donnant
+un choix de positionnement à la cellule mémoire à mettre en cache.  Les algorithmes de  ce  type  se
+différencient par leur politique de choix de la cellule à remplacer.
+\end{itemize}
+On a ainsi :
+\paragraph{{\it N}-Way Set Associative}
+Cet algorithme permet, pour chaque élément mémoire à charger  en  cache,  de  pouvoir  se  placer  à
+{\it N} endroits dans le cache.  Ces {\it N} positions sont dépendantes  de  l'adresse  physique  en
+mémoire centrale de la donnée.\\
+Le choix de  la  cellule  parmis  la  liste  des  cellules  admissibles  se  fait  au  travers  d'un
+algorithme de gestion de cache tel que décrit plus loin.
+
+\paragraph{Direct Mapped}
+L'algorithme Direct Mapped est un algorithme simple, optimisant le coût d'exécution du choix de la cellule.
+Un élément mémoire n'est placé qu'à un seul endroit dans le cache, en fonction de son adresse physique,
+quelle que soit la donnée précédemment présente.
+
+
+\paragraph{}
+Lorsqu'une donnée n'est pas en cache, on parle de {\it cache-miss}. Le processeur va successivement
+vérifier  les  caches  L1,  L2  et  L3  (siprésent),  avant   d'initier   une   recopie   à   partir
+de    la    mémoire    centrale.
+
+\paragraph{}
+Il existe plusieurs algorithmes de gestion du cache, tous de type  probabiliste,  ce  qui  les  rend
+malheureusement incompatibles avec les besoins du temps réel dur.\\
+En conséquence, les systèmes temps réel très  contraints,  comme  dans  l'aviation  ou  le  spatial,
+utilisent des architectures avec cache désactivé.
+
+\subsubsection{Cache positioning}
+
+\paragraph{Cache \index{Cache!Look-aside}look-aside}
+Cette architecture place le cache et la mémoire centrale côte à côte.  Ainsi, le CPU peut accéder  à
+la mémoire centrale sans passer par le cache.\\
+Le principe de fonctionnement est le suivant :
+\begin{itemize}
+\renewcommand{\labelitemi}{\textbullet}
+\item Le processeur démarre un cycle de lecture
+\item Si le cache possède la donnée en local (cache hit), il répond au CPU, et clôture le  cycle  de
+lecture sur le bus.
+\item Si le cache ne possède pas la donnée (cache miss), il laisse la mémoire centrale  répondre  au
+processeur,  et  espionne  les  données  transitant  sur  le  bus  afin  de  se   mettre   à   jour.
+\end{itemize}
+
+\begin{figure}[h]
+\input{figures/cache_memory_bus.tex}
+\caption{Comparaison   des   architectures   de   type   cache   through   et    cache    lookaside}
+\label{fig:cache_look_aside}
+\end{figure}
+
+
+\paragraph{Cache \index{Cache!Look-through}look-through}
+Cette architecture place le cache en coupure entre le processeur et la mémoire centrale. Le CPU passe
+donc par le cache pour l'accès mémoire.\\
+Le principe est le suivant :
+\begin{itemize}
+\renewcommand{\labelitemi}{\textbullet}
+\item Le processeur démarre un cycle de lecture
+\item  Si  le  cache  possède  la  donnée  en  local  (cache  hit),   il   répond   au   processeur.
+\item Si le cache ne possède pas la donnée, il transfert la requête de lecture sur le bus. La mémoire
+centrale renvoie la donnée, qui est mise en cache en même temps qu'elle est renvoyé  au  processeur.
+\end{itemize}
+
+\begin{figure}[h]
+\input{figures/cache_look_through.tex}
+\caption{Architecture de cache en mode {\it look-through}}
+\label{fig:cache_look_through}
+\end{figure}
+
+Cette architecture provoque des cache miss plus long (vérification par le cache avant  de  faire  la
+requête au contrôleur de bus), mais permet d'utiliser le cache indépendamment des autres processeurs
+(pour un cache local).
+
+\subsubsection{\index{Cache!Consistance}Cache consistance}
+
+\paragraph{}
+Du fait que le cache contient des duplicatas d'une partie de la mémoire, il est important de s'assurer
+que la copie  est  l'originale  restent  identique.   À  défaut,  cela  peut  entraîner  des  bogues
+logiciels,  difficilement  détectables.
+
+\paragraph{}
+La consistance du cache peut être impactée de différentes manières, dont voici une liste non-exhaustive :
+\begin{itemize}
+\renewcommand{\labelitemi}{\textbullet}
+\item Mise à jour de la mémoire par un contrôleur DMA
+\item  Écriture  en  mémoire  par  un  autre  processeur  (architecture   multi-CPU/culti-c{\oe}urs)
+\item Modification de la donnée en cache sur un autre processeur
+\end{itemize}
+
+Il existe différentes méthodes permettant de garantir la consistance des données en caches. En voici
+deux largement utilisées :
+
+\paragraph{\index{Cache!Snooping}Snooping}
+Le snooping consiste en l'espionnage du bus d'adresse, afin de détecter  une  modification  sur  une
+adresse mémoire contenue en cache.\\
+Il y a deux manières de réagir à une détection positive :
+\begin{itemize}
+\renewcommand{\labelitemi}{\textbullet}
+\item Prévoir un rechargement de la cellule impactée (méthode dite {\it write-back}). Le rechargement ne
+se fait pas nécessairement sur le moment, mais peut être ordonnancée pour s'exécuter au moment du prochain
+accès à cette cellule, ou avant, selon les implémentations.
+\item Désactiver la cellule impactée.  Le prochain accès au données de cette cellule  provoquera  un
+{\it    cache-miss},    suivi    d'une    recopie    à    partir    de    la    mémoire    centrale.
+\end{itemize}
+
+\paragraph{\index{Cache!Snarfing}Snarfing}
+Le snarfing consiste à associer la détection d'une modification d'une donnée en cache à l'espionnage du
+bus de donnée. En espionnant le bus, il est capable à tout instant de mettre à jour la cellule impactée,
+et de maintenir la consistance.
+
+\subsubsection{Synchronising cache with the main memory}
+\paragraph{}
+Lorsque des données sont modifiées en local sur le cache, il est nécessaire de mettre à jour la mémoire
+centrale afin de prendre en compte ce changement.
+
+\paragraph{write-back}
+Le cache garde en mémoire, pour chaque cellule, sont état. Lorsque la cellule est écrasée, ou que le cache
+est  vidé,  les  données  modifiées  localement  sont  synchronisées  avec  la  mémoire  centrale.\\
+La mise à jour de la mémoire centrale n'est pas synchrone avec la modification locale. Cela implique, au
+niveau logiciel, de prévoir les problèmes d'incohérence sur les architectures multi-c{\oe}urs, au travers
+de l'usage des {\it \index{Memory barrier}memory barriers}.
+
+\paragraph{write-through}
+Une écriture sur cache implique une remontée synchrone de la mise à jour de la donnée, afin de maintenir
+une cohésion.
+
+\subsubsection{Cache management algorithms}
+
+\paragraph{\index{Cache!LRU}Least Recently Used}
+L'algorithme LRU s'appuie sur les dates d'accès aux items du cache. En cas de cache-miss, c'est l'élément
+qui a été accédé il y a le plus longtemps qui est remplacé.\\
+Pour des processus faisant des accès fréquents à un même espace mémoire, comme dans le cas de processus
+calculatoires par exemple, LRU est efficace.
+
+\paragraph{\index{Cache!MRU}Most Recently Used}
+L'algorithme MRU, à l'opposé du LRU, remplace l'élément dont l'accès est le plus récent. Il considère
+l'hypothèse  selon  laquelle  un  élément  accédé   très   récemment   ne   le   sera   plus   avant
+une    certaine    durée.\\
+MRU   est   plus   efficace   pour   des   processus   faisant   des   accès   mémoire    cycliques.
+
+\paragraph{\index{Cache!Pseudo-LRU}Pseudo-LRU}
+L'algorithme Pseudo-LRU utilise un arbre binaire représentant l'ensemble des cellules de caches pouvant
+être remplacées. Chaque ensemble de cellules posséde un tag fournissant une indication sur l'emplacement
+(branche droite, branche gauche) de la cellule qui sera remplacée.  Ce tag est mis à jour  à  chaque
+traversée de l'arbre.
+
+\paragraph{}
+Il s'agit d'un algorithme jugé efficace en comparaison au LRU pour les caches dont l'associativité est
+supérieure à 4.  Il est utilisé dans les architectures Intel 486, et dans les architecture  PowerPC,
+comme le PowerPC G4 de Freescale \cite{plru}. Le schéma \ref{fig:cache_plru_e300} est tiré du manuel
+de   référence    du    processeur    e300,    utilisé    dans    les    power    quicc    2    pro.
+
+\begin{figure}
+\input{figures/cache_plru_e300.tex}
+\caption{Automate   à   état   de    l'algorithme    pseudo-LRU    du    Power    Quicc    2    Pro}
+\label{fig:cache_plru_e300}
+\end{figure}
+
+
+\paragraph{\index{Cache!Segmented-LRU}Segmented LRU}
+L'algorithme SLRU utilise deux segments de caches complémentaires, dont les cellules sont ordonnées de
+la dernière utilisée (MRU) à la plus anciennement utilisée (LRU) :
+
+\begin{itemize}
+\renewcommand{\labelitemi}{\textbullet}
+\item Le premier segment, nommé {\it probationary segment}, est celui sur lequel sont mises les données
+mémoire, en cas de cache miss. C'est également le seul segment où des données peuvent être retirées
+du cache.
+\item Le second segment, nommé {\it protected segment}, contient la liste des cellules de cache ayant
+été accédées au moins deux fois.
+\end{itemize}
+Le schéma \ref{fig:slru_1} montre ainsi que l'algorithme de cache fait une différence entre des données
+accédées à faible fréquence et des données accédées régulièrement.
+
+\begin{figure}
+\begin{minipage}[c]{.46\linewidth}
+  \input{figures/slru_1.tex}
+\end{minipage}\hfill
+\begin{minipage}[c]{.46\linewidth}
+  \input{figures/slru_2.tex}
+\end{minipage}\hfill
+\caption{Intégration et déplacement des données accédées fréquemment}
+\label{fig:slru_1}
+\end{figure}
+
+
+\paragraph{}
+En effet, lorsqu'une cellule est accédée une seconde fois après un premier cache miss, celle-ci  est
+transférée  sur  le  segment  protégé,  en  tête  de  liste  coté  MRU   (Most   Recently   Used).\\
+Cela a pour conséquence, si le segment protégé est plein, de faire descendre la cellule la plus anciennement
+accédée sur le segment probatoire, en tête de liste coté MRU, ceci afin de donner une deuxième chance à
+toute donnée accédée au moins deux fois. Lorsque le segment probatoire est plein et que de nouvelles
+données y sont intégrées, que ce soit via un déplacement d'une cellule du segment protégé ou du fait d'un
+cache miss, la cellule la moins récemment utilisée et écrasée.
+
+\begin{figure}
+\input{figures/slru_3.tex}
+\caption{Principe de deuxième chance du SLRU}
+\end{figure}
+
+\paragraph{}
+Cet algorithme fait donc une différence entre les données accédées souvent (au moins deux fois) et les
+données   accédées   rarement   (une   fois)   pendant    leur    durée    de    vie    en    cache.
+Il  permet  donc  d'optimiser  la  gestion  du  cache  lors   d'accès   mémoire   peu   fréquents.\\
+La  taille  des  deux   segments   est   dépendante   dynamiquement   du   schéma   d'entrée/sortie.
+
+\paragraph{\index{Cache!LFU}Least Frequently Used}
+
+Lors d'un cache miss, la cellule utilisée pour charger les données mémoire est celle dont le contenu est
+utilisé le moins fréquemment. En cas d'égalité de fréquence, l'algorithme LRU est utilisé pour départager
+les cellules.
+
+
+\subsection{Pipelines architectures}
+
+\subsection{Hyperthreading}
+
+\subsection{Branch prediction}
+
+\section{Memory controllers}
+
+\section{Sharing problematic}
+
+\subsection{Concurrent access}
+
+\subsection{Memory cohesion management}
+
+\section{MPSoC architectures}
+
+\section{Clustered architectures}

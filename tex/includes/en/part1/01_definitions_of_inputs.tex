@@ -6,48 +6,66 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:23:03 2010 Philippe THIERRY
-%% Last update Tue Mar 30 18:01:35 2010 Philippe THIERRY
+%% Last update Thu Jan 27 11:01:17 2011 Philippe THIERRY
 %%
 
-\chapter{DE LA MESURE ET DE L'EMPLOI DU WCET}
+\chapter{Measurement and usage of WCET}
 
 
 %\begin{changemargin}{1cm}{1cm}
 {\it
-Il existe deux types de système temps réel :
+A real-time system is a system which guarantee that all its tasks meet their relative deadlines.\\
+There is two different real-time systems:
 \begin{itemize}
-\item Les systèmes temps réel durs, où les taches doivent possèdent une date limite de fin d'exécution
-dont le dépassement a un impact fort sur le bon fonctionnement du système.
-\item Les systèmes temps réel souples, où le dépassement de la date limite de fin d'exécution est acceptable.
-à une qualité de service fournie par le système.
+\item hard real-time systems, in which all executed tasks relative deadlines must be met in order
+to avoid a huge impact on the overall system execution.
+\item soft real-time systems, in which some deadlines can be overtaken without having any serious
+impacts on the system execution. Such overtaking usually impacts the associated quality of services
 \end{itemize}
-Dans les deux cas, il est nécessaire d'évaluer une métrique : la durée d'exécution pire cas d'une tache.
+In both cases, a value is used in order to define the needed capacities : the worst case execution
+time of a task. 
 }
 %\end{changemargin}
 \doMinitoc
 
-\section{Définitions préliminaires}
+\section{Preliminary definitions}
 
-\subsection{Définition du temps réel}
+\subsection{Defining real-time}
 
 \paragraph{}
 Comme le montre le schéma \ref{fig:rt_hard_soft}, il existe trois grandes familles de taches :
 \begin{itemize}
-\item Les taches temps réel dur, comme la tache {\it A}. Elles doivent respecter scrupuleusement un
+\item Les taches temps réel dur. Ces dernières doivent respecter scrupuleusement un
 temps maximum d'exécution, faute de quoi l'utilisabilité des résultats de la tache est nulle.
-\item Les taches temps réel souple, comme la tache {\it B}. L'utilisabilité des résultats de la tache décroit avec son retard.
-\item Les taches non temps réel. Il n'est pas définit de temps maximum d'exécution. L'utilisabilité des reésultats
-reste constante.
+\item Les taches temps réel souple. L'utilisabilité des résultats de la tache décroît avec son retard.
+\item Les taches non temps réel. Il n'est pas définit de temps maximum d'exécution. L'utilisabilité des résultats
+reste constante. La Figure \ref{fig:rt_hard_soft} montre les différences entre les différents types de tache.
 \end{itemize}
 
 \begin{figure}[h]
-\input{figures/rt_hard_soft.tex}
-\label{fig:rt_hard_soft}
+\input{figures/real_time_lines.tex}
 \caption{Les trois grandes familles de taches}
+\label{fig:rt_hard_soft}
 \end{figure}
 
+\subsection{About real-time attributes}
+\label{sec:primarydef}
 
-\subsection{Définition du WCET}
+\paragraph{}
+Une tache temps réel $\tau_{i}$ possède trois attributs principaux:
+\begin{itemize}
+\item Sa durée d'exécution pire coût, ou \gls{wcet} (Worst Case Execution Time), notée $C_{i}$
+\item Sa deadline, définissant l'instant auquel elle doit avoir fini de s'exécuter, notée $D_{i}$
+\item Sa période, définissant sa latence minimum d'instanciation, notée $T_{i}$. Chaque instance de tache est appellé un {\it job}
+\item Le temps de réponse d'un job, correspondant à la durée entre son instanciation et sa terminaison, noté $R_{i}$
+\end{itemize}
+\`{A} ces trois attributs, d'autres viendront s'ajouter, en fonction du type de tache.
+
+\paragraph{}
+Un ensemble de taches temps réel est appellé un ensemble de taches, ou {\it taskset}. Un ensemble de tache possède
+des propriétés dérivées des taches qu'il possède. Ces dernières sont présentée dans la section \FIXME.
+
+\subsection{Défining the WCET}
 
 \paragraph{}
 Le \gls{wcet} ({\it Worst Case Execution Time}) définit la durée d'exécution maximum d'une tache. Associée à une {\it deadline},
@@ -59,35 +77,22 @@ elle permet, pour une liste de taches donnée :
 \end{itemize}
 
 \paragraph{}
-Le temps maximum $T_{m}(\tau_{i})$ pouvant se dérouler entre l'arrivée d'une tache $\tau_{i}$
-et sa terminaison se décompose comme suit :
-$$T_{m}(\tau_{i}) = T_{e}(\tau_{i}) + \Delta T$$
+Les attributs définis dans la Section \ref{sec:primarydef} doivent avoir les propriétés définies dans les équations \ref{eqn:rtprop_1},
+\ref{eqn:rtprop_2} et \ref{eqn:rtprop_3} pour que chaque tache $\tau_{i}$ soit ordonnançable.
 
-$\Delta T$ est la marge que possède l'ordonnanceur entre le coût d'exécution de la tache proprement dite, et la durée
-qu'il possède pour l'exécuter.
 
-\paragraph{}
-Un système en mode batch, exécutant chaque tache d'un ensemble de taches $E_{\tau}$ l'une après l'autre sans intelligence,
-doit respecter uniquement la règle suivante pour s'assurer que chaque tache est ordonnançable à temps :
+\begin{eqnarray}
+\label{eqn:rtprop_1}
+\forall i, C_{i} \le D_{i}\\
+\label{eqn:rtprop_2}
+\forall i, R_{i} \le D_{i}\\
+\label{eqn:rtprop_3}
+\forall i, D_{i} \le T_{i}
+%U_{i}, \displaystyle{\sum_{i \in [1, n]}} U_{i} \le 1
+%\label{eqn:rtprop_3}
+\end{eqnarray}
 
-$$\forall \tau_{i} \in E_{\tau}, B_{\tau} \textrm{ contenant toutes les taches précédantes à } \tau_{i}$$
-$$T_{m}(\tau_{i}) > T_{e}(\tau_{i}) + \sum_{\tau_{b} \in B_{\tau}} T_{e}(\tau_{b})$$
-
-Ainsi, lors de l'arrivée d'une nouvelle tache $\tau_{i}$, il est possible de définir son ordonnançabilité, et
-au besoin de la refuser.
-
-\paragraph{}
-Les algorithmes en mode batch sont aujourd'hui révolus, du fait de leur manque d'optimisation de la gestion des taches.
-Ainsi, là où un ordonnanceur intelligent pourrait, pour une nouvelle instance $\tau_{i}$ urgente, essayer de la
-placer plus en aval dans sa liste tout en s'assurant du maintient de l'ordonnançabilité des autres taches, un ordonnanceur
-en mode batch la refuserait.
-
-\paragraph{}
-La prise en compte de l'impact de l'exécution de chaque tache sur l'ordonnançabilité de toutes les autres est à la base
-de la définition des ordonnanceurs temps réel. Il devient nécessaire, à partir de ce moment, de définir ce qu'est un
-ensemble de taches.
-
-\subsection{Définition des ensembles de taches}
+\subsection{Definition of a taskset}
 
 \paragraph{}
 Pour aborder la problématique temps réel, on définit un profil d'environnement logiciel, nommé ensemble de taches ({\it
@@ -102,7 +107,7 @@ Pour aborder la problématique temps réel, on définit un profil d'environnement l
 On parle alors de l'ordonnançabilité d'une tache, au travers de la capacité d'exécution de toutes ses instances.\\
 Un ensemble de tache est nécessairement finit, et possède des caractéristiques fixes dans le temps.
 
-\subsubsection{Les ensembles périodiques}
+\subsubsection{Periodic tasksets}
 
 \paragraph{}
 Les ensembles périodiques respectent la propriété suivante :\\
@@ -117,7 +122,7 @@ On peut de plus mesurer la charge maximum induite par cette tache, en s'appuyant
 plus, la variation de la charge induite par cette tache dépend uniquement du de la variation du coût d'exécution de
 chaque instance de $\tau_{i}$.
 
-\subsubsection{Les ensembles sporadiques}
+\subsubsection{Sporadic tasksets}
 
 \paragraph{}
 Les ensemble sporadiques respectent la propriété suivante :\\
@@ -129,7 +134,7 @@ Par contre, on ne peux pas prédire les dates d'instanciation successives de cett
 la variation de la charge induite par cette tache dépend à la fois du coût d'exécution effectif de
 chaque instance de $\tau_{i}$ et de l'élongation de la période $P_{i}$.
 
-\subsubsection{Les ensembles apériodiques}
+\subsubsection{aperiodic tasksets}
 
 \paragraph{}
 Les ensembles apériodique respectent la propriété suivante :\\
@@ -139,18 +144,18 @@ indépendament de la finition de l'instance précédente.
 \paragraph{}
 On ne connaît pas la charge pire cas de chaque tache, la valeur de $P_{i}$ appartenant à l'ensemble $[0, +\infty[$
 
-\subsubsection{Les ensembles fenêtrés}
+\subsubsection{Windowed taskset}
 
 Une fenêtre glissante de temps ${\Delta}t$ est définie, et on lui associe un nombre d'interruptions
 maximum. Cette valeur est utilisée en entrée de la mesure du WCET.
 
-\subsection{La dynamique des ensembles de taches}
+\subsection{About the taskset dynamic}
 
-\subsubsection{Les ensembles concrets}
+\subsubsection{Concrete sets}
 
-\subsubsection{Les ensembles non concrets}
+\subsubsection{Dis-concrete sets}
 
-\section{Introduction à l'estimation du WCET}
+\section{Introducing the WCET estimation}
 
 \paragraph{}
 La mesure du \gls{wcet} est complexe pour de multiples raisons. En effet, pour définir la charge processeur maximum nécessaire à
@@ -180,28 +185,39 @@ comme les interruptions et les DMA), et implique en conséquence de maîtriser com
 Il existe cependant un certain nombre de solutions pour mesurer le \gls{wcet} d'une tache. Ces solutions sont diverses, et
 leur résultat plus ou moins précis.
 
-\section{Méthodes statiques d'estimation du WCET}
+\section{Static WCET estimation methods}
 
-\subsection{Analyse du flot d'exécution}
-
-\paragraph{}
-Un autre type de mesure correspond à l'étude du code assembleur d'une tache, afin d'en extraire un arbre d'exécution. La
-branche la plus coûteuse de cet arbre correspondrait alors à la dynamique d'exécution du \gls{wcet}.
+\subsection{Analysing the execution flow}
 
 \paragraph{}
-La difficulté devient alors de s'assurer que cette dynamique d'exécution est cohérente avec l'algorithmie de la tache et
-correspond donc bien à un comportement dynamique possible. En effet, lorsque les branchement dépendent d'éléments environnementaux
-de la tache, il devient difficile de différencier une branche d'exécution impossible d'une branche d'exécution envisageable.
+Pour chaque tache, il est également possible de s'appuyer sur la mesure du chemin d'exécution le plus long (\gls{wcep}). Si ce chemin est
+connu, alors le calcul du temps d'exécution de ce chemin définit le WCET de la tache.
 
-\subsection{Utilisation d'une interprétation abstraite}
+\paragraph{}
+Les difficultés est multiples dans ce cas. Tout d'abord, l'étude ne peut se faire que sur le code assembleur généré par le compilateur,
+afin d'avoir les optimisations de compilations prise en compte. Ainsi, étudier le code source du programme est insuffisant du fait
+des capacités d'optimisations du compilateur.
 
-\subsection{Mesure avec simulation de l'architecture matérielle par variables symboliques}
+\paragraph{}
+Cependant, un certain nombre d'éléments ne sont pas pris en compte :
+\begin{itemize}
+\item L'existence réelle de cette branche, si cette dernière dépend de données dynamiques extérieures. Il devient alors nécessaire de
+simuler l'usage de ces données, avec différents ensembles de données pour étudier les différents cas possibles et éliminer les branches
+impossibles.
+\item L'impact des éléments d'hyperthreading et de branch prediction, pouvant provoquer des ralentissement (ou accélérations) dans
+l'exécutions du programme.
+\end{itemize}
+
+
+\subsection{Using abstract interpretation}
+
+\subsection{Measurement with hardware architecture simulation using symbolic variables}
 
 Prise en compte des pipelines et des caches code. Cache de données non mesurés car trop complexe.
 
-\section{Méthodes dynamiques d'estimation du WCET}
+\section{Dynamic WCET estimation method}
 
-\subsection{Mesure empirique}
+\subsection{Empiric measurements}
 
 \paragraph{}
 On peut construire un ensemble de mesures de l'exécution d'une tache, et considérer la mesure la plus élevée comme
@@ -220,11 +236,12 @@ d'une fonction, un outil de mesure du \gls{wcet} s'appuiant sur une définition f
 d'une tache permettrait alors de garantir, en terme de chemin d'exécution, la traversée du chemin le plus long. Une telle définition
 est malheureusement spécifique à chaque tache, est devient alors très coûteuse.
 
-\subsection{Définition des jeux de test}
 
-\section{Les éléments non estimés}
+\subsection{Defining a representative test suite}
 
-FIXME : à reconsidérer en fonction des éléments étudiés au dessus.
+\section{Non estimated elements}
+
+\FIXME : à reconsidérer en fonction des éléments étudiés au dessus.
 \paragraph{}
 Ces deux manières de définir le \gls{wcet} nécessite ensuite l'évaluation des impacts du matériel (temps d'accès mémoire,
 impacts de l'ordonnancement du bus, impacts d'un changement de c{\oe}ur, mise à jour du cache TLB, etc), ainsi que de
@@ -240,5 +257,5 @@ Afin de se rapprocher du véritable \gls{wcet}, ses mesures ajoutent un pourcenta
 \section{Conclusion}
 
 \paragraph{}
-FIXME: difficultés de prise en compte des impacts matériels et environementaux sur la mesure du WCET
+\FIXME: difficultés de prise en compte des impacts matériels et environementaux sur la mesure du WCET
 

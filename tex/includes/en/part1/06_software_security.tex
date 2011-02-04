@@ -6,10 +6,10 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Thu Jul 15 16:04:45 2010 Philippe THIERRY
-%% Last update Tue Nov  2 11:20:01 2010 Philippe THIERRY
+%% Last update Thu Jan 27 11:17:17 2011 Philippe THIERRY
 %%
 
-\chapter{Principes généraux de la sécurité logicielle}
+\chapter{General principles of the software security}
 
 {\it
 Présentation rapide...
@@ -17,13 +17,13 @@ Présentation rapide...
 
 \doMinitoc
 
-\section{Définir une gestion sécurisée de la mémoire}
+\section{Defining a secured management of the memory}
 
-\subsection{Garantir une ségrégation des accès mémoire des taches}
+\subsection{Task's memory access segregation guarantee}
 
 \paragraph{}
 
-\subsection{À propos du déploiement d'un processus en mémoire}
+\subsection{About software process memory deployement}
 
 \paragraph{}
 Un applicatif, construit dans un fichier binaire lors de l'édition de lien, possède un certain nombre de sections
@@ -35,7 +35,7 @@ de   considérer   pour   chacune   de   ces   section   des    propriétés    d'a
 De plus, le positionnement de ces sections en mémoire ne doit pas être prédictible, sous peine de simplifier les
 attaques par réécriture sur des sections attaquable comme la pile.
 
-\section{De l'intérêt de cloisonner les taches}
+\section{About the interest of tasks partitioning}
 
 \paragraph{}
 Il existe plusieurs niveau d'abstraction de la mémoire physique :
@@ -81,7 +81,7 @@ physiques disjoints peuvent être positionnés de manière contigüe dans l'espace d
 croire  au  processus  que  ses  données  sont  contigüe  sans  pour  autant  qu'elles  le   soient.
 \end{itemize}
 
-\section{Droits d'accès mémoire et détection de comportement invalides}
+\section{Memory access rights and abnormal behaviour detection}
 
 \paragraph{}
 Les attaques entre les différents processus ne sont pas les  seules  possibles.   Il  est  également
@@ -103,14 +103,14 @@ selon le type de données qui y sont hébergé. Les MMU modernes, lors de la créati
 entre mémoire physique et mémoire virtuelles,  définissent  ces  trois  propriétés,  fournissant  un
 durcissement   supplémentaire   pour   réduire   les   risques   de   corruption   d'un   processus.
 
-\section{Les problématiques de sécurité des noyaux}
+\section{Kernel-specific security problematics}
 \paragraph{}
 
-\subsection{Maîtriser l'usage des interfaces du noyau}
+\subsection{Mastering the kernel user-space interface usage}
 \paragraph{}
 Se protéger d'une attaque
 
-\subsection{Limiter la visibilité d'une application sur les informations d'état du système}
+\subsection{Reducing the system state visibility to user-space processes}
 
-\subsection{Tracer et réagir aux comportements anormaux}
+\subsection{Tracing and responding to abnormal behaviour}
 

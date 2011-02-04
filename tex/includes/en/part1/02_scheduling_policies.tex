@@ -6,10 +6,10 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:28:03 2010 Philippe THIERRY
-%% Last update Mon Mar 29 16:10:21 2010 Philippe THIERRY
+%% Last update Thu Jan 27 11:08:13 2011 Philippe THIERRY
 %%
 
-\chapter{LES FAMILLES D'ORDONNANCEURS TEMPS RÉEL}
+\chapter{Real-time schedulers familly}
 \doMinitoc
 
 \paragraph{}
@@ -17,22 +17,22 @@ Les différents ordonnanceurs temps réel possèdent plusieurs propriétés quant à l
 Ce chapitre définit séparément chaque propriété, construisant ainsi un ensemble homogène. Chaque
 ordonnanceur se situe à l'intersection des ensembles décrivant toutes ses propriétés.
 
-\section{Par dynamique d'ordonnancement}
+\section{Classification of dynamic schedulers}
 
-\subsection{L'ordonnancement en ligne}
+\subsection{On-line scheduling}
 
 \paragraph{}
 Les choix d'ordonnancement se font durant l'exécution, en fonction de l'état du système (nombre de taches,
 priorités, durée d'exécution).
 
-\subsection{L'ordonnancement hors ligne}
+\subsection{Out-of-line scheduling}
 
 \paragraph{}
 La politique d'ordonnancement est définie par avance. Elle est donc optimisée pour un cas particulier de jeu
 de taches ({\it taskset}), mais pose problème en cas d'impact non prévu sur la dynamique d'exécution (effets de caches, de surcharge
 de bus, WCET trop grand ou trop faible, etc).
 
-\section{Par schéma d'exécution}
+\section{Classification based on scheduling schemes}
 
 \paragraph{}
 Le schéma suivant décrit l'automate générique caractérisant les différents états d'une tache :
@@ -41,7 +41,7 @@ Le schéma suivant décrit l'automate générique caractérisant les différents états
 \caption{schéma générique de la dynamique d'ordonnancement}
 \end{figure}
 
-\subsection{Les ordonnanceurs préemptifs}
+\subsection{Preemptive schedulers}
 
 \paragraph{}
 Les taches sont préemptées à une période prédéfinie, fixe ou dynamique, nommée {\it \index{quantum}quantum}.  En conséquence,
@@ -49,7 +49,7 @@ une tache s'exécute en plusieurs fois. Cela implique que l'ordonnanceur s'exécut
 dans le cadre du mode non préemptif. La plupart du temps, l'ordonnanceur est de type {\it \index{time-driven}time-driven} (il s'appuie
 sur une horloge pour régler sa période d'éxection). C'est le cas par exemple du Round-Robin, qui préempte les taches sur quantum.\\
 
-\subsection{Les ordonnanceurs non préemptifs}
+\subsection{Non premptive schedulers}
 
 \paragraph{}
 Une fois élue, chaque tache est exécutée dans son intégralité. Cela écarte les problématiques de rechargement
@@ -62,40 +62,40 @@ L'ordonnanceur peut également être de type {\it \index{event-driven}event-driven
 de priorité supérieure à celle en cours d'exécution. C'est le cas par exemple de l'EDF, qui ne préempte que sur l'arrivée d'une
 tache plus prioritaire.
 
-\subsection{Les ordonnanceurs mixtes}
+\subsection{Mix scheduler}
 
 \paragraph{}
 Selon la priorité de la tache, cette dernière s'exécute sans préemption ou avec préemption.
 
-\section{Par oisiveté}
+\section{Classification based on idleness}
 
-\subsection{Les ordonnanceurs oisifs}
+\subsection{Idle schedulers}
 
 Les ordonnanceurs préem
 
-\subsection{Les ordonnanceurs non oisif}
+\subsection{Non ide schedulers}
 
-\section{Par politique de priorisation}
+\section{Classification based on priority policy}
 
-\subsection{Les ordonnanceurs à priorité fixe}
+\subsection{Fixed priority schedulers}
 
 \paragraph{}
 La priorité est associée à une tache au moment de sa création. Cette dernière est maintenue tout au long de la vie de cette
 tache.
 
-\subsection{Les ordonnanceurs à priorité dynamique}
+\subsection{Dynamic priority schedulers}
 
 \paragraph{}
 La priorité de la tache varie, en fonction par exemple de son vieillissement et/ou de son historique de consommation CPU.
-C'est le cas de la plupart des ordonnanceurs nom temps réels, comme SFQ (FIXME à confirmer)n ou encore SCHED\_OTHER (FIXME trouver
+C'est le cas de la plupart des ordonnanceurs nom temps réels, comme SFQ (\FIXME à confirmer)n ou encore SCHED\_OTHER (\FIXME trouver
 son vrai nom).
 
-\subsection{Les ordonnanceurs à priorité hybride}
+\subsection{Hybrid priority schedulers}
 
 \paragraph{}
 La priorité peut varier, selon le type de tache. On parle d'ordonnanceurs {\it FP/DP} ({\it Fixed Priority/Dynamic Priority}).
 
-\section{Cas des ordonnanceurs SMP}
+\section{About SMP-aware schedulers}
 
 \paragraph{}
 Les grandes familles d'ordonnanceurs SMP temps-réel sont les suivantes :\\
