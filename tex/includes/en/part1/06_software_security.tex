@@ -6,13 +6,12 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Thu Jul 15 16:04:45 2010 Philippe THIERRY
-%% Last update Thu Jan 27 11:17:17 2011 Philippe THIERRY
+%% Last update Mon Apr  4 17:13:20 2011 Philippe THIERRY
 %%
 
 \chapter{General principles of the software security}
 
 {\it
-Présentation rapide...
 }
 
 \doMinitoc
@@ -23,17 +22,20 @@ Présentation rapide...
 
 \paragraph{}
 
-\subsection{About software process memory deployement}
+\subsection{About software function memory deployment}
 
 \paragraph{}
-Un applicatif, construit dans un fichier binaire lors de l'édition de lien, possède un certain nombre de sections
-servant de conteneur à des données différentes, et ayant en conséquence des propriétés de sécurité (en terme d'accès)
-également différente. De ce fait, lors du déploiement de ces différentes section en mémoire vive, il est nécessaire
-de   considérer   pour   chacune   de   ces   section   des    propriétés    d'accès    spécifiques.
+A software function, considered through a single or multi-threaded process, possess various memory
+section containing each one part of the process (e.g. text section, stack, heap, rodata, etc).\\
+Each section has a specific access behaviour and as a consequence specific security properties.
+Such section should be considered with the proper access rights and the operating system should be
+able to react, through a predefined security policy, with a specific action.
 
 \paragraph{}
-De plus, le positionnement de ces sections en mémoire ne doit pas être prédictible, sous peine de simplifier les
-attaques par réécriture sur des sections attaquable comme la pile.
+Sometimes, accessing a given data with valid rights may be the consequence of a threats, like
+trying to read password content. Such access should also be detected and the operating system able
+to react. In the same time, such accesses should be made difficult in order to reduce the security
+threats probability, and then increasing the system security.
 
 \section{About the interest of tasks partitioning}
 

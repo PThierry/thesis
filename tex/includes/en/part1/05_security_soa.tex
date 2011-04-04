@@ -1,20 +1,27 @@
 %%
 %%
-%% hardware_impacts.tex for thesis in /doctorat/these/tex
+%% hardware_security.tex for thesis in /doctorat/these/tex
 %%
 %% Made by Philippe THIERRY
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
-%% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
-%% Last update Mon Mar 14 12:56:46 2011 Philippe THIERRY
+%% Started on  Thu Jul 15 16:08:56 2010 Philippe THIERRY
+%% Last update Mon Apr  4 17:50:21 2011 Philippe THIERRY
 %%
 
-\chapter{Hardware impacts}
+\chapter{General principles of the security of Information \& Technologies}
+
+{\it
+This chapter fastly describes the security functions and threats considered in this document.
+In the same time, hardware and software elements considered in the case of security problematic is
+first explained.
+}
+
 \doMinitoc
 
-\section{Reminders}
+\section{Introducing modern hardware architectures}
 
-\subsection{Modern hardware architectures in embedded systems}
+\subsection{First explanations}
 
 Une   architecture   matérielle   type   est   proche    de    la    figure    \ref{fig:gal_hw_diag}
 \begin{figure}[h]
@@ -28,71 +35,16 @@ C'est  ce  dernier  qui  permet  la  communication  entre  les  différents   org
 compris   le   processeur\footnote{Le   terme   processeur    définit    ici    un    \index{GPP}GPP
 (General Purpose Unit)}.
 
-\subsection{Managing memory access}
-
-\paragraph{}
-Les processeurs modernes sont équipés d'une \index{MMU}\gls{mmu}  ({\it  Memory  Management  Unit}),
-voire, selon les familles de
-processeurs, d'une \index{I/OMMU}I/OMMU.
-Ces deux éléments jouent un rôle de filtre permettant  de  fournir  des  capacités  de  sécurisation
-des accès mémoire, ainsi qu'un service d'abstraction de  celle-ci,  au  travers  de  la  pagination.
-
-\paragraph{}
-La pagination permet de fournir au logiciel une vue logique de  la  mémoire,  permettant  ainsi  une
-gestion de l'adressage physique plus aisée car invisible  au  niveau  logiciel.   Elle  définit  des
-{\it \index{Espace  d'adressage}espaces  d'adressage}  pour  chaque  processus,  s'appuyant  sur  un
-adressage logique, lui donnant l'impression d'être seul à s'exécuter.
-
-\begin{figure}[h]
-\input{figures/mmu_as.tex}
-\caption{Translation d'adresse - vue générale}
-\end{figure}
-
-\paragraph{}
-À l'inverse, les éléments matériels utilisent  tous  un  adressage  physique.   Ainsi,  une  recopie
-\index{DMA}DMA  se   fait   directement   vers   une   adresse   physique   en   mémoire   centrale.
-
-\paragraph{}
-À ces deux organes du micro-processeur sont associés des éléments comme le \index{TLB}TLB ({\it Table
-Lookahead   Buffer}),   permettant   d'accélérer   la   translation    d'adresse    entre    logique
-et    physique.\\
-L'ensemble des accès du processeur vers la mémoire passe par la \gls{mmu}. L'ensemble des accès des
-contrôleurs d'I/O passe par l'\gls{iommu}.
-
-\paragraph{}
-La configuration de ces éléments matériels se fait par le logiciel. C'est le noyau qui est en charge
-de veiller à la gestion de la  mémoire,  et  donc  de  maintenir  à  jour  les  informations  de  la
-\gls{mmu}   et   de   l'\gls{iommu}
-
-\section{I/O controllers}
-
-Clients du contrôleur DMA primaire, ils font des requêtes de recopie mémoire à ce dernier, en fonction
-de leurs besoins.
-
-\section{DMA controllers}
-
-\subsection{General principle}
-
-Mono ou multi-canaux, ils se comportent comme un coprocesseur dont le travail correspond à faire de la
-recopie de mémoire à mémoire, qu'il s'agisse de la mémoire centrale ou de  la  mémoire  internes  au
-périphériques  d'entrée/sortie.
-
-\subsection{Data transfers}
-
-\subsubsection{Memory access using burst mode}
-
-\section{Memory controllers}
+\subsection{Memory controllers}
 
 \begin{figure}[h]
 \input{figures/ddr_memory_access.tex}
 \caption{Décomposition  des  lignes  de  bus  d'un   controleur   DDR1\label{fig:ddr_memory_access}}
 \end{figure}
 
+\subsection{Buses and interconnects}
 
-
-\section{Bus and interconnects policies}
-
-\section{Interrupts control units (ICU)}
+\subsection{Interrupt Control Units}
 
 \paragraph{}
 Les interruptions matérielles sont des évènements asynchrones émis  par  le  matériel  pour  générer
@@ -131,11 +83,7 @@ les interruptions devenant trop fréquente et donc trop coûteuses.
 \caption{Schéma général du PIC 8259 des architectures 8086}
 \end{figure}
 
-\section{Processors architecture}
-
-\subsection{Cache controllers and architecture}
-
-\subsubsection{General description}
+\subsection{Cache controllers}
 
 \paragraph{}
 Le \index{Cache}cache est une mémoire statique à accès  rapide,  permettant  d'accélérer  les  accès
@@ -267,7 +215,7 @@ Cette architecture provoque des cache miss plus long (vérification par le cache 
 requête au contrôleur de bus), mais permet d'utiliser le cache indépendamment des autres processeurs
 (pour un cache local).
 
-\subsubsection{\index{Cache!Consistance}Cache consistance}
+\paragraph{\index{Cache!Consistance}Cache consistance}
 
 \paragraph{}
 Du fait que le cache contient des duplicatas d'une partie de la mémoire, il est important de s'assurer
@@ -304,7 +252,7 @@ Le snarfing consiste à associer la détection d'une modification d'une donnée en 
 bus de donnée. En espionnant le bus, il est capable à tout instant de mettre à jour la cellule impactée,
 et de maintenir la consistance.
 
-\subsubsection{Synchronising cache with the main memory}
+\paragraph{Synchronising cache with the main memory}
 \paragraph{}
 Lorsque des données sont modifiées en local sur le cache, il est nécessaire de mettre à jour la mémoire
 centrale afin de prendre en compte ce changement.
@@ -320,7 +268,7 @@ de l'usage des {\it \index{Memory barrier}memory barriers}.
 Une écriture sur cache implique une remontée synchrone de la mise à jour de la donnée, afin de maintenir
 une cohésion.
 
-\subsubsection{Cache management algorithms}
+\paragraph{Cache management algorithms}
 
 \paragraph{\index{Cache!LRU}Least Recently Used}
 L'algorithme LRU s'appuie sur les dates d'accès aux items du cache. En cas de cache-miss, c'est l'élément
@@ -407,20 +355,142 @@ utilisé le moins fréquemment. En cas d'égalité de fréquence, l'algorithme LRU es
 les cellules.
 
 
-\subsection{Pipelines architectures}
+\subsection{SoC and MPSoC embedded architectures}
 
-\subsection{Hyperthreading}
+\section{Introducing modern software architectures}
 
-\subsection{Branch prediction}
 
-\section{Memory controllers}
+\subsection{Real-Time operating systems}
 
-\section{Sharing problematic}
+FIXME: voir avec JML, DR et Laurent les architectures de moninteurs
 
-\subsection{Concurrent access}
+\subsection{Modular and monolithic kernel architectures}
 
-\subsection{Memory cohesion management}
+\paragraph{}
+Les noyaux monolitiques et modulaires  sont  des  logiciels  riches,  fournissant  un  grand  nombre
+de services aux processus qu'ils gèrent.\\
+Il fournissent ainsi les éléments de base comme  la  gestion  du  matériel  sous-jacent,  de  l'ordonnancement
+ou encore de la mémoire, mais également des services à  valeur  ajoutée,  comme  les  pilotes  des  différents
+périphériques matériels, les implémentations de protocoles comme les piles réseau, USB,  et  ainsi  de  suite.
 
-\section{MPSoC architectures}
+\paragraph{}
+Un système s'appuyant sur une architecture de type noyau monolithique ou modulaire, comme  Windows  ou  Linux,
+est par essence un système intelligent, mais dont le comportement du noyau  est  difficilement  prédictible.\\
+En effet, du fait d'héberger une grande partie de la complexité logicielle dans le noyau génère une consommation
+de cycles processeurs par celui-ci beaucoup plus importante.  Ainsi, les traitements effectués  par  le  noyau
+qui ne sont pas dépendant d'un réveil par un processus ordonnancé, comme le routage de flux  réseau,  provoque
+en conséquence des perturbations dans le calcul du WCET si ceux-ci  ne  sont  pas  pris  en  compte.
 
-\section{Clustered architectures}
+\paragraph{}
+Ainsi, l'emploi d'un noyau monolithique faisant du traitement de flux réseau génère un overhead  mesurable  de
+manière empirique.  Malheureusement, la richesse des fonctionnalitées hébergées  dans  le  noyau  implique  de
+maîtriser complètement l'environnement  d'exécution  et  pas  seulement  l'ensemble  les  processus  hébergés.
+Cette maîtrise est rarement effective dans les cas réels.
+
+\subsection{Micro-kernel architecture}
+
+\paragraph{}
+Les micro-noyaux, à l'inverse de noyaux monolithiques, ne  traîtent  qu'un  ensemble  de  service
+restreints.\\
+On retrouve ainsi  la  gestion  du  BSP\footnote{pour  les  systèmes  embarqués,  ensemble  du  code
+spécifique à la carte fournissant une couche de base utilisable pour le noyau.   Il  contient  entre
+autre un support minimum pour pouvoir charger le noyau et les pilotes minimum au bon  fonctionnement
+du noyau lui-même} et les services de base que sont le support de la  mémoire  (implémentation  d'un
+allocateur mémoire type mmap, le support de l'ordonnancement (plus ou moins riche), la  gestion  des
+interruptions et des exceptions, et la  gestion  des  processus  (cration,  destruction  de  taches,
+en  couplage   avec   l'ordonnanceur).
+
+\paragraph{}
+Ces services de base ont l'avantage de consommer peu de cycles processeur.   Ainsi,  la  maîtrise  du  taskset
+permet de borner le coût d'exécution des éléments de  création  de  taches  ou  encore  d'ordonnancement.   La
+gestion des exceptions et des interruptions  pose  par  essence  des  problématique  de  prédictibilité,  mais
+il est envisageable de définir une borne suppérieure en  terme  de  WCET\footnote{confer  la  partie  suivante
+FIXME: faire une ref}, permettant en conséquence de  rester  compatible  des  exigences  de  temps  réel  dur.
+
+\paragraph{}
+La faible empreinte CPU des micro-noyaux implique cependant de  réintégrer  au  niveau  du  jeu  de  tâche  la
+richesse perdue au niveau noyau.  Ainsi,  les  pilotes  de  périphériques,  les  piles  protocolaires  doivent
+être implémentées en tant que  tache(s)  logicielle(s)  ordonnancée(s)  (du  point  de  vue  du  micro-noyau).
+Ainsi, un traitement de type routage de flux réseau entre  en  compte  dans  le  calcul  de  l'oronnançabilité
+d'un jeu de tache comme un tache à part entière, et permet ainsi d'en contrôler l'ordonnancement et  l'impact.
+
+\paragraph{}
+On intègre ainsi l'ordonnancement de tâches faisant du traitement de flux au travers  d'un  lien  de
+dépendance d'exécution entre les différentes tâches et la pile réseau  à  proprement  parlé.   Dans  le  cadre
+d'un ordonnancement strict, il devient possible de mesurer le volume  de  flux  maximum  pouvant  être  traité
+par le système, sans impacter les autres tâches.
+
+\paragraph{}
+Une telle architecture peut ainsi être prise en compte dans un système hybride faisant à la fois  du
+routage de flux en "tache de  fond"  et  du  traitement  frontal  (par  exemple  cartographie,  communication)
+comme on peut  par  exemple  l'imaginer  dans  le  cas  de  terminaux  légers  sur  réseaux  ad-hoc.
+
+\section{The memory management}
+
+\subsection{From flat memory management to pagination}
+
+\subsubsection{About the hardware memory managers}
+
+\paragraph{}
+Les processeurs modernes sont équipés d'une \index{MMU}\gls{mmu}  ({\it  Memory  Management  Unit}),
+voire, selon les familles de
+processeurs, d'une \index{I/OMMU}I/OMMU.
+Ces deux éléments jouent un rôle de filtre permettant  de  fournir  des  capacités  de  sécurisation
+des accès mémoire, ainsi qu'un service d'abstraction de  celle-ci,  au  travers  de  la  pagination.
+
+\paragraph{}
+La pagination permet de fournir au logiciel une vue logique de  la  mémoire,  permettant  ainsi  une
+gestion de l'adressage physique plus aisée car invisible  au  niveau  logiciel.   Elle  définit  des
+{\it \index{Espace  d'adressage}espaces  d'adressage}  pour  chaque  processus,  s'appuyant  sur  un
+adressage logique, lui donnant l'impression d'être seul à s'exécuter.
+
+\begin{figure}[h]
+\input{figures/mmu_as.tex}
+\caption{Translation d'adresse - vue générale}
+\end{figure}
+
+\paragraph{}
+À ces deux organes du micro-processeur sont associés des éléments comme le \index{TLB}TLB ({\it Table
+Lookahead   Buffer}),   permettant   d'accélérer   la   translation    d'adresse    entre    logique
+et    physique.\\
+L'ensemble des accès du processeur vers la mémoire passe par la \gls{mmu}. L'ensemble des accès des
+contrôleurs d'I/O passe par l'\gls{iommu}.
+
+
+
+\subsubsection{Memory Management Unit}
+
+\subsubsection{I/O controllers memory access policy}
+
+\paragraph{}
+À l'inverse, les éléments matériels utilisent  tous  un  adressage  physique.   Ainsi,  une  recopie
+\index{DMA}DMA  se   fait   directement   vers   une   adresse   physique   en   mémoire
+centrale.\\
+Mono ou multi-canaux, ils se comportent comme un coprocesseur dont le travail correspond à faire de la
+recopie de mémoire à mémoire, qu'il s'agisse de la mémoire centrale ou de  la  mémoire  internes  au
+périphériques  d'entrée/sortie.
+
+
+
+\subsubsection{Software integration and implementations}
+\paragraph{}
+La configuration de ces éléments matériels se fait par le logiciel. C'est le noyau qui est en charge
+de veiller à la gestion de la  mémoire,  et  donc  de  maintenir  à  jour  les  informations  de  la
+\gls{mmu}   et   de   l'\gls{iommu}
+
+
+\section{The hardware-based side-channels and covert-channels}
+
+\subsection{About cache controlers}
+
+\subsection{DMA controllers and others memory accessors}
+
+\subsection{ACPI and ICU}
+
+\section{The operating system and kernel security problematics}
+
+\subsection{Protecting the kernel memory}
+
+\subsection{About the boot process}
+
+\subsection{Reacting to a security breach}

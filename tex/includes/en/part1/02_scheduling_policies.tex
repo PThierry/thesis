@@ -6,124 +6,155 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:28:03 2010 Philippe THIERRY
-%% Last update Mon Mar 14 12:54:42 2011 Philippe THIERRY
+%% Last update Mon Apr  4 16:03:24 2011 Philippe THIERRY
 %%
 
 \chapter{Real-time schedulers familly}
+
+{\it
+In order to schedule Real-Time tasks, multiple specific schedulers have been implemented in order
+to propose various properties. Choosing a Real-Time scheduler may depend on various needs, like
+efficient energy management or security considerations.
+}
+
 \doMinitoc
 
 \paragraph{}
-Les différents ordonnanceurs temps réel possèdent plusieurs propriétés quant à la gestion des taches.
-Ce chapitre définit séparément chaque propriété, construisant ainsi un ensemble homogène. Chaque
-ordonnanceur se situe à l'intersection des ensembles décrivant toutes ses propriétés.
+Various Real-Time schedulers possess several properties impacting the tasks management and the
+hardware architecture support like SMP. This chapter explains each property separately. Considering
+the set of all scheduling property, each scheduler is considered like a specific subset, supporting
+some of all these properties.
 
 \section{Classification of dynamic schedulers}
 
 \subsection{On-line scheduling}
 
 \paragraph{}
-Les choix d'ordonnancement se font durant l'exécution, en fonction de l'état du système (nombre de taches,
-priorités, durée d'exécution).
+When a scheduling policy is done on-line, it is then defined depending on the current eligible
+tasks list. The scheduler is then able to react to unpredicted variations on the system load, like
+a job processor's overconsumption.
 
 \subsection{Out-of-line scheduling}
 
 \paragraph{}
-La politique d'ordonnancement est définie par avance. Elle est donc optimisée pour un cas particulier de jeu
-de taches ({\it taskset}), mais pose problème en cas d'impact non prévu sur la dynamique d'exécution (effets de caches, de surcharge
-de bus, WCET trop grand ou trop faible, etc).
+An out-of-line scheduling is defined before the effective system execution. Whatever happend, the
+system guarantee that the scheduling of each task is done respecting a pre-defined time sharing.\\
+Such policy is then predictable, but may generates deadline misses on unespected slows down. This
+is the case, for example, of TDMA (Time-Division Multiple Access) scheduling policies.
 
 \section{Classification based on scheduling schemes}
 
 \paragraph{}
-Le schéma suivant décrit l'automate générique caractérisant les différents états d'une tache :
+Figure \ref{fig:sched_automaton} describes the generic state automaton of any task scheduling
+policy. Such automaton is used in every scheduling policies.
 \begin{figure}[h]
 \input{figures/sched_graph.tex}
-\caption{schéma générique de la dynamique d'ordonnancement}
+\caption{Dynamic scheduling generic automaton\label{fig:sched_automaton}}
 \end{figure}
 
 \subsection{Preemptive schedulers}
 
 \paragraph{}
-Les taches sont préemptées à une période prédéfinie, fixe ou dynamique, nommée {\it \index{quantum}quantum}.  En conséquence,
-une tache s'exécute en plusieurs fois. Cela implique que l'ordonnanceur s'exécute plus souvent que
-dans le cadre du mode non préemptif. La plupart du temps, l'ordonnanceur est de type {\it \index{time-driven}time-driven} (il s'appuie
-sur une horloge pour régler sa période d'éxection). C'est le cas par exemple du Round-Robin, qui préempte les taches sur quantum.\\
-
-\subsection{Non premptive schedulers}
+Preemptive schedulers preempt the currently executed job after a specific duration, named {\it
+time \index{quantum}quantum}. As a consequence, a job may be pushed back from the processor
+multiple time before it finishes. The scheduling overhead is then increased, but the system
+reactivity is also increased.
 
 \paragraph{}
-Une fois élue, chaque tache est exécutée dans son intégralité. Cela écarte les problématiques de rechargement
-du cache lié à la préemption de tache, et les algorithmes d'ordonnancement ont l'avantage de la simplicité.\\
-Cependant, il est plus difficile de garantir le {\it \index{WCET}\gls{wcet}} que dans le cadre du mode préemptif. Un ordonnancement en mode
-FIFO s'exécute sans préemption, faisant s'exécuter les taches les unes à la suite des autres, dans l'ordre d'arrivée.
+Usually, preemptive schedulers are time-driven. Their execution is done with a specific period,
+depending on the system configuration. It is the case of most of the Best-Effort non-Real-Time
+schedulers and of some of Real-Time schedulers like Round-Robin.\\
+Some Real-Time preemptive scheduler are event-driven. Their execution is due to a specific event,
+like a new job arrival. This is the case of EDF, which preempts the current job only if a more
+prioritized job just arrives.
+
+
+\subsection{Non-preemptive schedulers}
 
 \paragraph{}
-L'ordonnanceur peut également être de type {\it \index{event-driven}event-driven}, comme dans le cadre de préemption sur arrivée d'une tache
-de priorité supérieure à celle en cours d'exécution. C'est le cas par exemple de l'EDF, qui ne préempte que sur l'arrivée d'une
-tache plus prioritaire.
+Non-preemptive schedulers guarantee that the execution of a given job is done without preemption
+due to the scheduling policy. First-In First-Out is a Real-Time non-preemptive scheduler.
 
-\subsection{Mix scheduler}
+\subsection{Mixed scheduler}
 
 \paragraph{}
-Selon la priorité de la tache, cette dernière s'exécute sans préemption ou avec préemption.
+Some schedulers have been implemented in order to support in the same time preemptive and
+non-preemptive policies. Segregation can be done using for example the task priority, considering
+high priority tasks as non-preemptive and low priority ones as preemptive tasks.
 
 \section{Classification based on idleness}
 
 \subsection{Idle schedulers}
 
-Les ordonnanceurs préem
+Idle schedulers are preemptive schedulers. They define fixed time quantum for each job
+sub-execution, and do not load a job by advance if the previous job didn't consume all its
+quantum.\\
+Such property maintain the predictability of the scheduling policy at the loss of effectiveness.
 
-\subsection{Non ide schedulers}
+\subsection{Non-idle schedulers}
+
+Contrarily to Idle schedulers, such schedulers elect by advance a job if the previous one didn't
+consume all its quantum. In the same manner, such schedulers are preemptive.
 
 \section{Classification based on priority policy}
 
 \subsection{Fixed priority schedulers}
 
 \paragraph{}
-La priorité est associée à une tache au moment de sa création. Cette dernière est maintenue tout au long de la vie de cette
-tache.
+Each task possess a fixed priority, defined during its creation. There is no task aging.
 
 \subsection{Dynamic priority schedulers}
 
 \paragraph{}
-La priorité de la tache varie, en fonction par exemple de son vieillissement et/ou de son historique de consommation CPU.
-C'est le cas de la plupart des ordonnanceurs nom temps réels, comme SFQ (\FIXME à confirmer)n ou encore SCHED\_OTHER (\FIXME trouver
-son vrai nom).
+Each task possess two priorities. One defined during its creation and used at each new job arrival,
+and one due to the current job aging. This is the case of EDF, which check the current relative
+deadline in order to elect the job having the earliest one.\\
+Priority variation can be done through multiple criteria like aging, previous CPU consumption or
+any other variable associated to a given job.
 
 \subsection{Hybrid priority schedulers}
 
 \paragraph{}
-La priorité peut varier, selon le type de tache. On parle d'ordonnanceurs {\it FP/DP} ({\it Fixed Priority/Dynamic Priority}).
+In the same manner as mixed schedulers, hybrid priority schedulers support mixed dynamic and static
+priorities, depending on a segregative property. Such schedulers are denoted {\it FP/DP} schedulers
+(Fixed Priority/Dynamic Priority).
 
 \section{About SMP-aware schedulers}
 
 \paragraph{}
-Les grandes familles d'ordonnanceurs SMP temps-réel sont les suivantes :\\
-\begin{enumerate}
-\item \index{Partitioned scheduling}Partitioned scheduling
-\item \index{Global scheduling}Global scheduling
-\item \index{Semi-partitioned scheduling}Semi-partitioned scheduling
-\end{enumerate}
-
-\subsection{Partitioned scheduling}
+Nowadays, most of hardware architectures are based on SMP systems, using in the same time multiple
+processors in order to accelerate the system capacities and reducing the overall consumption
+compared with Multi-processors architecture.
 
 \paragraph{}
-Il y a autant de queues de processus que de c{\oe}urs. La répartition des tâches se fait
-statiquement. Cela pose cependant la problématique de l'impact des synchronisations et des locks (besoin de
-précédance entre les tâches).
+There are three main families of SMP-aware Real-Time scheduling policies:\\
+\begin{enumerate}
+\item \index{Global scheduling}Global scheduling
+\item \index{Partitioned scheduling}Partitioned scheduling
+\item \index{Semi-partitioned scheduling}Semi-partitioned scheduling
+\end{enumerate}
 
 \subsection{Global scheduling}
 
 \paragraph{}
-Il y a une et une seule queue de processus pour l'ensemble des tâches. Cela pose le
-problème d'accès en écriture à cette queue dans les différentes instanciations
-de l'algorithme d'ordonnancement (une instance par c{\oe}ur \textit{actif}, afin
-de maintenir une bonne optimisation du coût de l'euristique d'ordonnancement).
+Whatever the number of core is, there is one eligible job queue. When the scheduler is executed on
+a given core (trough time-driven execution for example) the elected job is load in the core.\\
+Such scheduling policy have various impact on the overall schedulability, like cache-based
+preemption delay due to job movement between cores.
+
+\subsection{Partitioned scheduling}
+
+\paragraph{}
+Using a partitionned scheduling, we define one scheduling queue per core or cores pool. In
+this pool, a global scheduling policy is implemented. If the pool contains one and only one core,
+its execution policy is the same as in mono-core architectures, otherwise, global scheduling is
+used.
 
 \subsection{Semi-partitioned scheduling}
 
 \paragraph{}
-Il en existe deux types :
+Semi-partitioned scheduling support controlled job movement through multiple cores. There is two
+types of semi-partitioned scheduling policies:
 \begin{itemize}
 \item job partitioning
 \item instance partitioning
@@ -132,42 +163,60 @@ Il en existe deux types :
 \subsubsection{Job partitioning}
 
 \paragraph{}
-Une instance d'une tâche s'exécute complètement sur un seul c{\oe}ur. Par contre,
-à chaque ré-exécution de la tâche, son positionnement dans les c{\oe}urs peut varier.
-Cette variation est cependant fixée par avance et maîtrisée. Elle respecte donc un schéma
-prédéfini et le ré-exécute indéfiniment.
+Using job paritioning, the scheduler associates one job with one and only one core. Another
+instantiation of the given task may be executed in another core. Thus the choice of the newly
+selected core is predefined in an off-line moving policy.
 
 \subsubsection{Instance partitioning}
 
 \paragraph{}
-Un processus en cours d'exécution peut migrer d'un c{\oe}ur à un autre.
-Kato $(jap)$ propose l'algorithme suivant :
-Le WCET de la tâche est découpé en blocs de taille $\frac{D_{i}}{s}$, où
-$D_{i}$ est le temps avant lequel la tâche doit être exécutée, et $s$ le
-nombre de c{\oe}urs \textit{actifs}.\\
+Using instance partitioning, the scheduler allows movement of a given job between cores. Thus, such
+movements are controlled through a policy defining when and where a job is preempted in order to be
+moved in another core .\\
+As describes in \FIXME{article: Kato} a currently executed job can migrate from a core to another
+using the following algorithm \FIXME{mkproper}:\\
+\begin{enumerate}
+\item we denote $s$ the number of active cores.
+\item Considering a task $\tau_{i}$, when an associated job is executed during a time quantum $Q$ of a
+duration $L = \frac{D_i}{s}$, then the job is moved to the first free core.
+\end{enumerate}
 
 \paragraph{}
-À chaque fin de bloc, le processus migre d'un c{\oe}ur au suivant.
-Cela a pour conséquence de consommer le moins de c{\oe}urs possible, tout
-en les chargeant au maximum. C'est à double tranchant dans le sens où
-toute variation des hypothèses (inexactitude de WCET, surcharge temporelle) impacte violemment
-la capacité d'ordonnancement des tâches.\\
+The goal is to reduce the number of used core, increasing their load. Thus, such algorithm does
+not support unexpected variations of the WCET, which has a great impact on the schedulability of
+the overall taskset.
 
+\subsection{Sustainable and unsustainable schedulers}
 
 \paragraph{}
-L'algorithme ne semble donc pas résistant à toute élasticité du WCET, même contrôlée.
-Cette euristique ne possède pas de viabilité (\textit{sustainability} - capacité à résister à
-l'élasticité de valeurs de $c_{i}$, $T_{i}$, ou $D_{i}$, quel que soit la t\^{a}che $\tau_{i}$).\\
-Il s'agit d'une propriété importante du fait que la mesure du WCET
-peut être trop pessimiste (mesure via pire cas du graphe d'exécution,
-mais où le processus ne s'exécute que rarement en suivant cette branche) ou trop optimiste
-(mesure au travers d'une étude empirique sur le comportement du processus, n'ayant pas
-forcément pris en compte le véritable \textit{pire cas} si celui ci ne s'est pas produit).
+A sustainable scheduler support elasticity of the Real-Time properties, like the WCET. On the
+contrary, unsustainable scheduler doesn't guarantee the system's schedulability if any of the
+Real-Time properties is not respected.
 
 \section{A word about hierarchical scheduling}
 
+\paragraph{}
+Hierarchical schedulers are defined like multi-level scheduling policies. Such architecture allows
+concurrent execution of task sets with different scheduling policies, managed by an underlying
+scheduling policy.
+
 \subsection{Defining a hierarchy}
+
+\paragraph{}
+When defining a hierarchical scheduling policy, each task should be segregated in order to define by
+which subset it is scheduled. In the same time, subsets should be prioritized in order to elect a
+job between each subset elected one.
 
 \subsection{Multi-schedulers priority management}
 
+\paragraph{}
+A lot of work has been done on hierarchical scheduling.\FIXME{add articles, cf. hypervisor\_sched}
+
 \subsection{Toward virtualization-based hierarchical scheduling}
+
+\paragraph{}
+In hyervisor-based architectures, hierarchical scheduling is used in order to schedule various
+virtual machines or virtual environments. Depending on the need, the hypervisor scheduler can be a
+classical on-line scheduler like EDF or a strict time scharing scheduler like TDM ones.\\
+In the case of virtual machine scheduling, the unerlying hypervisor scheduler may not be informed
+of the virtual machine scheduler's needs.

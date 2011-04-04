@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Thu Jul 15 17:46:14 2010 Philippe THIERRY
-%% Last update Thu Jan 27 11:11:30 2011 Philippe THIERRY
+%% Last update Mon Apr  4 17:16:16 2011 Philippe THIERRY
 %%
 
 \chapter{About the security study scope}
@@ -15,7 +15,7 @@
 IT security is a large domain. In this thesis, the focus is done on the overall executing
 environment security.\\
 Are taken into account elements like the memory management, process execution and roles definition,
-time and space partitionning.
+time and space partitioning.
 }
 
 \doMinitoc
@@ -23,39 +23,44 @@ time and space partitionning.
 \section{Introduction}
 
 \paragraph{}
-Dans le cadre de ce document, il n'est adressé, sous le terme sécurité, que la partie {\it security of Information \& Technology},
-excluant la partie sûreté de fonctionnement, et résistance au fautes. Bien que non considéré en terme de sécurité, l'apport d'exigences
-de prédictibilité du temps réel au design du système traite, en partie, ces deux derniers points.
+In this document is only addressed, under the term of {\it security}, the {\it security of
+Information \& Technology} part. Safeness is considered through the existing Real-Time software
+architecture and associated supported hardware.
 
 \paragraph{}
-Le terme {\it security of Information \& Technology} reste également très vaste. Ce document traite des élément de sécurité intrinsèque
-du système (matériel + logiciel), dans le cadre de sa définition. Il n'est donc pas considéré les éléments tels que les firewalls, les
-honey-pots ou encore la détection d'attaque réseaux. Ces différents éléments, bien qu'impératifs à la définition d'un système sécurisés,
-sont hors sujet dans le cadre de ce document.
+Security of Information \& Technology is a large domain. In this document are only considered
+security threats and fragility associated to the considered software/hardware couple. Network
+security, including all associated software and hardware is considered out of scope.
 
 \paragraph{}
-On définit donc, sous le terme de sécurité, les éléments de sécurisation et de validation du système d'exploitation, comme la gestion des
-rôles, la séparation mémoire, la restriction des accès au matériel, ainsi que la réduction des différents canaux cachés, tant logiciels que
-matériels. Ces différents éléments correspondent au support de la classe FDP des critères communs, décrite dans la Section \ref{sec:cc_fdp}.
+Are considered here security elements associated to:
+\begin{itemize}
+\item The operating system implementation
+\item The memory management and threats
+\item The hardware access
+\item The hardware-based side-channels and covert-channels threats
+\end{itemize}
 
-\section{Définition des fonctions de sécurité considérées dans ce document}
+\section{Defining associated security functions}
 \label{sec:cc_fdp}
 
 \paragraph{}
-Dans le cadre de ce document, on s'intéresse au support des fonctions de sécurité de la classe FDP des critères communs
-\footnote{bibliography:\FIXME: CCPART2V3.1R3.pdf}. Cette classe définit les fonctions de protection des données utilisateurs. Celles-ci
-sont séparée en quatre parties :
-
+In this document are considered the security function of the Common Criteria FDP
+class\footnote{bibliography:\FIXME: CCPART2V3.1R3.pdf}. This class defines the protection function
+of the user data. These functions are separated in four parts:
 \begin{enumerate}
-\item Politique de protection des données utilisateur
-\item Architecture de protection des données utilisateur
-\item Sauvegarde hors-ligne des données, import et export des données
-\item Sécurité des communications de données utilisateur entre systèmes de confiance. Cet item n'est pas considéré dans ce document.
+\item User data protection policy
+\item User data protection architecture
+\item User data off-line backup, import and export
+\item Security if the user data communication between trusted components. This last part is not
+considered in this document.
 \end{enumerate}
 
 \section{Defining the security study vector}
 
 \paragraph{}
-L'étude des éléments de sécurité (et de non-sécurité) du système se fait via une approche bottom-up, en parallèle de l'étude des éléments
-impactant la prédictibilité du système. Ce document va donc prendre en compte en premier lieu les problématique de sécurité au niveau matériel,
-sur les différents composants problématiques, afin de pouvoir remonter vers le logiciel en s'appuyant sur une base connue et maîtrisée.
+The system security study is done through a bottom-up approach, taking into account hardware
+security porblematic and architecture, then the kernel and operating system security functions and
+implementation, to finish with the user space software protection and partitioning.\\
+All these elements are considered in order to be compliant to Real-Time problematics in order to
+maintain both Real-Time and security considerations.
