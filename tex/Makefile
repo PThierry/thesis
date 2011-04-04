@@ -16,6 +16,7 @@
 LATEX=pdflatex
 LATEXOPT=-shell-escape
 BIBTEX=bibtex
+PDFVIEWER?=acroread
 
 RM=rm
 RMFLAGS=-rf
@@ -78,5 +79,5 @@ install : $(TARGET)
 
 view:
 	if [ ! -f $(TARGET) ]; then make all; fi
-	acroread $(TARGET)_$(LANG).pdf
+	$(PDFVIEWER) $(TARGET)_$(LANG).pdf
 
