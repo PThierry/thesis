@@ -1,0 +1,74 @@
+%%
+%%
+%% 01_definition_modele.tex for thesis in /doctorat/these/tex
+%%
+%% Made by Philippe THIERRY
+%% Login   <Philippe THIERRYreseau-libre.net>
+%%
+%% Started on  Tue Aug 31 13:12:11 2010 Philippe THIERRY
+%% Last update Wed Sep  1 13:59:04 2010 Philippe THIERRY
+%%
+
+\chapter{Définition d'un modèle de système}
+
+\section{Définition des exigences d'entrée auxquelles les modèles  logiciels  et  matériels  doivent
+répondre}
+
+
+
+\section{Définition   d'un    premier    modèle    macroscopique    d'une    solution    logicielle}
+
+\subsection{Introduction}
+
+\subsubsection{Propriétés du matériel}
+
+\begin{enumerate}
+\item Le matériel doit fournir au logiciel deux niveaux de privilèges
+\item Seul le logiciel s'exécutant avec le niveau de privilèges  le  plus  élevé  peux  modifier  le
+niveau de privilège dans lequel il s'exécute
+\item Seul le logiciel s'exécutant dans le niveau de privilèges  le  plus  élevé  peut  définir  les
+politiques  d'accès  au  matériel   pour   les   différents   logiciels   des   niveaux   supérieurs
+\item Le matériel doit fournir un mécanisme  de  cloisonnement  mémoire  des  différents  logiciels.
+\item Seul le logiciel s'exécutant dans le niveau  de  privilège  le  plus  élevé  peut  définir  et
+modifier se cloisonnement
+\end{enumerate}
+
+\subsubsection{Propriétés du logiciel}
+
+Cette  partie  se  concentre  sur  la  définition  d'un  premier  modèle  de  solution   logicielle.
+
+\begin{enumerate}
+\item Le logiciel se définit  comme  une  association  entre  une  base  fournissant  une  interface
+d'abstraction du matériel, et un ensemble de logiciels ayant une  tache  unique  et  indépendante  à
+exécuter.
+\item On définit le logiciel de base sous le nom noyau
+\item Le noyau est le  seul  logiciel  s'exécutant  dans  le  niveau  de  privilège  le  plus  élevé
+\item   Le   noyau   définit   les   politiques   d'accès   au   matériel   des   autres   logiciels
+\item Seul le noyau peut définir ces politiques d'accès
+\item Le noyau  n'apporte  aucune  valeur  ajoutée  autre  que  la  capacité  de  gérer  les  autres
+logiciels et leur politique d'accès au matériel
+\item  Le  noyau   interfère   le   moins   possible   dans   l'exécution   des   autres   logiciels
+\item Le noyau garantie un ordonnancement des autres logiciels
+\item L'ordonnancement des autres logiciels permet le respect des hypothèses nécessaires au temps réel dur
+\item Le noyau doit fournir une interface aux autres logiciels indépendante du matériel  sous-jacent
+\item On définit une communication entre logiciel comme la  capacité  d'un  logiciel  à  initier  un
+traitement   spécifique    dans    un    autre    logiciel    (e.g.,    IPC,    appel    via    API)
+\item Les autres logiciels ne peuvent communiquer avec le  noyau  qu'au  travers  de  l'API  que  ce
+dernier leur fournit
+\end{enumerate}
+
+\section{Définition d'un modèle mathématique ensembliste du système logiciel}
+
+\paragraph{}
+On définit en premier lieu une instance de noyau, nommé $k_{i}$, appartenant à l'ensemble $K_{n}$ (où
+$n$ est le cardinal de l'ensemble) des noyaux pouvant être  générés  à  partir  de  sources  $S_{k}$
+associées à l'ensemble $K_{n}$.
+
+Les éléments $k_{i}$ de l'ensemble $K_{n}$  doivent  respecter  un  certain  nombre  de  propriétés.
+
+Soit $U_{m}$ un ensemble de logiciels de cardinal $m$. Cet ensemble possède les propriétés
+suivantes:
+\begin{itemize}
+\item Pour tout logiciel $u_{i} \in U_{n}$ le schéma d'exécution est le même (périodique,
+apériodique ou sporadique).
+\end{itemize}

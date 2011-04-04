@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:23:03 2010 Philippe THIERRY
-%% Last update Tue Jul 20 09:55:25 2010 Philippe THIERRY
+%% Last update Wed Jul 28 14:36:23 2010 Philippe THIERRY
 %%
 
 \chapter{de la mesure et de l'emploi du WCET}
@@ -90,29 +90,6 @@ Les attributs définis dans la Section \ref{sec:primarydef} doivent avoir les pro
 %U_{i}, \displaystyle{\sum_{i \in [1, n]}} U_{i} \le 1
 %\label{eqn:rtprop_3}
 \end{eqnarray}
-
-%\paragraph{}
-%Un système en mode batch, exécutant chaque tache d'un ensemble de taches $E_{\tau}$ l'une après l'autre sans intelligence,
-%doit respecter uniquement la règle suivante pour s'assurer que chaque tache est ordonnançable à temps :
-%
-%\begin{eqnarray}
-%\forall \tau_{i} \in E_{\tau}, B_{\tau} \textrm{ contenant toutes les taches précédantes à } \tau_{i}\\
-%T_{m}(\tau_{i}) > T_{e}(\tau_{i}) + \sum_{\tau_{b} \in B_{\tau}} T_{e}(\tau_{b})
-%\end{eqnarray}
-
-%Ainsi, lors de l'arrivée d'une nouvelle tache $\tau_{i}$, il est possible de définir son ordonnançabilité, et
-%au besoin de la refuser.
-
-%\paragraph{}
-%Les algorithmes en mode batch sont aujourd'hui révolus, du fait de leur manque d'optimisation de la gestion des taches.
-%Ainsi, là où un ordonnanceur intelligent pourrait, pour une nouvelle instance $\tau_{i}$ urgente, essayer de la
-%placer plus en aval dans sa liste tout en s'assurant du maintient de l'ordonnançabilité des autres taches, un ordonnanceur
-%en mode batch la refuserait.
-
-%\paragraph{}
-%La prise en compte de l'impact de l'exécution de chaque tache sur l'ordonnançabilité de toutes les autres est à la base
-%de la définition des ordonnanceurs temps réel. Il devient nécessaire, à partir de ce moment, de définir ce qu'est un
-%ensemble de taches.
 
 \subsection{Définition des ensembles de taches}
 
@@ -212,13 +189,24 @@ leur résultat plus ou moins précis.
 \subsection{Analyse du flot d'exécution}
 
 \paragraph{}
-Un autre type de mesure correspond à l'étude du code assembleur d'une tache, afin d'en extraire un arbre d'exécution. La
-branche la plus coûteuse de cet arbre correspondrait alors à la dynamique d'exécution du \gls{wcet}.
+Pour chaque tache, il est également possible de s'appuyer sur la mesure du chemin d'exécution le plus long (\gls{wcep}). Si ce chemin est
+connu, alors le calcul du temps d'exécution de ce chemin définit le WCET de la tache.
 
 \paragraph{}
-La difficulté devient alors de s'assurer que cette dynamique d'exécution est cohérente avec l'algorithmie de la tache et
-correspond donc bien à un comportement dynamique possible. En effet, lorsque les branchement dépendent d'éléments environnementaux
-de la tache, il devient difficile de différencier une branche d'exécution impossible d'une branche d'exécution envisageable.
+Les difficultés est multiples dans ce cas. Tout d'abord, l'étude ne peut se faire que sur le code assembleur généré par le compilateur,
+afin d'avoir les optimisations de compilations prise en compte. Ainsi, étudier le code source du programme est insuffisant du fait
+des capacités d'optimisations du compilateur.
+
+\paragraph{}
+Cependant, un certain nombre d'éléments ne sont pas pris en compte :
+\begin{itemize}
+\item L'existence réelle de cette branche, si cette dernière dépend de données dynamiques extérieures. Il devient alors nécessaire de
+simuler l'usage de ces données, avec différents ensembles de données pour étudier les différents cas possibles et éliminer les branches
+impossibles.
+\item L'impact des éléments d'hyperthreading et de branch prediction, pouvant provoquer des ralentissement (ou accélérations) dans
+l'exécutions du programme.
+\end{itemize}
+
 
 \subsection{Utilisation d'une interprétation abstraite}
 
@@ -246,6 +234,7 @@ Là où les outils de tests unitaires en mode MC/DC permettent de définir une repr
 d'une fonction, un outil de mesure du \gls{wcet} s'appuiant sur une définition formelle de toutes les entrées possibles
 d'une tache permettrait alors de garantir, en terme de chemin d'exécution, la traversée du chemin le plus long. Une telle définition
 est malheureusement spécifique à chaque tache, est devient alors très coûteuse.
+
 
 \subsection{Définition des jeux de test}
 

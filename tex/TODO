@@ -1,0 +1,15 @@
+﻿- Modèles TR
+  model de taches (en fonction du besoin : définir le profil de tache d'un flux réseau)
+  modele d'ordonnancement
+  modèle de contrainte temporelle
+
+- Modèles Sécu
+  modèle de confidencialité
+  modèle de résistance au panne
+  modèle de sureté
+  ...
+
+Définir les contraintes
+
+-> SW et HW
+
