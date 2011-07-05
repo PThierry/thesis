@@ -6,8 +6,38 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Tue Aug 31 13:12:11 2010 Philippe THIERRY
-%% Last update Mon Mar 14 13:07:58 2011 Philippe THIERRY
+%% Last update Tue Jul  5 11:14:04 2011 Philippe THIERRY
 %%
+
+\chapter{Security and afety requirements which should be respected}
+
+\section{Macroscopic security requirements}
+
+\paragraph{}
+\begin{itemize}
+\item From a given operating virtual machine, it should not be possible to read data from another virtual
+machine
+\item From a given operating virtual machine, it should not be possible to write data into another
+virtual machine
+\item From a given operating virtual machine, it should not be possible to impact the behaviour of
+another virtual machine
+\end{itemize}
+
+\section{Macroscopic security requirements}
+
+\paragraph{}
+\begin{itemize}
+\item If the behaviour of a given virtual machine varies abnormally, it should be detected by a
+behaviour controller
+\item A behaviour controller should be able to log any behaviour variation to a system logging
+facility
+\item The behaviour controller should be able to react to a behaviour variation depending on the
+associated safety policy (stop/reboot/...)
+\item Whatever the behaviour of a given virtual machine is, it should not impact the other executed
+virtual machines
+\end{itemize}
+
+
 
 \chapter{Formalization of the real-time problematic for I/O flow management}
 
@@ -15,7 +45,7 @@
 
 \section{Formal requirements on the software behaviour}
 
-\section{Toward a first compliant formal implementaton model}
+\section{Toward a first compliant formal implementation model}
 
 \subsection{Defining a flow management taskset}
 
