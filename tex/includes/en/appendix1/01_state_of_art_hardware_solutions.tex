@@ -6,57 +6,57 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Wed Mar 17 13:38:08 2010 Philippe THIERRY
-%% Last update Tue Jul 20 09:56:12 2010 Philippe THIERRY
+%% Last update Wed Apr  6 10:40:17 2011 Philippe THIERRY
 %%
 
-\chapter{État de l'art des éléments matériels pour répondre au besoin temps réel}
+\chapter{State of art of the hardware solution for real-time support}
 \doMinitoc
 
-\section{Gestion des DMA}
+\section{DMA management}
 
-\subsection{Gestion des périodes d'activation}
+\subsection{Controlling activation period}
 
 \subsection{Impacts}
 
-\section{Gestion des caches}
+\section{Cache controllers}
+
+\subsection{Cache locks}
+
+\subsubsection{General principle}
+
+\subsubsection{Static cache locks}
+
+\subsubsection{Dynamic cache locks}
+
+\subsection{Cache partitioning}
 
 \subsection{Les \index{Scratchpad}scratchpads}
 
 \subsubsection{Principe}
 
 \paragraph{}
-La {\it scratchpad} est une capacité du cache à autoriser une réservation d'une partie de sa mémoire, anciennement dédiée
-au cache code (cache L1), afin de maintenir une section de code sans risque d'écrasement.\\
-Il s'agit, par exemple, de placer une section de code correspondant à l'algorithme d'ordonnancement en cache code, et de
-bloquer cette mémoire pour une durée maîtrisée par le logiciel, pouvant aller jusqu'au reset matériel.
-
-\FIXME: scratchpad contient .code ou .code,.bss,.rodata,.data... ?
-\begin{figure}
-\input{figures/cache_scratchpad_simple.tex}
-\caption{Réservation d'une scratchpad dans le cache}
-\label{cache_scratchpad_simple}
-\end{figure}
+Scratchpad are local-to-CPU memory, which can be used dynamically by the software in order to host
+some of the most frequently executed part of the software elements. Scratchpad are usually
+accessible by the CPU core without using the memory bus, reducing by this way the access latency.
 
 \paragraph{}
-L'exécution du code mis en scratchpad ne nécessite plus de cycle de lecture mémoire coté cache code, et s'exécute ainsi
-beaucoup plus rapidement. Cependant, l'emploi d'une scratchpad mord sur l'espace mémoire alloué au cache code, et réduit
-en conséquence la taille du cache code dédié aux autres applications, provoquant indubitablement un accroissement des
-{\it cache-miss}.
+Depending on the hardware architecture, scratchpad can be used through a allocation of a subpart of
+the cache memory, or through an existing local SRAM. Multiple articles (\FIXME{get articles}) have
+been written to describes various ways to optimize the scratchpad memory allocation, like code
+section prediction and preallocation (\FIXME{get this article}).\\
+Figure \ref{fig:cache_scratchpad_simple} describes one of the possible way to allocate a scratchpad.
 
-\subsubsection{Mise en {\oe}uvre et impact}
+\begin{figure}
+\input{figures/cache_scratchpad_simple.tex}
+\caption{Reserving a scratchpad in the cache memory}
+\label{fig:cache_scratchpad_simple}
+\end{figure}
 
-\subsubsection{Inconvénients}
-
-\subsection{Les locks de cache}
+\subsubsection{Impact associated to the scratchpad usage}
 
 
+\section{SoC and MPSoC}
 
-\subsubsection{Mise en {\oe}uvre}
+\subsection{Principle}
 
-\subsubsection{Restriction d'usage et inconvénients}
-
-\section{Les (MP)SoC}
-
-\subsection{Principe}
-
-\subsection{Intégration de mémoire à accès rapide}
+\subsection{A word about NUMA architectures}

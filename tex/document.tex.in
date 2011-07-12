@@ -90,7 +90,7 @@
   \usepackage{graphics,color} %
   \usepackage{eso-pic} % Required for Draft (\AddToShipoutPicture)
   \AddToShipoutPicture{\resizebox{0.7\pdfpagewidth}{0.7\pdfpageheight}%
-  {\rotatebox{60}{\color[gray]{0.8}\hspace*{2.5cm}DRAFT}}}
+  {\rotatebox{60}{\color[gray]{0.8}\hspace*{2.5cm}draft}}}
 }{}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Macro definition
@@ -155,6 +155,7 @@
 
 
 \newtheorem{property}{Property}
+\newtheorem{assertion}{Assertion}
 
 \input{includes/\lang/titlepage.tex}
 

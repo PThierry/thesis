@@ -6,92 +6,132 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Tue Aug 31 13:12:11 2010 Philippe THIERRY
-%% Last update Mon Mar 14 13:07:58 2011 Philippe THIERRY
+%% Last update Tue Jul 12 17:05:44 2011 Philippe THIERRY
 %%
 
-\chapter{Formalization of the real-time problematic for I/O flow management}
+\chapter{On the definition of a pure Real-Time model}
 
-\section{Formal requirements on the hardware  behaviour}
+\section{About the target of this model}
 
-\section{Formal requirements on the software behaviour}
+\paragraph{}
+In this chapter, we define a real-time model for multiple soft real-time sporadic task-sets on
+hypervisor based architectures. Targeted tasks are critical network flow forwarding tasks with
+deadline support.
 
-\section{Toward a first compliant formal implementaton model}
+\chapter{On the definition of a MILS Real-Time aware security model}
 
-\subsection{Defining a flow management taskset}
+\section{On the need of the security model formalism}
 
-\subsection{About I/O unpredictability}
+\paragraph{}
+As defined in various document like \cite{formalsec}, security formalism for modern computer
+architecture is a necessary step in the definition of a efficient security-aware system.\\
+Such formalism permits to define properly the meaning of the term {\it security}. Through this
+definition, it permits to define the scope of the security elements that should be integrated in
+the system, and consequently to the security requirements and function specific to that system.
 
-\chapter{Defining and formalizing security elements}
+\paragraph{}
+In this thesis, the goal is to define security elements that should be integrated in the
+architecture in order to respond to the need of a Multi Independent Level of Security architecture
+with real-time constraints for critical network flows management.
 
-\section{On the definition of the integrated security subsystems}
+\paragraph{}
+Through a formalized security model, specific security and safety requirement are derived and
+integrated in the overall system architecture.
 
-\subsection{Software security systems}
+\section{Formal definitions}
 
-\subsection{Hardware security systems}
+\paragraph{}
+The model which is defined in this chapter is based on \cite{secmathfund}. This model denotes
+various formal elements in order to define a complete security model for modern computer system.
+The list of formal elements defined in \cite{secmathfund} is re-written in Table
+\ref{tab:secmathfund} for a better comprehension.\\
+In this thesis, this model is updated in order to take into account Real-Time requirement.
 
-\section{About the real-time and security system formal requirements}
+\paragraph{}
+In \ref{tab:secmathfund}, L. LaPadula proposes a formal definition for various entities and
+security elements in order to define his security model. In this thesis, we defines some new
+in order to take into account real-time needs but also hardware impacts on the system security.
 
-\subsection{Incompatibilities}
+\begin{table}[ht]
+\begin{tabular}{|p{3cm}|p{6cm}|p{7cm}|}
+\hline
+Set & Elements & Semantics \\
+\hline
+\hline
+S & $\{S_1, S_2, \hdots, S_n\}$ & {\it Subjects}; processes, programs in execution \\
+\hline
+O & $\{O_1, O_2, \hdots, O_m\}$ & {\it Objects}; data, files, programs, subjects \\
+\hline
+C & \begin{minipage}{5.5cm}$\{C_1, C_2, \hdots, C_q\}$\\$\{C_1 > C_2 > \hdots > C_q\} $\end{minipage} & {\it
+Classifications}; clearance level of a subject, classification of an object \\
+\hline
+K & $\{K_1, K_2, \hdots, K_r\}$ & {\it need-to-know categories}; project numbers, access privileges \\
+\hline
+A & $\{A_1, A_2, \hdots, A_p\}$ & {\it Access attributes}; read, write, copy, append, owner, control \\
+\hline
+R & $\{R_1, R_2, \hdots, R_u\}$ & {\it requests}; input commands, requests for access to objects by
+subjects \\
+\hline
+D & $\{D_1, D_2, \hdots, D_v\}$ & {\it Decisions}; outputs, answers,  "yes", "no", "error" \\
+\hline
+P$_\alpha$ & all subsets of $\alpha$ & {\it power set of $\alpha$} \\
+\hline
+$\alpha^\beta$ & all functions from the set $\beta$ to the set $\alpha$ & { } \\
+\hline
+$\alpha  \times \beta$ & $\{a,b): a \in \alpha, b \in \beta\}$ & {\it Cartesian product of the sets
+$\alpha$ and $\beta$} \\
+\hline
+F & \begin{minipage}{5.5cm}$C \times C^O \times (PK)^S \times (PK)^O$\\ an arbitrary element of F is written
+$f=(f_1,f_2,f_3,f_4)$\end{minipage} & \begin{minipage}{6.5cm}{\it classification/need-to-know
+vectors};\\$f_1$: subject-classification function\\
+           $f_2$: object-classification function\\
+           $f_3$: subject-need-to-know function\\
+           $f_4$: object-need-to-know function
+           \end{minipage} \\
+\hline
+X & \begin{minipage}{5.5cm}$R^T$\\ an arbitrary element of X is written x\end{minipage} & {\it request sequences} \\
+\hline
+Y & \begin{minipage}{5.5cm}$D^T$\\ an arbitrary element of Y is written y\end{minipage} & {\it request sequences} \\
+\hline
+M & \begin{minipage}{5.5cm}$\{M_1, M_2, \hdots, M_c\}$,\\ $c=nm2^p$;\\an element $M_k$ of $M$ is an $n
+\times m$ matrix with entries from PA; the (i,j)-entry of $M_k$ shows $S_i$'s access attributes
+relative to $O_j$\end{minipage} & {\it access matrices} \\
+\hline
+V & $P(S \times O) \times M \times F$ & {\it states} \\
+\hline
+Z & \begin{minipage}{5.5cm}$V^T$\\ an arbitrary element of Z is written z; $z_t \in z$ is the t-th
+stae in the state sequence z\end{minipage} & {\it state sequences} \\
+\hline
+\end{tabular}
+\caption{List of formalized element defined by LaPadula for a mathematical security model\label{tab:secmathfund}}
+\end{table}
 
-\subsection{Defining a valid set}
+In order to take into account real-time and hypervisor based architectures, we define new elements
+in Table \ref{tab:secmathfundmils}
+
+\begin{table}[ht]
+\begin{tabular}{|p{3cm}|p{6cm}|p{7cm}|}
+\hline
+Set & Elements & Semantics \\
+\hline
+\hline
+$\mathbb{V}$ & ${\mathbb{V}_1, \mathbb{V}_2, \hdots, \mathbb{V}_z}$ & {\it Container}; autonomous partitions containing a given set of objects \\
+\hline
+$\mathbb{R}$ & $\{\mathbb{R}_1, \mathbb{R}_2, \hdots, \mathbb{R}_t\}$ & {\it RT requirements}; set
+of Real-Time specific requirements \\
+\hline
+\end{tabular}
+\caption{Real-Time virtualization-aware new elements for separation-kernel based real-time MILS
+architecture\label{tab:secmathfundmils}}
+\end{table}
+
+\paragraph{}
+We define some Assertions on the various set inclusion.
+\begin{assertion}
+$\forall (i, j), i \in \{1, \hdots, z \}, j \in \{ 1, \hdots, z \}, i \neq j, \mathbb{V}_i \bigcap \mathbb{V}_j = \emptyset $
+\end{assertion}
+\begin{assertion}
+$\forall o \in O, \exists i \in \{ 1, \hdots, z \}, o \in \mathbb{V}_i$
+\end{assertion}
 
 
-
-%\section{On the input requirements on software and hardware architecture}
-
-%\section{Through a first macroscopic model of software architecture}
-
-%\subsection{Introduction}
-
-%\subsubsection{On hardware properties}
-
-%\begin{enumerate}
-%\item Le matériel doit fournir au logiciel deux niveaux de privilèges
-%\item Seul le logiciel s'exécutant avec le niveau de privilèges  le  plus  élevé  peux  modifier  le
-%niveau de privilège dans lequel il s'exécute
-%\item Seul le logiciel s'exécutant dans le niveau de privilèges  le  plus  élevé  peut  définir  les
-%politiques  d'accès  au  matériel   pour   les   différents   logiciels   des   niveaux   supérieurs
-%\item Le matériel doit fournir un mécanisme  de  cloisonnement  mémoire  des  différents  logiciels.
-%\item Seul le logiciel s'exécutant dans le niveau  de  privilège  le  plus  élevé  peut  définir  et
-%modifier se cloisonnement
-%\end{enumerate}
-%
-%\subsubsection{On software properties}
-%
-%Cette  partie  se  concentre  sur  la  définition  d'un  premier  modèle  de  solution   logicielle.
-%
-%\begin{enumerate}
-%\item Le logiciel se définit  comme  une  association  entre  une  base  fournissant  une  interface
-%d'abstraction du matériel, et un ensemble de logiciels ayant une  tache  unique  et  indépendante  à
-%exécuter.
-%\item On définit le logiciel de base sous le nom noyau
-%\item Le noyau est le  seul  logiciel  s'exécutant  dans  le  niveau  de  privilège  le  plus  élevé
-%\item   Le   noyau   définit   les   politiques   d'accès   au   matériel   des   autres   logiciels
-%\item Seul le noyau peut définir ces politiques d'accès
-%\item Le noyau  n'apporte  aucune  valeur  ajoutée  autre  que  la  capacité  de  gérer  les  autres
-%logiciels et leur politique d'accès au matériel
-%\item  Le  noyau   interfère   le   moins   possible   dans   l'exécution   des   autres   logiciels
-%\item Le noyau garantie un ordonnancement des autres logiciels
-%\item L'ordonnancement des autres logiciels permet le respect des hypothèses nécessaires au temps réel dur
-%\item Le noyau doit fournir une interface aux autres logiciels indépendante du matériel  sous-jacent
-%\item On définit une communication entre logiciel comme la  capacité  d'un  logiciel  à  initier  un
-%traitement   spécifique    dans    un    autre    logiciel    (e.g.,    IPC,    appel    via    API)
-%\item Les autres logiciels ne peuvent communiquer avec le  noyau  qu'au  travers  de  l'API  que  ce
-%dernier leur fournit
-%\end{enumerate}
-%
-%\section{Defining a first mathematical model of the software architecture}
-%
-%\paragraph{}
-%On définit en premier lieu une instance de noyau, nommé $k_{i}$, appartenant à l'ensemble $K_{n}$ (où
-%$n$ est le cardinal de l'ensemble) des noyaux pouvant être  générés  à  partir  de  sources  $S_{k}$
-%associées à l'ensemble $K_{n}$.
-%
-%Les éléments $k_{i}$ de l'ensemble $K_{n}$  doivent  respecter  un  certain  nombre  de  propriétés.
-%
-%Soit $U_{m}$ un ensemble de logiciels de cardinal $m$. Cet ensemble possède les propriétés
-%suivantes:
-%\begin{itemize}
-%\item Pour tout logiciel $u_{i} \in U_{n}$ le schéma d'exécution est le même (périodique,
-%apériodique ou sporadique).
-%\end{itemize}
