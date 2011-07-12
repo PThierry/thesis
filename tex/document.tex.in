@@ -155,6 +155,7 @@
 
 
 \newtheorem{property}{Property}
+\newtheorem{assertion}{Assertion}
 
 \input{includes/\lang/titlepage.tex}
 
