@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Thu Jul 15 17:46:14 2010 Philippe THIERRY
-%% Last update Mon Apr  4 17:16:16 2011 Philippe THIERRY
+%% Last update mer. 13 juil. 2011 11:24:07 CEST Philippe THIERRY
 %%
 
 \chapter{About the security study scope}
@@ -22,15 +22,64 @@ time and space partitioning.
 
 \section{Introduction}
 
+\subsection{Defining the security scope}
+
 \paragraph{}
 In this document is only addressed, under the term of {\it security}, the {\it security of
 Information \& Technology} part. Safeness is considered through the existing Real-Time software
 architecture and associated supported hardware.
 
+\subsection{Description of security formalisms}
+
 \paragraph{}
-Security of Information \& Technology is a large domain. In this document are only considered
-security threats and fragility associated to the considered software/hardware couple. Network
-security, including all associated software and hardware is considered out of scope.
+In {\it security of Informations and Technologies}, a complete formalism has been defined since
+1973 by Bell \& LaPadula. This formalism uses some terms and principles in software security, as
+described in Table \ref{tab:secformalfirst}.
+
+\begin{table}
+\begin{tabular}{|p{5cm}|p{10cm}|}
+\hline
+  Formalism & Signification \\
+\hline
+\hline
+  Subjects & \begin{minipage}{10cm}Any program which can be executed on the system\end{minipage} \\
+\hline
+  Objects & \begin{minipage}{10cm}Any software element of the system. They can be data, file(s), or
+  subjects\end{minipage} \\
+\hline
+  The need-to-know & \begin{minipage}{10cm}The knowledge of a given Subject in term of Objects
+  visibility or access\end{minipage} \\
+\hline
+  Transaction & \begin{minipage}{10cm}Any communication between a Subject and an Object. These
+  transactions are controlled depending on the system policy\end{minipage} \\
+\hline
+\end{tabular}
+\caption{Most important formal term in software security\label{tab:secformalfirst}}
+\end{table}
+
+\paragraph{}
+To this basic elements, three main security guarantees are defined in Table \ref{tab:secguarantee}.
+
+\begin{table}
+\begin{tabular}{|p{5cm}|p{10cm}|}
+\hline
+  Guarantee & Signification \\
+\hline
+\hline
+  Confidentiality & \begin{minipage}{10cm}The guarantee that a given object is can't be accessed by
+  an unauthorized Subject\end{minipage} \\
+\hline
+  Integrity & \begin{minipage}{10cm}The guarantee that a given object can't be modified by an
+  unauthorized Subject\end{minipage} \\
+\hline
+  Non-repudiation & \begin{minipage}{10cm}The guarantee that a Subject can't challenge the proof of
+  its own unauthorized action\end{minipage} \\
+\hline
+\end{tabular}
+\caption{Security guarantees\label{tab:secguarantee}}
+\end{table}
+
+
 
 \paragraph{}
 Are considered here security elements associated to:
@@ -60,7 +109,7 @@ considered in this document.
 
 \paragraph{}
 The system security study is done through a bottom-up approach, taking into account hardware
-security porblematic and architecture, then the kernel and operating system security functions and
+security problematic and architecture, then the kernel and operating system security functions and
 implementation, to finish with the user space software protection and partitioning.\\
 All these elements are considered in order to be compliant to Real-Time problematics in order to
 maintain both Real-Time and security considerations.

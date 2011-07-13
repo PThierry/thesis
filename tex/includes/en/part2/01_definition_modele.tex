@@ -6,21 +6,55 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Tue Aug 31 13:12:11 2010 Philippe THIERRY
-%% Last update Tue Jul 12 17:05:44 2011 Philippe THIERRY
+%% Last update mer. 13 juil. 2011 10:22:55 CEST Philippe THIERRY
 %%
 
 \chapter{On the definition of a pure Real-Time model}
 
+\label{chap:rtmodel}
+
+{\it
+This chapter describes a formal real-time model of the targeted system.
+Such model is incomplete: security considerations are not taken into account.
+Nevertheless, this is a good start in order to merge an advanced pure security model with
+real-time concerns.
+
+}
+
+\doMinitoc
+
 \section{About the target of this model}
+
+\subsection{Remind of the targeted system}
 
 \paragraph{}
 In this chapter, we define a real-time model for multiple soft real-time sporadic task-sets on
 hypervisor based architectures. Targeted tasks are critical network flow forwarding tasks with
 deadline support.
 
+\section{On the definition of a virtualization-aware real-time model}
+
+\subsection{Hypothesis and assertions}
+
+\paragraph{}
+
+\subsection{Formal definition of a real-time model}
+
+\paragraph{}
+
 \chapter{On the definition of a MILS Real-Time aware security model}
 
-\section{On the need of the security model formalism}
+{\it
+In order to propose a complete formal model of the targeted system, the real-time model defined in
+chapter \ref{chap:rtmodel} is integrated into a new model based on the Bell-LaPadula updated model
+\cite{secmathfund} and the Common Criteria.
+}
+
+\doMinitoc
+
+\section{The origins of the security model formalism}
+
+\subsection{On the needs of a security formalism for modern architectures}
 
 \paragraph{}
 As defined in various document like \cite{formalsec}, security formalism for modern computer
@@ -37,6 +71,14 @@ with real-time constraints for critical network flows management.
 \paragraph{}
 Through a formalized security model, specific security and safety requirement are derived and
 integrated in the overall system architecture.
+
+\subsection{From Bell-LaPadula to Common Criteria}
+
+\paragraph{}
+
+\subsection{Integrating hardware related properties into a complete system security model}
+
+\paragraph{}
 
 \section{Formal definitions}
 
