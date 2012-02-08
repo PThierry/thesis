@@ -59,7 +59,7 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{alltt}
-\usepackage[sectionbib]{natbib}
+%\usepackage[sectionbib]{natbib}
 \usepackage{chapterbib}
 
 \usepackage[Glenn]{fncychap}				% 'Glenn' chapter titles
