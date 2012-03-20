@@ -19,6 +19,8 @@ BIBTEX=bibtex
 BIBTEXOPT=-min-crossrefs=0
 PDFVIEWER?=acroread
 
+LATEXENV = TEXINPUTS='.:./styles:{/home/phil/.texmf-config,/home/phil/.texmf-var,/home/phil/texmf,/etc/texmf,!!/var/lib/texmf,!!/usr/local/share/texmf,!!/usr/share/texmf,!!/usr/share/texmf-texlive}/tex/{kpsewhich,generic,}//'
+
 RM=rm
 RMFLAGS=-rf
 MAKE=make
@@ -56,15 +58,13 @@ all : help
 
 pdf :
 	cp includes/$(LANG)/bibliography.bib .
-	cp styles/these.sty .
 	/bin/bash scripts/generate_toc.sh
-	$(LATEX) $(LATEXOPT) $(LATEXOPT) $(SOURCE)
+	$(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE)
 	$(BIBTEX) $(BIBTEXOPT) $(SOURCE_PREFIX)
 	makeindex $(SOURCE:.tex=.idx)
 	makeindex -s $(SOURCE:.tex=.ist) -o $(SOURCE:.tex=.gls) $(SOURCE:.tex=.glo)
-	while [ `cat $(SOURCE:.tex=.log) | grep 'may have changed.' | wc -l` -ge 1 ]; do $(LATEX) $(LATEXOPT) $(LATEXOPT) $(SOURCE); done
+	while [ `cat $(SOURCE:.tex=.log) | grep 'may have changed.' | wc -l` -ge 1 ]; do $(LATEXENV) $(LATEX) $(LATEXOPT) $(LATEXOPT) $(SOURCE); done
 	mv $(SOURCE:.tex=.pdf) $(TARGET)_$(LANG).pdf
-	rm these.sty
 
 clean : 
 	$(RM) $(RMFLAGS) $(OBJS) $(TODEL)
