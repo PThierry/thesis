@@ -16,6 +16,7 @@
 LATEX=pdflatex
 LATEXOPT=-shell-escape
 BIBTEX=bibtex
+BIBTEXOPT=-min-crossrefs=0
 PDFVIEWER?=acroread
 
 RM=rm
@@ -58,7 +59,7 @@ pdf :
 	cp styles/these.sty .
 	/bin/bash scripts/generate_toc.sh
 	$(LATEX) $(LATEXOPT) $(LATEXOPT) $(SOURCE)
-	$(BIBTEX) $(SOURCE_PREFIX)
+	$(BIBTEX) $(BIBTEXOPT) $(SOURCE_PREFIX)
 	makeindex $(SOURCE:.tex=.idx)
 	makeindex -s $(SOURCE:.tex=.ist) -o $(SOURCE:.tex=.gls) $(SOURCE:.tex=.glo)
 	while [ `cat $(SOURCE:.tex=.log) | grep 'may have changed.' | wc -l` -ge 1 ]; do $(LATEX) $(LATEXOPT) $(LATEXOPT) $(SOURCE); done
