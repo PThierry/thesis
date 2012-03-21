@@ -76,7 +76,6 @@
 \usepackage{these}
 
 % D. Verna FIXME mackage
-\usepackage{xkvltxp}
 \usepackage[margin=true]{fixme}
 
 
