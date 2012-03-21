@@ -75,6 +75,11 @@
 \end{psinputs}
 \usepackage{these}
 
+% D. Verna FIXME mackage
+\usepackage{xkvltxp}
+\usepackage[margin=true]{fixme}
+
+
 %\usepackage{draftcopy}				% mark doc as 'draft'
 %\draftcopyName{Provisoire}
 

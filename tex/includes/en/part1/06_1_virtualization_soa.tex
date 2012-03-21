@@ -6,13 +6,15 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  mar. 13 mars 2012 12:10:50 CET Philippe THIERRY
-%% Last update mar. 13 mars 2012 12:26:05 CET Philippe THIERRY
+%% Last update mer. 21 mars 2012 15:13:51 CET Philippe THIERRY
 %%
 
-\chapter{State of the art of most known virtualisation solutions}
+\chapter{State of the art of most known virtualization solutions}
 
 {\it
-foo...
+Virtualization solutions is an complex world of software and hardware solutions, using various
+architecture with various efficiency. This chapter proposes a state of art of the most known but
+also the most secure virtualization solutions.
 }
 
 \doMinitoc
@@ -21,10 +23,74 @@ foo...
 
 \subsection{About virtualization principles}
 
+\paragraph{}
+Virtualization is the availability to execute multiple autonomous software environments
+concurently on a same hardware. Some virtualization specific component are then defined:
+\begin{itemize}
+\item An autonomous software component being executed in a partition, with a reduced visibility on
+the hardware is a {\it Virtual Machine}.
+\item The software and/or hardware subsystem managing the Virtual machines of a given system is a
+{\it virtual machine monitor}, as defined in \cite{popek}.
+\end{itemize}
+
+\paragraph{}
+There is various reasons associated to the usage of virtualization.
+Using virtualization may be the consequence of various reasons. Most of the time, it allows to
+reduce the hardware cost and the power consumption through a better usage of the system capacities.
+Such usage is more and more deployed in modern systems (since the begining of the 21st century).\\
+More recently, using virtualization allowing a good flexibility through a dynamic approach of the
+virtual machines lifecycle (e.g. Cloud Computing architectures).\\
+Using virtualization in order to partition software elements for security has been proposed for
+some years. What have been conclude of such security architecture is that virtualization is not a
+perfect security solution and should, like native systems, be hardened in order to avoid security
+threats. Moreover, some various threats has been demonstrated in some software and more recently
+hardware virtualization solutions. These threats are described in \ref{chap:virtsec}.
+
+\paragraph{}
+Most of the security breaches of the virtualization solutions is the consequence of some
+incompatibility of the hardware with various properties requested by virtualizations solutions.
+Usual incompatibilities as been described formaly by Popek and Goldberg in \cite{popek} in 1974.
+Today, there is new threats that have been demonstrated on modern systems, based on covert channel.
+\fxnote{Define covert channel first}
+
 \subsubsection{About various existing virtualization models}
 
 \paragraph{}
-Level 1, level 2, application based, Para, HVM, FullVM and definition of names
+There is various ways to manage virtual machines. Depending on the hardware and software
+architecture of the solution, efficiency and security may seriously vary. A virtual machine
+monitor supports one (or more) of the following solutions:
+\begin{itemize}
+\item Host-based virtual machine monitor\\
+      Such architecture is based on a complete host operating system. The virtual machine monitor is
+      then executed like a process of the host and use admin rights on the host in order to support the
+      virtualized software environment needs.
+\item Autonomous virtual machine monitor\\
+      When the virtual machine monitor is directly executed on the hardware with no host layer,
+      it is named {\it hypervisor}. Most of the time, hypervisors are based on a micro-kernel
+      design, reducing the overhead of the virtualization to the specific virtual machine management
+      routines and basic board support (i.e. interrupt routines initialization blocks)
+\end{itemize}
+
+\paragraph{}
+Managing virtual machines is a hard task. In \cite{popek}, the authors specify that a virtualized
+application execution should have exactly the same behaviour as a native application. Nevertheless,
+when executing in user space software that should normally be executed in kernel space, like a
+kernel, it try then to execute instructions impacting the system state. Such behaviour may be
+difficult to manage in modern architectures.
+\begin{itemize}
+\item If the instruction is denied in userspace, an exception is rised by the processor core and
+the hypervisor can react to it, for example through emulation of the hardware behaviour.
+\item If the instruction is allowed in userspace, the hypervisor can't be informed of its execution
+and should protect the system against such instruction execution. The hypervisor can prevent such
+execution using on line execution flow modifications.
+\end{itemize}
+Paravirtualization is an easy and efficient way to avoid the usage of sensible instruction in a
+virtual machine. It is based on the replacement of any sensible instructions bloc in the virtual
+machine applications with a call to a method of the hypervisor. Such method is named {\it
+hypercall} and works like a system call in native operating systems. The hypercall execute the
+action or any other action having the same result from the virtual machine point of view, in
+hypervisor mode. In order to support paravirtualization, the kernel of the virtual machine should
+be modified. This can be done for Linux or BSD systems, but not for MS Windows systems.
 
 \subsection{First definition of a virtualizable hardware plateform}
 
@@ -33,14 +99,13 @@ Level 1, level 2, application based, Para, HVM, FullVM and definition of names
 \subsubsection{Formal requirements and properties}
 
 \paragraph{}
-About the popek \& Goldberg formal requirements (1972)
+About the Popek \& Goldberg formal requirements (1974)
 
 \subsubsection{Incompatibilities of existing hardware}
 
 \subsubsection{On the paravirtualization principles}
 
 \subsubsection{Virtualization friendly processors, their advantages and limitations}
-
 
 \section{About lightweight and applicative virtualizer}
 
@@ -52,14 +117,31 @@ About the popek \& Goldberg formal requirements (1972)
 
 \subsection{BSD Jails}
 
-
 \section{About hypervisor based virtualization}
 
 \subsection{About Xen hypervisor}
 
 \subsubsection{General architecture}
 
-\subsubsection{Existing threats and security}
+\paragraph{}
+Xen is an hypervisor created in the Cambridge UK University in 2003. The Xen hypervisor is Open
+Source and is also supported in its commercial version by Citrix.\\
+The hypervisor is based on a Linux domain controller. This domain controller is a specific virtual
+machine which have administration rights on the hypervisor through specific hypercalls.
+The Xen micro-kernel implements board support package for x86 and x86\_64 architecture and has been
+ported to ARM architecture. Event if the hypervisor is a micro-kernel, its source code is
+relatively big (approximatively 250 Klines).\\
+The hypervisor support in the same time paravirtualisation, through the implementation of a
+complete set of hypercalls, and Hardware-based virtualization for Intel VT and AMD-V.
+The hypervisor scheduling policy is based on a non Real-Time scheduler, but also supports a S-EDF
+scheduling policy definining per VM minimum granted time slot in a given time period.
+\paragraph{}
+The usage of a domain manager based on a complete Linux system permits an easy management of the
+system but generates a certain overhead and reduce the security of the overall system.
+Xen guarantee a complete spacial (memory) partitioning of the VM, avoiding classical memory based
+covert channel. Nevertheless, Xen does not support a strict temporal partitioning of the virtual machine.
+
+%\subsubsection{Existing threats and security}
 
 \paragraph{The QubesOs security solution}
 

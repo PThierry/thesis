@@ -19,7 +19,7 @@ BIBTEX=bibtex
 BIBTEXOPT=-min-crossrefs=0
 PDFVIEWER?=acroread
 
-LATEXENV = TEXINPUTS='.:./styles:{/home/phil/.texmf-config,/home/phil/.texmf-var,/home/phil/texmf,/etc/texmf,!!/var/lib/texmf,!!/usr/local/share/texmf,!!/usr/share/texmf,!!/usr/share/texmf-texlive}/tex/{kpsewhich,generic,}//'
+LATEXENV = TEXINPUTS='.:./styles:./style/fixme:{/home/phil/.texmf-config,/home/phil/.texmf-var,/home/phil/texmf,/etc/texmf,!!/var/lib/texmf,!!/usr/local/share/texmf,!!/usr/share/texmf,!!/usr/share/texmf-texlive}/tex/{kpsewhich,generic,}//'
 
 RM=rm
 RMFLAGS=-rf
