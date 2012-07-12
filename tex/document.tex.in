@@ -118,6 +118,8 @@
 \makeindex						% call for index generation
 
 
+\newcommand{\gls}[1]{#1}
+
 %\input{macros/myminitoc.sty}
 
 

@@ -19,7 +19,8 @@ BIBTEX=bibtex
 BIBTEXOPT=-min-crossrefs=0
 PDFVIEWER?=acroread
 
-LATEXENV = TEXINPUTS='.:./styles:./style/fixme:{/home/phil/.texmf-config,/home/phil/.texmf-var,/home/phil/texmf,/etc/texmf,!!/var/lib/texmf,!!/usr/local/share/texmf,!!/usr/share/texmf,!!/usr/share/texmf-texlive}/tex/{kpsewhich,generic,}//'
+TEXINPUTS    = $(shell kpsewhich -var-value=TEXINPUTS)
+LATEXENV = TEXINPUTS='./styles:$(TEXINPUTS)'
 
 RM=rm
 RMFLAGS=-rf
@@ -37,6 +38,7 @@ OBJS	     = $(SOURCE:.tex=.aux) $(SOURCE:.tex=.log) $(SOURCE:.tex=.out) $(SOURCE
 	       $(SOURCE:.tex=.lot) *.ps *.mlf* *.mlt* *.mtc* document-fig*.tex *.log document-fig*.pdf tmp.inputs document.tex
 TODEL	     = tags *~ .*.swp
 LANG	     = $(shell cat config/config.tex|grep "newcommand.*lang"|sed -re "s:.*\{([fe][rn])\}.*:\1:")
+
 
 #############################################################################
 ## rules
@@ -56,13 +58,13 @@ images:
 
 all : help
 
+#makeindex -s $(SOURCE:.tex=.ist) -o $(SOURCE:.tex=.gls) $(SOURCE:.tex=.glo)
 pdf :
 	cp includes/$(LANG)/bibliography.bib .
 	/bin/bash scripts/generate_toc.sh
 	$(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE)
 	$(BIBTEX) $(BIBTEXOPT) $(SOURCE_PREFIX)
 	makeindex $(SOURCE:.tex=.idx)
-	makeindex -s $(SOURCE:.tex=.ist) -o $(SOURCE:.tex=.gls) $(SOURCE:.tex=.glo)
 	while [ `cat $(SOURCE:.tex=.log) | grep 'may have changed.' | wc -l` -ge 1 ]; do $(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE); done
 	mv $(SOURCE:.tex=.pdf) $(TARGET)_$(LANG).pdf
 
