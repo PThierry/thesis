@@ -89,14 +89,15 @@ garantir la confidentialité des données qu'ils traite, et assurer qu'aucun
 canal direct (d'accès au données) ou indirect (détection comportementale par
 canal caché) permet de récupérer des informations sur le contenu du flux ou
 sur sont profil.
-On définit alors l'hypothèse suivante:
+On définit alors l'hypothèse suivante:\\
 
-\begin{itemize}
-\item HYP\_SEC\_MAT\_NIC\_01: le contrôleur réseau garantie la confidentialité du
-flux qu'il traite
-\item HYP\_SEC\_MAT\_NIC\_01: le contrôleur réseau garantie la confidentialité du
+\hypo{HYP\_SEC\_MAT\_NIC\_01}{
+le contrôleur réseau garantie la confidentialité du flux qu'il traite
+}
+\hypo{HYP\_SEC\_MAT\_NIC\_02}{
+le contrôleur réseau garantie la confidentialité du
 profil comportemental du flux qu'il traite
-\end{itemize}
+}
 
 \paragraph{}
 Ces mêmes données transitent par un bus d'interconnexion entre les différents

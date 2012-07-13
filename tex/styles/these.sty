@@ -1,8 +1,18 @@
-\newenvironment{hypo}[1]{
-\begin{minipage}{0.9\linewidth}
-\textbf{\textsc{\textit{#1}}}\\
-\it
-}{
-\end{minipage}
-\vspace{0.5cm}
+\newcounter{hypcount}
+\setcounter{hypcount}{1}
+
+\newcommand{\hypo}[2]{
+\par
+\noindent
+{\it
+\begin{tabular}{|p{\linewidth}|}
+\hline
+Hyp. \arabic{hypcount} \hspace{5mm}\textsc{\textit{#1}} \\
+\hline
+#2 \\
+\hline
+\end{tabular}\\
+\vspace{5mm}
+}
+\stepcounter{hypcount}
 }
