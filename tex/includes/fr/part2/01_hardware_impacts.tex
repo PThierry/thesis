@@ -7,35 +7,44 @@
 %%
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
 %% Last update Mon Aug 30 17:00:21 2010 Philippe THIERRY
-%%
 
-\chapter{impact des éléments matériels}
+
+\chapter{Rappel général sur les éléments logiciels et matériels impactant}
 \doMinitoc
 
-\section{Rappels}
+\section{Rappel général sur les éléments matériels impactant}
 
-\subsection{Éléments matériels en jeu dans les architectures modernes}
+\subsection{Architecture générale simplifiée}
 
-Une   architecture   matérielle   type   est   proche    de    la    figure    \ref{fig:gal_hw_diag}
+\paragraph{}
+Une   architecture   matérielle   type   est   proche    de    la    Figure    \ref{fig:gal_hw_diag}
 \begin{figure}[h]
 \input{figures/hw_std.tex}
 \label{fig:gal_hw_diag}
 \caption{Schéma général des composants matériels impactant le temps réel}
 \end{figure}
 
-L'élément central est le  bus,  dont  l'accès  est  contrôlé  par  le  {\it  contrôleur  de  bus}.\\
-C'est  ce  dernier  qui  permet  la  communication  entre  les  différents   organes   matériel,   y
-compris   le   processeur\footnote{Le   terme   processeur    définit    ici    un    \index{GPP}GPP
-(General Purpose Unit)}.
+L'élément central est le  bus d'intercommunication,  dont  l'accès  est  contrôlé  par  le  {\it  contrôleur  de  bus}.\\
+C'est  ce  dernier  qui  permet  la  communication  entre  les  différents
+organes   matériel.\\
+Selon la complexité de l'architecture matérielle, le bus peut être substitué
+par un interconnect ou un Network On Chip (NOC). Dans ce dernier cas, la
+parallélisation des accès permet de réduire les latences d'accès par les
+initiateurs (éléments matériels initiant des requêtes sur le bus
+d'intercommunication). Ces derniers sont par exemple le processeur ou encore le
+contrôleur DMA.
 
-\subsection{Gestion de l'adressage}
+\subsection{Gestion de l'adressage mémoire centrale}
 
 \paragraph{}
 Les processeurs modernes sont équipés d'une \index{MMU}\gls{mmu}  ({\it  Memory  Management  Unit}),
-voire, selon les familles de
-processeurs, d'une \index{I/OMMU}I/OMMU.
+voire, selon les familles de processeurs, d'une \index{I/OMMU}I/OMMU
+(dénomination Intel) ou SMMU (dénomination ARM).
 Ces deux éléments jouent un rôle de filtre permettant  de  fournir  des  capacités  de  sécurisation
-des accès mémoire, ainsi qu'un service d'abstraction de  celle-ci,  au  travers  de  la  pagination.
+des accès mémoire via la segrégation des accès en fonction des processus
+logiciels (MMU) et en fonctions de l'initiateur (I/OMMU - SMMU). La MMU est en
+coupure entre le coeur processeur et le bus, l'I/OMMU (dans le cas d'Intel) en coupure entre les
+périphériques initiateurs et la mémoire.
 
 \paragraph{}
 La pagination permet de fournir au logiciel une vue logique de  la  mémoire,  permettant  ainsi  une
@@ -45,85 +54,119 @@ adressage logique, lui donnant l'impression d'être seul à s'exécuter.
 
 \begin{figure}[h]
 \input{figures/mmu_as.tex}
-\caption{Translation d'adresse - vue générale}
+\caption{Translation d'adresse mémoire, vue générale}
 \end{figure}
 
 \paragraph{}
-À l'inverse, les éléments matériels utilisent  tous  un  adressage  physique.   Ainsi,  une  recopie
-\index{DMA}DMA  se   fait   directement   vers   une   adresse   physique   en   mémoire   centrale.
+À l'inverse des éléments logiciels exécuté dans les coeurs processeur, les éléments
+matériels (hors coeur processeur) utilisent  tous  un  adressage  physique.   Ainsi,  une  recopie
+\index{DMA}DMA  se  fait   directement   vers   une   adresse   physique   en
+mémoire   centrale. Les éléments matériels de filtrage comme l'I/OMMU ou la
+SMMU sont là pour autoriser ou interdire l'accès à un sous ensemble de la
+mémoire centrale.
 
 \paragraph{}
-À ces deux organes du micro-processeur sont associés des éléments comme le \index{TLB}TLB ({\it Table
-Lookahead   Buffer}),   permettant   d'accélérer   la   translation    d'adresse    entre    logique
-et    physique.\\
-L'ensemble des accès du processeur vers la mémoire passe par la \gls{mmu}. L'ensemble des accès des
-contrôleurs d'I/O passe par l'\gls{iommu}.
+La MMU gère une table de correspondance entre adressage physique et adressage
+logique pour chaque processus. C'est le noyau du système d'exploitation qui
+initie ces tables et fournit le pointeur à la MMU. Ces dernières sont donc en
+mémoire centrale. Afin d'optimiser les accès et réduire les accès mémoire, la
+MMU s'appuie sur un cache local, de manière similaire aux caches de données du
+processeur. Ce dernier est nommé \index{TLB}TLB ({\it Translation Lookaside
+Buffer}).
 
 \paragraph{}
 La configuration de ces éléments matériels se fait par le logiciel. C'est le noyau qui est en charge
 de veiller à la gestion de la  mémoire,  et  donc  de  maintenir  à  jour  les  informations  de  la
-\gls{mmu}   et   de   l'\gls{iommu}
-
-\section{Les contrôleurs d'entrée/sortie}
-
-Clients du contrôleur DMA primaire, ils font des requêtes de recopie mémoire à ce dernier, en fonction
-de leurs besoins.
+\gls{mmu}   et   de   l'\gls{iommu}.
 
 \section{Les contrôleurs DMA}
 
 \subsection{Principe de fonctionnement}
-Mono ou multi-canaux, ils se comportent comme un coprocesseur dont le travail correspond à faire de la
-recopie de mémoire à mémoire, qu'il s'agisse de la mémoire centrale ou de  la  mémoire  internes  au
-périphériques  d'entrée/sortie.
+
+\paragraph{}
+DMA signifie Direct Memory Access. Il s'agit de contrôleurs spécialisés dans
+les recopies mémoire. Il permette de gérer les recopies entre mémoire centrale
+et mémoires périphériques (e.g. mémoire interne du contrôleur ethernet) sans
+recours au processeur. Ainsi, la recopie se fait en "tache de fond",
+permettant au processeur de continuer ses traitements après initialisation du
+transfer. L'avantage principal est donc la réduction de la charge processeur.
+L'inconvénient principal est l'impact en terme de temps réel et de sécurité.
+En effet, le contrôleur DMA perturbe les accès au bus d'interconnexion
+lorsqu'il exécute des recopies mémoire, générant de potentielles augmentation
+de latence d'accès au bus de la part du processeur.
+Mono ou multi canaux, ils supportent potentiellement plusieurs interfaces de
+traitement et donc plusieurs élément logiciels initiateurs du traitement.
 
 \subsection{Les transferts de données}
 
-\subsubsection{Le mode {\it burst}}
+\paragraph{}
+Les transferts de données sont par nature asynchrones. En effet, lorsqu'un
+service logiciel configure le contrôleur DMA afin d'opérer une recopie
+mémoire, cette dernière n'est pas synchrone de la requête. La fin de la
+recopie est en générale spécifiée par une interruption.\\
 
-\section{Les controleurs mémoire}
+\section{Les contrôleurs mémoire}
 
 \begin{figure}[h]
 \input{figures/ddr_memory_access.tex}
 \caption{Décomposition  des  lignes  de  bus  d'un   controleur   DDR1\label{fig:ddr_memory_access}}
 \end{figure}
 
-
-
 \section{Les arbitreurs de bus}
 
+\paragraph{}
+Les arbitreurs de bus gèrent les accès concurrent au bus d'intercommunication.
+Lorsque ce dernier ne permet pas de paralléliser les requêtes des initiateurs,
+ces dernières sont traitées en série. L'arbitreur permet de gérer la file
+d'attente des requêtes et peut, selon le type de bus, supporter de la qualité
+de service afin d'assurer des bornes supérieures d'accès au bus. Les bus
+d'intercommunications complexes fournissent une interface programmative
+permettant au noyau de spécifier la qualité de service qu'il souhaite en terme
+par exemple de priorisation des accès selon l'initiateur.
+
+\paragraph{}
+Dans le cadre des Network On Chip, le bus est décomposé en routeurs sur un ou
+plusieurs niveaux. Ces derniers gère en interne les files d'attente des
+requêtes entre initiateurs et cibles.
 
 \section{Les interruptions}
 
 \paragraph{}
 Les interruptions matérielles sont des évènements asynchrones émis  par  le  matériel  pour  générer
-de manière synchrone l'exécution d'un élément logiciel. Il peut s'agir d'un timer (un ordonnancement
+l'exécution d'un élément logiciel. Il peut s'agir d'un timer (un ordonnancement
 en mode {\it time-driven} s'appuie sur ce dernier pour gérer sa période d'exécution),  d'une  frappe
 clavier,   ou   de   toute   information   dont   la    fréquence    n'est    pas    trop    élevée.
 
 \paragraph{}
 Les  interruptions  sont  gérés  par  un  contrôleur  matériel,  l'\index{APIC}APIC  ({\it  Advanced
 Programable Interruption Controler}),  qui  les  relaie  au  processeur.   Ce  dernier  stoppe  sont
-cycle d'exécution courrant, pour exécuter un {\it handler  d'IRQ},  que  le  noyau  à  préalablement
+cycle d'exécution en cours, pour exécuter un {\it handler  d'IRQ},  que  le  noyau  à  préalablement
 enregistré auprès du processeur (e.g. sur les architectures ia32, cela se fait via le registre IDTR).
 
 \paragraph{}
 Les interruptions matérielles ont deux propriétés :
 \begin{itemize}
-\item Elles ne sont pas  prédictibles  car  sont  la  conséquence  d'un  évènement  matériel  lié  à
-l'environnement,  comme  un  signal   de   remplissage   de   la   mémoire   interne   d'une   carte
+\item Elles ne sont pas  prédictibles  car  sont  la  conséquence  d'un
+évènement  asynchrone  lié  à l'environnement,  comme  un  signal   de   remplissage   de   la   mémoire   interne   d'une   carte
 Ethernet,   ou   une   frappe   clavier.
 \item Elles sont exécutées par le processeur en l'absence de contrôle logiciel. Seule la désactivation
-des interruptions peut empécher leur exécution (hors \index{NMI}NMI).
+des lignes interruptions peut empêcher leur exécution (hors \index{NMI}NMI).
+\item Sur certains contrôleurs d'interruption, il est possible de prioriser
+ces dernières. Ainsi, une interruption peut préempter une autre interruption
+moins prioritaire.
 \end{itemize}
 
 \paragraph{}
 L'exécution des handlers d'interruptions se faisant directement par le processeur sans  en  informer
-la   couche   logicielle   font   de    ces    dernières    des    {\it    voleurs    de    cycles}.
+l'ordonnanceur logiciel  font   de    ces    dernières    des    {\it
+voleurs    de    cycles}. Elles doivent donc impérativement être maîtrisée
+pour permettre le support d'exigences temps réel.
 
 \paragraph{}
-Comme le montre la figure \ref{fig:pic_cascade}, il peut y avoir  un  grand  nombre  d'interruptions
-matérielles différentes. Aujourd'hui, elles ont tendance à diminuer au profit du DMA et du polling,
-les interruptions devenant trop fréquente et donc trop coûteuses.
+Comme le montre la Figure \ref{fig:pic_cascade}, il peut y avoir  un  grand  nombre  d'interruptions
+matérielles différentes. Aujourd'hui, elles ont tendance à diminuer au profit
+de contrôleurs DMA chaînant les copies mémoire et du polling (i.e vérification
+active par le logiciel d'informations asynchrones).
 
 \begin{figure}[h]
 \input{figures/pic_cascade.tex}
@@ -182,7 +225,7 @@ Mémoire centrale & 10-60 nano secondes \\
 
 \paragraph{}
 Le tableau \ref{tab:cache_access_time}\footnote{confer \url{http://expertester.wordpress.com/2008/05/30/core-2-duo-vs-pentium-dual-core/}} fournit
-une  comparaison  du  coût  d'accès  à   une   donnée   selon   son   positionnement   en   mémoire.
+un exemple de comparaison  du  coût  d'accès  à   une   donnée   selon   son   positionnement   en   mémoire.
 
 \paragraph{}
 Les algorithmes de cache ont divers niveaux d'associativité :
@@ -305,6 +348,7 @@ bus de donnée. En espionnant le bus, il est capable à tout instant de mettre à j
 et de maintenir la consistance.
 
 \subsubsection{Synchronisation caches/mémoire centrale}
+
 \paragraph{}
 Lorsque des données sont modifiées en local sur le cache, il est nécessaire de mettre à jour la mémoire
 centrale afin de prendre en compte ce changement.
@@ -409,11 +453,7 @@ les cellules.
 
 \subsection{Les pipelines}
 
-\subsection{L'hyperthreading}
-
-\subsection{La prédiction de branchement}
-
-\section{Les contrôleurs mémoire}
+\subsection{La prédiction de branches}
 
 \section{Les problématiques de partages}
 

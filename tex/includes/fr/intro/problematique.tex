@@ -13,110 +13,96 @@
 \chapter{Problématique}
 \doMinitoc
 
-\section{Besoins en terme de temps réel}
-
-\subsection{Rappels}
+\section{Définition des termes}
 
 \paragraph{}
-Jusqu'aux années 1990,  les réseaux utilisaient des protocoles basés sur de la commutation de
-circuit (eg. RNIS), de cellules (eg. \index{Protocoles!ATM}) offrant
-des propriétés temps réel fortes.
-%\index{Protocoles!X25}\gls{x25}.\\
-Avec l'avènement d'\index{Protocoles!IP}\gls{ip} et de la commutation de trame, les protocoles réseaux ont perdu leur capacité
-temps réel pour un modèle de type {\it best effort}, moins complexe, mais qui aujourd'hui, avec l'avènement
-des flux audio et vidéo sur \gls{ip} et la disparition petit à petit du RNIS, montrent leur limitation.
+On appelle système critique un système pouvant mettre en danger des vies
+humaines ou du matériel en cas de défaillance. C'est le cas par exemple des systèmes
+avioniques ou véhiculaires. Plus les dégats conséquents à une panne sont
+importants, plus le niveau de criticité est élevé.
 
 \paragraph{}
-Un certain nombre de \gls{rfc} fournissent des capacités supplémentaires à \gls{ip}, comme le \index{diffserv}\gls{diffserv} et la \index{QoS}\gls{qos}
-au niveau liaison avec le \index{802.1q}\gls{8021q}. Cela permet de définir une priorisation des flux au niveau
-des n{\oe}uds de communications, mais ne fournissant pas un respect du temps réel aussi fort que
-les anciens protocoles {\it legacy}.
+On appelle système sécurisé un système devant garantir au moins une parmis les
+trois propriétés suivantes:
+\begin{itemize}
+\item La confidencialité des données qu'il traite
+\item L'intégrité des données qu'il traite
+\item L'imputabilité des données qu'il traite
+\end{itemize}
+Le niveau de sécurité d'un système dépend de l'impact de la non-garantie d'une
+ou plusieurs de ses propriétés.
+
+\section{A propos des systèmes embarqués avioniques}
 
 \paragraph{}
-Il existe cependant des cas particuliers (réseaux hertziens, réseaux très contraints,
-réseaux avec forte garantie de latence de bout en bout), où il est nécessaire de fournir
-des solutions systèmes permettant, tant au niveau protocolaire qu'au niveau noeud de
-communications, de fournir des garanties fortes sur la traversée des données.
+Dans le cadre de l'avionique, la problématique multi-critique se pose
+lorsqu'il s'agit de remonter des information de vol (altitude, température
+extéreure, vitesse) au niveau du système multimédia. On parle alors de système
+multi-critique. On s'appuie sur des passerelles multi-critiques assurant la
+protection du système de haute criticité tout en fournissant au système de
+criticité la plus basse les informations demandées.
+
+\section{A propos des systèmes embarqués véhiculaires}
 
 \paragraph{}
-La coût du traitement logiciel qu'implique le routage d'un paquet au sein d'un n{\oe}ud de
-communications impacte directement ces performances en terme de nombre de flux supporté,
-et donc sa capacité à s'intégrer en c{\oe}ur de réseau.
+Aujourd'hui, les véhicules embarquent un grand nombre de sous-systèmes
+critiques. Ces systèmes fournissent des services à valeur ajoutée comme l'ABS
+ou les différents mécanismes d'aide à la conduite. Ces systèmes sont de plus
+en plus nombreux et de plus en plus complexes. C'est par exemple le cas de
+l'aide au créneaux couplé au caméras et radars de recul.
 
 \paragraph{}
-A l'inverse, dans les réseaux hertziens, ce n'est plus le besoin en terme de capacité de
-traitement qui implique de fournir une latence maximum garantie, mais le besoin de synchronisation
-pour la gestion de l'émission de donnée.\\
-La finesse de la répartition temporelle croît avec le besoin en terme de débit et de sécurité.
+Dans leur globalité, les systèmes véhiculaires s'appuient principalement sur
+un maillage complexe de bus CAN, permettant de remonter les informations de
+divers sondes et de corréler de telles information. A ce réseau de réseaux
+CAN commencent à s'associer un réseau IP, afin d'intégrer un environnement
+multimédia de plus en plus riche (téléphone portable, mécanisme de
+cartographie par internet, etc). Le cloisonnement de ces deux domaines
+s'affaiblit petit à petit avec l'augmentation des services de remontée
+d'informations sur les terminaux utilisateurs. Cette tendance s'accroît avec
+les travaux sur les véhicules autonomes. Ces travaux implique d'intégrer le
+véhicule comme un noeud dans un réseau, et en conséquence réduit encore un peu
+plus la capacité à ségréguer les domaines de criticité.
 
 \paragraph{}
-Tous ces éléments ont comme besoin la définition d'une latence de traversée maximum garantie,
-que ce soit au niveau n{\oe}ud de communications ou de bout en bout.
-==<<
-\subsection{De la gestion de flux à l'ordonnancement}
+Dans le cas des véhicules militaires, un grand nombre de sous systèmes
+viennent s'intégrer au véhicule. Il s'agit de la gestion des communications,
+du blindage ou encore de la détection d'attaque. Ces éléments interagissent
+fortement pour répondre au besoin.\\
+Aujourd'hui, un tel système s'appuie sur des éléments de niveau de criticité
+différents, mais également de niveaux de sécurité différents. Faire
+communiquer ses éléments entre eux implique la prise en compte de la
+problématique de communications entre domaines de criticité différents, mais
+également la problématique de communications entre domaines de sécurité
+différents. Une telle architecture systèmes est très complexe et nécessite des
+passerelles inter-domaines assurant un bon cloisonnement des niveaux de
+criticité et de sécurité tout en permettant une communication controllée entre
+les domaines.
 
-En considérant le schéma suivant :
-
-\begin{figure}[h]
-\input{figures/problematique_fw_base.tex}
-\caption{Routage de flux : modèle macroscopique générique}
-\end{figure}
-
-L'équation \ref{eqn:traversal_cost} définit, pour un échantillon $E$ de mesures d'un flux donné, un coût
-maximum de traversée $f$ :
-
-\begin{eqnarray}
-\forall i \in E, \delta t_i = t_{in,i} - t_{out,i}), f = max_{i \in E}(\delta t_i)
-\label{eqn:traversal_cost}
-\end{eqnarray}
-
-Pour une charge processeur maximum $U$ accordée au traitement de $n$ flux réseau en parallèle, on doit s'assurer de
-l'hypothèse \ref{eqn:hyp_total_cost} :
-
-\begin{eqnarray}
-\sum_{j \in n} f_{j} < U
-\label{eqn:hyp_total_cost}
-\end{eqnarray}
+\section{A propos des système Multi-Level Security}
 
 \paragraph{}
-Dans le cadre d'un {\it \index{switch}\gls{switch}}, où le traitement est fait au niveau matériel, ce modèle est valide,
-car la latence de traversée est fixe.
-Malheureusement, on reste ici dans un environnement souvent idéal, où non seulement la charge processeur qu'on
-alloue au traitement réseau est garantie, mais également ou le flux réseau est considéré comme une tache
-au profil unique.\\
-Lorsqu'un traitement à valeur ajoutée est exécuté dans le cadre d'un routage de flux, ce dernier est
-un des éléments d'entrée impactant le coût de son routage (comme par exemple dans le cadre de règles de
-filtrage), ce qui rend ce modèle caduque.
+Les mécanisme de communications militaires ont besoin aujourd'hui d'assurer la
+communication contrôlée entre domaines de sécurité. Un cas classique et la
+capacité à remonter des informations de type coalition au niveau pays tout en
+réduisant la vision coalition sur les données pays.
 
 \paragraph{}
-On a donc la problématique suivante : comment, dans le cadre d'un n{\oe}ud de communications évolué, reposant à la fois sur un
-traitement matériel est logiciel,  peut-on définir un modèle de mesure du coût de traversée d'un paquet ?
+Ces mécanismes sont encore aujourd'hui évités via un cloisonnement matériel
+strict. On travail alors avec plusieurs terminaux complètement indépendants,
+impliquant de redonder le matériel avec toutes les conséquences en terme de
+poids et de volumétrie.
 
-\section{Cas d'usage}
-
-\subsection{Les réseaux synchrones bas débit}
-
-\paragraph{}
-On retrouve ces réseaux partout où il est nécessaire de pouvoir émettre à une très grande portée, ou là ou
-les architectures réseaux classiques sont inexistantes. C'est le cas par exemple en aéronautique, dans le satellitaire, ou dans des pays
-n'ayant pas encore l'infrastructure nécessaire pour permettre l'emploi de réseaux câblés ou \index{Wifi}\index{WiMax}\index{3G}WiFi/WiMax/3G.
-
-\subsection{Les architectures réseaux temps réel}
+\section{Synthèse}
 
 \paragraph{}
-Ce type de réseau est utilisé pour des besoin de type temps réel dur, comme les postes de pilotage.
+On constate qu'il devient aujourd'hui difficile d'échapper au besoin d'un
+système communicant multi-critique et multi-niveaux de sécurité. Les
+passerelles multi-critiques et multi-niveaux de sécurité sont la conséquence
+d'un besoin grandissant, et doivent pouvoir s'insérer dans divers systèmes
+pour permettre la communication contrôlés entre des éléments de criticité et
+de sécurité différents. Pour cela, cette passerelle doit pouvoir être
+compatible d'exigences à la fois temps réel et de sécurité, et fournir des
+mécanismes sous forme de fonctions certifiables, autonomes et agrégeable pour
+couvrir un maximum de besoin.
 
-\subsubsection{Les réseaux \index{Protocoles!AFDX}AFDX}
-
-ARINC 664 Part 7
-
-\subsubsection{Les réseau radio TDMA}
-
-Réseaux à répartition temporelle d'accès stricte et synchrone.
-
-\section{Définition d'une réponse au besoin}
-Le traitement de flux temps réel possède un besoin premier qui est la capacité à fournir une garantie en terme de latence de
-traversée. Cette garantie s'obtient, dans le cadre d'un traitement logiciel, au travers d'une gestion de l'exécution temps réel.\\
-Le but dans ce document, est de définir l'ensemble des élément impactant sur l'exécution du traitement temps réel, d'isoler chaque élément
-et de définir au mieux un système complet qui pourrait alors exécuter une tache de n{\oe}ud de communication avec le plus de garanties
-possibles.
