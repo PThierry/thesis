@@ -13,7 +13,7 @@
 %% Document style definition
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\documentclass[twoside,a4paper,11pt,titlepage]{book} 	% document type
+\documentclass[twoside,a4paper,12pt,titlepage]{book} 	% document type
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -25,7 +25,7 @@
 \usepackage{listings}					% lists support. Used for code
 \usepackage[usenames,dvipsnames]{color}					% basic color support
 \usepackage[T1]{fontenc} 				% caracteres norme iso-8859.
-			 				% risque de ne pas marcher avec les fichiers crees
+		 					% risque de ne pas marcher avec les fichiers crees
                          				% sous windows.
 \usepackage[english,francais]{babel}			% french support
 \usepackage{amsfonts}					% special fonts support (math, etc)
@@ -42,6 +42,7 @@
 \usepackage{array}					% tabular replacement
 \usepackage{chngpage}					% change page layout localy
 \usepackage{minitoc}
+\usepackage{setspace}
 %
 \usepackage{makeidx}
 \usepackage[pdftex,
@@ -122,6 +123,8 @@
 
 %\input{macros/myminitoc.sty}
 
+% interligne
+\onehalfspacing
 
 % Add glossary
 \input{includes/\lang/glossary.tex}
@@ -235,6 +238,17 @@
 % chapter. To be fixed in the future.
 %
 
+\newpage
+articles publiés:\\
+- Algorithme de gestion de cache L1 virtualisable (besoin de sécurité), assurant
+que l'état du cache lors de la reprise de l'exécution d'une partition est
+identique à l'état lors de le précédante préemption. Etude théorique sur la sauvegarde
+du cache dans une SRAM locale\\
+- Workshop sur la définition du problème d'ordonnançabilité d'un système
+hiérarchique fournissant des partitions logicielle de type TDM.\\
+article en cours:\\
+- définition d'un connecteur multi-niveaux de criticité (exigences TR) et de
+sécurité (exigences de cloisonnement) pour le transfert de flux télécom.
 
 \input{includes/\lang/intro/introduction.tex}
 
