@@ -13,36 +13,7 @@
 \chapter{Problématique}
 \doMinitoc
 
-\section{Définition des termes}
-
-\paragraph{}
-On appelle système critique un système pouvant mettre en danger des vies
-humaines ou du matériel en cas de défaillance. C'est le cas par exemple des systèmes
-avioniques ou véhiculaires. Plus les dégats conséquents à une panne sont
-importants, plus le niveau de criticité est élevé.
-
-\paragraph{}
-On appelle système sécurisé un système devant garantir au moins une parmis les
-trois propriétés suivantes:
-\begin{itemize}
-\item La confidencialité des données qu'il traite
-\item L'intégrité des données qu'il traite
-\item L'imputabilité des données qu'il traite
-\end{itemize}
-Le niveau de sécurité d'un système dépend de l'impact de la non-garantie d'une
-ou plusieurs de ses propriétés.
-
-\section{A propos des systèmes embarqués avioniques}
-
-\paragraph{}
-Dans le cadre de l'avionique, la problématique multi-critique se pose
-lorsqu'il s'agit de remonter des information de vol (altitude, température
-extéreure, vitesse) au niveau du système multimédia. On parle alors de système
-multi-critique. On s'appuie sur des passerelles multi-critiques assurant la
-protection du système de haute criticité tout en fournissant au système de
-criticité la plus basse les informations demandées.
-
-\section{A propos des systèmes embarqués véhiculaires}
+\section{Définition des enjeux}
 
 \paragraph{}
 Aujourd'hui, les véhicules embarquent un grand nombre de sous-systèmes
@@ -76,33 +47,99 @@ problématique de communications entre domaines de criticité différents, mais
 également la problématique de communications entre domaines de sécurité
 différents. Une telle architecture systèmes est très complexe et nécessite des
 passerelles inter-domaines assurant un bon cloisonnement des niveaux de
-criticité et de sécurité tout en permettant une communication controllée entre
+criticité et de sécurité tout en permettant une communication contrôlée entre
 les domaines.
 
-\section{A propos des système Multi-Level Security}
+\paragraph{}
+Pour des raisons de place, de température et de consommation, les
+systèmes embarqués véhicules s'appuient sur des embarqués basse consommation.
+Ces derniers doivent être aptes à pouvoir traiter à la fois des données
+véhicules avec des exigences temps réel dur et des exigences de sécurité plus
+souples, et des données métier (cartographie et gestion de mission pour les
+militaires, données médicales pour les services d'urgences) avec des exigences
+de temps réel plus souples mais dont les exigences de sécurité sont elles
+beaucoup plus fortes.
+
+\subsection{Sécurité}
 
 \paragraph{}
-Les mécanisme de communications militaires ont besoin aujourd'hui d'assurer la
-communication contrôlée entre domaines de sécurité. Un cas classique et la
-capacité à remonter des informations de type coalition au niveau pays tout en
-réduisant la vision coalition sur les données pays.
+On dit qu'un système d'information est sécurisé lorsqu'il respecte les 3 principes
+de sécurité suivants pour les données qu'il traite:
+\begin{itemize}
+\item Disponibilité
+\item Intégrité
+\item Confidentialité
+\end{itemize}
+
+\FIXME{texte de Sylvain, à écrire moi même}
+
+\paragraph{Disponibilité}
+La disponibilité est la capacité à accéder à une information à n'importe quel moment.
+Dans la pratique, des mécanismes de redondance des données sont mis en place pour permettre
+un accès continue aux données, même dans le cas d'une défaillance d'un équipement.
+
+\paragraph{Intégrité}
+L'intégrité d'une donnée informatique correspond à la non-modification de cette donnée
+dans le temps. Dans la pratique, l'intégrité des données est le plus souvent vérifiée par des
+algorithmes de hashage 2 ou des sommes de contrôle (par exemple le CRC32 des trames réseau
+Ethernet).
+
+\paragraph{Confidentialité}
+La confidentialité est le fait de s'assurer que l'information n'est seulement accessible
+qu'à ceux dont l'accès est autorisé. Dans la pratique, la confidentialité est assuré
+par le cloisonnement et la gestion des d'accès aux données utilisateurs.
+
+\FIXME{end}
 
 \paragraph{}
-Ces mécanismes sont encore aujourd'hui évités via un cloisonnement matériel
-strict. On travail alors avec plusieurs terminaux complètement indépendants,
-impliquant de redonder le matériel avec toutes les conséquences en terme de
-poids et de volumétrie.
+Le niveau de sécurité d'un système dépend de l'impact de la non-garantie d'une
+ou plusieurs de ses propriétés.
+
+\paragraph{}
+Les enjeux de sécurité associés au traitement de données dans le domaine
+véhiculaire proviennent de la problématique de MLS (MultiLevel Security) et de
+MILS (Multi-Idependent Level of Security).
+
+\subsection{Temps réel et criticité}
+
+\paragraph{}
+
+\paragraph{}
+On appelle système critique un système pouvant mettre en danger des vies
+humaines ou du matériel en cas de défaillance. C'est le cas par exemple des systèmes
+avioniques ou véhiculaires. Plus les dégats conséquents à une panne sont
+importants, plus le niveau de criticité est élevé.
+
+\paragraph{}
+Dans le cadre de l'avionique comme dans la vetronique, la problématique
+multi-critique se pose lorsqu'il s'agit de remonter des informations
+du véhicule (e.g. altitude, température extéreure, vitesse) au niveau du
+système multimédia. On parle alors de système {\it multi-critique}.
+Aujourd'hui, le passage d'un domaine critique à un domaine non critique se
+fait via l'emploi de diodes matérielle. Ces dernières garantissent que les
+données ne transitent que dans un et un seul sens.
+
+\paragraph{}
+Dans le cadre de flux de données métiers, principalement dans le cadre de
+véhicules militaires, il est impératif de pouvoir assurer le traitement de
+flux critiques en priorité sur des flux non critique, et ce indépendamment de
+la politique réseau de gestion de flux. Ainsi, un flux VoIP, dont la
+priorisation (au niveau diffserv) est plus forte, est potentiellement moins
+prioritaire qu'un flux de contrôle conséquent d'un ordre hiérarchique. Il est
+alors nécessaire de pouvoir garantir cette priorisation au niveau des éléments
+logiciels afin d'assurer une borne supérieure d'exécution pour son traitement,
+quitte à impacter le traitement de flux moins critiques.
 
 \section{Synthèse}
 
 \paragraph{}
 On constate qu'il devient aujourd'hui difficile d'échapper au besoin d'un
-système communicant multi-critique et multi-niveaux de sécurité. Les
+système communicant multi-critique et multi-niveaux de sécurité. Le besoin de
 passerelles multi-critiques et multi-niveaux de sécurité sont la conséquence
-d'un besoin grandissant, et doivent pouvoir s'insérer dans divers systèmes
-pour permettre la communication contrôlés entre des éléments de criticité et
-de sécurité différents. Pour cela, cette passerelle doit pouvoir être
-compatible d'exigences à la fois temps réel et de sécurité, et fournir des
-mécanismes sous forme de fonctions certifiables, autonomes et agrégeable pour
-couvrir un maximum de besoin.
+de la complexification des systèmes embarquées véhiculaires, et doivent pouvoir
+s'insérer dans divers systèmes pour permettre la communication contrôlés entre
+des éléments de criticité et de sécurité différents. Pour cela, cette passerelle
+doit pouvoir être compatible d'exigences à la fois temps réel et de sécurité,
+et fournir des mécanismes sous forme de fonctions certifiables, autonomes et
+agrégeable pour couvrir un maximum de besoin.
 
