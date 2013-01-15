@@ -60,13 +60,13 @@ all : help
 
 #makeindex -s $(SOURCE:.tex=.ist) -o $(SOURCE:.tex=.gls) $(SOURCE:.tex=.glo)
 pdf :
-	cp includes/$(LANG)/bibliography.bib .
+	cp includes/bibliography.bib .
 	/bin/bash scripts/generate_toc.sh
 	$(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE)
 	$(BIBTEX) $(BIBTEXOPT) $(SOURCE_PREFIX)
 	makeindex $(SOURCE:.tex=.idx)
 	while [ `cat $(SOURCE:.tex=.log) | grep 'may have changed.' | wc -l` -ge 1 ]; do $(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE); done
-	mv $(SOURCE:.tex=.pdf) $(TARGET)_$(LANG).pdf
+	mv $(SOURCE:.tex=.pdf) $(TARGET).pdf
 
 clean : 
 	$(RM) $(RMFLAGS) $(OBJS) $(TODEL)
@@ -82,5 +82,5 @@ install : $(TARGET)
 
 view:
 	if [ ! -f $(TARGET) ]; then make all; fi
-	$(PDFVIEWER) $(TARGET)_$(LANG).pdf
+	$(PDFVIEWER) $(TARGET).pdf
 

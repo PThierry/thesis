@@ -60,7 +60,7 @@ militaires, données médicales pour les services d'urgences) avec des exigences
 de temps réel plus souples mais dont les exigences de sécurité sont elles
 beaucoup plus fortes.
 
-\subsection{Sécurité}
+\subsection{Principes de sécurité}
 
 \paragraph{}
 On dit qu'un système d'information est sécurisé lorsqu'il respecte les 3 principes
@@ -100,9 +100,7 @@ Les enjeux de sécurité associés au traitement de données dans le domaine
 véhiculaire proviennent de la problématique de MLS (MultiLevel Security) et de
 MILS (Multi-Idependent Level of Security).
 
-\subsection{Temps réel et criticité}
-
-\paragraph{}
+\subsection{Objectifs de temps réel et de multi-criticité}
 
 \paragraph{}
 On appelle système critique un système pouvant mettre en danger des vies
@@ -116,7 +114,7 @@ multi-critique se pose lorsqu'il s'agit de remonter des informations
 du véhicule (e.g. altitude, température extéreure, vitesse) au niveau du
 système multimédia. On parle alors de système {\it multi-critique}.
 Aujourd'hui, le passage d'un domaine critique à un domaine non critique se
-fait via l'emploi de diodes matérielle. Ces dernières garantissent que les
+fait via l'emploi de diodes matérielle\FIXME{ref}. Ces dernières garantissent que les
 données ne transitent que dans un et un seul sens.
 
 \paragraph{}
@@ -129,6 +127,10 @@ prioritaire qu'un flux de contrôle conséquent d'un ordre hiérarchique. Il est
 alors nécessaire de pouvoir garantir cette priorisation au niveau des éléments
 logiciels afin d'assurer une borne supérieure d'exécution pour son traitement,
 quitte à impacter le traitement de flux moins critiques.
+
+\section{Mise en perspective}
+
+\paragraph{}
 
 \section{Synthèse}
 

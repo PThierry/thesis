@@ -127,7 +127,7 @@
 \onehalfspacing
 
 % Add glossary
-\input{includes/\lang/glossary.tex}
+\input{includes/glossary.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Code insertion support, using listing
@@ -166,7 +166,7 @@
 \newtheorem{property}{Property}
 \newtheorem{assertion}{Assertion}
 
-\input{includes/\lang/titlepage.tex}
+\input{includes/titlepage.tex}
 
 % Set chaptername lowercase
 \ChNameLowerCase
@@ -207,7 +207,7 @@
 \cleardoublepage					% double blank page
 \frontmatter						% out of TOC chapterss
 
-\input{includes/\lang/resume.tex}				% insert abstracts
+\input{includes/resume.tex}				% insert abstracts
 
 \mainmatter						% starting TOC chapters
 
@@ -250,8 +250,8 @@ article en cours:\\
 - définition d'un connecteur multi-niveaux de criticité (exigences TR) et de
 sécurité (exigences de cloisonnement) pour le transfert de flux télécom.
 
-\input{includes/\lang/intro/introduction.tex}
+\input{includes/intro/introduction.tex}
 
-\input{includes/\lang/intro/problematique.tex}
+\input{includes/intro/problematique.tex}
 
 

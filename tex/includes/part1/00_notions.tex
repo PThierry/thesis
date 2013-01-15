@@ -8,175 +8,264 @@
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
 %% Last update Mon Aug 30 17:00:21 2010 Philippe THIERRY
 
-
-\chapter{Rappel général sur les éléments logiciels et matériels impactant}
+\chapter{Notions techniques}
 \doMinitoc
 
-\section{Rappel général sur les éléments matériels impactant}
+\section{Principes généraux de la sécurité}
 
-\subsection{Architecture générale simplifiée}
+\subsection{Ce que cible la sécurité logicielle}
 
-\paragraph{}
-Une   architecture   matérielle   type   est   proche    de    la    Figure    \ref{fig:gal_hw_diag}
-\begin{figure}[h]
-\input{figures/hw_std.tex}
-\label{fig:gal_hw_diag}
-\caption{Schéma général des composants matériels impactant le temps réel}
-\end{figure}
 
-L'élément central est le  bus d'intercommunication,  dont  l'accès  est  contrôlé  par  le  {\it  contrôleur  de  bus}.\\
-C'est  ce  dernier  qui  permet  la  communication  entre  les  différents
-organes   matériel.\\
-Selon la complexité de l'architecture matérielle, le bus peut être substitué
-par un interconnect ou un Network On Chip (NOC). Dans ce dernier cas, la
-parallélisation des accès permet de réduire les latences d'accès par les
-initiateurs (éléments matériels initiant des requêtes sur le bus
-d'intercommunication). Ces derniers sont par exemple le processeur ou encore le
-contrôleur DMA.
+\section{Principe généraux des systèmes temps réel}
 
-\subsection{Gestion de l'adressage mémoire centrale}
+\subsection{Définition du temps réel}
 
 \paragraph{}
-Les processeurs modernes sont équipés d'une \index{MMU}\gls{mmu}  ({\it  Memory  Management  Unit}),
-voire, selon les familles de processeurs, d'une \index{I/OMMU}I/OMMU
-(dénomination Intel) ou SMMU (dénomination ARM).
-Ces deux éléments jouent un rôle de filtre permettant  de  fournir  des  capacités  de  sécurisation
-des accès mémoire via la segrégation des accès en fonction des processus
-logiciels (MMU) et en fonctions de l'initiateur (I/OMMU - SMMU). La MMU est en
-coupure entre le coeur processeur et le bus, l'I/OMMU (dans le cas d'Intel) en coupure entre les
-périphériques initiateurs et la mémoire.
-
-\paragraph{}
-La pagination permet de fournir au logiciel une vue logique de  la  mémoire,  permettant  ainsi  une
-gestion de l'adressage physique plus aisée car invisible  au  niveau  logiciel.   Elle  définit  des
-{\it \index{Espace  d'adressage}espaces  d'adressage}  pour  chaque  processus,  s'appuyant  sur  un
-adressage logique, lui donnant l'impression d'être seul à s'exécuter.
-
-\begin{figure}[h]
-\input{figures/mmu_as.tex}
-\caption{Translation d'adresse mémoire, vue générale}
-\end{figure}
-
-\paragraph{}
-À l'inverse des éléments logiciels exécuté dans les coeurs processeur, les éléments
-matériels (hors coeur processeur) utilisent  tous  un  adressage  physique.   Ainsi,  une  recopie
-\index{DMA}DMA  se  fait   directement   vers   une   adresse   physique   en
-mémoire   centrale. Les éléments matériels de filtrage comme l'I/OMMU ou la
-SMMU sont là pour autoriser ou interdire l'accès à un sous ensemble de la
-mémoire centrale.
-
-\paragraph{}
-La MMU gère une table de correspondance entre adressage physique et adressage
-logique pour chaque processus. C'est le noyau du système d'exploitation qui
-initie ces tables et fournit le pointeur à la MMU. Ces dernières sont donc en
-mémoire centrale. Afin d'optimiser les accès et réduire les accès mémoire, la
-MMU s'appuie sur un cache local, de manière similaire aux caches de données du
-processeur. Ce dernier est nommé \index{TLB}TLB ({\it Translation Lookaside
-Buffer}).
-
-\paragraph{}
-La configuration de ces éléments matériels se fait par le logiciel. C'est le noyau qui est en charge
-de veiller à la gestion de la  mémoire,  et  donc  de  maintenir  à  jour  les  informations  de  la
-\gls{mmu}   et   de   l'\gls{iommu}.
-
-\section{Les contrôleurs DMA}
-
-\subsection{Principe de fonctionnement}
-
-\paragraph{}
-DMA signifie Direct Memory Access. Il s'agit de contrôleurs spécialisés dans
-les recopies mémoire. Il permette de gérer les recopies entre mémoire centrale
-et mémoires périphériques (e.g. mémoire interne du contrôleur ethernet) sans
-recours au processeur. Ainsi, la recopie se fait en "tache de fond",
-permettant au processeur de continuer ses traitements après initialisation du
-transfer. L'avantage principal est donc la réduction de la charge processeur.
-L'inconvénient principal est l'impact en terme de temps réel et de sécurité.
-En effet, le contrôleur DMA perturbe les accès au bus d'interconnexion
-lorsqu'il exécute des recopies mémoire, générant de potentielles augmentation
-de latence d'accès au bus de la part du processeur.
-Mono ou multi canaux, ils supportent potentiellement plusieurs interfaces de
-traitement et donc plusieurs élément logiciels initiateurs du traitement.
-
-\subsection{Les transferts de données}
-
-\paragraph{}
-Les transferts de données sont par nature asynchrones. En effet, lorsqu'un
-service logiciel configure le contrôleur DMA afin d'opérer une recopie
-mémoire, cette dernière n'est pas synchrone de la requête. La fin de la
-recopie est en générale spécifiée par une interruption.\\
-
-\section{Les contrôleurs mémoire}
-
-\begin{figure}[h]
-\input{figures/ddr_memory_access.tex}
-\caption{Décomposition  des  lignes  de  bus  d'un   controleur   DDR1\label{fig:ddr_memory_access}}
-\end{figure}
-
-\section{Les arbitreurs de bus}
-
-\paragraph{}
-Les arbitreurs de bus gèrent les accès concurrent au bus d'intercommunication.
-Lorsque ce dernier ne permet pas de paralléliser les requêtes des initiateurs,
-ces dernières sont traitées en série. L'arbitreur permet de gérer la file
-d'attente des requêtes et peut, selon le type de bus, supporter de la qualité
-de service afin d'assurer des bornes supérieures d'accès au bus. Les bus
-d'intercommunications complexes fournissent une interface programmative
-permettant au noyau de spécifier la qualité de service qu'il souhaite en terme
-par exemple de priorisation des accès selon l'initiateur.
-
-\paragraph{}
-Dans le cadre des Network On Chip, le bus est décomposé en routeurs sur un ou
-plusieurs niveaux. Ces derniers gère en interne les files d'attente des
-requêtes entre initiateurs et cibles.
-
-\section{Les interruptions}
-
-\paragraph{}
-Les interruptions matérielles sont des évènements asynchrones émis  par  le  matériel  pour  générer
-l'exécution d'un élément logiciel. Il peut s'agir d'un timer (un ordonnancement
-en mode {\it time-driven} s'appuie sur ce dernier pour gérer sa période d'exécution),  d'une  frappe
-clavier,   ou   de   toute   information   dont   la    fréquence    n'est    pas    trop    élevée.
-
-\paragraph{}
-Les  interruptions  sont  gérés  par  un  contrôleur  matériel,  l'\index{APIC}APIC  ({\it  Advanced
-Programable Interruption Controler}),  qui  les  relaie  au  processeur.   Ce  dernier  stoppe  sont
-cycle d'exécution en cours, pour exécuter un {\it handler  d'IRQ},  que  le  noyau  à  préalablement
-enregistré auprès du processeur (e.g. sur les architectures ia32, cela se fait via le registre IDTR).
-
-\paragraph{}
-Les interruptions matérielles ont deux propriétés :
+Comme le montre le schéma \ref{fig:rt_hard_soft}, il existe trois grandes familles de taches :
 \begin{itemize}
-\item Elles ne sont pas  prédictibles  car  sont  la  conséquence  d'un
-évènement  asynchrone  lié  à l'environnement,  comme  un  signal   de   remplissage   de   la   mémoire   interne   d'une   carte
-Ethernet,   ou   une   frappe   clavier.
-\item Elles sont exécutées par le processeur en l'absence de contrôle logiciel. Seule la désactivation
-des lignes interruptions peut empêcher leur exécution (hors \index{NMI}NMI).
-\item Sur certains contrôleurs d'interruption, il est possible de prioriser
-ces dernières. Ainsi, une interruption peut préempter une autre interruption
-moins prioritaire.
+\item Les taches temps réel dur. Ces dernières doivent respecter scrupuleusement un
+temps maximum d'exécution, faute de quoi l'utilisabilité des résultats de la tache est nulle.
+\item Les taches temps réel souple. L'utilisabilité des résultats de la tache décroît avec son retard.
+\item Les taches non temps réel. Il n'est pas définit de temps maximum d'exécution. L'utilisabilité des résultats
+reste constante. La Figure \ref{fig:rt_hard_soft} montre les différences entre les différents types de tache.
+\end{itemize}
+
+\begin{figure}[h]
+\input{figures/real_time_lines.tex}
+\caption{Les trois grandes familles de taches}
+\label{fig:rt_hard_soft}
+\end{figure}
+
+\subsection{Définitions préliminaires}
+\label{sec:primarydef}
+
+\paragraph{}
+Une tache temps réel $\tau_{i}$ possède trois attributs principaux:
+\begin{itemize}
+\item Sa durée d'exécution pire coût, ou \gls{wcet} (Worst Case Execution Time), notée $C_{i}$
+\item Sa deadline, définissant l'instant auquel elle doit avoir fini de s'exécuter, notée $D_{i}$
+\item Sa période, définissant sa latence minimum d'instanciation, notée $T_{i}$. Chaque instance de tache est appellé un {\it job}
+\item Le temps de réponse d'un job, correspondant à la durée entre son instanciation et sa terminaison, noté $R_{i}$
+\end{itemize}
+\`{A} ces trois attributs, d'autres viendront s'ajouter, en fonction du type de tache.
+
+\paragraph{}
+Un ensemble de taches temps réel est appellé un ensemble de taches, ou {\it taskset}. Un ensemble de tache possède
+des propriétés dérivées des taches qu'il possède. Ces dernières sont présentée dans la section \FIXME.
+
+\subsection{Définition du WCET}
+
+\paragraph{}
+Le \gls{wcet} ({\it Worst Case Execution Time}) définit la durée d'exécution maximum d'une tache. Associée à une {\it deadline},
+elle permet, pour une liste de taches donnée :
+\begin{itemize}
+\item de connaître à l'avance si cette liste est ordonnançable ou si certaines taches ne pourront pas
+être terminées à temps.
+\item de définir une répartition temporelle des taches pour respecter la {\it deadline} de chacune.
 \end{itemize}
 
 \paragraph{}
-L'exécution des handlers d'interruptions se faisant directement par le processeur sans  en  informer
-l'ordonnanceur logiciel  font   de    ces    dernières    des    {\it
-voleurs    de    cycles}. Elles doivent donc impérativement être maîtrisée
-pour permettre le support d'exigences temps réel.
+Les attributs définis dans la Section \ref{sec:primarydef} doivent avoir les propriétés définies dans les équations \ref{eqn:rtprop_1},
+\ref{eqn:rtprop_2} et \ref{eqn:rtprop_3} pour que chaque tache $\tau_{i}$ soit ordonnançable.
+
+
+\begin{eqnarray}
+\label{eqn:rtprop_1}
+\forall i, C_{i} \le D_{i}\\
+\label{eqn:rtprop_2}
+\forall i, R_{i} \le D_{i}\\
+\label{eqn:rtprop_3}
+\forall i, D_{i} \le T_{i}
+%U_{i}, \displaystyle{\sum_{i \in [1, n]}} U_{i} \le 1
+%\label{eqn:rtprop_3}
+\end{eqnarray}
+
+\subsection{Définition des ensembles de taches}
 
 \paragraph{}
-Comme le montre la Figure \ref{fig:pic_cascade}, il peut y avoir  un  grand  nombre  d'interruptions
-matérielles différentes. Aujourd'hui, elles ont tendance à diminuer au profit
-de contrôleurs DMA chaînant les copies mémoire et du polling (i.e vérification
-active par le logiciel d'informations asynchrones).
+Pour aborder la problématique temps réel, on définit un profil d'environnement logiciel, nommé ensemble de taches ({\it
+\gls{taskset}}). Cet ensemble se définit comme suit :
+\begin{itemize}
+\item Une liste de taches $\tau$, chaque tache possédant un {\it WCET} et une {\it deadline} qui lui est propre
+\item Chaque tache se matérialise sous la forme d'une {\it instance de tache}, correspondant à un processus logiciel.
+\item Un profil d'arrivée des instances de tache (arrivée périodique, sporadique ou apériodique)
+\end{itemize}
 
-\begin{figure}[h]
-\input{figures/pic_cascade.tex}
-\label{fig:pic_cascade}
-\caption{Schéma général du PIC 8259 des architectures 8086}
+\paragraph{}
+On parle alors de l'ordonnançabilité d'une tache, au travers de la capacité d'exécution de toutes ses instances.\\
+Un ensemble de tache est nécessairement finit, et possède des caractéristiques fixes dans le temps.
+
+\subsubsection{Les ensembles périodiques}
+
+\paragraph{}
+Les ensembles périodiques respectent la propriété suivante :\\
+Chaque tache $\tau_{i}$ est instanciée à une période fixe $P_{i}$ connue.
+
+\paragraph{}
+Ainsi, en connaissant la date de la première instanciation d'une tache, on est capable de prédire les dates d'instanciation
+de cette tache durant toute la durée de vie de l'ensemble de taches.
+
+\paragraph{}
+On peut de plus mesurer la charge maximum induite par cette tache, en s'appuyant sur $WCET(\tau_{i})$ et $P_{i}$. De
+plus, la variation de la charge induite par cette tache dépend uniquement du de la variation du coût d'exécution de
+chaque instance de $\tau_{i}$.
+
+\subsubsection{Les ensembles sporadiques}
+
+\paragraph{}
+Les ensemble sporadiques respectent la propriété suivante :\\
+Chaque tache $\tau_{i}$ est instanciées avec une période {\it minimum} $P_{i}$ définie.
+
+\paragraph{}
+On connaît donc la charge pire cas de chaque tache,  en s'appuyant sur $WCET(\tau_{i})$ et $P_{i}$.\\
+Par contre, on ne peux pas prédire les dates d'instanciation successives de cette tache. De plus,
+la variation de la charge induite par cette tache dépend à la fois du coût d'exécution effectif de
+chaque instance de $\tau_{i}$ et de l'élongation de la période $P_{i}$.
+
+\subsubsection{Les ensembles apériodiques}
+
+\paragraph{}
+Les ensembles apériodique respectent la propriété suivante :\\
+Aucune tache n''est soumise à une période d'instanciation minimum. Une instance peut être créée n'importe quand,
+indépendament de la finition de l'instance précédente.
+
+\paragraph{}
+On ne connaît pas la charge pire cas de chaque tache, la valeur de $P_{i}$ appartenant à l'ensemble $[0, +\infty[$
+
+\subsubsection{Les ensembles fenêtrés}
+
+Une fenêtre glissante de temps ${\Delta}t$ est définie, et on lui associe un nombre d'interruptions
+maximum. Cette valeur est utilisée en entrée de la mesure du WCET.
+
+
+
+
+
+
+
+\section{Les domaines de sécurité}
+
+\section{Les domaines de criticité}
+
+\section{Qualité de service dans les réseaux IP}
+
+\subsection{802.1p}
+\subsection{802.1q}
+\subsection{Diffserv et champs ToS}
+
+\section{Les ineraction entre le matériel, la sécurité et le temps réel}
+
+\subsection{Principes de base de la MMU}
+
+\paragraph{}
+Un applicatif, construit dans un fichier binaire lors de l'édition de lien, possède un certain nombre de sections
+servant de conteneur à des données différentes, et ayant en conséquence des propriétés de sécurité (en terme d'accès)
+également différente. De ce fait, lors du déploiement de ces différentes section en mémoire vive, il est nécessaire
+de   considérer   pour   chacune   de   ces   section   des    propriétés    d'accès    spécifiques.
+
+\paragraph{}
+Lorsque plusieurs applicatifs s'exécutent de manière concurente, il est
+important de les cloisonnner dans des environnement logiques séparés, ceci
+afin d'éviter que ces derniers puissent interagir sans contrôle, par simple
+accès à la mémoire physique.
+
+\paragraph{}
+Il existe plusieurs niveau d'abstraction de la mémoire physique :
+\begin{itemize}
+\item Sans aucune abstraction, on est en mode dit  {\it  flat  memory}.
+L'ensemble  des  logiciels s'exécutant en mémoire traite des adresses physiques.
+Ainsi,  ils  connaissent  leur  position  en mémoire,   et    ont    une    visibilité
+sur    l'ensemble    de    la    mémoire    physique.\\
+De ce fait, il leur est possible d'accéder au contenu des autres applicatifs en  cours  d'exécution.
+Il devient ainsi aisé d'espionner les sections d'autres logiciels, comme les section data ou rodata,
+dans  lesquelles   il   est   possible   de   récupérer   par   exemple   des   mots   de   passe.\\
+Autre risque : l'accès à la pile des autres applicatifs peut permettre de dériver son exécution vers
+un bloc de code spécifique, en remplaçant l'adresse de la fonction parente par une adresse  dont  on
+maîtrise le contenu. Du fait que la pile est par essence accessible en écriture, tous les processus
+peuvent modifier les champs d'un processus donné en mode {\it flat memory}, à partir  du  moment  où
+l'adresse physique de la pile est connue.
+\item Décomposition de la mémoire physique en segment.  Il s'agit du mode  de  segmentation  présent
+uniquement sur les processeur de la famille Intel IA32.  Ce mode étant aujourd'hui remplacé  par  le
+système de pagination, il ne sera pas décrit ici.
+\item En s'appuyant sur une abstraction de la mémoire physique, appellé {\it mémoire virtuelle}. On
+parle alors de mode dit de  {\it  pagination  mémoire}.   Un  processus  donné  possède  son  propre
+environnement mémoire, dont la taille correspond à la valeur maximum d'un mot mémoire (e.g. dans un
+processeur 32 bits, l'environnement  mémoire  virtuelle  à  une  taille  de  quatre  giga-octets).\\
+Cet environnement mémoire est appellé AS (Address Space).  Le processus, lors de son  exécution,  ne
+traîte alors que des adresses virtuelles, dont la  translation  en  adresses  physique  se  fait  au
+travers d'un élément matériel nommé MMU.   La  conséquence  directe  est  que  le  coeur  processeur
+travaille en adressage virtuel.
+\end{itemize}
+
+\paragraph{}
+La gestion de la pagination est géré par le contrôleur MMU, sous les ordre du
+noyau du système d'exloitation. Ce dernier construit l'association entre
+mémoire physique et mémoire virtuelle dans des structures en mémoire nommées
+Pages Tables. Sur les architecture x86, ces dernières sont accédées par la MMU
+via un registre nommé PDBR. Ce dernier pointe vers la racine de l'arbre de
+mapping de mémoire virtuelle du processus en cours, et s'appuie sur ce dernier
+pour retrouver l'adresse mémoire physique associée à l'adresse mémoire
+virtuelle demandée par le coeur processeur. Afin d'optimiser les accès à cet
+arbre de page, la MMU s'appuie sur un cache local nommé TLB (Translation
+Lookaside Buffer), réduisant ainsi les requêtes au contrôleur mémoire.
+
+\paragraph{}
+Le   principe   de   fonctionnement   de   la   pagination    fournit    plusieurs    avantages    :
+\begin{itemize}
+\item A chaque processus est associé un AS (espace d'adressage) qui  lui  est  propre.
+Ainsi, il se voit seul en mémoire et il ne possède plus la capacité d'accéder aux autres  processus.
+En effet, l'accès à la mémoire physique se fait via un accès à une adresse  virtuelle.   Pour  qu'un
+processus y accède, une association entre adresse physique et adresse virtuelle, locale à cet espace
+d'adressage, doit avoir été faite par le noyau en préalable, via configuration de la MMU. Lors de la
+création d'un processus, seules les adresses physiques correspondant  à  ces  propres  données  sont
+intégrées à l'espace d'adressage, interdisant à ce dernier  d'accéder  aux  données  de  tout  autre
+processus.
+\item De plus, la gestion de la fragmentation de la mémoire centrale, dépendant des  allocations  et
+désallocations successives de la mémoire, est rendue opaque en mémoire virtuelle. Des espace mémoire
+physiques disjoints peuvent être positionnés de manière contigüe dans l'espace
+d'adressage virtuel,  faisant croire  au  processus  que  ses  données  sont  contigüe  sans  pour
+autant  qu'elles  le   soient.
+\item Le contrôleur MMU permet d'associer à chaque page mémoire des propriété
+en terme d'accès:\\
+\begin{itemize}
+  \item Niveau d'exécution minimum (mode administrateur ou utilisateur)
+  \item droits d'accès (lecture, écriture et/ou exécution)
+\end{itemize}
+Ces droits d'accès permettent, dans un espace d'adressage donnée, de limiter
+les accès à chaque page au processus. Une telle protection réduit la surface
+d'attaque, comme en complexifiant par exemple l'exploitation de dépassement de pile
+\end{itemize}
+La Figure \ref{fig:mmu} décrit le principe général de pagination entre mémoire
+physique et mémoire virtuelle.
+
+\begin{figure}
+\label{fig:mmu}
+\input{figures/mmu_as.tex}
+\caption{Principe général du mapping de page mémoire dans les espaces
+d'adressage des processus}
 \end{figure}
 
-\section{Les processeurs}
+\paragraph{}
+Les attaques entre les différents processus ne sont pas les  seules  possibles.   Il  est  également
+possible de corrompre le comportement d'un processus donné, pour lui faire faire un  traitement  non
+prévu.\\
+Une des attaques les plus classiques est l'injection  de  {\it  shellcode}.   L'attaque  consiste  à
+intégrer quelque part dans l'espace d'adressage du processus  une  suite  d'instructions,  avant  de
+corrompre   la   pile   pour   provoquer   un   branchement   vers   ce    bloc    d'instructions.\\
+Cette attaque est donc faite en deux temps, en positionnant des instructions en  mémoire,  avant  de
+forcer un branchement.  Cela implique de pouvoir écrire des données  dans  une  partie  de  l'espace
+mémoire qui soit exécutable.  Cela implique de pouvoir écraser des données déjà présente  sans  pour
+autant provoquer un plantage du processus.  En général, les shellcodes sont placés dans la pile,  en
+amont du positionnement courant du pointeur de pile. Il convient, pour éviter ce type d'attaque, de
+rendre l'espace mémoire utilisé pour la pile non-exécutable.  A l'inverse, l'espace  mémoire  où  se
+situe le code du processus doit lui être exécutable, mais ne doit pas  être  écrivable,  ce  dernier
+étant immuable durant l'exécution du processus.\\
+On définit ici des droits d'accès à des  espace  mémoire  (lecture,  écriture,  exécution)  variants
+selon le type de données qui y sont hébergé. Les MMU modernes, lors de la création d'une association
+entre mémoire physique et mémoire virtuelles,  définissent  ces  trois  propriétés,  fournissant  un
+durcissement   supplémentaire   pour   réduire   les   risques   de   corruption   d'un   processus.
 
-\subsection{Les caches}
+\subsection{A propos des contrôleurs de cache}
 
 \subsubsection{Description générale}
 
@@ -451,14 +540,4 @@ utilisé le moins fréquemment. En cas d'égalité de fréquence, l'algorithme LRU es
 les cellules.
 
 
-\subsection{Les pipelines}
 
-\subsection{La prédiction de branches}
-
-\section{Les problématiques de partages}
-
-\subsection{Les accès concurrents}
-
-\subsection{Le maintien de la cohésion mémoire}
-
-\subsection{Les architectures SMP}

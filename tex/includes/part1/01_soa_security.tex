@@ -1,0 +1,72 @@
+%%
+%%
+%% hardware_impacts.tex for thesis in /doctorat/these/tex
+%%
+%% Made by Philippe THIERRY
+%% Login   <Philippe THIERRYreseau-libre.net>
+%%
+%% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
+%% Last update Mon Aug 30 17:00:21 2010 Philippe THIERRY
+
+\chapter{A propos de l'état de l'art de la sécurisation d'une plateforme de traitement réseau multi-domaines de sécurité}
+\doMinitoc
+
+\section{Sécurisation par séparation physique des traitements}
+
+\subsection{Interconnection sécurisé par passerelle de type diode matérielle}
+
+\subsubsection{Description de la solution}
+
+\paragraph{}
+Dans les systèmes militaires, les domaines de sécurité devant être
+interconnectés le sont au travers de passerelles certifiées s'appuyant sur des
+éléments physiques disjoints. Ces dernier assurent un transfert sens unique de données
+entre le domaine de plus basse sécurité (source des données) et le domaine de
+plus haute sécurité (destination des donées). Le but de la passerelle de
+sécurité est double:
+\begin{itemize}
+  \item Elle assure la traversée sens unique. Aucune donnée du domaine de
+    sécurité le plus élevé peut être transféré vers le domaine de sécurité le
+    plus bas
+  \item Elle assure une opacité forte du domaine de sécurité le plus élevé d'un point de vue
+    comportemental. Elle évite ainsi les cannaux cachés s'appuyant sur l'étude
+    du comportement du domaine de sécurité le plus élevé. Ces derniers
+    permettent en effet de remonter indirectement des données auprès du
+    domaine de sécurité le plus bas.
+\end{itemize}
+
+\begin{figure}
+  \label{fig:diodephy}
+  \input{figures/diode_phy.tex}
+  \caption{Architecture générale d'une passerelle de type diode matérielle}
+\end{figure}
+
+\paragraph{}
+Le principe d'architecture d'une diode matérielle a été formalisé par la
+Direction Générale de l'Armement en 2006\cite{sstic2006diode}. Le principe
+proposé s'appuie sur un élément matériel aux propriétés physiques
+particulières assurant une traversée sens unique, associée à deux {\it
+  guichets}, comme décrit dans la Figure \ref{fig:diodephy}. Ces guichets
+permettent une action humaine pour initier le transfer de données et le
+receptionner. Une telle architecture permet de garantir l'imputabilité du
+transfert de donnée en cas d'usage invalide de la passerelle.
+
+\subsubsection{Avantages et limitations}
+
+\paragraph{}
+Les diodes matérielles s'appuie sur le principe de séparation protocolaire
+pour limiter l'exploitation de cannal caché s'appuyant sur l'utilisation des
+en-tête protocolaire comme conteneur d'information.\\
+En conséquence, elles ne permettent donc pas d'intégrer le support d'une
+criticité multiple en terme d'ordonancement de flux. Cette gestion doit donc
+être déportée au niveau du gichet haut (émetteur de la donnée).L'intervention
+humaine, conséquence du besoin d'imputabilité associé au transfer de donnée,
+est également problématique lorsque le besoin de temps réel est exigé.
+
+\section{A propos des architecture MLS (MultiLevel Security}
+
+\subsection{MLS et principe de virtualisation}
+
+\subsection{A propos de l'état de l'art des solution de virtualisation}
+
+
