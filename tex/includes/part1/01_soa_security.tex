@@ -13,7 +13,7 @@
 
 \section{Sécurisation par séparation physique des traitements}
 
-\subsection{Interconnection sécurisé par passerelle de type diode matérielle}
+\subsection{Interconnexion sécurisé par passerelle de type diode matérielle}
 
 \subsubsection{Description de la solution}
 
@@ -22,14 +22,14 @@ Dans les systèmes militaires, les domaines de sécurité devant être
 interconnectés le sont au travers de passerelles certifiées s'appuyant sur des
 éléments physiques disjoints. Ces dernier assurent un transfert sens unique de données
 entre le domaine de plus basse sécurité (source des données) et le domaine de
-plus haute sécurité (destination des donées). Le but de la passerelle de
+plus haute sécurité (destination des données). Le but de la passerelle de
 sécurité est double:
 \begin{itemize}
   \item Elle assure la traversée sens unique. Aucune donnée du domaine de
     sécurité le plus élevé peut être transféré vers le domaine de sécurité le
     plus bas
   \item Elle assure une opacité forte du domaine de sécurité le plus élevé d'un point de vue
-    comportemental. Elle évite ainsi les cannaux cachés s'appuyant sur l'étude
+    comportemental. Elle évite ainsi les canaux cachés s'appuyant sur l'étude
     du comportement du domaine de sécurité le plus élevé. Ces derniers
     permettent en effet de remonter indirectement des données auprès du
     domaine de sécurité le plus bas.
@@ -42,8 +42,8 @@ sécurité est double:
 \end{figure}
 
 \paragraph{}
-Le principe d'architecture d'une diode matérielle a été formalisé par la
-Direction Générale de l'Armement en 2006\cite{sstic2006diode}. Le principe
+Le principe d'architecture d'une diode matérielle a été formalisé par Philippe
+Lagadec de la Direction Générale de l'Armement en 2006\cite{sstic2006diode}. Le principe
 proposé s'appuie sur un élément matériel aux propriétés physiques
 particulières assurant une traversée sens unique, associée à deux {\it
   guichets}, comme décrit dans la Figure \ref{fig:diodephy}. Ces guichets
@@ -55,29 +55,159 @@ transfert de donnée en cas d'usage invalide de la passerelle.
 
 \paragraph{}
 Les diodes matérielles s'appuie sur le principe de séparation protocolaire
-pour limiter l'exploitation de cannal caché s'appuyant sur l'utilisation des
-en-tête protocolaire comme conteneur d'information.\\
+pour limiter l'exploitation de canal caché s'appuyant sur l'utilisation des
+en-têtes protocolaires comme conteneur d'information.\\
 En conséquence, elles ne permettent donc pas d'intégrer le support d'une
-criticité multiple en terme d'ordonancement de flux. Cette gestion doit donc
-être déportée au niveau du gichet haut (émetteur de la donnée).L'intervention
-humaine, conséquence du besoin d'imputabilité associé au transfer de donnée,
+criticité multiple en terme d'ordonnancement de flux. Cette gestion doit donc
+être déportée au niveau du guichet haut (émetteur de la donnée).L'intervention
+humaine, conséquence du besoin d'imputabilité associé au transfert de donnée,
 est également problématique lorsque le besoin de temps réel est exigé.
+Comme le décrit l'auteur, la diode matérielle permet cependant d'assurer à la fois:
+\begin{itemize}
+\item la confidentialité des données du récepteur
+\item l'intégrité et la disponibilité des données de l'émetteur
+\end{itemize}
 
-\section{A propos des architecture MLS (MultiLevel Security et MILS
+\section{A propos des architecture MLS (MultiLevel Security) et MILS
 (Multi-Independent Level of Security)}
+
+\subsection{Systèmes MILS et la haute sécurité}
+
+\paragraph{}
+Un système MILS (Multiple Independent Level of Security) est une architecture
+de haute sécurité basée sur le principe de séparation des flux d'informations
+dont l'implémentation est faite dans un composant certifié. Ce dernier assure
+le cloisonnement de ces flux via un mécanisme évaluable.
+
+\paragraph{}
+Le mécanisme assurant le cloisonnement des différent niveaux de sécurité n'est
+pas imposé. Il peut être physique (séparation complète), matériel
+(implémentation d'un mécanisme matériel) ou logiciel (noyau de séparation
+sécurisé, usuellement nommé {\it Secure Separation Kernel} ou SSK. Dans le
+cadre de ma thèse, la solution considérée est le SSK afin d'être compatible
+avec les exigences de volume, de consommation et de faible coût.
+
+\paragraph{}
+Avant les premiers travaux sur les systèmes MILS (définis par le DoD au début
+des année 2000), la problématique de gestion de la
+sécurité dans les systèmes automatisés était étudiée au travers de principes
+de listes de contrôle d'accès. En 1973\cite{lapadula1}, une méthode de
+gestion de contrôle d'accès définissant le principe de de sujets ayant accès à
+des objets fut définit et démontrée mathématiquement. Il s'agit du RBAC
+(\FIXME cite).
+
+\paragraph{}
+En parallèle des travaux de Bell et LaPadula\cite{labadula1}\cite{lapadula2},
+une étude fut effectués sur la capacité à verifier formellement les architectures
+logicielles de sécurité basées sur un noyau\cite{securedesign} ({\it" kernelized secure
+systems"}), où l'auteur démontre la difficulté de certifier un système où
+le noyau lui même est trop complexe. L'auteur décrit alors le principe de
+noyau de sécurité, devant être de petite taille, et pouvant être accompagné de
+processus logiciels dis de confiance, également certifiable. Une telle
+architecture permet alors d'héberger également des processus non certifiables
+dont le cloisonnement et assuré par le noyau. L'auteur décrit également que le
+noyau n'est alors plus sujet d'une politique de sécurité, cette dernière
+ciblant les processus logiciel qu'il porte. Plus globalement, l'auteur décrit
+les premiers principes d'un système dit {\it rouge-noir}, dans lequel une
+architecture distribuées de sous-systèmes communiquent de manière sécurisée en
+assurant que l'unique moyen de passage est maîtrisé par un élément de
+confiance permettant la transmission de données noircie. Ce principe est
+encore utilisé aujourd'hui dans la définition de systèmes dont l'architecture
+est distribuée comme la radio logicielle\cite{sdr}, où il s'associe à une
+architecture de type MILS pour séparer rouge et noir.
+
+\paragraph{}
+La définition des architectures MILS reprend ces travaux afin de définir une
+nouvelle approche contrastant fortement avec les principes décrit par Bell et
+LaPadula.\\
+Les systèmes MILS sont compatibles de quatre propriétés éditées par le DoD:
+
+\begin{property}
+{\bf Non contournable}:
+Un composant ne peux utiliser que le chemin de communication
+qui lui est fournit par le moniteur de sécurité.
+\end{property}
+
+\begin{property}
+{\bf Evaluable}:
+L'ensemble des composant considérés comme de confiance doivent être évaluable
+au niveau nécessaire pour atteindre le niveau de sécurité demandé.
+\end{property}
+
+L'évaluation de ses composant doit être suffisante pour assurer le niveau de
+sécurité de l'ensemble du système (i.e. les composants n'étant pas de
+confiance ne doivent pas impacter le niveau de sécurité du système.
+
+\begin{property}
+{\bf Validation à chaque accès}:
+Chaque accès ou message entre composant doit pouvoir être validé par un
+moniteur de sécurité.
+\end{property}
+
+Le moniteur de sécurité peut être le SSK ou un processus de confiance dédié à
+ce traitement.
+
+\begin{property}
+{\bf Inviolable}:
+Le système assure le contrôle des accès en écriture aux moniteurs de
+sécurités, à leurs données ou à leur configuration, assurant ainsi leur
+intégrité et celle du système.
+\end{property}
+
+\paragraph{}
+Les architectures MILS ne se limitent pas à la problématique de contrôle des
+communications dans un environnement multi-niveaux de sécurité sur du matériel
+partagé. Elles permettent également la communication au travers d'une
+infrastructure compatible MILS\cite{milssecgrid}. Dans cet article, les auteurs
+décrivent les mécanismes répartis dans le réseau d'interconnexion permettant
+de faire communiquer des domaines de sécurité hétérogène de manière sûre. Les
+quatres propriétés des systèmes MILS sont alors respectées.
 
 \subsection{Principes généraux du MLS}
 
 \paragraph{}
 Un système MultiLevel Security correspond à l'usage d'un système informatique
-permettant de traiter des données de niveaux de sécurité hétérogènes. Il
+permettant de traiter en parallèle des données de niveaux de sécurité hétérogènes. Il
 permet l'accès simultané à des utilisateurs ayant des niveaux d'accréditation
 et de besoin-d'en-connaître différents, tout en garantissant un cloisonnement
 strict entre ces différents utilisateurs. La définition a été formalisé dans
-le glossaire du commité National des systèmes de sécurité (CNSSI) \cite{cnssi_4009}.
+le glossaire du commité National des systèmes de sécurité (CNSSI)\cite{cnssi_4009}.
 
 \subsection{MLS et principe de virtualisation}
 
-\subsection{A propos de l'état de l'art des solution de virtualisation}
+\paragraph{}
+Le principe de MultiLevel Security s'appuie sur un environnement d'exécution
+de confiance assurant le cloisonnement des compartiments de domaine de
+sécurité différents. Cet environnement d'exécution est appellé un {\it
+Separation Kernel}. Le principe de separation kernel a été initialement
+définit en 1981\cite{sk_def} et reste aujourd'hui d'actualité, suite à la
+définition des systèmes MILS par la NSA en 2001\FIXME{citer NSA 2001}.
 
+\paragraph{}
+Parmis les mécanismes de séparation des domaines tels que décrit par la NSA
+dans la définition des architectures MILS, le Separation Kernel est la
+solution la plus tengible dans l'existant et les travaux de recherche
+\FIXME{cite recherche et brevets}. Les systèmes MILS requiers, en plus des
+différentes fonctions de sécurité dont le nombre et la complexité dépendent du
+niveau de certification demandé, requièrent des propriétés comportementales
+fortes de la part du Separation Kernel:
+\begin{requirement}
+Le Separation Kernel doit assurer une séparation spatiale stricte
+\end{requirement}
 
+\paragraph{}
+La réponse au besoin de MultiLevel Security et de Multi-Independent Level of
+Security via l'usage d'un separation kernel permet de construire une
+architecture logicielle où se cotoient des compartiment hébergeant des
+fonctions logicielles plus ou moins complexes. Ces fonctions logicielles
+peuvent correspondre à des systèmes d'exploitation complet, lorsqu'il est
+nécessaire de déployer des services complexes comme les services réseaux IP.
+Le separation kernel se comporte alors comme un hyperviseurs avec des
+propriétés de sécurité particulières. Il devient donc nécessaire d'étudier
+l'existant des solutions de virtualisations et les fonctions de sécurité
+qu'elles supportent.
+
+\section{Interconnexion sécurisée inter-domaines de sécurité}
+
+\subsection{Principe de diode logicielle pour le cloisonnement de domaines sur
+architecture matérielle partagée}

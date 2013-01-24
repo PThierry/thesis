@@ -62,6 +62,7 @@
 \usepackage{alltt}
 %\usepackage[sectionbib]{natbib}
 \usepackage{chapterbib}
+\usepackage{theorem}
 
 \usepackage[Glenn]{fncychap}				% 'Glenn' chapter titles
 
@@ -162,8 +163,18 @@
      xleftmargin=0.5cm 					%
     } 							%
 
+{\theoremstyle{marginbreak}
+\theoremstyle{break}
+\theorembodyfont{\itshape}
+\theoremheaderfont{\scshape}
+\newtheorem{requirement}{Exigence}}
 
-\newtheorem{property}{Property}
+{\theoremstyle{marginbreak}
+\theoremstyle{break}
+\theorembodyfont{\itshape}
+\theoremheaderfont{\scshape}
+\newtheorem{property}{Property}}
+
 \newtheorem{assertion}{Assertion}
 
 \input{includes/titlepage.tex}

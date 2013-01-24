@@ -8,6 +8,60 @@
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
 %% Last update Mon Aug 30 17:00:21 2010 Philippe THIERRY
 
+\chapter{A propos de l'état de l'art de l'ordonnancement hierarchique de tâches}
+\doMinitoc
+
+\section{Principe de l'ordonnancement hierarchique}
+
+\paragraph{}
+On parle d'ordonnancement hierarchique lorsqu'une tâche est ordonnancée au
+travers de deux politiques d'ordonnancement distinctes hierarchisées. Dans les
+systèmes temps réels, on considère un ensemble de jeux de tâches exécutés en
+concurence:
+\begin{itemize}
+\item On définit une politique d'ordonnancement des jeux de tâches
+\item On définit une politique d'ordonnancement des tâches dans un jeu donné
+\end{itemize}
+Un exemple d'ordonnancement hierarchique est l'EDF/RM, où les tâches sont
+ordonnancées suivant une politique de type EDF et les jeux de tâches sont ordonnancés
+suivant une politique de type RM. Les calculs d'ordonnançabilité sont
+immédiatement impactés par le principe de hierarchie, et nécessitent donc
+d'être considérés de manière spécifique.
+
+\paragraph{}
+L'ordonnancement hiérarchique a été beaucoup étudié ces dernières années. La
+capacité à ordonnancer de manière concurrente des jeux de tâches sur un même
+coeur processeur permet de pouvoir prendre en considération des classes de
+tâches et différencier leur ordonnancement en fonction de leur profil. Ces
+différents travaux ont pour hypothèse une connaissance initiale de l'ensemble
+des tâches, hypothèse d'entrée exigée dans les systèmes temps réels
+dur\cite{methodhierarchical}. Néanmoins, lorsque la hierarchisation de
+l'ordonnancement provient du principe de virtualisation, les deux politiques
+d'ordonnancement s'ignorent l'une l'autre. En conséquence, les ordonnanceurs
+en-ligne ne sont plus éligibles, faute d'information sur la politique
+d'ordonnancement intérieur à chaque jeu de tâche. L'ordonnanabilité d'un jeu
+de tâches temps réel dans un contexte virtualisé a cependant été
+étudié\cite{virtrtconstraints}. \FIXME{to complete}
+
+\section{A propos de l'ordonnancement hiérarchique sur base TDM}
+
+\paragraph{}
+La considération d'un ordonnancement de jeu de tâche de type TDM est un cas
+intéressant d'ordonnancement hiérarchique. Les jeux de tâches sont ordonnancés
+de manière stricte via la définition d'un motif répétitif d'ordonnancement. La
+politique d'ordonnancement des tâches doit donc considérer deux propriétés:
+\begin{itemize}
+\item La charge processeur allouée au compartiment, impactant la capacité à
+ordonnancer les tâches en terme de charge
+\item La période d'élection du compartiment, impactant la capacité à respecter
+les deadlines des tâches
+\end{itemize}
+
+\paragraph{}
+J'ai étudié cette problématique d'ordonnançabilité afin de valider le fait
+que plusieurs jeux de tâches ordonnancés en TDM restaient certifiable en terme
+d'ordonnançabilité pure\cite{tdmsched}.
+
 \chapter{A propos de l'état de l'art de l'ordonnancement de tâche à multiple criticité}
 \doMinitoc
 

@@ -60,7 +60,6 @@ all : help
 
 #makeindex -s $(SOURCE:.tex=.ist) -o $(SOURCE:.tex=.gls) $(SOURCE:.tex=.glo)
 pdf :
-	cp includes/bibliography.bib .
 	/bin/bash scripts/generate_toc.sh
 	$(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE)
 	$(BIBTEX) $(BIBTEXOPT) $(SOURCE_PREFIX)

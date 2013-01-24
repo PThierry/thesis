@@ -13,10 +13,94 @@
 
 \section{Principes généraux de la sécurité}
 
+\subsection{A propos des besoin de confidentialité, d'intégrité et de
+disponibilité}
+
+\paragraph{}
+Dans le cadre du besoin sécuritaire, on considère initialement trois propriété
+potentiellement séparables selon les exigences d'entrées:
+\begin{enumerate}
+\item La confidentialité:\\propriété assurant qu'une information n'est pas
+divulguée à toute entité (utilisateur, processus, périphérique) si cette
+dernière n'est pas initialement autorisé à y accéder.
+\item L'intégrité:\\propriété assurant qu'une donnée n'a pas été
+modifié sans autorisation préalable.
+\item La disponibilité:\\propriété assurant qu'une donnée est à tout moment
+accessible à toute entité ayant l'autorisation d'y accéder.
+\end{enumerate}
+
+\subsection{Fuite d'informations: Canaux cachés et canaux auxiliaires}
+
+\paragraph{}
+Assurer la confidentialité est une tâche complexe. En effet, limiter l'accès à
+la donnée n'est pas suffisant pour assurer sa protection. En effet, il est
+possible de récupérer des informations sur la donnée de plusieurs manières,
+sans y accéder directement. On parle alors de cannal auxiliaire ou de cannal
+caché, selon la méthode.
+
+\subsubsection{Canal auxiliaire et étude comportementale}
+
+\paragraph{}
+Le principe d'un canal auxiliaire consiste à s'appuyer sur une etude
+comportementale non-invasive sur des fonctions ou des traitements afin de
+récupérer des informations sur les données traitées. La plupart des études sur
+le sujet sont dans le domaine de la
+cryptanalyse\cite{sidechancube}\cite{sidechan}. Ces
+différentes études démontrent la capacité, au travers l'étude de la consommation électrique
+des différents éléments d'un processeur\cite{sidechancube} ou via l'étude de
+l'impact des caches processeurs sur le comportement temporel de
+l'algorithmique\cite{sidechan}, de récupérer des données sur la clef
+de chiffrement utilisée.\\
+Le risque lié au canal auxiliaire est connu depuis longtemps et ont permis de
+démontrer que des algorithmes cryptographique réputés sûr restent fragiles à
+ce type d'attaque. C'est le cas par exemple d'AES\cite{aes} ou de
+Serpent\cite{serpent}.
+
+\subsubsection{Canal caché pour le transfert de données}
+
+\paragraph{}
+Le principe d'un canal caché consiste en la capacité à utiliser la bande
+passante d'un canal logiciel ou matériel pour faire transiter des données
+pour lesquels il n'est pas initialement prévu. L'usage d'un canal caché
+implique un usage volontaire de part et d'autre pour émettre les données et
+pour les recevoir.\\
+Un exemple typique est de s'appuyer sur la période inter trame d'un flux
+réseau donné pour fournir une information. En faisant varier la période, il
+est possible d'émettre de l'information, qui peut être ainsi interprété par un
+récepteur. De manière générale, les canaux cachés permettent l'émission de
+données de faible taille, car leur débit est en général très faible. Ils sont
+cependant tout à fait suffisant pour faire transiter des données de type
+cryptographie (clefs symétrique et/ou asymétrique) ou des messages courts.
+
 \subsection{Ce que cible la sécurité logicielle}
 
+\paragraph{}
+Dans leur globalité, les architectures de sécurité sont là pour répondre à ces
+trois besoins initiaux. Selon le niveau de certifiabilité, les architectures
+de sécurité peuvent prendre plusieurs formes, allant d'une séparation
+matérielle complète et strict jusqu'à la simple intégration d'une politique de
+gestion de contrôle d'accès (propriétaire, groupe, droit d'accès) au fichiers,
+comme par exemple les systèmes DAC (Discretionary Access Control), MAC
+(Mandatory Access Control) ou RBAC (Role-based Access Control).
 
-\section{Principe généraux des systèmes temps réel}
+
+\subsection{Cibles de sécurité et certifiabilité}
+
+\paragraph{}
+La complexité du système dépend du besoin de certifiabilité. On définit
+initialement un {\it TOE} (Target Of Evaluation), définissant ce qui, dans le
+système cible, doit être évalué, ainsi que le niveau de l'évaluation. Les
+Critères Communs définissent une échelle dans l'évaluation sécuritaire
+dénotée EAL (Evaluation Assurance Level) allant de 1 (la plus basse) à 7 (la
+plus haute). Le niveau de sécurité du TOE est donc dépendant du niveau
+souhaité. Les systèmes Linux bien configuré en terme de sécurité peuvent
+atteindre un niveau de certification de l'ordre de EAL4. Il faut cependant
+prendre soin d'étudier précisément quel est le TOE. En effet, le niveau de
+sécurité d'un système certifié en étant totalement autonome n'est plus assuré
+si ce dernier est connecté à un réseau. Il en va de même en cas de
+modification même légère du TOE.
+
+\section{Principes généraux des systèmes temps réel}
 
 \subsection{Définition du temps réel}
 
@@ -137,13 +221,27 @@ On ne connaît pas la charge pire cas de chaque tache, la valeur de $P_{i}$ appar
 Une fenêtre glissante de temps ${\Delta}t$ est définie, et on lui associe un nombre d'interruptions
 maximum. Cette valeur est utilisée en entrée de la mesure du WCET.
 
-
-
-
-
-
-
 \section{Les domaines de sécurité}
+
+\paragraph{}
+Un domaine de sécurité est un environnement ou un contexte incluant un
+ensemble de ressources système et d'entités respectant une même politique de
+sécurité.\\
+Les interaction intra-domaines ne sont pas soumises à des exigences fortes de
+sécurité. Cependant, il arrive qu'un même domaine de sécurité soit
+physiquement séparé en plusieurs sous-systèmes qui, pour communiquer, doivent
+traverser des domaines de sécurité différents. Les passerelles
+d'inter-connexion doivent alors assurer le {\it noircissement} des données à
+faire transiter. L'action de noircissement consiste à assurer la
+confidentialité des données de diverses manière afin d'assurer que les
+domaines par lesquels transitent ces données ne soient pas aptes à en tirer
+une information dont le niveau de sécurité est supérieur au leur.\\
+De manière générale, le noircissement implique un chiffrement des données et
+potenciellement une modification du profil de flux, ceci afin de limiter la
+problématique de cannal auxiliaire dérivant du profil de flux initial.
+
+\paragraph{}
+
 
 \section{Les domaines de criticité}
 
@@ -325,7 +423,7 @@ et une seule cellule de cache.  Il s'agit d'un algorithme surjectif, du fait de 
 Le choix de remplacement étant de type $1:1$, aucun algorithme spécifique n'est utilisé. Les données
 sont écrites au seul emplacement possible en cache.
 \item Les algorithmes de type {\textit N-way associative} et supérieur associe une cellule mémoire avec
-{\it N} (resp. 2, 3, 4, ...)
+{\it N} (resp. 2, 4, 8, ...)
 cellules de cache. Cette associativité permet d'optimiser l'écrasement des cellules du cache en donnant
 un choix de positionnement à la cellule mémoire à mettre en cache.  Les algorithmes de  ce  type  se
 différencient par leur politique de choix de la cellule à remplacer.
