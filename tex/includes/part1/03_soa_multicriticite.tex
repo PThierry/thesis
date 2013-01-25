@@ -9,6 +9,7 @@
 %% Last update Mon Aug 30 17:00:21 2010 Philippe THIERRY
 
 \chapter{A propos de l'état de l'art de l'ordonnancement hierarchique de tâches}
+\label{sec:hierarchique}
 \doMinitoc
 
 \section{Principe de l'ordonnancement hierarchique}
@@ -25,7 +26,7 @@ concurence:
 Un exemple d'ordonnancement hierarchique est l'EDF/RM, où les tâches sont
 ordonnancées suivant une politique de type EDF et les jeux de tâches sont ordonnancés
 suivant une politique de type RM. Les calculs d'ordonnançabilité sont
-immédiatement impactés par le principe de hierarchie, et nécessitent donc
+impactés par le principe de hierarchie, et nécessitent donc
 d'être considérés de manière spécifique.
 
 \paragraph{}
@@ -42,6 +43,29 @@ en-ligne ne sont plus éligibles, faute d'information sur la politique
 d'ordonnancement intérieur à chaque jeu de tâche. L'ordonnanabilité d'un jeu
 de tâches temps réel dans un contexte virtualisé a cependant été
 étudié\cite{virtrtconstraints}. \FIXME{to complete}
+
+\paragraph{}
+La répartition des tâches par familles se fait en fonction des exigences de
+réactivité. La Figure \ref{fig:hierarchical_sample} décrit une répartition
+classique telle que décrite dans \cite{methodhierarchical}.
+
+\begin{figure}
+\label{fig:hierarchical_sample}
+\input{figures/hierarchical_sample.tex}
+\caption{Répartition type des tâches par jeux autonomes, en fonctions des exigences de réactivité}
+\end{figure}
+
+Analyse de concurrence des systèmes temps réels à ordonnancement hierarchique
+\cite{regehr_evolving_2003}\\
+Calcul du temps de réponse sur un système temps réel à ordonnancement
+hierarchique sur base de priorité fixe
+\cite{balbastre_exact_2009}\\w
+Ordonnancement hiérarchique SMP
+\cite{chandra_hierarchical_2008}\\
+Respect des contraintes temporelles dans les systèmes virtualisés
+\cite{cucinotta_respecting_2009}\\
+Le rôle de la virtualisation dont les systèmes embarqués
+\cite{heiser_role_2008}
 
 \section{A propos de l'ordonnancement hiérarchique sur base TDM}
 

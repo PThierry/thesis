@@ -251,6 +251,170 @@ problématique de cannal auxiliaire dérivant du profil de flux initial.
 \subsection{802.1q}
 \subsection{Diffserv et champs ToS}
 
+\section{La virtualisation}
+
+\paragraph{}
+Il existe plusieurs type de virtualisation, en fonction de l'architecture
+logicielle et parfois matérielle qui entre en compte dans la solution.
+
+\subsection{Les solution de virtualisation type II}
+
+\paragraph{}
+Les soltions de virtualisation type II s'appuie sur la présence d'un hôte qui
+accueil le moniteur de machine virtuelle comme un processus. Ce dernier est
+donc lui-même ordonnancé par l'hôte. Ce type de solution de virtualisation
+correspond à des produits tels que VMWare Workstation ou encore VirtualBox.
+La Figure \ref{fig:vmtype2} décrit l'architecture logicielle d'une telle
+solution.
+\begin{figure}
+  \label{fig:vmtype2}
+  \input{figures/vmtype2.tex}
+  \caption{Architecture logicielle d'une solution de virtualisation type II}
+\end{figure}
+
+\paragraph{}
+Ces solutions étant basée sur des hôtes de type GNU/Linux ou Windows dans
+lesquels elles s'exécutent comme des tâches non temps réel, elles sont
+donc incompatibles de besoin temps réel, y compris lorsque ces derniers sont
+relativement faible. Elles sont également incompatibles des exigences de
+sécurité forte, du fait de la non-certifiabilité du système hôte.
+
+\paragraph{}
+Les solutions de moniteurs de machines virtuelles utilisant ce type
+d'architecture ne permettent pas d'assurer un cloisonnement spatial fort
+(répartition stricte en mémoire physique) ni un cloisonnement temporel fort
+(l'ordonnancement des machines virtuelles étant assujetti aux propriétés de
+l'ordonnanceur de l'environnement hôte.
+
+\subsection{Les solutions de virtualisation applicative}
+
+\paragraph{}
+Les solutions de virtualisation applicative sont parentes des solution de
+virtualisation de type II, mais ne gèrent pas de noyau invité. Elles
+permettent d'instancier aisément des compartiments dont le noyau est partagé
+entre les compartiment, mais également avec l'hôte. La gestion de
+l'ordonnancement des taches des compartiment est géré directement par
+l'ordonnanceur de l'hôte, sous forme de groupes de tâches autonomes. Ce type
+d'ordonnancement se rapproche ainsi du principe d'ordonnancement hiérarchique
+qui sera décrit dans le Chapitre \ref{sec:hierarchique}.\\
+Un exemple de solution de virtualisation applicative est la solution LXC
+(LinuX Containers) de Linux. La Figure \ref{fig:vmlxc} décrit
+l'architecture logicielle d'une telle solution. 
+
+\paragraph{}
+Les solution de virtualisation applicatives permettent de créer des compartiments
+dont le système de fichiers, le jeu de tâches, les interfaces réseau et la
+vision du stockage de masse est séparé. 
+
+\begin{figure}
+  \label{fig:vmlxc}
+  \input{figures/vmlxc.tex}
+  \caption{Architecture logicielle d'une solution de virtualisation applicative}
+\end{figure}
+
+\subsection{Les solution de virtualisation type I}
+
+\paragraph{}
+Les solutions de virtualisation de type I s'appuie sur un moniteur de machines
+virtuelles autonome, s'exécutant directement sur le matériel. Il est seul
+maître de l'environnement logiciel de la machine et assure l'ordonnancement
+des compartiments. La Figure \ref{fig:vmtype1} décrit l'architecture
+logicielle de ce type de solution.\\
+Les interactions entre le moniteur de machines virtuelles et ces dernières
+peuvent varier selon la solution utilisée pour assurer la bonne exécution de
+l'environnement invité (i.e. l'environnement logiciel de la machine virtuelle)
+et plus particulièrement du noyau invité.\\
+Pour répondre à ce besoin, il existe trois solutions:
+\begin{itemize}
+  \item La virtualisation complète
+  \item La paravirtualisation
+  \item La virtualisation matérielle
+\end{itemize}
+
+\begin{figure}
+  \label{fig:vmtype1}
+  \input{figures/vmtype1.tex}
+  \caption{Architecture logicielle générique des solutions de virtualisation de type I}
+\end{figure}
+
+\subsubsection{Principe de la virtualisation complète}
+
+\paragraph{}
+Historiquement la plus ancienne, elle fut formalisée en terme d'exigences par
+G.J. Popek et R.P. Goldberg\cite{popek} dès 1974. Le principe est de pouvoir
+exécuter un environnement logicielle dans une machine virtuelle tout en
+assurant que sont comportement est identique à une exécution native.
+L'environnement invité n'est pas modifié, et c'est au travers des exceptions
+processeurs dûes à l'exécution en tant qu'environnement invité que le moniteur
+de machines virtuelles réagit à des traitements qui ne peuvent être exécutés
+directement par l'environnement invité sans impact sur la sécurité et la
+sûreté du système.\\
+Dans l'Article \cite{popek}, les auteurs décrivent les incompatibilité du
+matériel avec ce type de principe. En effet, seules les instructions générant
+des exception processeur peuvent être substituées par le moniteur de machine
+virtuelles. Les
+instructions sensibles ne générant pas d'exception sont une problématique
+fortes car ces dernières peuvent s'exécuter sans que le moniteur de machines
+virtuelles en soit informé. La conséquence peut être plus ou moins grave car
+ces dernières impactent la sûreté et la sécurité du système.
+
+\paragraph{}
+Afin de pouvoir virtualiser des environnements logiciels sans l'aide du matériel
+et sans modifier l'environnement à virtualiser, plusieurs solutions ont été
+mises en place, entre autre par VMWare. Dans ses
+solutions, ce dernier est capable de déterminer les instructions sensibles qui seront
+demandées par l'environnement invité et de modifier ces dernières afin
+d'injecter des traitements simulés en lieu et place. Ce type de solution est
+transparent pour l'environnement invité, mais génère des variations dans le
+coût effectif d'un certain nombre de traitement. Ces variations font parties
+des mécanismes permettant de détecter que l'environnement d'exécution est
+virtualisé.
+
+\subsubsection{Principe de la paravirtualisation}
+
+\paragraph{}
+Afin de limiter la problématique de simulation des traitements consécutifs à
+la détection d'instructions incompatibles avec la virtualisation, une solution
+a été définie visant à impliquer le noyau de l'environnement invité dans le
+support de la virtualisation. Le noyau est alors modifié pour substituer les
+instructions sensibles par des appels volontaires à des fonctions du moniteur
+de machines virtuelles. Dans ce cas, le moniteur traîte la fonction soit en
+exécutant le traitement initial avec les droits qui sont les siens, soit en
+simulant le traitement. On parle alors d'{\it hypercalls}.
+
+\paragraph{}
+Il existe un certain nombre de solution permettant la paravirtualisation.
+C'est par exemple le cas de Xen ou encore de la solution propriétaire PikeOS
+de Sysgo. La limitation du principe de virtualisation est dûe à l'éxigence
+d'adaptation du noyau invité à l'API du moniteur de machine virtuelle. Cette
+API n'étant pas normalisée, cela implique une implémentation souvent
+spécifique à la solution de virtualisation utilisée. Cela implique également
+d'avoir accès au code source du noyau invité, limitant ainsi les choix en
+terme d'environnements paravirtualisables.
+
+\subsubsection{Principe de la virtualisation matérielle}
+
+\paragraph{}
+Définie initialement par IBM, puis reprise depuis le début des années 2000 par
+Intel et AMD, la virtualisation matérielle consiste à intégrer dans le
+matériel des aides à la virtualisation. Le but est de limiter la complexité du
+moniteur de machines virtuelles, ce dernier reposant sur des instructions
+privilégiées de configuration du matériel pour gérer des environnements
+matériels d'exécution des machines virtuelles séparés. Un exemple de solution
+est l'architecture VT-d d'Intel, proposant des structure de configuration et
+d'hébergement matérielles nommée VMCS (Virtual Machine Control Structure) qui
+dupliquent les registres sensibles comme le PDBR. Lorsque le moniteur de
+machines virtuelles ordonnance l'environnement virtualisé, il indique au
+processeur le VMCS à utiliser en lieu et place des registres utilisés
+par le moniteur lui même. La solution s'appuie également sur des élément de
+filtrage d'accès au périphériques (nommés I/OMMU pour Intel, SMMU pour ARM
+Cortex A15). Il n'existe à ce jour aucune norme et chaque fondeur possède
+ses propres instructions.\\
+Cette solution n'est pas considérée ici car incompatible des exigences de
+portabilité.
+
+
+
 \section{Les ineraction entre le matériel, la sécurité et le temps réel}
 
 \subsection{Principes de base de la MMU}

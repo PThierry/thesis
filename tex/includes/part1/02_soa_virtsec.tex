@@ -8,14 +8,8 @@
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
 %% Last update Mon Aug 30 17:00:21 2010 Philippe THIERRY
 
-\chapter{A propos de l'état de l'art de la sécurité des solutions de
-virtualisation}
+\chapter{A propos de l'état de l'art des solutions de virtualisation}
 \doMinitoc
-
-\section{A propos des solutions de virtualisation étudiée}
-
-\paragraph{}
-Solution type I (paravirtualisation sur base hyperviseur (non hosted), hw indépendant)
 
 \section{Etude de la sécurité des solutions de virtualisation existantes}
 
@@ -146,7 +140,48 @@ intéressant pour le besoin de confidentialité des données.
 
 \subsubsection{Principe}
 
+\paragraph{}
+La solution LXC est une solution de virtualisation applicative. Elle s'appuie
+donc sur un noyau hôte pour ordonnancer les tâches des différents
+compartiments, avec une gestion de la politique d'ordonnancement
+potentiellement spécifique à chaque compartiment. 
+
+\paragraph{}
+Pour les solutions de virtualisations applicatives, la capacité à respecter des
+exigences temps réelles dépend directement des propriétés de l'ordonnanceur de
+l'hôte. Cependant, une tâche temps réelle d'un compartiment sera ordonnancée en
+concurrence avec les autres tâches temps réelles du système, ce qui implique
+de maîtriser l'ensemble des tâches du système pour pouvoir répondre au besoin
+temps réel. La solution LXC couplée à une solution de type Linux-RT peut
+permettre de répondre à des besoins temps réel souple tout en assurant le
+cloisonnement des différentes tâches. Dans les noyaux récents, il est
+également possible de définir un certain nombre de propriétés intéressantes en
+terme de temps réel et de sécurité:
+\begin{itemize}
+  \item L'affinité, spécifiant sur quels coeur(s) processeur(s) le
+    compartiment doit s'exécuter
+  \item La charge associée aux tâches temps réel du compartiment, définissant
+    une charge maximum que peuvent consommer les tâches temps réel
+  \item La charge associée aux tâches non temps réel du compartiment, avec les
+    mêmes propriétés
+  \item La mémoire physique allouée de manière stricte, assurant un
+    cloisonnement spatial entre les compartiments
+\end{itemize}
+Ces différentes propriétés rendent la solution intéressante pour des besoins
+de sécurité et de temps réel assez souples, mais la solution reste
+incompatible de besoin temps réel durs et du haut niveau de sécurité, de par
+la présence d'un noyau Linux comme environnement d'exécution des compartiment.
+
 \subsubsection{Synthèse}
+
+\paragraph{}
+La solution LXC est intéressante pour les besoins de maquettage, mais ne
+permet pas de répondre à des exigences de type MILS, car cette solution est
+incompatible des Propriétés \ref{pro:noncontournable}, \ref{pro:evaluable},
+\ref{pro:validation} et \ref{pro:inviolable} exigées par les architectures
+MILS.\\
+Pour des besoins de temps réel souple, elle reste envisageable si les
+exigences de réactivités sont faibles (supérieur à la milliseconde).
 
 \subsection{La famille L4}
 

@@ -123,12 +123,14 @@ LaPadula.\\
 Les systèmes MILS sont compatibles de quatre propriétés éditées par le DoD:
 
 \begin{property}
+\label{pro:noncontournable}
 {\bf Non contournable}:
 Un composant ne peux utiliser que le chemin de communication
 qui lui est fournit par le moniteur de sécurité.
 \end{property}
 
 \begin{property}
+\label{pro:evaluable}
 {\bf Evaluable}:
 L'ensemble des composant considérés comme de confiance doivent être évaluable
 au niveau nécessaire pour atteindre le niveau de sécurité demandé.
@@ -139,6 +141,7 @@ sécurité de l'ensemble du système (i.e. les composants n'étant pas de
 confiance ne doivent pas impacter le niveau de sécurité du système.
 
 \begin{property}
+\label{pro:validation}
 {\bf Validation à chaque accès}:
 Chaque accès ou message entre composant doit pouvoir être validé par un
 moniteur de sécurité.
@@ -148,6 +151,7 @@ Le moniteur de sécurité peut être le SSK ou un processus de confiance dédié à
 ce traitement.
 
 \begin{property}
+\label{pro:inviolable}
 {\bf Inviolable}:
 Le système assure le contrôle des accès en écriture aux moniteurs de
 sécurités, à leurs données ou à leur configuration, assurant ainsi leur
@@ -184,16 +188,14 @@ définit en 1981\cite{sk_def} et reste aujourd'hui d'actualité, suite à la
 définition des systèmes MILS par la NSA en 2001\FIXME{citer NSA 2001}.
 
 \paragraph{}
-Parmis les mécanismes de séparation des domaines tels que décrit par la NSA
+Parmi les mécanismes de séparation des domaines tels que décrit par la NSA
 dans la définition des architectures MILS, le Separation Kernel est la
 solution la plus tengible dans l'existant et les travaux de recherche
-\FIXME{cite recherche et brevets}. Les systèmes MILS requiers, en plus des
+\FIXME{cite recherche et brevets}. Les systèmes MILS et MLS requièrent, en plus des
 différentes fonctions de sécurité dont le nombre et la complexité dépendent du
-niveau de certification demandé, requièrent des propriétés comportementales
-fortes de la part du Separation Kernel:
-\begin{requirement}
-Le Separation Kernel doit assurer une séparation spatiale stricte
-\end{requirement}
+niveau de certification demandé, une compatibilité avec les quatre propriétés
+\ref{pro:noncontournable}, \ref{pro:evaluable}, \ref{pro:validation} et
+\ref{pro:inviolable}.
 
 \paragraph{}
 La réponse au besoin de MultiLevel Security et de Multi-Independent Level of
@@ -206,6 +208,19 @@ Le separation kernel se comporte alors comme un hyperviseurs avec des
 propriétés de sécurité particulières. Il devient donc nécessaire d'étudier
 l'existant des solutions de virtualisations et les fonctions de sécurité
 qu'elles supportent.
+
+\paragraph{}
+Afin d'assurer le cloisonnement de ces services complexes, considérés comme
+n'étant pas de confiance, le Separation Kernel doit également être apte à
+héberger dans certains compartiments des moniteurs de sécurité certifiables.
+Ces derniers sont donc de petite taille, sous forme d'une fonction simple
+s'exécutant directement au dessus du Separation Kernel. Cependant, ces
+fonctions doivent pouvoir être dissociées du Separation Kernel en terme de
+binaires, ceci afin de limiter la complexité de chaque brique logicielle, et
+pour pouvoir être potentiellement compatible avec le principe de certification
+par composition. Ce principe permet de pouvoir faire évoluer l'architecture
+logicielle sans devoir certifier à nouveau les éléments binaires que le sont
+déjà sur la cible matérielle utilisée.
 
 \section{Interconnexion sécurisée inter-domaines de sécurité}
 
