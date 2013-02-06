@@ -193,5 +193,67 @@ exigences de réactivités sont faibles (supérieur à la milliseconde).
 
 \subsubsection{Principe}
 
+L'hyperviseur PikeOS est un micro-noyau avec des propriétés temps réel
+(certifié DO-178B-DALB) dont l'architecture logicielle permet de gérer un
+système de type MLS.
+L'architecture de la solution PikeOS est séparable en trois couches
+distinctes.
+\begin{itemize}
+\item Le micro-noyau: Ce dernier gère les accès mémoires le mapping des
+périphériques (lignes d'interruption, espace mémoire d'entrée/sortie)
+dans les différents compartiments et bien sûr l'ordonnancement.
+\item Le {\it System Software}: Il gère les canaux de communications entre les
+compartiments, mais également la gestion des droits d'accès sur l'état de la
+machine de la part des différents compartiment (capacité à être informé de
+l'état des autres compartiment, de se redémarrer ou de redémarrer le système,
+etc).
+\item Les compartiments: Ces derniers peuvent être des tâches certifiables
+ordonnançable directement par le micro-noyau ou un système d'exploitation
+complet, impliquant un ordonnancement de type hiérarchique, comme le décrit la
+Figure \ref{fig:pikeos}
+\end{itemize}
+
+\begin{figure}
+\label{fig:pikeos}
+\input{figures/pikeos.tex}
+\caption{Architecture logicielle de la solution PikeOS}
+\end{figure}
+
+\paragraph{}
+PikeOS définit deux principes:
+\begin{itemize}
+\item Le principe de compartimentation spatiale, définissant un espace de
+mémoire allouée de manière stricte, associé à une politique d'accès aux
+périphériques définie par configuration
+\item Le principe de compartimentation temporelle, définissant une durée et
+une période d'activation. Cette compartimentation permet d'assurer une charge
+processeur et une réactivité minimum assurée pour la où les tâches exécutée(s)
+dans le compartiment temporel.
+\end{itemize}
+
+\paragraph{}
+La solution PikeOS permet de gérer les politiques d'ordonancement de type RM
+avec 255 niveaux de priorités. Il permet de plus de définir une séparation
+temporelle de type TDM venant s'ajouter à la politique d'ordonnancement RM
+initiale, afin de déterminer des fenêtres d'ordonnancement strictes et
+périodique.
+\paragraph{}
+En terme de séparation spatiale, PikeOS permet d'assurer une séparation
+spatiale stricte en définissant une répartition des compartiment en mémoire
+par configuration, et assure la ségrégation des accès aux périphériques via
+la MMU pour les espaces mémoire d'entrée/sortie et au travers d'une gestion
+fine du contrôleur d'interruption pour associer chaque ligne d'interruption à
+un compartiment spatial donné. C'est par l'assignation d'une compartimentation
+spatiale {\bf et} temporelle à chaque entité devant être ordonancée que la
+solution PikeOS permet à la fois de supporter des exigences en terme de temps réel
+et en terme de sécurité.
+
 \subsubsection{Synthèse}
+
+\paragraph{}
+La capacité à ordonnancer à la fois des OS complexes et des tâches
+certifiables fait de cette solution logicielle un bon candidat à l'intégration
+des moniteurs de sécurité tels que nécessités par une architecture de type MLS
+ou MILS.
+
 

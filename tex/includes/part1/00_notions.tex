@@ -257,61 +257,6 @@ problématique de cannal auxiliaire dérivant du profil de flux initial.
 Il existe plusieurs type de virtualisation, en fonction de l'architecture
 logicielle et parfois matérielle qui entre en compte dans la solution.
 
-\subsection{Les solution de virtualisation type II}
-
-\paragraph{}
-Les soltions de virtualisation type II s'appuie sur la présence d'un hôte qui
-accueil le moniteur de machine virtuelle comme un processus. Ce dernier est
-donc lui-même ordonnancé par l'hôte. Ce type de solution de virtualisation
-correspond à des produits tels que VMWare Workstation ou encore VirtualBox.
-La Figure \ref{fig:vmtype2} décrit l'architecture logicielle d'une telle
-solution.
-\begin{figure}
-  \label{fig:vmtype2}
-  \input{figures/vmtype2.tex}
-  \caption{Architecture logicielle d'une solution de virtualisation type II}
-\end{figure}
-
-\paragraph{}
-Ces solutions étant basée sur des hôtes de type GNU/Linux ou Windows dans
-lesquels elles s'exécutent comme des tâches non temps réel, elles sont
-donc incompatibles de besoin temps réel, y compris lorsque ces derniers sont
-relativement faible. Elles sont également incompatibles des exigences de
-sécurité forte, du fait de la non-certifiabilité du système hôte.
-
-\paragraph{}
-Les solutions de moniteurs de machines virtuelles utilisant ce type
-d'architecture ne permettent pas d'assurer un cloisonnement spatial fort
-(répartition stricte en mémoire physique) ni un cloisonnement temporel fort
-(l'ordonnancement des machines virtuelles étant assujetti aux propriétés de
-l'ordonnanceur de l'environnement hôte.
-
-\subsection{Les solutions de virtualisation applicative}
-
-\paragraph{}
-Les solutions de virtualisation applicative sont parentes des solution de
-virtualisation de type II, mais ne gèrent pas de noyau invité. Elles
-permettent d'instancier aisément des compartiments dont le noyau est partagé
-entre les compartiment, mais également avec l'hôte. La gestion de
-l'ordonnancement des taches des compartiment est géré directement par
-l'ordonnanceur de l'hôte, sous forme de groupes de tâches autonomes. Ce type
-d'ordonnancement se rapproche ainsi du principe d'ordonnancement hiérarchique
-qui sera décrit dans le Chapitre \ref{sec:hierarchique}.\\
-Un exemple de solution de virtualisation applicative est la solution LXC
-(LinuX Containers) de Linux. La Figure \ref{fig:vmlxc} décrit
-l'architecture logicielle d'une telle solution. 
-
-\paragraph{}
-Les solution de virtualisation applicatives permettent de créer des compartiments
-dont le système de fichiers, le jeu de tâches, les interfaces réseau et la
-vision du stockage de masse est séparé. 
-
-\begin{figure}
-  \label{fig:vmlxc}
-  \input{figures/vmlxc.tex}
-  \caption{Architecture logicielle d'une solution de virtualisation applicative}
-\end{figure}
-
 \subsection{Les solution de virtualisation type I}
 
 \paragraph{}
@@ -413,6 +358,62 @@ ses propres instructions.\\
 Cette solution n'est pas considérée ici car incompatible des exigences de
 portabilité.
 
+
+
+\subsection{Les solution de virtualisation type II}
+
+\paragraph{}
+Les soltions de virtualisation type II s'appuie sur la présence d'un hôte qui
+accueil le moniteur de machine virtuelle comme un processus. Ce dernier est
+donc lui-même ordonnancé par l'hôte. Ce type de solution de virtualisation
+correspond à des produits tels que VMWare Workstation ou encore VirtualBox.
+La Figure \ref{fig:vmtype2} décrit l'architecture logicielle d'une telle
+solution.
+\begin{figure}
+  \label{fig:vmtype2}
+  \input{figures/vmtype2.tex}
+  \caption{Architecture logicielle d'une solution de virtualisation type II}
+\end{figure}
+
+\paragraph{}
+Ces solutions étant basée sur des hôtes de type GNU/Linux ou Windows dans
+lesquels elles s'exécutent comme des tâches non temps réel, elles sont
+donc incompatibles de besoin temps réel, y compris lorsque ces derniers sont
+relativement faible. Elles sont également incompatibles des exigences de
+sécurité forte, du fait de la non-certifiabilité du système hôte.
+
+\paragraph{}
+Les solutions de moniteurs de machines virtuelles utilisant ce type
+d'architecture ne permettent pas d'assurer un cloisonnement spatial fort
+(répartition stricte en mémoire physique) ni un cloisonnement temporel fort
+(l'ordonnancement des machines virtuelles étant assujetti aux propriétés de
+l'ordonnanceur de l'environnement hôte.
+
+\subsection{Les solutions de virtualisation applicative}
+
+\paragraph{}
+Les solutions de virtualisation applicative sont parentes des solution de
+virtualisation de type II, mais ne gèrent pas de noyau invité. Elles
+permettent d'instancier aisément des compartiments dont le noyau est partagé
+entre les compartiment, mais également avec l'hôte. La gestion de
+l'ordonnancement des taches des compartiment est géré directement par
+l'ordonnanceur de l'hôte, sous forme de groupes de tâches autonomes. Ce type
+d'ordonnancement se rapproche ainsi du principe d'ordonnancement hiérarchique
+qui sera décrit dans le Chapitre \ref{sec:hierarchique}.\\
+Un exemple de solution de virtualisation applicative est la solution LXC
+(LinuX Containers) de Linux. La Figure \ref{fig:vmlxc} décrit
+l'architecture logicielle d'une telle solution. 
+
+\paragraph{}
+Les solution de virtualisation applicatives permettent de créer des compartiments
+dont le système de fichiers, le jeu de tâches, les interfaces réseau et la
+vision du stockage de masse est séparé. 
+
+\begin{figure}
+  \label{fig:vmlxc}
+  \input{figures/vmlxc.tex}
+  \caption{Architecture logicielle d'une solution de virtualisation applicative}
+\end{figure}
 
 
 \section{Les ineraction entre le matériel, la sécurité et le temps réel}
