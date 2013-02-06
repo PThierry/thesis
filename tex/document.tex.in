@@ -173,7 +173,7 @@
 \theoremstyle{break}
 \theorembodyfont{\itshape}
 \theoremheaderfont{\scshape}
-\newtheorem{property}{Property}}
+\newtheorem{property}{Propriété}}
 
 \newtheorem{assertion}{Assertion}
 

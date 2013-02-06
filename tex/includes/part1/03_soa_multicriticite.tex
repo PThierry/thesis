@@ -8,41 +8,35 @@
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
 %% Last update Mon Aug 30 17:00:21 2010 Philippe THIERRY
 
-\chapter{A propos de l'état de l'art de l'ordonnancement hierarchique de tâches}
+\chapter{A propos de l'état de l'art de l'ordonnancement hiérarchique de tâches}
 \label{sec:hierarchique}
 \doMinitoc
 
-\section{Principe de l'ordonnancement hierarchique}
+\section{Principe de l'ordonnancement hiérarchique}
+
+\subsection{Principes généraux et théorie de l'ordonnancement hiérarchique}
 
 \paragraph{}
-On parle d'ordonnancement hierarchique lorsqu'une tâche est ordonnancée au
-travers de deux politiques d'ordonnancement distinctes hierarchisées. Dans les
-systèmes temps réels, on considère un ensemble de jeux de tâches exécutés en
-concurence:
-\begin{itemize}
-\item On définit une politique d'ordonnancement des jeux de tâches
-\item On définit une politique d'ordonnancement des tâches dans un jeu donné
-\end{itemize}
-Un exemple d'ordonnancement hierarchique est l'EDF/RM, où les tâches sont
-ordonnancées suivant une politique de type EDF et les jeux de tâches sont ordonnancés
-suivant une politique de type RM. Les calculs d'ordonnançabilité sont
-impactés par le principe de hierarchie, et nécessitent donc
-d'être considérés de manière spécifique.
+On parle d'ordonnancement hiérarchique lorsqu'une tâche est ordonnancée au
+travers de deux politiques d'ordonnancement distinctes hiérarchisées. Dans les
+systèmes temps réels, on considère alors un ensemble de jeux $\Gamma_i$ de
+tâches exécutés en concurrence. Pour chaque jeux de tâches, on considère un ensemble de tâches
+$\tau^i_j$ qui lui sont associées. On définit alors
+\begin{enumerate}
+\item Une politique d'ordonnancement des jeux de tâches, nommé ordonnancement
+global
+\item Une politique d'ordonnancement des tâches dans un jeu donné, nommé
+ordonnancement local
+\end{enumerate}
 
 \paragraph{}
 L'ordonnancement hiérarchique a été beaucoup étudié ces dernières années. La
 capacité à ordonnancer de manière concurrente des jeux de tâches sur un même
-coeur processeur permet de pouvoir prendre en considération des classes de
+c{\oe}ur processeur permet de pouvoir prendre en considération des classes de
 tâches et différencier leur ordonnancement en fonction de leur profil. Ces
 différents travaux ont pour hypothèse une connaissance initiale de l'ensemble
 des tâches, hypothèse d'entrée exigée dans les systèmes temps réels
-dur\cite{methodhierarchical}. Néanmoins, lorsque la hierarchisation de
-l'ordonnancement provient du principe de virtualisation, les deux politiques
-d'ordonnancement s'ignorent l'une l'autre. En conséquence, les ordonnanceurs
-en-ligne ne sont plus éligibles, faute d'information sur la politique
-d'ordonnancement intérieur à chaque jeu de tâche. L'ordonnanabilité d'un jeu
-de tâches temps réel dans un contexte virtualisé a cependant été
-étudié\cite{virtrtconstraints}. \FIXME{to complete}
+dur\cite{methodhierarchical}. 
 
 \paragraph{}
 La répartition des tâches par familles se fait en fonction des exigences de
@@ -55,17 +49,81 @@ classique telle que décrite dans \cite{methodhierarchical}.
 \caption{Répartition type des tâches par jeux autonomes, en fonctions des exigences de réactivité}
 \end{figure}
 
+\paragraph{}
 Analyse de concurrence des systèmes temps réels à ordonnancement hierarchique
 \cite{regehr_evolving_2003}\\
 Calcul du temps de réponse sur un système temps réel à ordonnancement
 hierarchique sur base de priorité fixe
-\cite{balbastre_exact_2009}\\w
+\cite{balbastre_exact_2009}\\
 Ordonnancement hiérarchique SMP
 \cite{chandra_hierarchical_2008}\\
-Respect des contraintes temporelles dans les systèmes virtualisés
-\cite{cucinotta_respecting_2009}\\
 Le rôle de la virtualisation dont les systèmes embarqués
 \cite{heiser_role_2008}
+
+
+
+\subsection{Ordonnancement hiérarchique et principe de virtualisation}
+
+\paragraph{}
+Lorsque la hiérarchisation de
+l'ordonnancement provient du principe de virtualisation, les deux politiques
+d'ordonnancement s'ignorent souvent l'une l'autre. En conséquence, les ordonnanceurs
+en-ligne ne sont plus éligibles pour l'ordonnancement global, faute d'information sur la politique
+d'ordonnancement intérieur à chaque jeu de tâche. Ce dernier est donc en
+général de type FP (Fixed Priority). Ce type de restriction est décrit dans
+\cite{cucinotta_respecting_2009} où les auteurs expliquent l'impact de
+l'ordonnanceur global sur la capacité des tâches virtualisées à rester
+ordonnançable. Différents travaux \cite{cucinotta_respecting_2009}\cite{rtvm} ont été
+fait sur la base de solution open-source comme Xen\cite{barham2003xen} ou
+KVM\cite{kivity2007kvm}.
+
+\paragraph{}
+Du fait de la hiérarchisation de l'ordonnancement des tâches, on parle alors
+de d'un ordonnancement de type X/Y, ou X spécifie l'ordonnancement des
+machines virtuelles $\Gamma_i, i \in { a, b, c ... }$, Y définissant
+l'ordonnancement des tâches $\tau^i_j$ de la machines virtuelle $\Gamma_i$.\\
+Un exemple d'ordonnancement hiérarchique est l'EDF/RM, où les tâches sont
+ordonnancées suivant une politique de type EDF et les jeux de tâches des
+différentes machines virtuelles sont ordonnancés suivant une politique de type RM.
+Les calculs d'ordonnançabilité sont impactés par le principe de hiérarchie, et nécessitent donc
+d'être considérés de manière spécifique.
+
+\paragraph{}
+Du fait de la hiérarchisation de l'ordonnancement des tâches, on parle alors
+de d'un ordonnancement de type X/Y, ou X spécifie l'ordonnancement des
+machines virtuelles $\Gamma_i, i \in { a, b, c ... }$, Y définissant
+l'ordonnancement des tâches $\tau^i_j$ de la machines virtuelle $\Gamma_i$.\\
+Un exemple d'ordonnancement hiérarchique est l'EDF/RM, où les tâches sont
+ordonnancées suivant une politique de type EDF et les jeux de tâches des
+différentes machines virtuelles sont ordonnancés suivant une politique de type RM.
+Les calculs d'ordonnançabilité sont impactés par le principe de hiérarchie, et nécessitent donc
+d'être considérés de manière spécifique.
+
+
+\paragraph{}
+Dans la solution Xen, une implémentation de S-EDF a été faite afin d'assurer
+une réservation de ressource CPU minimum dans une fenêtre temporelle aux
+différentes machines virtuelles. Cependant, cette solution a ses limitations,
+principalement lorsque les tâches temps réelles impliques un grand nombre
+d'entrées/sorties, impactant le respect de l'ordonnancement des autres
+machines virtuelles\cite{cucinotta_respecting_2009}.\\
+KVM utilise une architecture différente, puisqu'il implique un hôte pouvant
+ordonnancer des tâches potentiellement temps réel à côté de machines
+virtuelles. Dans ce cas, les tâches natives (non virtualisées) impactent
+potentiellement fortement l'ordonnancement des machines virtuelles et des jeux
+de tâches associés, comme le décrivent T. Cucinotta, g. Anastasi et L. Abeni
+dans \cite{rtvm}. L'emploi d'un de type CBS (Constant Bandwidth Server\cite{abeni1998integrating})
+permet d'assurer une réservation stricte de charge processeur pour les
+différentes machines virtuelles, limitant fortement l'impact des tâches
+natives. La gestion concurrentes de jeux de tâches temps réels virtualisé et
+de jeux de tâches natifs (ordonnancés directement par l'hôte) est donc un
+problème complexe à résoudre. Dans le cadre des architectures MILS, ce type
+d'architecture est malheureusement nécessaire afin de pouvoir traiter les
+moniteurs de sécurité comme des tâches du {\it separation kernel}, ces
+dernières ne pouvant être intégrés à un OS virtualisés sans perdre leur
+certifiabilité.
+
+%saewong2002analysis
 
 \section{A propos de l'ordonnancement hiérarchique sur base TDM}
 
@@ -96,11 +154,5 @@ d'ordonnançabilité pure\cite{tdmsched}.
 \subsection{A propos De l'ordonnancement d'un taskset multi-critique}
 
 \subsection{Impact de l'ordonnancement hierarchique sur la multi-criticité}
-
-\section{A propos des architecture MLS (MultiLevel Security}
-
-\subsection{MLS et principe de virtualisation}
-
-\subsection{A propos de l'état de l'art des solution de virtualisation}
 
 
