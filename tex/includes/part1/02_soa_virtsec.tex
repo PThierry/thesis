@@ -27,7 +27,23 @@ correspondant à un domaine d'administration, nommée dans le cas de Xen {\it
 Ce domaine possède des droits élargis sur l'interface de communication entre
 l'hyperviseur et les machines virtuelles. Ce dernier est en effet apte à
 créer, configurer, lancer, stopper ou détruire toute autre machine virtuelle,
-dénommée dans le cadre de Xen {\it domU}, pour domaine Utilisateur.
+dénommée dans le cadre de Xen {\it domU}, pour domaine Utilisateur. Il est
+également en charge des communications réseaux entre machines virtuelles et
+vers l'extérieur, comme le décrit la Figure \ref{fig:xen_interactions}.
+Une telle architecture implique donc, pour un traitement réseau dans un
+domaine utilisateur, d'ordonnancer le domaine d'administration. Les
+différentes machines virtuelles utilisateurs ne sont donc pas aptes à
+communiquer de manière autonome avec le matériel. Un tel principe est
+intéressant en terme de sécurité, limitant l'usage de canaux cachés par ces
+dernières (comme l'accès à la mémoire au travers du contrôleur DMA). Il est
+par contre impactant en terme de temps réel, le domaine d'administration étant
+de plus un système GNU/Linux complet.
+
+\begin{figure}
+\label{fig:xen_interactions}
+\input{figures/xen_interactions.tex}
+\caption{Interactions entre le domaine d'administration et les autres machines virtuelles}
+\end{figure}
 
 \paragraph{}
 Xen fournit une solution de virtualisation de niveau OS. Ainsi, chaque machine

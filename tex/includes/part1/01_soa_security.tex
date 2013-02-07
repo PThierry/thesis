@@ -224,5 +224,19 @@ déjà sur la cible matérielle utilisée.
 
 \section{Interconnexion sécurisée inter-domaines de sécurité}
 
-\subsection{Principe de diode logicielle pour le cloisonnement de domaines sur
-architecture matérielle partagée}
+\subsection{Le contrôle de flux et les passerelles de sécurité}
+
+\paragraph{}
+Des travaux ont été effectués\cite{blum2011smart}\cite{bettger2009secure} pour répondre au besoin d'interconnexions de serveurs
+hébergeant des données dont le niveau de sensibilité et les profils
+utilisateurs associés sont variant. Ces travaux ciblent la problématique de
+l'usage du SOA (Service Oriented Architectures) pour les données
+potentiellement confidentielles\cite{blum2011smart} ou une fonction de
+stockage de type base de données compatible MILS\cite{bettger2009secure}. Ces travaux décrivent principalement la
+gestion des rôles et des attributs par les services, et comment faire
+interagir ses derniers avec  des éléments logiciels de  vérification des rôles
+et les gestionnaires de stockage.
+Ces travaux considèrent cependant comme hypothèse que l'environnement
+d'exécution est de confiance, travaillant sur une formalisation de
+l'architecture applicative et le protocole de communication entre ces
+dernières.

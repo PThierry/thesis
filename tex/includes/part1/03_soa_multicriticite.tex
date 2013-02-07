@@ -151,6 +151,30 @@ d'ordonnançabilité pure\cite{tdmsched}.
 
 \subsection{Propriété des tâches multi-critique}
 
+\paragraph{}
+En 2007, S. Vestal\cite{vestal2007preemptive} a décrit le principe d'une tâche
+multi-critique. On définit une tâche à multiple criticité en définissant
+plusieurs pire cas d'exécution (WCET), chaque WCET étant associé à un niveau
+de criticité. La multiplicité des coûts d'exécution pire cas viens du niveau
+d'assurance exigé par chaque niveau de criticité. Plus ce dernier est élevé,
+plus l'assurance demandée par la certification est forte. En conséquence, la
+mesure d'exécution pire cas est de plus en plus pessimiste afin de garantir
+que la tâche respecte son WCET. Ainsi, une tâche de faible niveau de criticité
+peut s'appuyer sur une mesure probabiliste, dont le WCET est forcément plus
+faible qu'une mesure formelle du profil d'exécution d'une tâche.
+
+\paragraph{}
+On définit pour chaque tâche de l'ensemble de tâches un niveau de criticité en
+fonction de son importance. Un système s'exécute par défaut dans le domaine de
+criticité le plus faible. Si une tâche de criticité supérieure au domaine
+courant dépasse le WCET qui lui est donné pour ce domaine, on
+considère qu'il faut changer de domaine de criticité. On accroît alors le
+domaine de criticité du système et on désactive les tâches dont le niveau de
+criticité est inférieur au nouveau domaine de criticité actif. Ceci est fait afin de
+maintenir l'ordonançabilité des tâches critiques, ces dernières ayant alors un
+WCET plus élevé, correspondant à celui du domaine de criticité nouvellement
+actif.
+
 \subsection{A propos De l'ordonnancement d'un taskset multi-critique}
 
 \subsection{Impact de l'ordonnancement hierarchique sur la multi-criticité}
