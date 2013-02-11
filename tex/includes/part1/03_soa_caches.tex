@@ -1,0 +1,101 @@
+%%
+%%
+%% hardware_impacts.tex for thesis in /doctorat/these/tex
+%%
+%% Made by Philippe THIERRY
+%% Login   <Philippe THIERRYreseau-libre.net>
+%%
+%% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
+%% Last update Mon Aug 30 17:00:21 2010 Philippe THIERRY
+
+\chapter{A propos de l'état de l'art des algorithmes de gestion de caches}
+\label{sec:hierarchique}
+\doMinitoc
+
+\section{Les caches et la sécurité}
+
+\subsection{Principes généraux et limitations}
+
+\paragraph{}
+Les gestionnaires de caches sont des éléments matériels incontournable dans
+les architectures modernes. Cependant, comme décrit dans le Chapitre
+\ref{sec:notions_caches}, leur impact est non-nul sur la sécurisation d'un systèmes lorsque deux domaines de
+sécurités sont ordonnancés sur un même matériel. Cela est encore plus vrai si
+ces deux domaines sont ordonnancés sur un c{\oe}ur processeur.\\
+En effet, la modification de l'état des caches processeur est induit par le
+comportement des différentes applications en cours d'exécution, générant un
+canal auxiliaire entre ses dernières.\\
+Dans \cite{percival2005cache}, l'auteur a ainsi démontré qu'il était possible, au travers de
+mesures des coûts d'accès mémoire d'une tâche, de détecter l'impact d'une
+autre tâche exécutée en concurrence (i.e. dans le cadre d'un ordonnancement
+préemptif). Cet impact étant variant selon le comportement de cette dernière,
+il est alors possible d'en déduire certaines informations sur l'arbre
+d'exécution associé, et donc sur les choix qui ont été effectué. Une telle
+information implique la connaissance du code source, et de la structure du
+binaire associé. Cette hypothèse est aujourd'hui plus réaliste dans le monde
+de l'open-source. Un tel mécanisme a été montré fonctionnel dans
+\cite{bernstein2005cache}\cite{bonneau2006cache} et dans \cite{banescu2011cache}, où les auteurs
+démontrent la capacité pour une tâche à récupérer des
+informations sur les données d'entrée d'algorithmes cryptographiques utilisées
+par une tâche concurrente.
+Dans \cite{bernstein2005cache} La démonstration a été effectué dans le cadre de deux tâches
+exécutées de manière simultanée sur un processeur Pentium 4 supportant
+l'hyperthreading. Dans \cite{banescu2011cache}, l'auteur n'impose pas l'usage simultané du c{\oe}ur
+processeur via un mécanisme de type hyper-threading.
+L'espionnage se fait au travers de l'étude de son propre comportement en terme
+de mesure de temps d'accès mémoire, induit par le comportement de la tache
+concurrente (mesure des caches-miss induits).\\
+De manière générale, l'espionnage des algorithmes cryptographique au travers
+des collisions des lignes de caches est facilité par les implémentations des
+algortithmes cryptographiques, ces derniers s'appuyant sur des tables de
+taille fixe mappées en mémoires à des emplacement disjoint. A ce jour, les
+clefs de chiffrements restent donc un éléments confidentiel difficile à
+protéger en confidentialité si tout ou partie de l'architecture logicielle est corrompue.
+
+\subsection{A propos de l'état de l'art de la sécurisation}
+
+\paragraph{}
+Aujourd'hui, lorsque deux compartiments s'exécutent en concurrence sur un même
+c{\oe}ur processeur, il est d'usage de flusher les caches à chaque préemption
+des compartiment. On considère ainsi qu'un compartiment donné ne protège pas
+ses propre tâches entre elles, mais que deux compartiments concurrents doivent être
+ordonnancés avec un cache dont le contenu est connu assuré. En effet, imposer
+un flush de cache à chaque préemption de tâche a un coût prohibitif, et la
+compartimentation en entité ordonnançable disposant d'une période
+d'ordonnancement plus longue réduit le coût de la fonction de sécurité.
+Avec une telle architecture logicielle, la fonction de sécurité correspondant
+au flush de cache est considérée suffisante. Cette dernière peut en effet être
+bornée dans le temps, et assure bien l'état du cache lorsque le compartiment
+reprend son exécution.
+
+\section{Les caches et le temps réel}
+
+\subsection{Principes généraux et limitations}
+
+\paragraph{}
+Les caches processeurs sont également impactant pour le respect du temps réel.
+Leur comportement probabiliste impacte l'exécution des différentes tâches temps
+réelles si ces dernières sont exécutées avec une politique d'ordonnancement
+préemptive. Dans les systèmes très exigeants en terme de temps réel, les
+caches sont en général désactivés. Malheureusement, une telle configuration
+est de plus en plus difficile à mettre en {\oe}uvre. En effet, les
+architectures matérielles et logicielles sont de plus en plus construite pour
+être performante grâce aux contrôleur de caches (usage de 2 voir 3 niveaux de
+caches, mécanisme de synchronisation avancé dans le cadre des architectures
+MPSoC, etc). La désactivation des caches génère un ralentissement difficile à
+accepter selon les hypothèses de performances initiales.
+
+
+\subsection{A propos de l'état de l'art de la prise en comptes des algorithmes de caches dans le temps réel}
+
+\paragraph{}
+Il existe un grand nombre de travaux sur la prise en compte des contrôleurs de
+caches dans le temps réel. Ces travaux sont séparables en deux grandes
+familles:
+\begin{itemize}
+  \item Prise en compte des besoins temps réel dans le contrôleur de caches
+    (cache locks et cache partitioning)
+  \item Caclul des pire cas de cache-miss au travers de l'étude de l'arbre
+    d'exécution des différentes tâches en exécution concurrente
+\end{itemize}
+
