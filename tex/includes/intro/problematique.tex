@@ -1,6 +1,6 @@
 %%
 %%
-%% problematique.tex for doctorat in /home/phil/Travail/ScolaritÃ©/Doctorat/doc/tex
+%% problematique.tex for doctorat in /home/phil/Travail/Scolarite/Doctorat/doc/tex
 %%
 %% Made by Philippe THIERRY
 %% Login   <Philippe THIERRYreseau-libre.net>
@@ -15,6 +15,40 @@
 
 \section{Définition des enjeux}
 
+\subsection{Problématique générale}
+
+\paragraph{}
+Avec l'intégration de plus en plus forte des réseaux IP dans les systèmes
+embarqués (véhiculaires, avioniques non temps-réel, transport)
+l'interconnexion de réseaux locaux initialement disjoint et de réseau locaux
+et d'infrastructure est de plus en plus courant.\\
+L'interconnexion des réseaux locaux est poussé par différents besoins. Dans le
+cadre des embarqués véhiculaire, le besoin initial, toujours fort aujourd'hui
+et dont la résolution reste complexe, correspond à l'intégration sur un même
+matériel de plusieurs réseau indépendants. La réponse à ce besoin est faite au
+travers d'architectures de type MILS (Multi-Independent Level of Security),
+solution décrite dans le Chapitre \ref{sec:notions}. Ces solutions permettent
+de répondre au besoin sécuritaire associés à ce type d'interconnexion.
+Cependant ces solutions ne
+respectent cependant pas nécessairement des exigences de type temps réel sur
+les traitements logiciel effectués, ces dernières n'étant pas toujours
+exprimées.\\
+Le second besoin correspond à l'interconnexion de réseaux locaux à une
+infrastructure plus ou moins complexe, avec des exigences de confidentialité
+des données locales plus ou moins fortes. De telles architectures ont des
+réponses dans les systèmes d'informations, au travers de l'usage de
+chiffreurs, de filtres et d'éléments matériels en coupure. Ces solutions
+restent difficile à intégrer sur les systèmes embarqués du fait de leur
+volume, de leur poids et de leur consommation électrique.
+
+\subsection{A propos des besoins véhiculaires}
+
+\paragraph{}
+Les systèmes véhiculaires font partie des différents systèmes embarqués demandant
+une interconnexion de réseaux locaux. Ces derniers peuvent également demander
+à être intégrer avec une infrastructure déportée. Ce besoin est inhérent à
+leur évolution.
+
 \paragraph{}
 Aujourd'hui, les véhicules embarquent un grand nombre de sous-systèmes
 critiques. Ces systèmes fournissent des services à valeur ajoutée comme l'ABS
@@ -25,26 +59,28 @@ l'aide au créneaux couplé au caméras et radars de recul.
 \paragraph{}
 Dans leur globalité, les systèmes véhiculaires s'appuient principalement sur
 un maillage complexe de bus CAN, permettant de remonter les informations de
-divers sondes et de corréler de telles information. A ce réseau de réseaux
+divers sondes et de corréler de telles informations. A ce réseau de réseaux
 CAN commencent à s'associer un réseau IP, afin d'intégrer un environnement
 multimédia de plus en plus riche (téléphone portable, mécanisme de
 cartographie par internet, etc). Le cloisonnement de ces deux domaines
 s'affaiblit petit à petit avec l'augmentation des services de remontée
 d'informations sur les terminaux utilisateurs. Cette tendance s'accroît avec
-les travaux sur les véhicules autonomes. Ces travaux implique d'intégrer le
-véhicule comme un noeud dans un réseau, et en conséquence réduit encore un peu
-plus la capacité à ségréguer les domaines de criticité.
+les travaux sur les véhicules autonomes effectués par les différents
+constructeurs automobile ainsi que par Google. Ces travaux impliquent d'intégrer le
+véhicule comme un n{\oe}ud dans un réseau, et en conséquence réduit encore un peu
+plus la capacité à ségréguer les domaines de criticité (forte pour les
+commandes de bord, plus faible pour le multimédia).
 
 \paragraph{}
-Dans le cas des véhicules militaires, un grand nombre de sous systèmes
+Le cas des véhicules militaires est particulier: un grand nombre de sous systèmes
 viennent s'intégrer au véhicule. Il s'agit de la gestion des communications,
 du blindage ou encore de la détection d'attaque. Ces éléments interagissent
 fortement pour répondre au besoin.\\
-Aujourd'hui, un tel système s'appuie sur des éléments de niveau de criticité
+Aujourd'hui, un tel système s'appuie sur des éléments de niveaux de criticité
 différents, mais également de niveaux de sécurité différents. Faire
 communiquer ses éléments entre eux implique la prise en compte de la
 problématique de communications entre domaines de criticité différents, mais
-également la problématique de communications entre domaines de sécurité
+également la problématique de communication entre domaines de sécurité
 différents. Une telle architecture systèmes est très complexe et nécessite des
 passerelles inter-domaines assurant un bon cloisonnement des niveaux de
 criticité et de sécurité tout en permettant une communication contrôlée entre
@@ -56,9 +92,10 @@ systèmes embarqués véhicules s'appuient sur des embarqués basse consommation.
 Ces derniers doivent être aptes à pouvoir traiter à la fois des données
 véhicules avec des exigences temps réel dur et des exigences de sécurité plus
 souples, et des données métier (cartographie et gestion de mission pour les
-militaires, données médicales pour les services d'urgences) avec des exigences
+militaires, données médicales pour les services d'urgence) avec des exigences
 de temps réel plus souples mais dont les exigences de sécurité sont elles
-beaucoup plus fortes.
+beaucoup plus fortes. Ces dernières peuvent aller jusqu'à une exigence
+législative, comme par exemple la garantie du secret des données médicales.
 
 \subsection{Principes de sécurité}
 
@@ -93,12 +130,17 @@ par le cloisonnement et la gestion des d'accès aux données utilisateurs.
 
 \paragraph{}
 Le niveau de sécurité d'un système dépend de l'impact de la non-garantie d'une
-ou plusieurs de ses propriétés.
-
-\paragraph{}
+ou plusieurs de ses propriétés.\\
+Afin de répondre au besoin de sécurité, on implémente des {\it fonctions de
+sécurité}. Ces dernières peuvent être logicielles ou matérielles, et
+permettent de répondre à tout ou partie des risques sécutaires définis dans le
+cadre de l'étude du système.\\
 Les enjeux de sécurité associés au traitement de données dans le domaine
 véhiculaire proviennent de la problématique de MLS (MultiLevel Security) et de
-MILS (Multi-Idependent Level of Security).
+MILS (Multi-Idependent Level of Security), qui sont là pour fournir une base à
+la définition de l'architecture du système. Ils ne décrivent cependant pas
+quelle fonction de sécurité doit être intégrée au système, ni comment
+l'implémenter.
 
 \subsection{Objectifs de temps réel et de multi-criticité}
 
