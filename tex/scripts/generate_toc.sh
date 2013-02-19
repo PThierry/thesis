@@ -17,6 +17,7 @@ for part in $parts; do
 done
 
 echo '
+\backmatter
 
 %\input{includes/\lang/appendix/title.tex}
 

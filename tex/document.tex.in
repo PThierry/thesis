@@ -220,7 +220,6 @@
 
 \input{includes/resume.tex}				% insert abstracts
 
-\mainmatter						% starting TOC chapters
 
 \cleardoublepage					% double blank page
 %\dominitoc
@@ -261,8 +260,10 @@ article en cours:\\
 - définition d'un connecteur multi-niveaux de criticité (exigences TR) et de
 sécurité (exigences de cloisonnement) pour le transfert de flux télécom.
 
-\input{includes/intro/introduction.tex}
+\mainmatter
 
-\input{includes/intro/problematique.tex}
+\input{includes/intro/01_introduction.tex}
 
+\input{includes/intro/02_problematique.tex}
 
+\input{includes/intro/03_notions.tex}
