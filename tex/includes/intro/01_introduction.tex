@@ -1,0 +1,95 @@
+%%
+%%
+%% introduction.tex for doctorat in /home/phil/Travail/Scolarité/Doctorat/doc/tex
+%%
+%% Made by Philippe THIERRY
+%% Login   <Philippe THIERRYreseau-libre.net>
+%%
+%% Started on  mar. 24 nov. 2009 22:17:16 CET Philippe THIERRY
+%% Last update Thu Jul 15 16:40:28 2010 Philippe THIERRY
+%%
+
+\chapter{Introduction}
+\doMinitoc
+
+\paragraph{}
+Ce chapitre présente le contexte général de la thèse, les motivations qui
+sont à l'origine de la définition du sujet et les objectifs qui ont été
+définis.
+
+\section{Contexte}
+
+\paragraph{}
+
+Ce sujet de thèse est choisi, en accord avec Thales Communications \&
+Security, afin de pouvoir répondre aux nouvelles problématiques de temps réel
+et de sécurité des systèmes embarqués Multi-Processor System on Chip (MPSoC)
+communicants. La thèse cible les nouvelles problématiques véhiculaires mais
+en essayant d'assurer la portabilité de la solution logicielle et de
+l'architecture associée sur des plateformes non embarquées.\\
+
+Cette thèse cible la problématique de partage du matériel avec
+de fortes exigences sur les propriétés du logiciel et du matériel pour
+répondre à la fois aux besoins temps réels et sécuritaire.
+
+\paragraph{}
+Aujourd'hui, les solutions de partage du matériel s'appuie sur le principe de
+virtualisation. Ce dernier, parfois aidé par le matériel, permet de pouvoir
+{\it héberger} plusieurs environnements logiciels autonomes sur un même matériel.
+On parle alors de mutualisation des ressources matérielles, comme décrit dans
+la Figure \ref{fig:virt_simple}.
+
+\begin{center}
+\begin{figure}
+\input{figures/virt_simple_fr.tex}
+\caption{Principe général de virtualisation\label{fig:virt_simple}}
+\end{figure}
+\end{center}
+
+C'est ce principe qui est retenu dans le cadre de cette thèse. Cependant, un
+certain nombre de propriétés tant de temps réel que de sécurité doit être
+considéré afin de valider les propriété de la solution de virtualisation
+considérée.
+
+\section{Objectifs}
+
+\paragraph{}
+L'objectif principal de ma thèse et de définir l'architecture logicielle d'une
+passerelle de communication réseau pour l'embarqué véhiculaire. Cette
+passerelle doit pouvoir répondre à plusieurs classes d'exigences:
+\begin{itemize}
+\item La sécurité des données transitant
+\item Le support d'une borne supérieure pour le traitement d'un flux réseau
+\item L'assurance de traitement de certain flux de manière prioritaire
+\end{itemize}
+
+\paragraph{}
+La capacité d'optimiser au mieux l'utilisation du matériel embarqué type MPSoC pour exécuter une
+application doit permettre de satisfaire des contraintes applicatives de qualité de
+service exprimées sous la forme  de contraintes de latence de traversée d'un
+flux, de contrainte de temps de réponse de bout en bout pour tout message d'un
+flux ou encore de contrainte de bande passante allouée à un flux. Le niveau de
+criticité de chaque flux lui étant propre, la passerelle doit permettre de
+prioriser au besoin les flux les plus critique dans le cadre de son
+ordonnancement.
+
+\paragraph{}
+Tout en assurant ces propriétés temps réel, il est nécessaire de considérer la
+capacité d'intégrer une politique de sécurité à chacun des flux traités afin
+d'en assurer la confidentialité. Les données associées doivent donc être
+compatible de cette politique de sécurité pour pouvoir être transférés.
+Il est donc nécessaire de permettre l'injection d'une politique de sécurité
+associée à chaque flux et d'assurer un bon cloisonnement entre chacun des
+côtés de la passerelle.
+
+\paragraph{}
+Cette thèse se construit dans un cadre industriel. Ainsi, l'aspect coût doit
+être considéré dans le cadre de la définition de l'architecture logicielle. La
+solution doit donc pouvoir être configurable et évolutive, ceci afin de
+pouvoir la considérer dans une problématique produit.
+
+\paragraph{}
+La validation de l'objectif doit pouvoir se faire dans le cadre d'un
+caquetage validant la solution en terme de sécurité et de temps réel.
+
+\section{présentation du document}
