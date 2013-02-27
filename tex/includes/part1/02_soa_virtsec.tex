@@ -15,15 +15,13 @@
 
 \subsection{Etude de la solution Xen}
 
-INTEGRER DES PAPIERS (QQU'UNS SUR XEN, S-EDF)
-
 \subsubsection{Principe}
 \paragraph{}
-Xen est un hyperviseur s'appuyant sur une architecture de type micro-noyau. Ce
+Xen\cite{barham2003xen} est un hyperviseur s'appuyant sur une architecture de type micro-noyau. Ce
 dernier fournit les élements de base pour la gestion et le déploiement des
 machines virtuelles, sous le contrôle d'une machine virtuelle particulière
 correspondant à un domaine d'administration, nommée dans le cas de Xen {\it
-  dom0}.
+  dom0}\cite{fraser2004safe}.
 
 \paragraph{}
 Ce domaine possède des droits élargis sur l'interface de communication entre
@@ -54,7 +52,8 @@ Xen est une solution de virtualisation proposant plusieurs éléments
 intéressants en terme de cloisonnement. Il peut assurer un cloisonnement
 strict de la mémoire entre les machines virtuelles. Il est également apte à
 assurer une charge minimum garantie à chaque machine virtuelle pour un laps de
-temps donné. C'est le mécanisme de type SEDF décrit dans l'hyperviseur.\\
+temps donné. C'est le mécanisme de type SEDF décrit dans
+l'hyperviseur\cite{cherkasova2007comparison}\cite{govindan2007xen}.\\
 Il ne permet cependant pas de définir des politiques d'ordonnancement strictes
 type Time Division Multiplexing.
 
@@ -81,7 +80,8 @@ fait via l'usage de bridges dans ce domaine, générant un overhead non nul dans
 le chemin de donnée réseau d'une machine virtuelle utilisateur.\\
 Ainsi, lorsque deux machines virtuelles communiquent, l'ordonnancement du
 domaine d'administration est nécessaire pour permettre au flux d'être reçu
-de l'émetteur puis renvoyé vers le destinataire.
+de l'émetteur puis renvoyé vers le
+destinataire\cite{apparao2006characterization}.
 
 \paragraph{}
 D'un point de vue sécurité, le domaine d'administration est d'ailleurs un
@@ -94,7 +94,7 @@ utilisateurs sont également chiffré afin de limiter la capacité du domaine
 d'administration de modifier son contenu.\\
 L'usage d'un tel domaine permet de pouvoir simplifier la gestion de la
 dynamicité des machines virtuelles, ainsi que l'interaction avec le matériel,
-mais au dépend de la sécurité générale du système. Il est donc d'usage de
+mais au dépend de la sécurité générale du système\cite{han2011verifying}. Il est donc d'usage de
 sortir le domaine d'administration de l'architecture logique, le rendant
 accessible exclusivement via une console locale d'administration.\\
 Enfin, cette solution n'est à ce jour pas certifiable du fait de la volumétrie
@@ -116,12 +116,12 @@ PowerPC est prédominante.
 \subsubsection{Principe}
 
 \paragraph{}
-QubesOS est une solution logicielle ciblant les postes de travail. Les
+QubesOS\cite{rutkowska2010qubes} est une solution logicielle ciblant les postes de travail. Les
 exigences initiales de la solution Qubes et de pouvoir assurer la
 confidentialité des données personnelles et professionnelles. Afin de pouvoir
 répondre à cette exigence, QubesOS s'appuie sur une architecture comparimentée
 exécutant de manière autonomes des environnements
-d'exécutions pour chaque type de donnée.\\
+d'exécutions pour chaque type de donnée\cite{gadaleta2012effectiveness}.\\
 Les accès aux périphériques sont déportés dans un domaine de confiance afin de
 limiter l'accès au matériel pour les environnements compartimentés.\\
 
@@ -143,7 +143,7 @@ intéressant pour le besoin de confidentialité des données.
 \subsubsection{Principe}
 
 \paragraph{}
-La solution LXC est une solution de virtualisation applicative. Elle s'appuie
+La solution LXC\cite{lxc_web} est une solution de virtualisation applicative. Elle s'appuie
 donc sur un noyau hôte pour ordonnancer les tâches des différents
 compartiments, avec une gestion de la politique d'ordonnancement
 potentiellement spécifique à chaque compartiment. 
@@ -195,7 +195,7 @@ exigences de réactivités sont faibles (supérieur à la milliseconde).
 
 \subsubsection{Principe}
 
-L'hyperviseur PikeOS est un micro-noyau avec des propriétés temps réel
+L'hyperviseur PikeOS\cite{pike_kaiser2007evolution} est un micro-noyau avec des propriétés temps réel
 (certifié DO-178B-DALB) dont l'architecture logicielle permet de gérer un
 système de type MLS.
 L'architecture de la solution PikeOS est séparable en trois couches
@@ -256,6 +256,6 @@ et en terme de sécurité.
 La capacité à ordonnancer à la fois des OS complexes et des tâches
 certifiables fait de cette solution logicielle un bon candidat à l'intégration
 des moniteurs de sécurité tels que nécessités par une architecture de type MLS
-ou MILS.
+ou MILS\cite{pike_baumann2009verifying}.
 
 

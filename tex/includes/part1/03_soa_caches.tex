@@ -99,3 +99,24 @@ familles:
     d'exécution des différentes tâches en exécution concurrente
 \end{itemize}
 
+\subsection{Etat de l'art des problématiques temps réel dans le support MMU}
+
+\paragraph{}
+Les contrôleurs de caches des CPU ont un impact reconnu sur le respect des
+contraintes temps réelles d'un système. Il en va de même pour la TLB
+(Translation Lookaside Buffer).\\
+Le TLB est le mécanisme de cache permettant d'optimiser la translation
+d'adresse que la MMU effectue entre l'adressage logique (tel que vu par le
+c{\oe}ur processeur) et l'adressage physique (tel que vu au niveau du bus
+d'interconnexion). La présence du TLB découle du fait que les données de
+translation sont géré en mémoire centrale, induisant des accès mémoires
+fréquents par le contrôleur MMU afin de faire l'association mémoire
+logique/mémoire physique. La TLB est donc un cache local permettant de garder
+une mémoire des dernières translation d'adresse afin d'éviter une
+surconsommation des accès mémoire centrale par le contrôleur MMU.\\
+Le contenu du TLB est impacté par l'ordonnancement de tâches, et doit donc
+être considéré dans le cadre de la gestion de tâches temps réel dûr.
+Dans \cite{groesbrink2008modular} les auteurs décrivent un mécanisme apparenté
+aux cache-locking afin de limiter l'impact du TLB sur le coût d'exécution des
+tâches temps réelles.
+
