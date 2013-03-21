@@ -34,20 +34,8 @@ des exigences permettant de répondre à ce besoin \FIXME{ref}.
 Afin d'être compatible de ces exigences, je m'appuie sur le principe de
 micro-noyau de sécurité, permettant de garantir des propriétés d'isolation. A
 cela, il est nécessaire de définir une architecture logicielle complète pour
-répondre à la problématique. On a pu constater dans l'état de l'art
-\FIXME{ref} que les éléments logiciels permettant de faire du traitement
-télécom avec valeur ajoutée ne permettent pas de certification. De manière
-générale, seul l'usage d'élément logicielle à faible volumétrie de code permet
-de supporter une certification. C'est pourquoi, dans la solution que je
-propose, je m'appuie sur une telle architecture, à laquelle j'associe des
-éléments logiciels pour le traitement de flux réseau dont j'assure le
-cloisonnement de manière certifiable. Ce mécanisme permet de répondre à
-l'exigence \FIXME{MILS: verif des I/O} des architecture MILS. Pour assurer le
-cloisonnement de ces environnements logiciels complexes, je définis des
-moniteurs de sécurité, certifiable et en coupure, afin de valider les entrées
-et les sorties de ces éléments logiciels, en toute circonstance.
+répondre à la problématique. Cette architecture est décrite dans ce chapitre.
 
-\FIXME{schema}
 
 \section{Définition des hypothèses générales}
 
@@ -87,7 +75,10 @@ matériel comme base pour des cannaux cachés ou auxiliaires est considéré dans
 le cadre de ma thèse et des solutions sont proposées pour répondre à cette
 problématique.
 
-\subsection{Du cloisonnement des éléments non certifiables}
+\section{Problématiques d'architectures et choix structuraux}
+
+\subsection{De la raison de la présence d'éléments non certifiables}
+\label{sec:noncert}
 
 \paragraph{}
 La présente passerelle interconnecte des domaines de sécurité disjoints. Elle
@@ -96,9 +87,13 @@ doit donc être compatible des propriétés \ref{pro:noncontournable},
 des architectures MLS.
 
 \paragraph{}
-L'implémentation d'un passerelle de type télécom ne peut être certifiée en
-terme de sécurité du simple fait de la volumétrie du code associée à la pile
-logicielle gérant le réseau IP. Les éléments d'implémentation de cette pile
+On a pu constater dans l'état de l'art \FIXME{ref} que les éléments logiciels
+permettant de faire du traitement télécom avec valeur ajoutée ne permettent pas
+de certification. De manière générale, seul l'usage d'éléments logiciels à
+faible volumétrie de code permet de supporter une certification.\\
+
+Parce que l'implémentation d'un passerelle de type télécom ne peut être certifiée en
+terme de sécurité, les éléments d'implémentation de cette pile
 sont donc considérés comme ne pouvant pas être de confiance. Il devient alors
 nécessaire de définir dans l'architecture de sécurité deux famille logicielles
 $Sec$ et $Unsec$. Ces deux familles doivent respecter les propriétés
@@ -113,15 +108,47 @@ puisse être audité pas un élément tiers.
 \begin{property}
 $Unsec$ définit l'ensemble des éléments logiciels non-certifiables. Ces derniers
 ne peuvent accéder directement à tout élément de configuration du matériel.
-L'ensemble de leurs interfaces d'interconnexions sont également vérifiées,
-comme décrit dans propriété \ref{pro:validation} des architectures MILS.
-Ils sont ainsi cloisonnés en cas de corruption.
 \end{property}
 
 \begin{property}
 Aucun élément logiciel ne peut être à la fois sûr et non sûr:
 $$Sec \cap Unsec = \emptyset$$
 \end{property}
+
+
+\begin{figure}
+  \label{fig:iofilter}
+  \input{figures/io_filtering.tex}
+  \caption{filtrage par un montieur de confiance des entrées sorties}
+\end{figure}
+
+
+\paragraph{}
+Les éléments logiciels non certifiables doivent donc être entourés d'éléments
+logiciels de confiance (appartenant au groupe $Sec$) afin de valider
+l'ensemble de leurs entrées/sorties. Ainsi, la propriété \ref{pro:validation}
+des architectures MILS est respectée, comme le montre la Figure
+\ref{fig:iofilter}.
+
+\subsection{A propos des moniteurs de sécurité}
+
+\paragraph{}
+Il est montré dans le chapire précédant que la présence d'élément logiciels
+non certifiable est un mal nécessaire pour permettre un certain nombre de
+traitements à valeur ajoutés sur des flux télécoms. L'implémentation d'une pile
+réseau certifiable étant trop couteuse, j'ai fait le choix d'intégrer de tels
+logiciels, en considérant le problème de non-certification associée dans
+l'architecture.
+
+\paragraph{}
+Comme vu dans le Chapitre \ref{sec:noncert}, l'usage de tels logiciels peut
+être considérés si des éléments certifiables extérieurs sont présents afin de
+rester compatible des quatres exigences initiales des architecture MILS. Dans
+la litérature (\FIXME{ref}, des éléments logiciels certifiable portant une
+fonction de sécurité sont appellés moniteurs de sécurité. On appellera donc
+l'ensemble de ces éléments des moniteurs de sécurité.\\
+Dans le cadre de cette architecture, un grand nombre de moniteurs de sécurité
+est présent. L'ensemble de ses moniteurs définit l'ensemble $Sec$.
 
 
 \subsection{A propos de la certification par composition}
