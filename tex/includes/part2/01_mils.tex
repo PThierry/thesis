@@ -11,6 +11,136 @@
 \chapter{De la définition d'une architecture logicielle pour le MLS orientée traitement de flux}
 \doMinitoc
 
+\section{A propos du principe de passerelle de traitement de flux MultiLevel Security}
+
+\paragraph{}
+Afin de répondre à la problématique décrite en \ref{sec:problematique}, il est
+nécessaire de définir une solution répondant au besoin de sécurité
+multi-niveaux (MLS), impliquant un mécanisme assurant une étanchéité des
+données à différents niveaux:
+\begin{itemize}
+  \item Les données transitant du niveau le plus élevé au niveau le plus
+    faible doivent être complètement contrôlées, afin de valider que ces
+    dernières peuvent être désensibilisées
+  \item Le flux transitant du niveau le plus faible au niveau le plus élevé ne
+    nécessite pas de filtrage en terme de contenu. Cependant, son comportement
+    ne doit pas fournir d'information aux éléments émetteurs ou tout autre
+    élément du niveau de sécurité le plus faible
+\end{itemize}
+
+\paragraph{}
+Les mécanismes définis pour répondre au besoin de type MLS ou MILS définissent
+des exigences permettant de répondre à ce besoin \FIXME{ref}.
+Afin d'être compatible de ces exigences, je m'appuie sur le principe de
+micro-noyau de sécurité, permettant de garantir des propriétés d'isolation. A
+cela, il est nécessaire de définir une architecture logicielle complète pour
+répondre à la problématique. On a pu constater dans l'état de l'art
+\FIXME{ref} que les éléments logiciels permettant de faire du traitement
+télécom avec valeur ajoutée ne permettent pas de certification. De manière
+générale, seul l'usage d'élément logicielle à faible volumétrie de code permet
+de supporter une certification. C'est pourquoi, dans la solution que je
+propose, je m'appuie sur une telle architecture, à laquelle j'associe des
+éléments logiciels pour le traitement de flux réseau dont j'assure le
+cloisonnement de manière certifiable. Ce mécanisme permet de répondre à
+l'exigence \FIXME{MILS: verif des I/O} des architecture MILS. Pour assurer le
+cloisonnement de ces environnements logiciels complexes, je définis des
+moniteurs de sécurité, certifiable et en coupure, afin de valider les entrées
+et les sorties de ces éléments logiciels, en toute circonstance.
+
+\FIXME{schema}
+
+\section{Définition des hypothèses générales}
+
+\subsection{A propos des propriétés du matériel}
+
+\paragraph{}
+La définition d'un système sécurisé implique de prendre en compte l'impact
+sécuritaire du matériel. Dans le cadre de ma thèse, j'ai ciblé principalement
+les propriétés que doit apporter le logiciel, et considère en conséquence des
+hypothèses strictes sur le matériel.\\
+Bien que ces hypothèses sont peu réalistes sur du matériel généraliste (i.e.
+du marché civil), elles doivent être supportées pour assurer les propriétés de
+sécurité, à défaut d'avoir intégrer un design matériel spécifique.
+
+\begin{hypothesis}
+  {\bf conformité}: l'ensemble des contrôleurs matériels sont conforme de leur
+  documentation. Ils assurent le respect des exigences documentaires et ne
+  fourissent aucune propriété non documentée
+\end{hypothesis}
+
+\begin{hypothesis}
+  {\bf compatibilité au temps réel}: les éléments d'interconnexion (bus,
+  interconnect, etc) sont compatibles de la gestion de tâches temps réel. Ces
+  derniers ne sont pas considérés dans le cadre de ma thèse.
+\end{hypothesis}
+
+\begin{hypothesis}
+  {\bf sûreté de fonctionnement}: les éléments matériels sont réputés sûrs.
+  Ils ne génèrent pas de faille de sécurité de par une erreur d'architecture ou de comportement.
+\end{hypothesis}
+
+\paragraph{}
+Bien que ces hypothèses soient considérés valide dans le cadre du matériel
+considéré dans la solution, l'usage invalide volontaire de ce matériel par
+le logiciel reste considéré pour les problématiques de sécurité. L'usage du
+matériel comme base pour des cannaux cachés ou auxiliaires est considéré dans
+le cadre de ma thèse et des solutions sont proposées pour répondre à cette
+problématique.
+
+\subsection{Du cloisonnement des éléments non certifiables}
+
+\paragraph{}
+La présente passerelle interconnecte des domaines de sécurité disjoints. Elle
+doit donc être compatible des propriétés \ref{pro:noncontournable},
+\ref{pro:evaluable}, \ref{pro:validation} et \ref{pro:inviolable}
+des architectures MLS.
+
+\paragraph{}
+L'implémentation d'un passerelle de type télécom ne peut être certifiée en
+terme de sécurité du simple fait de la volumétrie du code associée à la pile
+logicielle gérant le réseau IP. Les éléments d'implémentation de cette pile
+sont donc considérés comme ne pouvant pas être de confiance. Il devient alors
+nécessaire de définir dans l'architecture de sécurité deux famille logicielles
+$Sec$ et $Unsec$. Ces deux familles doivent respecter les propriétés
+suivantes:
+
+\begin{property}
+$Sec$ définit l'ensemble des éléments logiciels certifiables. Ces derniers
+sont aptes à contrôler des éléments matériels, bien que leur comportement
+puisse être audité pas un élément tiers.
+\end{property}
+
+\begin{property}
+$Unsec$ définit l'ensemble des éléments logiciels non-certifiables. Ces derniers
+ne peuvent accéder directement à tout élément de configuration du matériel.
+L'ensemble de leurs interfaces d'interconnexions sont également vérifiées,
+comme décrit dans propriété \ref{pro:validation} des architectures MILS.
+Ils sont ainsi cloisonnés en cas de corruption.
+\end{property}
+
+\begin{property}
+Aucun élément logiciel ne peut être à la fois sûr et non sûr:
+$$Sec \cap Unsec = \emptyset$$
+\end{property}
+
+
+\subsection{A propos de la certification par composition}
+
+\paragraph{}
+\FIXME{trouver une doc à ce propos}
+
+\section{De la définition de la réponse technique au besoin}
+
+\subsection{Définition des données à protéger}
+
+\subsection{Définition des exigences sécuritaires associées}
+
+\paragraph{}
+Confidentialité exigée\\
+Intégrité exigée\\
+Dispo non exigée (en cas de corruption des conténaires non-sûrs), mais
+éléments proactifs à intégrer
+
 \section{Définition des moniteurs de sécurité}
 
 \subsection{Moniteurs de sécurité pour les accès matériel à risque sécuritaire}

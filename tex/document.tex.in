@@ -175,6 +175,12 @@
 \theoremheaderfont{\scshape}
 \newtheorem{property}{Propriété}}
 
+{\theoremstyle{marginbreak}
+\theoremstyle{break}
+\theorembodyfont{\itshape}
+\theoremheaderfont{\scshape}
+\newtheorem{hypothesis}{Hypothèse}}
+
 \newtheorem{assertion}{Assertion}
 
 \input{includes/titlepage.tex}
