@@ -46,12 +46,13 @@ La définition d'un système sécurisé implique de prendre en compte l'impact
 sécuritaire du matériel. Dans le cadre de ma thèse, j'ai ciblé principalement
 les propriétés que doit apporter le logiciel, et considère en conséquence des
 hypothèses strictes sur le matériel.\\
-Bien que ces hypothèses sont peu réalistes sur du matériel généraliste (i.e.
+Bien que ces hypothèses soient peu réalistes sur du matériel généraliste (i.e.
 du marché civil), elles doivent être supportées pour assurer les propriétés de
-sécurité, à défaut d'avoir intégrer un design matériel spécifique.
+sécurité, à défaut d'avoir intégrer un design matériel spécifique. Ces
+hypothèses sont les suivantes:
 
 \begin{hypothesis}
-  {\bf conformité}: l'ensemble des contrôleurs matériels sont conforme de leur
+  {\bf conformité}: l'ensemble des contrôleurs matériels sont conformes de leur
   documentation. Ils assurent le respect des exigences documentaires et ne
   fourissent aucune propriété non documentée
 \end{hypothesis}
@@ -59,12 +60,13 @@ sécurité, à défaut d'avoir intégrer un design matériel spécifique.
 \begin{hypothesis}
   {\bf compatibilité au temps réel}: les éléments d'interconnexion (bus,
   interconnect, etc) sont compatibles de la gestion de tâches temps réel. Ces
-  derniers ne sont pas considérés dans le cadre de ma thèse.
+  derniers ne sont pas considérés dans le cadre de ma thèse comme impactant.
 \end{hypothesis}
 
 \begin{hypothesis}
   {\bf sûreté de fonctionnement}: les éléments matériels sont réputés sûrs.
-  Ils ne génèrent pas de faille de sécurité de par une erreur d'architecture ou de comportement.
+  Ils ne génèrent pas de faille de sécurité de par une erreur d'architecture
+  ou de comportement.
 \end{hypothesis}
 
 \paragraph{}
@@ -88,16 +90,25 @@ des architectures MLS.
 
 \paragraph{}
 On a pu constater dans l'état de l'art \FIXME{ref} que les éléments logiciels
-permettant de faire du traitement télécom avec valeur ajoutée ne permettent pas
-de certification. De manière générale, seul l'usage d'éléments logiciels à
+permettant de faire du traitement télécom avec valeur ajoutée ne sont pas
+compatible d'une certification. De manière générale, seul l'usage d'éléments logiciels à
 faible volumétrie de code permet de supporter une certification.\\
 
-Parce que l'implémentation d'un passerelle de type télécom ne peut être certifiée en
-terme de sécurité, les éléments d'implémentation de cette pile
+Parce que l'implémentation logicielle d'un passerelle de type télécom ne peut être certifiée en
+terme de sécurité, les éléments d'implémentation de celle-ci
 sont donc considérés comme ne pouvant pas être de confiance. Il devient alors
-nécessaire de définir dans l'architecture de sécurité deux famille logicielles
-$Sec$ et $Unsec$. Ces deux familles doivent respecter les propriétés
-suivantes:
+nécessaire:
+\begin{itemize}
+  \item de définir dans l'architecture de sécurité deux famille logicielles
+$Sec$ et $Unsec$, l'une étant de confiance, l'autre non
+  \item de définir des mécanismes permettant de pouvoir intégrer des éléments
+    non certifiables tout en maintenant la sécurité du système
+\end{itemize}
+
+\paragraph{}
+Dans un premier temps, je définit pour les familles $Sec$ et $Unsec$ les
+propriétés suivantes afin d'assurer un cloisonnement strict entre ce qui est
+certifiable et ce qui ne l'est pas:
 
 \begin{property}
 $Sec$ définit l'ensemble des éléments logiciels certifiables. Ces derniers
@@ -127,7 +138,7 @@ $$Sec \cap Unsec = \emptyset$$
 Les éléments logiciels non certifiables doivent donc être entourés d'éléments
 logiciels de confiance (appartenant au groupe $Sec$) afin de valider
 l'ensemble de leurs entrées/sorties. Ainsi, la propriété \ref{pro:validation}
-des architectures MILS est respectée, comme le montre la Figure
+des architectures MLS est respectée, comme le montre la Figure
 \ref{fig:iofilter}.
 
 \subsection{A propos des moniteurs de sécurité}
@@ -143,22 +154,63 @@ l'architecture.
 \paragraph{}
 Comme vu dans le Chapitre \ref{sec:noncert}, l'usage de tels logiciels peut
 être considérés si des éléments certifiables extérieurs sont présents afin de
-rester compatible des quatres exigences initiales des architecture MILS. Dans
+rester compatible des quatres exigences initiales des architecture MLS. Dans
 la litérature (\FIXME{ref}, des éléments logiciels certifiable portant une
 fonction de sécurité sont appellés moniteurs de sécurité. On appellera donc
 l'ensemble de ces éléments des moniteurs de sécurité.\\
 Dans le cadre de cette architecture, un grand nombre de moniteurs de sécurité
-est présent. L'ensemble de ses moniteurs définit l'ensemble $Sec$.
+est présent. L'ensemble de ses moniteurs définit l'ensemble $Sec$. Ces
+derniers permettent de répondre aux différentes exigences du MLS:
+\begin{itemize}
+  \item Ils valident les entrées/sorties des éléments non certifiables
+  \item Ils détectent et remontent les évènements invalident auprès d'un tiers
+    de confiance
+  \item Ils assurent le cloisonnement entre les différents éléments logiciels
+    pour assurer l'inviolabilité de l'ensemble des moniteurs de sécurité (dont
+    eux-même)
+\end{itemize}
 
-
-\subsection{A propos de la certification par composition}
+\subsection{Synthèse des choix structuraux}
 
 \paragraph{}
-\FIXME{trouver une doc à ce propos}
+Dans ce chapitre, j'ai décrit les choix structuraux que j'ai fait en terme
+d'architecture générale du système. J'ai définit deux familles d'entités
+logicielles répondant à des exigences disjointes, et définissant les fonctions
+de sécurité de base permettant de respecter les architectures MLS.\\
+A partir de ces éléments, je vais définir l'architecture logicielle complète
+permettant de répondre au besoin d'une passerelle multi-domaines de sécurité,
+en définissant les besoins sécuritaires associés à la fonction passerelles, et
+en définissant l'architecture logicielle complète permettant de répondre à ce
+besoin.
+
+%\subsection{A propos de la certification par composition}
+
+%\paragraph{}
+%\FIXME{trouver une doc à ce propos}
 
 \section{De la définition de la réponse technique au besoin}
 
 \subsection{Définition des données à protéger}
+
+\paragraph{}
+La définition de l'architecture logicielle pour le besoin d'une passerelle
+multi-domaines de sécurité nécessite de répondre aux intérogations suivantes:
+\begin{itemize}
+  \item Quels sont les données à protéger ?
+  \item Quel(s) type(s) de protection la passerelle doit fournir sur ces
+    données (confidentialité, intégrité, disponibilité) ?
+  \item Quels sont les fonctions de sécurité nécessaires pour répondre à ces
+    besoin ?
+\end{itemize}
+
+\subsubsection{De la définition des données à protéger}
+\paragraph{}
+
+\subsubsection{Du choix des propriétés de sécurité qui doivent être apportés à ces données}
+\paragraph{}
+
+\subsubsection{De la définition des fonctions de sécurité qui assurent les propriétés de sécurité}
+\paragraph{}
 
 \subsection{Définition des exigences sécuritaires associées}
 
