@@ -12,6 +12,7 @@
 \doMinitoc
 
 \section{A propos du principe de passerelle de traitement de flux MultiLevel Security}
+\label{sec:mls_gw_principle}
 
 \paragraph{}
 Afin de répondre à la problématique décrite en \ref{sec:problematique}, il est
@@ -38,6 +39,7 @@ répondre à la problématique. Cette architecture est décrite dans ce chapitre.
 
 
 \section{Définition des hypothèses générales}
+\label{sec:mls_gw_hypothesis}
 
 \subsection{A propos des propriétés du matériel}
 
@@ -193,18 +195,97 @@ besoin.
 \subsection{Définition des données à protéger}
 
 \paragraph{}
+J'ai définit dans les Chapitres \ref{sec:mls_gw_principles} et
+\ref{sec:mls_gw_hypothesis} les principes généraux qui doivent être considérés
+dans le cadre de la définition d'une architecture logicielle pour le
+traitement de données entre domaines de sécurité disjoints (i.e. MultiLevel
+Security). À la définition de ces principes généraux, il faut maintenant
+décrire plus en détail les principes structuraux nécessaires pour répondre au
+besoin tel que définit dans la problématique générale. Pour cela, je m'appuie
+sur les principes qui ont été définit initialement par
+l'ANSSI\footnote{Agence Nationale pour la Securité des Systèmes d'Information} dans le cadre
+de la méthode EBIOS\cite{hemery2007utilisation}. Cette dernière implique de définir:
+\begin{itemize}
+  \item Quelles sont les données à protéger
+  \item Quels sont les attaques dont il faut se prémunir dans le cadre de
+    cette protection
+\end{itemize}
+La méthode EBIOS permet ensuite de pouvoir définir un niveau de sécurisation
+nécessaire et suffisant pour répondre à ce besoin.
+
+\paragraph{}
 La définition de l'architecture logicielle pour le besoin d'une passerelle
-multi-domaines de sécurité nécessite de répondre aux intérogations suivantes:
+multi-domaines de sécurité nécessite donc de répondre aux interrogations suivantes:
 \begin{itemize}
   \item Quels sont les données à protéger ?
-  \item Quel(s) type(s) de protection la passerelle doit fournir sur ces
+  \item Quel(s) type(s) de protection la passerelle souhaite fournir sur ces
     données (confidentialité, intégrité, disponibilité) ?
-  \item Quels sont les fonctions de sécurité nécessaires pour répondre à ces
-    besoin ?
+  \item Quels sont les attaques impactant ses protection dans le cadre de
+    cette solution ?
+  \item Quels sont les fonctions de sécurité nécessaires pour se prémunir
+    contre ces attaques ?
 \end{itemize}
 
 \subsubsection{De la définition des données à protéger}
 \paragraph{}
+Dans le cadre de ma thèse, je cherche à répondre au besoin d'une passerelle
+multi-domaines de sécurité et de criticité. Ainsi, le but est de permettre de
+transférer du flux de type réseau IP entre deux domaines de sécurité et de
+criticité. Il en découle plusieurs exigences générale de sécurité, afin
+d'assurer le maintient du cloisonnement entre les deux domaines de sécurité, à
+l'exception des données volontairement transmises:
+
+\begin{requirement}
+\label{req:integrity}
+Les flux transmis doivent être garantis en terme d'intégrité
+\end{requirement}
+
+\begin{requirement}
+\label{req:transit}
+L'action de transmission des flux ne doit pas révéler d'informations sur le domaine de
+sécurité le plus haut
+\end{requirement}
+
+\begin{requirement}
+\label{req:desensibilisation}
+Si les flux sont transmis du domaine de sécurité le plus haut au domaine le
+plus bas, ces derniers doivent contenir exclusivement des données autorisées à
+être désensibilisées
+\end{requirement}
+
+\paragraph{}
+De la définition des Exigences \ref{req:integrity}, \ref{req:transit} et
+\ref{req:desensibilisation}, il faut dériver des exigences techniques. Pour
+cela, je détermine d'abord la surface d'attaque. On appelle surface d'attaque
+les éléments d'interface à partir desquels on considère une attaque possible.
+La surface d'attaque est décomposée en trois environnements disjoints:
+\begin{enumerate}
+  \item Les attaques externes initiées du coté du domaine de plus haute
+    sécurité. Je considère alors qu'un éléments de ce domaine cherche à faire
+    sortie de l'information non autorisée vers le domaine de plus faible
+    sécurité, avec ou sans l'aide d'un élément de ce dernier
+  \item Les attaques externes initiées du coté du domaine de plus faible
+    criticité. Je considère qu'un élément du domaine de plus faible sécurité
+    cherche à récupérer de l'information sur le domaine de plus haute
+    sécurité, sans l'aide d'un élément de ce dernier
+  \item Les attaques internes, venant des éléments de la passerelle
+    appartenant à la famille $Unsec$, telle que décrite dans la Section \ref{sec:noncert}
+\end{enumerate}
+La Figure \ref{fig:threats_surface} schématise la répartition de la surface
+d'attaque sur le système englobant la passerelle multi-domaines de sécurité.
+
+\begin{figure}
+  \label{fig:threats_surface}
+  \input{figures/threats_surces.tex}
+  \caption{Répartition des surfaces d'attaque sur la passerelle de sécurité}
+\end{figure}
+
+\paragraph{}
+À ces trois surfaces d'attaque, on associe un niveau de faisabilité de
+l'attaque, qui permet de déterminer le niveau de risque, et donc l'exigence de
+protection associée. Dans le cadre de ma thèse, je considère cependant le
+risque élevé sur ces trois surfaces, et je répond donc en terme de
+contre-mesures de sécurité à l'ensemble de ses environnements.
 
 \subsubsection{Du choix des propriétés de sécurité qui doivent être apportés à ces données}
 \paragraph{}
@@ -215,8 +296,8 @@ multi-domaines de sécurité nécessite de répondre aux intérogations suivantes:
 \subsection{Définition des exigences sécuritaires associées}
 
 \paragraph{}
-Confidentialité exigée\\
-Intégrité exigée\\
+\index{Confidentialité}Confidentialité exigée\\
+\index{Intégrité}Intégrité exigée\\
 Dispo non exigée (en cas de corruption des conténaires non-sûrs), mais
 éléments proactifs à intégrer
 
@@ -269,3 +350,7 @@ Définition du problème, besoin de sécurité
 Changement de criticité: priorisation aux flux dont la QoS IP n'est pas la
 plus élevée
 
+
+\FIXME{exigences de criticité}:\\
+La transmission des flux doit respecter les exigences temporelles du domaine
+de criticité le plus haut
