@@ -90,7 +90,7 @@ comme par exemple les systèmes DAC (Discretionary Access Control), MAC
 
 \paragraph{}
 La complexité du système dépend du besoin de certifiabilité. On définit
-initialement un {\it TOE} (Target Of Evaluation), définissant ce qui, dans le
+initialement une {\it TOE} (Target Of Evaluation), définissant ce qui, dans le
 système cible, doit être évalué, ainsi que le niveau de l'évaluation. Les
 Critères Communs définissent une échelle dans l'évaluation sécuritaire
 dénotée EAL (Evaluation Assurance Level) allant de 1 (la plus basse) à 7 (la
@@ -101,6 +101,19 @@ prendre soin d'étudier précisément quel est le TOE. En effet, le niveau de
 sécurité d'un système certifié en étant totalement autonome n'est plus assuré
 si ce dernier est connecté à un réseau. Il en va de même en cas de
 modification même légère du TOE.
+
+\paragraph{}
+Associé à la TOE, on définit la {\it Trusted Computing Base} (TCB). Cette
+notion définit l'ensemble des éléments logiciels et matériels de
+la solution cible qui sont considérés comme de confiance. La corruption de
+tout élément de cet ensemble génère en conséquence une faille dans les
+propriétés de sécurité de la solution. Ainsi les éléments de la TCB doivent
+non seulement être certifiables au plus haut niveau souhaité dans le cadre de
+l'évaluation du système, mais doivent être également protégés contre toute
+corruption extérieure (comme par exemple à partir d'un élément
+non-certifiable). On leur impose alors une exigence d'{\it inviolabilité},
+comme décrit dans les exigences générales des systèmes MILS, décrit dans le
+Chapitre \ref{sec:mils} 
 
 \section{Principes généraux des systèmes temps réel}
 

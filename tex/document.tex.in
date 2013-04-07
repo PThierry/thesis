@@ -24,6 +24,7 @@
 \usepackage[latin1]{inputenc}				% char format
 \usepackage{listings}					% lists support. Used for code
 \usepackage[usenames,dvipsnames]{color}					% basic color support
+\usepackage[table]{xcolor}
 \usepackage[T1]{fontenc} 				% caracteres norme iso-8859.
 		 					% risque de ne pas marcher avec les fichiers crees
                          				% sous windows.

@@ -115,7 +115,9 @@ certifiable et ce qui ne l'est pas:
 \begin{property}
 $Sec$ définit l'ensemble des éléments logiciels certifiables. Ces derniers
 sont aptes à contrôler des éléments matériels, bien que leur comportement
-puisse être audité pas un élément tiers.
+puisse être audité pas un élément tiers. Ces éléments font partie de la TCB
+(Trusted Computing Base), qui définit l'ensemble des éléments certifiables et
+inviolables du système.
 \end{property}
 
 \begin{property}
@@ -146,11 +148,11 @@ des architectures MLS est respectée, comme le montre la Figure
 \subsection{A propos des moniteurs de sécurité}
 
 \paragraph{}
-Il est montré dans le chapire précédant que la présence d'élément logiciels
-non certifiable est un mal nécessaire pour permettre un certain nombre de
-traitements à valeur ajoutés sur des flux télécoms. L'implémentation d'une pile
+Il est montré dans le chapire précédant que la présence d'éléments logiciels
+non certifiables est un mal nécessaire pour permettre un certain nombre de
+traitements à valeur ajoutés sur des flux télécoms. En effet, l'implémentation d'une pile
 réseau certifiable étant trop couteuse, j'ai fait le choix d'intégrer de tels
-logiciels, en considérant le problème de non-certification associée dans
+logiciels, en prenant en compte le problème de non-certification associée dans
 l'architecture.
 
 \paragraph{}
@@ -226,7 +228,13 @@ multi-domaines de sécurité nécessite donc de répondre aux interrogations suivant
     contre ces attaques ?
 \end{itemize}
 
+\paragraph{}
+Les sections suivantes mettent en pratique les principes de la méthode EBIOS
+pour mettre en adéquation une solution technique avec les besoins sécuritaires
+liés à la fonction passerelle multi-domaines.
+
 \subsubsection{De la définition des données à protéger}
+
 \paragraph{}
 Dans le cadre de ma thèse, je cherche à répondre au besoin d'une passerelle
 multi-domaines de sécurité et de criticité. Ainsi, le but est de permettre de
@@ -253,11 +261,39 @@ plus bas, ces derniers doivent contenir exclusivement des données autorisées à
 être désensibilisées
 \end{requirement}
 
+\begin{requirement}
+  \label{req:escape}
+  Les flux doivent transiter exclusivement dans la direction initialement choisie, au
+  travers des canaux logiques et physiques initialement choisis
+\end{requirement}
+
 \paragraph{}
-De la définition des Exigences \ref{req:integrity}, \ref{req:transit} et
-\ref{req:desensibilisation}, il faut dériver des exigences techniques. Pour
+Au travers de ces exigences, je détermine la répartition des responsabilités
+sécuritaires en terme de confidentialité, intégrité et disponibilité.
+\begin{itemize}
+  \item La confidentialité des données est partagée entre:
+    \begin{itemize}
+      \item La configuration de la passerelle, qui est une donnée d'entrée de
+        celle-ci donc en dehors du cadre de ma thèse. C'est cette
+        configuration qui détermine quel type de flux est autorisé à transité,
+        et vers quelle destination
+      \item Les propriétés de cloisonnement de la passerelle, qui répondent à
+        l'exigence \ref{req:escape}
+    \end{itemize}
+  \item L'intégrité des données est assurée par la passerelle durant le temps
+    de leur transit
+  \item La disponibilité n'est pas considéré dans le cadre de ma thèse
+\end{itemize}
+
+\subsection{De la définition des profils d'attaques}
+
+\subsubsection{Généralités sur les profils d'attaques}
+
+\paragraph{}
+De la définition des Exigences \ref{req:integrity}, \ref{req:transit},
+\ref{req:desensibilisation} et \ref{req:escape}, il faut dériver des exigences techniques. Pour
 cela, je détermine d'abord la surface d'attaque. On appelle surface d'attaque
-les éléments d'interface à partir desquels on considère une attaque possible.
+les éléments d'interfaces à partir desquels on considère une attaque possible.
 La surface d'attaque est décomposée en trois environnements disjoints:
 \begin{enumerate}
   \item Les attaques externes initiées du coté du domaine de plus haute
@@ -269,8 +305,12 @@ La surface d'attaque est décomposée en trois environnements disjoints:
     cherche à récupérer de l'information sur le domaine de plus haute
     sécurité, sans l'aide d'un élément de ce dernier
   \item Les attaques internes, venant des éléments de la passerelle
-    appartenant à la famille $Unsec$, telle que décrite dans la Section \ref{sec:noncert}
+    appartenant à la famille $Unsec$, telle que décrite dans la Section
+    \ref{sec:noncert}, impactantes pour l'exigence \ref{req:escape}
 \end{enumerate}
+Les éléments de la TCB (appartement à la famille $Sec$) sont considérés comme
+de confiance. En conséquence, ils ne sont pas considérés comme source
+d'attaque potentielle.\\
 La Figure \ref{fig:threats_surface} schématise la répartition de la surface
 d'attaque sur le système englobant la passerelle multi-domaines de sécurité.
 
@@ -283,12 +323,49 @@ d'attaque sur le système englobant la passerelle multi-domaines de sécurité.
 \paragraph{}
 À ces trois surfaces d'attaque, on associe un niveau de faisabilité de
 l'attaque, qui permet de déterminer le niveau de risque, et donc l'exigence de
-protection associée. Dans le cadre de ma thèse, je considère cependant le
-risque élevé sur ces trois surfaces, et je répond donc en terme de
+protection associée. Dans le cadre de ma thèse, je cherche à définir une
+solution modulaire associant des éléments non certifiables à des éléments
+certifiables. Les domaines extérieurs à la solution ne sont de plus
+par connus initialement. Il n'est alors pas possible d'en déterminer le risque
+sécuritaire associer. Pour répondre à un maximum de besoin, je considère alors le
+risque élevé sur ces trois surfaces et je répond donc en terme de
 contre-mesures de sécurité à l'ensemble de ses environnements.
 
-\subsubsection{Du choix des propriétés de sécurité qui doivent être apportés à ces données}
+\subsubsection{Définition des attaques et impact sur les exigences
+  sécuritaires de la solution}
+
 \paragraph{}
+Cette Section décrit un certain nombre d'attaques connues impactant les
+exigences de sécurité de la passerelle.\\
+Le Tableau \ref{tab:threats} liste les différents types d'attaques et leur
+impact sur les exigences de sécurité.
+
+\begin{table}[h!]
+\label{tab:threats}
+\begin{tabular}{|l|p{10cm}|c|c|c|c|}
+  \hline
+\cellcolor{blue!25}Source & \cellcolor{blue!25}Attaque & \multicolumn{4}{|c|}{\cellcolor{blue!25}Exigence} \\
+  \hline
+  \multicolumn{2}{|c|}{ } & \ref{req:integrity} & \ref{req:transit} & \ref{req:desensibilisation} & \ref{req:escape} \\ 
+  \hline
+  {\it Domaine inférieur} & Étude temporelle de la vitesse de transit du flux vers le domaine supérieur & & X & & \\
+  \hline
+  {\it Domaine supérieur} & Émission de flux non conforme de la configuration de sécurité & & & X & \\
+  \hline
+  {\it Interne} & Retransmission du flux au travers d'un canal non autorisé & & & & X \\
+  \hline
+  {\it Interne} & Modification du contenu du flux avant retransmission & X & & & \\
+  \hline
+  {\it Interne} & Écoute par canal auxiliaire d'un flux transitant par un autre compartiment pour retransmission & & & & X \\
+  \hline
+  {\it Interne} & Communication entre deux compartiments au travers d'un canal caché & & & & X \\
+  \hline
+\end{tabular}
+\caption{Profils d'attaques et impact sur les exigences sécuritaires}
+\end{table}
+
+\subsection{De la définition des réponses }
+
 
 \subsubsection{De la définition des fonctions de sécurité qui assurent les propriétés de sécurité}
 \paragraph{}
