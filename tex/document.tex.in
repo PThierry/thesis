@@ -168,21 +168,21 @@
 \theoremstyle{break}
 \theorembodyfont{\itshape}
 \theoremheaderfont{\scshape}
-\newtheorem{requirement}{Exigence}}
+\newtheorem{requirement}{Exigence}[section]}
 
 {\theoremstyle{marginbreak}
 \theoremstyle{break}
 \theorembodyfont{\itshape}
 \theoremheaderfont{\scshape}
-\newtheorem{property}{Propriété}}
+\newtheorem{property}{Propriété}[section]}
 
 {\theoremstyle{marginbreak}
 \theoremstyle{break}
 \theorembodyfont{\itshape}
 \theoremheaderfont{\scshape}
-\newtheorem{hypothesis}{Hypothèse}}
+\newtheorem{hypothesis}{Hypothèse}[section]}
 
-\newtheorem{assertion}{Assertion}
+\newtheorem{assertion}{Assertion}[section]
 
 \input{includes/titlepage.tex}
 

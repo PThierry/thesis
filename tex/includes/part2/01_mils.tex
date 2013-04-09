@@ -342,7 +342,7 @@ impact sur les exigences de sécurité.
 
 \begin{table}[h!]
 \label{tab:threats}
-\begin{tabular}{|l|p{10cm}|c|c|c|c|}
+\begin{tabular}{|l|p{8.5cm}|c|c|c|c|}
   \hline
 \cellcolor{blue!25}Source & \cellcolor{blue!25}Attaque & \multicolumn{4}{|c|}{\cellcolor{blue!25}Exigence} \\
   \hline
@@ -351,6 +351,8 @@ impact sur les exigences de sécurité.
   {\it Domaine inférieur} & Étude temporelle de la vitesse de transit du flux vers le domaine supérieur & & X & & \\
   \hline
   {\it Domaine supérieur} & Émission de flux non conforme de la configuration de sécurité & & & X & \\
+  \hline
+  {\it Domaine supérieur} & Transfert de donnée par canal caché via variation du profil de flux & & & X & \\
   \hline
   {\it Interne} & Retransmission du flux au travers d'un canal non autorisé & & & & X \\
   \hline
@@ -364,42 +366,122 @@ impact sur les exigences de sécurité.
 \caption{Profils d'attaques et impact sur les exigences sécuritaires}
 \end{table}
 
-\subsection{De la définition des réponses }
-
-
-\subsubsection{De la définition des fonctions de sécurité qui assurent les propriétés de sécurité}
 \paragraph{}
+Ces différents comportements permettent de mettre à mal le principe de
+cloisonnement associé à la passerelle inter-domaines, et doivent donc être
+bloqués ou à défaut tracés.\\
+Dans le cadre de ma thèse, je propose un certain nombre de solutions
+permettant de réagir à ces attaques (contre-mesures), ainsi qu'un certain
+nombre d'éléments de protection, pour les rendre inefficaces. Ces différents
+éléments de sécurité sont construits sous forme de {\it moniteurs de
+sécurité}, portant chacun une fonction de sécurité particulière. C'est au
+travers de l'association de tous ces moniteurs qu'il est possible de
+construire une solution répondant à l'ensemble des exigences de sécurités de
+la problématique générale de la thèse.
 
-\subsection{Définition des exigences sécuritaires associées}
-
-\paragraph{}
-\index{Confidentialité}Confidentialité exigée\\
-\index{Intégrité}Intégrité exigée\\
-Dispo non exigée (en cas de corruption des conténaires non-sûrs), mais
-éléments proactifs à intégrer
-
+% les moniteurs
 \section{Définition des moniteurs de sécurité}
 
-\subsection{Moniteurs de sécurité pour les accès matériel à risque sécuritaire}
+
+% exigence 1 : intégrité des données
+\subsection{Protection de l'intégrité des données}
+
+\paragraph{}
+Les moniteurs de sécurité décrit ici ont pour but d'assurer le respect de
+l'exigence \label{req:integrity}. L'intégrité des données transmises est une
+exigence dont le but est d'assurer que le flux de données qui transite au
+travers de la passerelle multi-domaines de sécurité n'est jamais modifié sans
+autorisation préalable. Cela se fait usuellement en définissant une liste de
+droits d'accès associé au flux, définissant quel éléments logiciel (sujet) est
+autorisé à accéder au contenu du flux (objet). Seuls les sujets explicitement
+autorisés sont aptes à accéder à ces données et potentiellement les modifier.
+Dans le cadre de l'architecture choisie, il est nécessaire de faire transiter
+le flux télécom par des compartiments ne pouvant être considérés comme de
+confiance. Il s'agit de compartiment appartenant à la famille $Unsec$, qu'il
+est difficile de réimplémenter sans accroître fortement le coût de la
+passerelle. Il devient alors nécessaire de prévoir des éléments de
+contre-mesure, permettant de détecter toute modification non autorisée et de
+réagir à celle-ci.\\
+Dans le cadre de ma thèse, je propose l'implémentation d'un moniteur de
+sécurité particulier, ... \FIXME{ref}
+
+
+% exigence 2 : sens unique 
+\subsection{Garantie de transmission de flux sans canal auxiliaire inverse}
+
+\paragraph{}
+Le moniteur de sécurité décrit ici répond à l'exigence \label{req:transit}.
+Sa présence doit assurer que tout flux transmis entre deux domaines de
+confidentialité puisse se faire sans que le domaine de confidentialité de plus faible
+niveau puisse récupérer d'information sur le domaine de confidentialité de
+plus haut niveau.
+
+\paragraph{}
+Il existe plusieurs cas qui doivent être considéré dans le cadre du besoin
+associé à la Problématique générale:
+\begin{enumerate}
+\item Le transfert sens unique de données d'un domaine de plus faible niveau à un domaine
+de plus haut niveau
+\item Le transfert de flux désensibilisé d'un domaine de plus haut niveau vers
+un domaine de plus faible niveau
+\end{enumerate}
+
+\subsubsection{A propos d'une architecture de diode logicielle pour le transfert agnostique de donnée}
+
+\paragraph{}
+Il existe dans l'état de l'art des solutions permettant d'assurer le transfert
+de flux unidirectionnel entre deux domaines. C'est le cas des différentes
+diodes matérielles \FIXME{ref}. Ces solutions impliquent cependant de déployer
+plusieurs équipements distincts dont la consommation et la volumétrie ne sont
+pas toujours compatibles des exigences de l'embarqué.
+
+\paragraph{}
+Pour répondre à ce besoin, j'ai travaillé avec plusieurs collaborateurs à la
+définition et l'implémentation d'un moniteur de sécurité permettant de
+répondre à cette même exigence, sans nécessiter l'usage de plusieurs matériels
+distinct.\\
+Pour répondre à cette exigence, il est nécessaire d'implémenter une fonction
+logicielle dont le comportement est prévu pour assurer une opacité forte lors
+du transit des données entre son entrée et sa sortie, quel que soit le
+comportement des éléments source et destination du flux.
+
+\subsubsection{De la problématique d'exploitation des canaux auxiliaires: à propos des profils de flux}
+
+Dernier article: émetteur périodique
+
+% conformité du flux à une politique de sécurité
+\subsection{Conformité des données transmise à la politique de sécurité}
+
+\paragraph{}
+Les moniteurs de sécurité de cette sections répondent à l'exigence
+\label{req:desensibilisation}. Ils en existe plusieurs car cette exigence
+implique plusieurs fonctions, à la fois sur le contenu transmis et sur le
+comportement du flux, afin d'empêcher l'usage d'un canal auxiliaire de type
+temporel.
+
+\subsubsection{Moniteurs de sécurité pour la vérification des données}
+
+\paragraph{}
+Moniteur de filtrage de donnée (DPI), moniteur de vérification
+d'authentification de l'émetteur (non existant aujourd'hui)
+
+% canaux cachés internes et compartimentation
+\subsection{Compartimentation garantie}
+
+\paragraph{}
+Il a été décrit plus haut l'usage dans la passerelle d'éléments non
+certifiables (éléments appartenant à l'ensemble $Unsec$). Pour être compatible
+des Exigences MILS et pour pouvoir répondre à l'Exigence \label{req:escape},
+il est nécessaire d'assurer que l'ensemble des canaux de communications
+utilisés sont explicitement ceux qui ont été validés dans le cadre de la
+définition de l'architecture.
+
+\subsubsection{Moniteurs de sécurité pour les accès matériel à risque sécuritaire}
 
 \paragraph{}
 Moniteur de gestion du DMA et moniteur de gestion de l'ethernet
 
-\subsection{Moniteurs de sécurité pour la vérification des données}
-
-Moniteur de filtrage de donnée (DPI), moniteur de vérification
-d'authentification de l'émetteur (non existant aujourd'hui)
-
-\subsection{A propos d'une architecture de diode logicielle pour le transfert agnostique de donnée}
-
-\paragraph{}
-Moniteur implémenté, brevet en cours de dépôt.
-
-\subsection{De la problématique d'exploitation des canaux auxiliaires: à propos des profils de flux}
-
-Dernier article: émetteur périodique
-
-\subsection{De la problématique d'exploitation des canaux auxiliaires: les caches processeur}
+\subsubsection{De la problématique d'exploitation des canaux auxiliaires: les caches processeur}
 
 Article sur les caches, problématique des flush de cache (à prendre en compte
 dans l'ordonnancement
