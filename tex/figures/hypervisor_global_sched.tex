@@ -1,0 +1,99 @@
+%%
+%%
+%% hypervisor_failure.tex for  in /doctorat/articles
+%%
+%% Made by Philippe THIERRY
+%% Login   <Philippe THIERRYreseau-libre.net>
+%%
+%% Started on  Fri Jan 21 17:17:13 2011 Philippe THIERRY
+%% Last update jeu. 14 avril 2011 15:04:49 CEST Philippe THIERRY
+%%
+\begin{pdfpic}
+\scalebox{0.50}
+{
+\begin{pspicture}(-1,0)(27,30)
+\psline(0,0)(0,0)
+% tau 1 (pi 1)
+%%% cadrillage
+\definecolor{lightgray}{rgb}{0.85,0.85,0.85}
+\psgrid[subgriddiv=1,gridlabels=0pt,unit=1cm,griddots=5](-1,20)(25,22)
+\definecolor{darkgreen}{rgb}{0,0.6,0}
+\psline[linewidth=0.1cm,arrowsize=14pt,linecolor=darkgreen]{->}(0,20)(0,22)
+\psframe[linewidth=0.05cm,arrowsize=14pt,linecolor=darkgreen,fillstyle=solid,fillcolor=lightgray](2,20)(3,21)
+\psline[linewidth=0.1cm,arrowsize=14pt,linecolor=darkgreen]{->}(24,20)(24,22)
+\psline[linewidth=0.05cm,arrowsize=8pt]{->}(0,20)(25,20)
+% tau 2 (pi 1)
+%%% cadrillage
+\psgrid[subgriddiv=1,gridlabels=0pt,unit=1cm,griddots=5](-1,17)(25,19)
+\definecolor{darkred}{rgb}{0.6,0,0}
+\psline[linewidth=0.1cm,arrowsize=14pt,linecolor=darkred]{->}(0,17)(0,19)
+\psframe[linewidth=0.05cm,linecolor=darkred,fillstyle=solid,fillcolor=lightgray](1,17)(2,18)
+\psframe[linewidth=0.05cm,linecolor=darkred,fillstyle=solid,fillcolor=lightgray](12,17)(13,18)
+\psline[linewidth=0.1cm,arrowsize=14pt,linecolor=darkred]{->}(12,17)(12,19)
+\psline[linewidth=0.1cm,arrowsize=14pt,linecolor=darkred]{->}(24,17)(24,19)
+% line
+\psline[linewidth=0.05cm,arrowsize=8pt]{->}(0,17)(25,17)
+% tau 1 (pi 2) 
+%%% cadrillage
+\psgrid[subgriddiv=1,gridlabels=0pt,unit=1cm,griddots=5](-1,14)(25,16)
+\definecolor{darkblue}{rgb}{0,0,0.6}
+\psline[linewidth=0.1cm,arrowsize=14pt,linecolor=darkblue]{->}(0,14)(0,16)
+\psframe[linewidth=0.05cm,linecolor=darkblue,fillstyle=solid,fillcolor=lightgray](0,14)(1,15)
+\psframe[linewidth=0.05cm,linecolor=darkblue,fillstyle=solid,fillcolor=lightgray](8,14)(9,15)
+\psframe[linewidth=0.05cm,linecolor=darkblue,fillstyle=solid,fillcolor=lightgray](16,14)(17,15)
+\psframe[linewidth=0.05cm,linecolor=darkblue](24,14)(25,15)
+\psline[linewidth=0.1cm,arrowsize=14pt,linecolor=darkblue]{->}(8,14)(8,16)
+\psline[linewidth=0.1cm,arrowsize=14pt,linecolor=darkblue]{->}(16,14)(16,16)
+\psline[linewidth=0.1cm,arrowsize=14pt,linecolor=darkblue]{->}(24,14)(24,16)
+\psline[linewidth=0.05cm,arrowsize=8pt]{->}(0,14)(25,14)
+% hierarchical scheduling
+\psgrid[subgriddiv=1,gridlabels=0pt,unit=1cm,griddots=5](-1,10)(25,13)
+\psline[linewidth=0.1cm,arrowsize=14pt]{->}(0,10)(0,12)
+\psline[linewidth=0.1cm,arrowsize=14pt]{->}(6,10)(6,12)
+\psline[linewidth=0.1cm,arrowsize=14pt]{->}(12,10)(12,12)
+\psline[linewidth=0.1cm,arrowsize=14pt]{->}(18,10)(18,12)
+\psline[linewidth=0.1cm,arrowsize=14pt]{->}(24,10)(24,12)
+% associated scheduling
+\psframe[linewidth=0.05cm,fillstyle=solid](-1,10)(0,11)
+\psframe[linewidth=0.05cm,fillstyle=solid,fillcolor=lightgray](5,10)(6,11)
+\psframe[linewidth=0.05cm,fillstyle=solid,fillcolor=lightgray](11,10)(12,11)
+\psframe[linewidth=0.05cm,fillstyle=solid,fillcolor=lightgray](17,10)(18,11)
+\psframe[linewidth=0.05cm,fillstyle=solid,fillcolor=lightgray](23,10)(24,11)
+\psline[linewidth=0.05cm,arrowsize=8pt]{->}(0,10)(25,10)
+% global line
+\psline[linewidth=0.04cm](0,10)(0,22)
+\rput(0,22.5){\text {\Huge $0$}}
+\psline[linewidth=0.04cm](6,10)(6,22)
+\rput(6,22.5){\text {\Huge $ST_{i}$}}
+\psline[linewidth=0.04cm](12,10)(12,22)
+\rput(12,22.5){\text {\Huge $2ST_{i}$}}
+\psline[linewidth=0.04cm](18,10)(18,22)
+\rput(18,22.5){\text {\Huge $3ST_{i}$}}
+\psline[linewidth=0.04cm](24,10)(24,22)
+\rput(24,22.5){\text {\Huge $4ST_{i}$}}
+% infos
+\psline[linewidth=0.1cm,arrowsize=14pt]{->}(4,8.6)(5,10)
+\rput(2.5,8){\text {\Huge $ST_{i} - SC_{i}$}}
+\psline[linewidth=0.05cm]{<->}(5,9.2)(6,9.2)
+\rput(5.5,8.6){\text {\Huge $SC_{i}$}}
+%
+\psline[linewidth=0.1cm,arrowsize=14pt]{->}(10,8.6)(11,10)
+\rput(8.5,8){\text {\Huge $2ST_{i} - SC_{i}$}}
+\psline[linewidth=0.05cm]{<->}(11,9.2)(12,9.2)
+\rput(11.5,8.6){\text {\Huge $SC_{i}$}}
+%
+\psline[linewidth=0.1cm,arrowsize=14pt]{->}(16,8.6)(17,10)
+\rput(14.5,8){\text {\Huge $3ST_{i} - SC_{i}$}}
+\psline[linewidth=0.05cm]{<->}(17,9.2)(18,9.2)
+\rput(17.5,8.6){\text {\Huge $SC_{i}$}}
+%
+\psline[linewidth=0.1cm,arrowsize=14pt]{->}(22,8.6)(23,10)
+\rput(20.5,8){\text {\Huge $4ST_{i} - SC_{i}$}}
+\psline[linewidth=0.05cm]{<->}(23,9.2)(24,9.2)
+\rput(23.5,8.6){\text {\Huge $SC_{i}$}}
+% arinc line
+\psline[linewidth=0.08cm]{<->}(0,7.3)(24,7.3)
+\rput(12,6.7){\text {\Huge $ST$}}
+\end{pspicture}
+}
+\end{pdfpic}

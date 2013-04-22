@@ -8,8 +8,9 @@
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
 %% Last update Mon Aug 30 17:00:21 2010 Philippe THIERRY
 
-\chapter{De la définition d'une architecture logicielle pour le MLS orientée traitement de flux}
+\chapter{De la définition d'une architecture logicielle sécurisée pour le MLS orientée traitement de flux}
 \doMinitoc
+\label{chap:solution_secu}
 
 \section{A propos du principe de passerelle de traitement de flux MultiLevel Security}
 \label{sec:mls_gw_principle}
@@ -486,30 +487,3 @@ Moniteur de gestion du DMA et moniteur de gestion de l'ethernet
 Article sur les caches, problématique des flush de cache (à prendre en compte
 dans l'ordonnancement
 
-\section{Moniteurs de sécurité, fonctions temps réel et environnements non sécurisables}
-
-\subsection{De la compatibilité des moniteurs de sécurité avec le temps réel}
-
-\paragraph{}
-
-\section{Répartition des moniteurs en environnement multi-processeur}
-
-\subsection{Localisation des moniteurs et des compartiments par domaines de
-sécurité}
-
-\chapter{Temps réel, assurance de Qualité de Service IP et flux à multiple criticités}
-
-\section{Ordonnancement hierarchique et Time Division Multiplexing}
-
-Définition du problème, besoin de sécurité
-
-\section{Priorisation par criticité, modification de la QoS pour la sécurité
-  dans les moniteurs de sécurité}
-
-Changement de criticité: priorisation aux flux dont la QoS IP n'est pas la
-plus élevée
-
-
-\FIXME{exigences de criticité}:\\
-La transmission des flux doit respecter les exigences temporelles du domaine
-de criticité le plus haut

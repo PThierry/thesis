@@ -1,0 +1,232 @@
+%%
+%%
+%% hardware_impacts.tex for thesis in /doctorat/these/tex
+%%
+%% Made by Philippe THIERRY
+%% Login   <Philippe THIERRYreseau-libre.net>
+%%
+%% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
+%% Last update Mon Aug 30 17:00:21 2010 Philippe THIERRY
+
+\chapter{De la compatibilité d'une architecture sécuritée avec des contraintes temps-réel}
+\doMinitoc
+
+\section{Architectures compartimentées et temps réel}
+
+\paragraph{}
+Afin de repondre aux exigences sécuritaires de la solution, l'usage
+d'architectures logicielles compartimentées dans le temps est nécessaire.
+Cette compartimentation réduit en effet les interactions dues aux variations
+de comportement (charge processeur, accès mémoire, etc) des différents
+compartiment.\\
+Lorsqu'il est nécessaire d'intégrer dans le même temps des exigences temps
+réel sur les flux traité par la passerelle, il devient nécessaire de
+considérer la bonne adéquation de la solution de compartimentation avec les
+contraintes d'exécution (WCET, période, Dead-line) des services de traitement de flux.
+
+\subsection{De l'ordonnancement hierarchique à la virtualisation}
+
+\subsection{Hiérarchie et Time Division Multiplexing}
+
+\paragraph{}
+Les architectures logicielles compartimentées sont ordonnancées à la manière
+des systèmes temps réels à ordonnancement hiérarchique (\FIXME{ref}). On
+définit alors un ordonnancement dit {\it global}, correspondant à l'ordonnancement des compartiments, et un ordonnancement dit {\it local}
+correspondant à l'ordonnancement des tâches dans un compartiment donné.\\
+A chaque compartiment est associé un {\it slot}. Ce slot est une fraction
+temporelle périodique pendant laquelle le compartiment est autorisé à être
+exécuté. L'exécution successive de l'ensemble des slots du systèmes forme un
+motif temporel strict définissant la période TDM.
+
+\paragraph{}
+Dans le cadre de ma thèse, j'ai étudié la problématique d'ordonnancement temps
+réel des fonctions logicielles de la passerelle sur une base TDM, pour les
+raisons de sécurité évoquée dans le Chapitre \ref{chap:solution_secu}. Les
+fonctions de traitement des différents compartiments devant respecter des
+exigences de temps-réel s'appuie sur une politique d'ordonnancement de type
+EDF (Earliest Deadline First). La solution s'appuie donc sur un ordonnancement
+global TDM avec un ordonnancement local EDF, qui sera noté dans la suite
+TDM/EDF.
+
+\paragraph{}
+Dans le cadre de cette architecture, il est cependant nécessaire de
+déterminer, pour l'ensemble des compartiments ayant des tâches devant
+respecter des exigences de temps réel, la période et la durée nécessaire
+du slot permettant d'assurer le respect. La particularité de la solution de
+compartimentation pour la sécurité sur base TDM est que l'ordonnanceur global,
+géré au niveau de l'hyperviseur, n'est pas informé des propriétés temps réel
+des tâches hébergées dans les compartiments. De plus, le respect du
+partitionnement TDM strict interdit toute variation du motif d'ordonnancement
+des compartiments. En conséquence, bien que l'ordonnancement local des tâches d'un
+compartiment donné puisse être considéré en ligne (c'est le cas de la
+politique d'ordonnancement EDF), l'ordonnancement global est calculé hors
+ligne. C'est ce calcul qui est considéré ici.
+
+\paragraph{}
+Plusieurs variables sont introduite dans la Table \ref{tab:vars} afin de formaliser l'ordonnançabilité
+d'une architecture logicelle compartimentée sur une base TDM (Time Division
+Multiplexing) stricte.
+\begin{table}
+\label{tab:vars}
+\begin{tabular}{ll}
+ {\it Variables de niveau {\it global}} & {\it Variables de niveau {\it local}} \\
+ \begin{minipage}{0.48\linewidth}
+ \fbox{
+    \begin{minipage}{1\linewidth}
+        Considérant $m$ compartiments, on définit:\\
+        $U_{i}:$ la charge associée au compartiment $C_{i}$\\
+        $SC=\{SC_1,\ldots,SC_m\}$ la durée du slot $S_i$ associé à $C_{i}$\\
+        $\tau=\{\tau_1,\ldots,\tau_m\}$ l'ensemble des ensembles tâches associés à $C_i$\\
+        $ST_{i}$ La période du slot $S_{i}$\\
+        $SC_{i}$ La durée du slot $S_i$
+    \end{minipage}
+ }
+ \end{minipage}
+ &
+ \begin{minipage}{0.48\linewidth}
+ \fbox{
+    \begin{minipage}{1\linewidth}
+        Considering $n$ tâches, on définit:\\
+        $\tau_{i}$ l'ensemble de tâches du compartiment $C_{i}$, $\tau_{i} = \{ \tau_i^{1},
+            \ldots, \tau_i^{n} \}$\\
+            $d_{j}$ la deadline de la tâche $\tau_{i}^{j}$ de $C_{i}$\\
+            $c_{j}$ le WCET de la tâche $\tau_{i}^{j}$ de $C_{i}$\\
+            $t_j$ la période de la tâche $\tau_{i}^{j}$ de $C_{i}$\\
+    \end{minipage}
+ }
+ \end{minipage}
+ \\
+\end{tabular}
+\caption{Définition des variables de niveau compartiment et de niveau tâches}
+\end{table}
+
+
+\begin{figure}{h}
+\input{figures/hypervisor_global_sched.tex}
+\caption{S}
+\label{fig:hyp_global_sched}
+\end{figure}
+
+
+%-------------8<
+
+\paragraph{}
+Afin de garantir l'ordonnançabilité d'un système de compartimenté sur base
+TDM, plusieurs contraintes doivent être satisfaites. Certaines sont des
+contraintes {\it globales} (au niveau hyperviseur) d'autres {\it locales} (au
+niveau compartiment). Ces contraintes sont définies ci-après:\\
+\noindent
+\vspace{1cm}
+\fbox{
+    \begin{minipage}{0.95\textwidth}
+        %\begin{linearProg}
+        %\end{linearProg}
+        \vspace{-5mm}
+            \noindent \textbf{Considered Table \ref{tab:vars}, Given the problem:} {\it Maximize
+            $min_{i=1\ldots,n} SC_i(1-U_{i})$} {\bf under the constraints:}
+
+        \begin{tabular}{l|l}
+                \noindent \textit{Slot level constraints} &
+                \noindent \textit{Tasks level constraints}\\
+        \begin{minipage}{0.45\textwidth}
+                    {\small
+            \begin{equation}
+                \sum_{i=1}^m U_i \leq 1
+                                \label{eqn:vm_load_sum}
+            \end{equation}
+            \begin{equation}
+                \forall i\in \{ 1, \ldots, m \}, \frac{ST}{ST_i}\in
+                \mathbb{N}^*
+                                \label{eqn:slots_relative}
+            \end{equation}
+            \begin{equation}
+                \sum_{i=1}^m SC_i \leq gcd(ST_1,\ldots,ST_m)
+                                \label{eqn:slots_pgcd}
+            \end{equation}
+                        }
+        \end{minipage} &
+        \begin{minipage}{0.50\textwidth}
+                    {\small
+            \begin{equation}
+                \forall i\in \{ 1, \ldots, m \}, \forall \tau_i^j \in S_i, d_j>ST_i-SC_i
+                                \label{eqn:deadline_vs_ST}
+            \end{equation}
+                        \begin{center}
+                        $\forall k \in \mathbb{N}^*, \forall t \in [ kST_{i} - SC_{i}, kST_{i}],$
+            \begin{equation}
+                            h(t) \leq t - k(ST_{i} - SC_{i})
+                                \label{eqn:edf_sched}
+            \end{equation}
+                        {\it with} $h(t) = \sum_{j = 1}^{n} max (0, 1 + \lfloor \frac{t - d_{j}}{t_{j}} \rfloor)c_{j}$,
+                        \end{center}
+                        }
+        \end{minipage}\\
+        \end{tabular}
+    \end{minipage}
+}
+
+Les contraintes globales sont les suivantes:\\
+L'Equation \ref{eqn:vm_load_sum} garantie que la charge processeur est
+inférieur à 1. L'Equation \ref{eqn:slots_relative} est une condition
+nécessaire pour assurer l'usage de slots temporels périodiques. L'Equation
+\ref{eqn:slots_pgcd} est une confition suffisante pour assurer que les slots
+ne se chevauchent pas, comme définit dans \cite{schedcond}.\\
+La Figure \ref{fig:hyp_global_sched} décrit un exemple de répartition
+temporelle entre différents slots.\\
+Il est également nécessaire de considérer une contrainte locale. L'Equation
+\ref{eqn:deadline_vs_ST} est une condition nécessaire pour garantir que les
+tâches des compartiments exécutés dans le cadre de slots temporels ont
+toujours une deadline supérieure à la période d'inactivité associées à ce
+compartiment. On s'appuie, dans le cadre d'une hiérarchie d'ordonnancement de
+type TDM/EDF, sur l'Equation \ref{eqn:edf_sched}, qui est une condition
+nécessaire et suffisante de faisabilité dans le cadre de l'ordonnancement EDF.
+Pour démontrer cette Equation, considérons le slot $i$ et l'ensemble de tâches
+exécuté localement avec une politique d'ordonnancement EDF dans ce slot.\\
+
+\noindent
+Le Slot $i$ est exécuté de manière périodique par l'hyperviseur, avec une
+période de $ST_i$ unités de temps. Les tâches exécutées dans ce slots le sont
+pour une durée contigüe de $SC_i$ unité de temps. On commence par déterminer
+le scénario pire cas en terme de faisabilité pour cet ensemble de tâches. Ce
+dernier est arrive si:
+\begin{itemize}
+\item Toutes les tâches sont relachées simultanément (en $t_0$)
+\item Le slot $i$ a déjà été exécuté entre $t_{-SC_i}$ et $t_0$, de telle
+sorte que les tâches ont raté l'échéance du slot et ne pourront être exécutées
+que lors du prochain slot, soit $ST_i - SC_i$ unité de temps plus tard
+\end{itemize}
+Ce scénario maximise clairement à la fois la charge associée à l'ensemble de
+tâches du slot et le délai avant l'exécution de cet ensemble de tâches.
+Le scénario pire cas étand déterminé, il reste ensuite à définir la condition
+de faisabilié d'un ensemble de tâche ordonnancé par une politique de type EDF
+dans le slot $i$ dans le cadre de ce scénario.\\
+Toutes les tâches relachées dans l'intervale de temps $[0, t]$ avec une
+deadline absolie inférieure ou égale à $t$ sont ordonnançables et respectent
+leur deadlines si et seulement si elles sont exécutées durant au pire $t -
+k(ST_i - SC_i)$ unités de temps. Cela se traduit en:\\
+Pour tout entier $k$ avec $k \geq 1$, pour tout $t$ dans l'intervalle $[k ST_i
+- SC_i, k ST_i]$, la fonction de demande processeur au temps $t$t, $h(t)$ est
+  inférieure ou égale à $t - k(ST_i - SC_i)$ (condition de l'équation
+  \ref{eqn:edf_sched})
+
+\section{Moniteurs de sécurité, fonctions temps réel et environnements non sécurisables}
+
+\subsection{De la compatibilité des moniteurs de sécurité avec le temps réel}
+
+\paragraph{}
+
+\subsection{Répartition des moniteurs en environnement multi-processeur}
+
+\subsubsection{Localisation des moniteurs et des compartiments par domaines de
+sécurité}
+
+\section{Intégration du support des flux à criticité multiple}
+
+Changement de criticité: priorisation aux flux dont la QoS IP n'est pas la
+plus élevée
+
+
+\FIXME{exigences de criticité}:\\
+La transmission des flux doit respecter les exigences temporelles du domaine
+de criticité le plus haut
+
