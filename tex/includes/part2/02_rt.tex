@@ -72,26 +72,27 @@ Multiplexing) stricte.
  {\it Variables de niveau {\it global}} & {\it Variables de niveau {\it local}} \\
  \begin{minipage}{0.48\linewidth}
  \fbox{
-    \begin{minipage}{1\linewidth}
+    \begin{minipage}{0.97\linewidth}
         Considérant $m$ compartiments, on définit:\\
         $U_{i}:$ la charge associée au compartiment $C_{i}$\\
         $SC=\{SC_1,\ldots,SC_m\}$ la durée du slot $S_i$ associé à $C_{i}$\\
         $\tau=\{\tau_1,\ldots,\tau_m\}$ l'ensemble des ensembles tâches associés à $C_i$\\
         $ST_{i}$ La période du slot $S_{i}$\\
-        $SC_{i}$ La durée du slot $S_i$
+        $SC_{i}$ La durée du slot $S_i$\\
     \end{minipage}
  }
  \end{minipage}
  &
  \begin{minipage}{0.48\linewidth}
  \fbox{
-    \begin{minipage}{1\linewidth}
+    \begin{minipage}{0.97\linewidth}
         Considering $n$ tâches, on définit:\\
         $\tau_{i}$ l'ensemble de tâches du compartiment $C_{i}$, $\tau_{i} = \{ \tau_i^{1},
             \ldots, \tau_i^{n} \}$\\
             $d_{j}$ la deadline de la tâche $\tau_{i}^{j}$ de $C_{i}$\\
             $c_{j}$ le WCET de la tâche $\tau_{i}^{j}$ de $C_{i}$\\
             $t_j$ la période de la tâche $\tau_{i}^{j}$ de $C_{i}$\\
+            \vspace{10.5mm}
     \end{minipage}
  }
  \end{minipage}
@@ -115,19 +116,21 @@ Afin de garantir l'ordonnançabilité d'un système de compartimenté sur base
 TDM, plusieurs contraintes doivent être satisfaites. Certaines sont des
 contraintes {\it globales} (au niveau hyperviseur) d'autres {\it locales} (au
 niveau compartiment). Ces contraintes sont définies ci-après:\\
-\noindent
+%\noindent
 \vspace{1cm}
+\begin{minipage}{0.98\textwidth}
 \fbox{
-    \begin{minipage}{0.95\textwidth}
+    \begin{minipage}{0.98\textwidth}
         %\begin{linearProg}
         %\end{linearProg}
-        \vspace{-5mm}
-            \noindent \textbf{Considered Table \ref{tab:vars}, Given the problem:} {\it Maximize
-            $min_{i=1\ldots,n} SC_i(1-U_{i})$} {\bf under the constraints:}
+        %\vspace{-5mm}
+            \noindent \textbf{Considérant la table \ref{tab:vars}, soit le
+              problème:} {\it Maximiser $min_{i=1\ldots,n} SC_i(1-U_{i})$}
+            {\bf sous les contraintes:}
 
         \begin{tabular}{l|l}
-                \noindent \textit{Slot level constraints} &
-                \noindent \textit{Tasks level constraints}\\
+                \noindent \textit{contraintes de niveau global} &
+                \noindent \textit{contraintes de niveau local}\\
         \begin{minipage}{0.45\textwidth}
                     {\small
             \begin{equation}
@@ -145,7 +148,7 @@ niveau compartiment). Ces contraintes sont définies ci-après:\\
             \end{equation}
                         }
         \end{minipage} &
-        \begin{minipage}{0.50\textwidth}
+        \begin{minipage}{0.52\textwidth}
                     {\small
             \begin{equation}
                 \forall i\in \{ 1, \ldots, m \}, \forall \tau_i^j \in S_i, d_j>ST_i-SC_i
@@ -157,13 +160,14 @@ niveau compartiment). Ces contraintes sont définies ci-après:\\
                             h(t) \leq t - k(ST_{i} - SC_{i})
                                 \label{eqn:edf_sched}
             \end{equation}
-                        {\it with} $h(t) = \sum_{j = 1}^{n} max (0, 1 + \lfloor \frac{t - d_{j}}{t_{j}} \rfloor)c_{j}$,
+                        {\it avec} $h(t) = \sum_{j = 1}^{n} max (0, 1 + \lfloor \frac{t - d_{j}}{t_{j}} \rfloor)c_{j}$,
                         \end{center}
                         }
         \end{minipage}\\
         \end{tabular}
     \end{minipage}
 }
+\end{minipage}
 
 Les contraintes globales sont les suivantes:\\
 L'Equation \ref{eqn:vm_load_sum} garantie que la charge processeur est
@@ -214,6 +218,107 @@ Pour tout entier $k$ avec $k \geq 1$, pour tout $t$ dans l'intervalle $[k ST_i
 \subsection{De la compatibilité des moniteurs de sécurité avec le temps réel}
 
 \paragraph{}
+
+\subsection{De la compatibilité des environnements non certifiables avec le temps réel}
+
+\paragraph{}
+Dans le cadre de mes travaux, j'utilise dans les compartiments non certifiable
+le système d'exploitation Linux. Ce dernier fournit une grande richesse
+applicative et une pile réseau très complète. Cependant, Linux n'est pas un
+système d'exploitation compatible avec des exigences temps réel dur. En effet,
+ce dernier possède plusieurs points problématiques. En effet, le noyau Linux
+étant très riche il s'appuie:
+\begin{itemize}
+  \item sur des thread noyau ordonnancés avec les politiques d'ordonnancement
+    temps réel de POSIX (SCHED\_FIFO et SCHED\_RR) qui intègre un mécanisme
+    complexe de vieillissement. La charge associés à ces threads est
+    difficilement bornable car elle correspond pour la plupart à la
+    conséquences de traitements d'entrées/sorties comme la gestion du disque.
+    Ces threads possèdent néanmoins une affinité CPU, ce qui évite de les
+    migrer en fonction de la charge. Malheureusement, l'assignation d'un
+    traitement à un coeur processeur plutôt qu'un autre n'est pas définissable
+    sous forme d'une configuration, mais s'établit en fonction de la charge
+    courante de chacun des coeurs.
+  \item sur des fonctions logicielles qui cassent la mécanique
+    d'ordonnancement via le {\it vol de cycle}. En effet, ces fonctions
+    (nommées {\it softirq}) ont été intégrées sous formes de code
+    complémentaires exécutés à la suite de divers services comme les appels
+    systèmes ou les interruptions, afin d'avoir une réactivité moyenne très forte.
+    Cependant, une telle solution ne permet pas de garantir un coût d'exécution
+    pire cas pour les processus ordonnancés car leur propre exécution est impactée
+    par ces fonctions. Ces dernières étant de plus en plus fréquentes avec les
+    version du noyau et difficile à dimensionner, la charge associée est
+    difficilement bornable.
+\end{itemize}
+
+\paragraph{}
+Malgré tous ces éléments problématiques pour le temps réel, il existe
+plusieurs patchs permettant de rétablir un peu de comportement temps réel dans
+le système d'exploitation. Dans le cadre de ma thèse, je ne parle cependant
+pas des solutions RTAI ou Xenomai, qui impliquent des exigences particulières
+sur les tâches temps réel, leur interdisant l'usage des API standard Linux
+sous peines de perdre leur propriétés temps réel. Dans le cadre de la
+définition d'une passerelle pour du traitement réseau, il est nécessaire que
+ces tâches soient aptes à traiter des flux télécom, et donc à s'interfacer
+avec l'API POSIX de traitement réseau. Afin de répondre à cette problématique,
+je me suis donc appuyer sur la solution Linux-RT, qui intègre les travaux du
+patch PREEMPT\_RT d'Ingo Molnar\cite{koolwal2009myths}. Cette solution permet
+de modifier le comportement du noyau Linux en divers points:
+\begin{itemize}
+  \item Les threads noyaux ne s'exécutent plus avec une haute priorité temps
+    réel, supprimant la collision de ses derniers avec l'ensemble de tâches
+    temps réel
+  \item Les {\it softirqs} ne s'exécutent plus via du vol de cycle, mais
+    exclusivement dans un thread kernel spécifique
+\end{itemize}
+
+\paragraph{}
+Dans le cadre de mes travaux, j'ai dimentionner l'impact de ce patch sur la
+variation de latence à l'initialisation d'un job de priorité maximum. Cette
+mesure permet de déterminer si il est effectivement possible de définir une
+borne supérieur à cette initialisation.\\
+
+Pour cela, je me suis appuyé sur de
+l'outillage de test\cite{abeni2002measurement} pour simuler une forte charge à
+la fois en terme d'entrées/sorties, d'accès mémoire et de charge processeur.
+La mesure a été faite sur le système décrit dans la Table \ref{tab:rttest}\\
+
+\begin{table}
+\label{tab:rttest}
+\begin{center}
+\begin{tabular}{|l|l|}
+  \hline
+  {\bf Élément} & {\bf Description} \\
+  \hline
+  \hline
+  {\it Architecture} & i686 core 2 duo 2Ghz \\
+  {\it NICs} & DLINK-RTL8139, VIA VT6105 \\
+  {\it OS} & Debian Squeeze \\
+  {\it Kernel} & linux 3.2.12-rt24 \\
+         & pas de support ACPI\\
+         & mode FULL\_PREEMPT\\
+  {\it Securité} & patch grsecurity plus compléments specifiques\\
+  & (memoire \& compartimentation) \\
+  {\it Load-average} & 40 \\
+  {\it outil de test} & cycletest \\
+  {\it nombre d'échantillons} & $10^8$ \\
+  {\it durée de la mesure} & ~5 heures \\
+  \hline
+\end{tabular}
+\end{center}
+\caption{Description de la cible pour la mesure de latence d'ordonnancement avec Linux-RT}
+\end{table}
+
+\paragraph{}
+Cette mesure a permis de démontrer que pour une mesure portant sur $10^8$
+échantillons pendant une durée de 5 heures, la latence pire cas à
+l'ordonnancement est de $350 \mu s$, comme le montre la Figure \ref{fig:rttest}.
+
+\begin{figure}
+  \includegraphics[width=8.9cm]{figures/rttest.pdf}
+  \caption{Latence d'ordonnancement pour la tâche de plus haute priorité sous
+    Linux avec PREEMPT\_RT\label{fig:rttest}}
+\end{figure}
 
 \subsection{Répartition des moniteurs en environnement multi-processeur}
 
