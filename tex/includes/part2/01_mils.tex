@@ -276,8 +276,10 @@ sécuritaires en terme de confidentialité, intégrité et disponibilité.
     \begin{itemize}
       \item La configuration de la passerelle, qui est une donnée d'entrée de
         celle-ci donc en dehors du cadre de ma thèse. C'est cette
-        configuration qui détermine quel type de flux est autorisé à transité,
-        et vers quelle destination
+        configuration qui détermine entre autre quel type de flux est autorisé
+        à transité, et vers quelle destination. La configuration de la
+        passerelle peut potentiellement intégrer des éléments nécessaire au
+        bon fonctionnement de l'interconnexion réseau
       \item Les propriétés de cloisonnement de la passerelle, qui répondent à
         l'exigence \ref{req:escape}
     \end{itemize}
@@ -285,6 +287,75 @@ sécuritaires en terme de confidentialité, intégrité et disponibilité.
     de leur transit
   \item La disponibilité n'est pas considéré dans le cadre de ma thèse
 \end{itemize}
+
+\subsection{De l'intégration des problématiques réseaux}
+
+\subsubsection{Poriblématique générale}
+
+\paragraph{}
+La solution consiste à permettre l'interconnexion sécurisée de deux domaines
+indépendants, avec des exigences temps réel et sécuritaires.
+Dans le cadre de la définition d'une telle architecture, la gestion des plans
+d'adressage IP est problématique dans le respect de l'Exigence
+\ref{req:transit}. Il est en effet nécessaire de permettre l'interconnexion
+de deux services sur deux réseaux disjoints tout en assurant que ces derniers
+ne soient pas capable de déterminer tout ou partie des informations télécom
+associées à l'autre service. Une telle problématique impacte fortement le
+comportement de la passerelle.
+
+\subsubsection{De l'intégration des proxys}
+
+\paragraph{}
+Il devient alors nécessaire de prévoir un mécanisme de séparation
+protocolaire. Ce mécanisme doit répondre à plusieurs besoins:
+\begin{itemize}
+  \item En entrée, les en-têtes de niveau réseau et transport doivent être
+    retirées, afin d'empêcher toute information dérivant de ces en-têtes, comme le plan
+    d'adressage IP
+  \item En sortie, de nouvelles en-têtes appartenant au plan d'adressage de
+    sortie doivent être construite pour se substituer aux précédante
+\end{itemize}
+On parle alors d'un mécanisme de séparation protocolaire\FIXME{ref}. Ces
+mécanismes implique l'usage d'applications de type proxy, se substituant d'une
+part à la destination et d'autre part à la source afin de permettre une
+interconnexion entre deux services de part et d'autre de la passerelle.
+
+\paragraph{}
+Une telle architecture est décrite dans la Figure \ref{fig:sep_proto}. Ainsi
+l'ensemble des communications interne à la passerelle se font indépendement
+des protocoles couches 1 à 4, s'appuyant directement sur des buffers. L'usage
+de proxys n'est pas forcément un mécanisme aisé. Les applications proxys
+doivent être aptent à gérer des contextes de communications de manière
+synchrone. Une telle synchronisation peut ainsi impliquer un mécanisme de
+communication plus ou moins complexe entre les deux proxy corolaires.
+
+\paragraph{}
+Dans le cadre de ma thèse, les proxys sont considérés pour des protocoles
+simples. Ainsi, on considère comme service un proxy spécialisé dans un
+protocole de niveau application. Ce proxy est en écoute sur un port donné, et
+interagit avec son corolaire dans l'autre domaine de sécurité, utilisant comme
+source le même numéro de port. Il est considéré:
+\begin{restrictions}
+ pour un service donné, une et une seule destination (couple IP et port
+ destination) est considéré par configuration
+\end{restrictions}
+\begin{restrictions}
+ pour un service donné, un seul contexte est considéré à la fois, ne
+ nécessitant ainsi pas de mécanisme de synchronisation
+\end{restrictions}
+
+\paragraph{}
+Un véritable mécanisme de passerelle doit être apte à traiter un ensemble de
+flux reçus de manière concurrentes par un même service. Cela implique alors
+une capacité de syncrhonisation des contextes de flux entre le service entrant
+et le service sortant afin de permettre la différentiation des flux en sortie,
+tout en respectant l'exigence \ref{req:transit}.
+
+\begin{figure}
+  \label{fig:sep_proto}
+  \input{figures/sep_proto.tex}
+  \caption{Exemple de séparation protocolaire couche transport}
+\end{figure}
 
 \subsection{De la définition des profils d'attaques}
 
@@ -372,7 +443,7 @@ Ces différents comportements permettent de mettre à mal le principe de
 cloisonnement associé à la passerelle inter-domaines, et doivent donc être
 bloqués ou à défaut tracés.\\
 Dans le cadre de ma thèse, je propose un certain nombre de solutions
-permettant de réagir à ces attaques (contre-mesures), ainsi qu'un certain
+(contre-mesures) permettant de réagir à ces attaques, ainsi qu'un certain
 nombre d'éléments de protection, pour les rendre inefficaces. Ces différents
 éléments de sécurité sont construits sous forme de {\it moniteurs de
 sécurité}, portant chacun une fonction de sécurité particulière. C'est au
@@ -386,6 +457,8 @@ la problématique générale de la thèse.
 
 % exigence 1 : intégrité des données
 \subsection{Protection de l'intégrité des données}
+
+\subsubsection{Problématique générale}
 
 \paragraph{}
 Les moniteurs de sécurité décrit ici ont pour but d'assurer le respect de
@@ -402,10 +475,61 @@ confiance. Il s'agit de compartiment appartenant à la famille $Unsec$, qu'il
 est difficile de réimplémenter sans accroître fortement le coût de la
 passerelle. Il devient alors nécessaire de prévoir des éléments de
 contre-mesure, permettant de détecter toute modification non autorisée et de
-réagir à celle-ci.\\
-Dans le cadre de ma thèse, je propose l'implémentation d'un moniteur de
-sécurité particulier, ... \FIXME{ref}
+réagir à celle-ci.
 
+\subsubsection{A propos des moniteurs d'intégrité}
+
+\paragraph{}
+Dans le cadre de ma thèse, je propose l'implémentation d'un moniteur de
+sécurité particulier, afin d'assurer l'intégrité des données transitant par la
+passerelle. En effet, comme le montre la Figure \ref{fig:threats_surface},
+certains composants de la passerelle ne peuvent être certifiés et sont donc
+potentiellement attaquable ou corruptible. Il devient donc nécessaire de
+vérifier par un moyen certifiable que les données transitant par la passerelle
+ne sont pas modifiées.
+
+\paragraph{}
+J'appelle moniteur d'intégrité un couple de deux compartiments logiciels, l'un
+en entrée et l'autre en sortie, interagissant pour valider la signature des
+données transitants dans la passerelle. Du fait du mécanisme de séparation
+protocolaire, seule les données de la couches applicative sont vérifiée. Ces
+deux compartiments s'intègre en amont et en aval des compartiments télécoms et
+plus généralement des compartiments de l'ensemble $Unsec$.\\
+Le principe général est de calculer en amont et en aval la somme de contrôle
+de l'ensemble des données de la couche applicative transitant par la passerelle.
+Les deux moniteurs se partagent alors une mémoire afin que le second moniteur
+vérifie l'existance du hash qu'il a calculé dans la liste fournie par le
+premier moniteur. Une telle architecture logicielle implique plusieurs
+exigences:
+\begin{requirement}
+  L'intégration de la signature dans la mémoire partagée doit être garantie avant
+  l'arrivé du paquet dans le second moniteur.
+\end{requirement}
+
+\begin{requirement}
+  Les données de la couche applicatives ne doivent pas être sectionnées. C'est
+  une exigence dure car cela implique que la MTU en aval doit être suffisante
+  pour tout type de paquet reçu en amont.
+\end{requirement}
+
+\begin{requirement}
+  Des paquets peuvent être perdus ou droppés par un autre moniteur de sécurité
+  (e.g. un filtre DPI). En conséquence, les sommes de contrôles doivent avoir
+  une durée de présence dans la mémoire partagée maximum, pour éviter tout
+  débordement.
+\end{requirement}
+Dans ma thèse, je considère la problématique temps réel et cherche à
+déterminer la durée maximum de traversée d'un paquet. Ceci permet de déterminer
+la durée pire cas de présence de la somme de contrôle dans la mémoire
+partagée.
+
+\begin{requirement}
+La mémoire partagée est suffisamment grande pour permettre au moniteur amont
+d'y ajouter les nouvelles sommes de contrôle au fur et à mesure de la
+réception de paquets.
+\end{requirement}
+
+\paragraph{}
 
 % exigence 2 : sens unique 
 \subsection{Garantie de transmission de flux sans canal auxiliaire inverse}
