@@ -69,8 +69,9 @@ comme les terminaux utilisateurs.
 Comme le décrit l'auteur dans \cite{ttsoc} la gestion des flux en provenances des différents sous-systèmes
 se fait au travers d'un ordonnancement de type TDM, assurant un cloisonnement
 temporel strict entre les traitements à fortes exigences de sûreté et les
-traitements non-sûrs, comme le multimédia. Les réseaux sont également
+traitements non sûrs, comme le multimédia. Les réseaux sont également
 strictement séparés afin d'assurer un cloisonnement spatial strict.
+
 %%%% End of update %%%%
 \paragraph{}
 When safety critical and unsafe subsystems are not independent, we call this
@@ -414,15 +415,26 @@ $S$, the sender & $C_S$ & $P_S$, fixed & 3 \\
 To support bursts in the input flow, we define the following
 properties that should be respected by the input flow to guarantee
 that no packet is dropped:\\
-\property{The average input flow throughput should be one packet per sender
-  period $P_S$}\\
-\property{The input flow burst size should not be greater than the
-  connector's input buffer depth}\\
-\property{For a given burst, the period between too packets should be fixed
-  to $P_E$}\\
-\property{Another burst can be sent only if the previous one has been
+\begin{property}
+ The average input flow throughput should be one packet per sender
+  period $P_S$
+\end{property}
+
+\begin{property}
+  The input flow burst size should not be greater than the
+  connector's input buffer depth
+\end{property}
+
+\begin{property}
+For a given burst, the period between too packets should be fixed
+  to $P_E$
+\end{property}
+
+\begin{property}
+  Another burst can be sent only if the previous one has been
   completely treated by the connector (the connector's buffer should contain,
-  at most, one packet)}\\
+  at most, one packet)
+\end{property}
 
 To respect these properties, the input flow profile should respect the following equations:
 
