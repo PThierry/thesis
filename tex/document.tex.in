@@ -39,6 +39,7 @@
 \usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
 \usepackage{calc}					% counter support
 \usepackage{datetime}					% personnalize dates
+\usepackage{algorithm2e}
 \usepackage{tabularx}					% tabular with more conf
 \usepackage{array}					% tabular replacement
 \usepackage{chngpage}					% change page layout localy
@@ -117,6 +118,7 @@
 }\item }{\end{list}}					%
 %%%% fin macro %%%%
 
+\newcommand{\termino}[2]{{\textbf{#1}}: #2}
 % index support
 \makeindex						% call for index generation
 

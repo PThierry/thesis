@@ -1,0 +1,814 @@
+%%
+%%
+%% 03_all.tex for  in /home/phil/Travail/Doctorat/these/tex
+%%
+%% Made by Philippe THIERRY
+%% Login   <Philippe THIERRYreseau-libre.net>
+%%
+%% Started on  ven. 14 juin 2013 12:52:20 CEST Philippe THIERRY
+%% Last update ven. 14 juin 2013 12:52:20 CEST Philippe THIERRY
+%%
+
+\chapter{Vers une passerelle sécurisée et temps réel pour le traitement de
+  flux multi-critique}
+\doMinitoc
+
+\section{Prise en compte du besoin vétronique}
+
+\subsection{A propos de l'évolution des systèmes véhiculaires}
+
+\paragraph{}
+L'intégration des systèmes d'aide à la conduite et de gestion du multimédia a
+beaucoup évolué ces dernières année. De tels systèmes intègre à la fois des
+mécanique de protection de l'usager tel que l'{\it Anti-Lock Breaking System}
+(ABS) ou l'{\it Electronic Stability Control} (ESP). De tels sous-systèmes
+fonctionnent de manière autonome et n'autorisent aucune interaction
+utilisateur dans le cadre de leur fonctionnement. Ils restent cependant
+activable ou desactivable par le conducteur via une interface de contrôle.
+Ses sous-systèmes sont compatible d'exigences temps réel fortes, dûe à la
+problèmatique de sureté de fonctionnement qui leur est associée.\\
+Avec l'accroissement des performances des architectures embarquées basse
+consommation, de nouveaux sous-systèmes voient le jour dans l'infrastructure
+véhiculaire. C'esgt par exemple le cas des radars de reculs, parfois couplés à
+des caméras, ou encore de nouveaux modes d'interaction avec les terminaux
+utilisateurs, via du réseau sans-fil courte portée. C'est également le cas de
+sous-systèmes comme le {\it stop and go}, permettant de couper le moteur lors
+de l'arrêt du véhicule afin de réduire la consommation moyenne d'essence.
+
+\paragraph{}
+Les systèmes vetroniques sont aujourd'hui très complexes, intégrant à la fois
+des éléments avec de fortes exigences temps réel comme l'ABS ou l'ESP, avec
+des exigences de sûreté élevées comme le stop-and-go ou encore des exigences de
+sécurité également élevées, comme la gestion du démarrage sans contact.
+A cela, il faut intégrer un réseau de contrôle et de diagnostic, permettant de
+simplifier l'audit d'un véhicule en cas de problème électronique.
+
+\paragraph{}
+Dans \cite{invehicle_survey}, l'auteur montre à quel point les réseaux
+d'interconnexion de systèmes vétroniques peuvent être complexes. Ces réseaux
+sont habituellement basés sur une infrastructure de bus CAN ({\it Controller
+  Area Network}) interconnectés au travers de gateways. Ces dernières sont
+parfois à sens unique, afin d'assurer la sureté de fonctionnement de certains
+sous-systèmes.\\
+Avec l'intégration de terminaux utilisateurs dans le cadre de la gestion du
+multimédia, viennent se greffer ces réseaux IP dont le coisonnement est
+aujourd'hui de plus en plus complexe à assurer. En effet, l'utilisateur peut
+accéder, via ces derniers, à diverses informations moteurs, impliquant un
+média de remontée d'information. Le niveau de sûreté mais aussi de sécurité
+des passerelles d'interconnexion devient alors de plus en plus élevé.\\
+L'ordonateur de bord, élément dont l'interface utilisateur est unifié, permet
+à la fois le paramétrage des élément non-sûrs (multimédia, gestion des
+périphériques utilisateurs) et des éléments critiques ((des)activation des
+différents sous-sytèmes d'aide à la conduite, etc). Une telle architecture
+implique un support à la fois des problématiques de sûreté de fonctionnement
+mais aussi de sécurité, afin de protéger les sous-systèmes critiques de toute
+attaque ou impact dû à un comportement invalide d'un sous-système non-sûr
+comme les terminaux utilisateurs.
+
+\paragraph{}
+Comme le décrit l'auteur dans \cite{ttsoc} la gestion des flux en provenances des différents sous-systèmes
+se fait au travers d'un ordonnancement de type TDM, assurant un cloisonnement
+temporel strict entre les traitements à fortes exigences de sûreté et les
+traitements non-sûrs, comme le multimédia. Les réseaux sont également
+strictement séparés afin d'assurer un cloisonnement spatial strict.
+%%%% End of update %%%%
+\paragraph{}
+When safety critical and unsafe subsystems are not independent, we call this
+system a {\it systronic system}. An example of a systronic system is a vehicle-embedded system containing at the same time vehicle-related subsystems and various third
+parties for e.g. long distance radio support and cameras communications. Such a system
+is composed of subsystems which must respect various safety levels and sometimes
+various security levels.
+% stem ? transitive verb.
+The conception cost of a systronic system stems from the criticality and security level inheritance.
+This happens when non critical subsystems can influence a critical subsystem's
+behavior, for example when communication exists between them. This is also the case for
+security level inheritance.\\
+This becomes worse when high critical or high security subsystems must be certified as all subsystems should then be certified at the highest level.
+
+\subsection{A propos des problématiques techniques des architectures vetroniques civiles et militaires}
+
+\subsubsection{Problématiques générales du civil}
+
+\paragraph{}
+Today, some new needs impact Systronic systems. One example is the capacity to get
+various information such as probe values, from critical networks to
+uncritical subsystems like mobile terminals. As a consequence, gateways
+between critical and non critical networks have to guarantee that the critical
+network is protected against any invalid request from the non critical network.
+Moreover, any invalid request should be detected in order to be diagnosed.\\
+At the same time, safety critical subsystems must comply with safety requirements.
+Not all subsystems require the same safety requirements, but when
+communication associates two or more safety critical subsystems, all of them
+need to be compliant to the highest safety critical subsystem requirements.
+Such requirements are costly and highly impact the integration of new components in
+a safety critical network. Avoiding such costs when integrating
+non-critical subsystems is difficult if communication exists between such
+components and a safety critical network.\\ %Respecting \ref{req:multi_crit} avoid such overcost.\\
+However, independent non-communicating systems can have different
+criticality if it is proved that neither communication nor border effect can affect
+the each other.\\
+In newly manufactured vehicles and in military
+vehicles as shown in figure \ref{fig:armoured}, safety critical, non-critical and sometimes security critical subsystems
+are aggregated in a systronic system, and the separation between all these systems
+is more and more difficult to maintain.
+
+\subsubsection{Besoins spécifiques aux architectures militaires}
+
+\paragraph{}
+Today, some new needs impact Systronic systems. One example is the capacity to get
+In military systronics, various nodes managing sound, cameras, GPS, and other heterogeneous communicating subsystems are also
+aggregated to a generic vehicle.
+Figure \ref{fig:armoured} shows a simplified systronic architecture of an armoured vehicule like those used by the United Nations.
+Whatever the complexity of the systronic subsystem, it should be able to be completely
+managed through two or three management terminals. These terminals aggregate
+various security and safety levels. In such a system, it is not possible to
+partition various criticality subsystems and security subsystems and to propose 
+a simple human-machine interface. In such cases, communication between
+multi-criticality and multi-security domains should be highly filtered.\\
+% Requirement \ref{req:sec_filter} should be supported.\\
+Covert channels should also be prevented, because content
+filtering is not efficient enough to allow communications between various
+security domains.\\
+% as proposed in Requirement \ref{req:sec_covert}.\\
+
+\paragraph{}
+Moreover, information received by critical
+subsystems should also be sent to the management terminal in a bounded, short enough, time to be
+treated by the terminal user. Even if the worst case traversal time is not too
+short, it should still be upper-bounded. \\
+%Requirement \ref{req:rt} is the consequence of such need.\\
+
+\paragraph{}
+As a consequence, network integration is even more complex, because
+multiple independent safety critical networks exist, one for the motor
+management, others for the multiple communications nodes that should be
+partitioned (i.e. local inter-communicators versus communications with allies, etc). 
+In these safety critical networks, security critical nodes are interconnected to a non
+safety-critical network, with different security levels. Such nodes could be,
+for example, management terminals or antenna treatment nodes. Integration of various
+security domains is the consequence of having people with different access
+rights. For example the driver is not allowed to manage some of the
+communication subsystems.\\
+All these networks are not only on CAN buses, but also based on
+switched Ethernet networks, supporting higher rates, sometimes with real-time
+requirements.
+
+\paragraph{}
+We now summarize the five requirements that a systronic system should meet.
+
+
+\paragraph{}
+Interconnection should be guaranteed in terms of bandwidth in order to
+respond to the less critical subsystem needs like informational data
+processing. This is the case for video flows in the camera management
+subsystem. For this case, a minimum flow rate should be supported, as
+defined in Requirement \ref{req:debit}.
+It is also the case for some other data flows like alarm management
+for various motor probes. However, transfered data should be filtered
+in order to avoid any transfer of non-approved confidential data. Because less
+critical subsystems can't be certified for highly critical needs, they should
+not be able to send any requests to higher critical subsystems.\\
+Communication between such hybrid critical systems should therefore be in one
+direction (using a {\it diode} behavior) or with guarantees on the content of
+the returning flow.
+
+\paragraph{}
+The consequence is that systronic systems are based on a
+lot of heterogeneous subsystems that are increasingly interacting with each-other.
+The network interconnections need to be filtered and even inspected in order to
+react to invalid events. Furthermore, intercommunications between various safety
+critical and security critical subsystems need to be guaranteed. Such a filtering bridge should
+respect safety, security and real-time constraints at the same time.\\
+Depending on the network that need to be interconnected, the
+interconnection module behavior may vary in terms of security and real-time needs.
+For example, the interconnection of a motor informational subsystem with a
+smartphone does not have hard real-time requirements but must be guaranteed in
+terms of flow profile in order to avoid any flooding of the high-critical
+subsystem. Interconnecting the cartography and
+GPS subsystem with the weapon management terminal should be guaranteed in terms
+of high-level security, because these two nodes are part of two different
+security domains. Some of such interconnections must be in one way only, others
+must respect hard real-time constraints.\\
+%The consequence of such problematic is that various interconnection node
+%should be deployed, with various behaviors.\\
+% end of updated part. below needs to be updated
+
+\begin{figure}
+\input{figures/prv.tex}
+\caption{Armoured vehicle sample subsystems integration\label{fig:armoured}}
+\end{figure}
+
+\section{Associer sécurité et temps-réel}
+
+\section{De la réponse au besoin à la définition d'une architecture}
+
+\subsection{A propos d'une architecture logicielle pour une passerelle
+  vetronique}
+
+\subsubsection{Terminology}
+
+\paragraph{}
+In the following, various terms are used in order to describe the proposed
+solution. Some are network specific, others are security specific.
+\begin{itemize}
+\item \termino{supervision plane}{The network flow containing supervision
+data (e.g. informational data, counters).}
+\item \termino{data plane}{The network flow in which the utility data
+transit.}
+\item \termino{software diode}{A software implementation which guarantees that its input
+is in read-only mode and its output is in write-only mode. This can permit a
+one-way only connection.}
+\item \termino{software filter}{A software implementation filtering a data flow using a
+specific policy.}
+\item \termino{shaper}{A flow management policy which guarantees that any flow
+passing through is reduced to a specified maximum bandwidth.}
+\item \termino{periodic sender}{A software algorithm which sends network
+packets periodically. Output flow is then a periodic flow.}
+\item \termino{container}{Autonomous space (and potentially time) partition in
+which a specific task set responding to a given need is executed. A container designates
+space and time properties, not its content.}
+\item \termino{Virtual Element}{{\it (VE)} A set of processes executed into a container.
+In the system model of this article, the scheduling of all tasks of all VE is done
+by the hypervisor.}
+\item \termino{hypervisor}{Software element managing the scheduling of the
+various VE and the network interconnections.}
+\item \termino{TLV}{Type-Length-Value. Type of protocol using recursive
+    aggregation of typed values with fixed length.}
+\item \termino{filtering connector}{connector between different criticality
+and/or security networks which guarantees that any data flowing through it is
+compliant to a given policy.}
+\item \termino{policy}{Security or safety requirements on the content and the
+profile of a given flow. If the flow is not compliant to the policy, it is
+dropped by the filtering connector.}
+\end{itemize}
+
+\subsubsection{Defining a multi-purpose filtering architecture for systronic systems}
+
+\paragraph{}
+The consequence of the problematic shown in \ref{subsec:problematics}
+is that various filtering connectors with various behaviors need to be
+deployed. These connectors interconnect subnetworks with different levels of criticality and
+support some policy based communication channels flowing through them.
+In order to avoid high validation costs due to multiple filtering
+connector profiles, we contribute to a specific configurable architecture
+which can respond to such needs.
+
+\paragraph{}
+This architecture is based on autonomous communicating containers.
+Each container is specialized
+for a specific treatment. Such treatment can be filtering, shaping, one-way
+software diode, or any other treatment needed to respond to the
+systronic needs. In the following, some of these containers are described more
+precisely.\\
+The goal of such a software architecture is to support various container
+configurations according to the needs, without having to rewrite the entire
+software. However, the reused software elements (such as the hypervisor)
+should be able to respond at the same time to higher critical and security
+needs.
+
+\paragraph{}
+The filtering connector should be able to guarantee a Worst Case Traversal Cost (WCTC)
+for the filtered data flow. It corresponds to the complete traversal time of the filtering connector.
+Considering Figure \ref{fig:block}, the traversal cost measurement starts when a packet is
+received in the {\it VE filter} container and stops when it is sent by the
+{\it VE sender} container.\\
+Respecting a WCTC implies that each flow management task should be considered as
+an element of a real-time task set. In the model, we use the standard POSIX
+real-time FIFO scheduling scheme.\\
+
+\subsubsection{About the supervision containers}
+
+\paragraph{}
+The filtering connector uses a given policy to decide whether some specific data should
+be transmitted or not. Any transmission of invalid data should be detected.
+The filtering connector should therefore be supervised to detect invalid
+behaviors. A supervision node then receives informational flow about such
+events and various other counter values from the filtering connector.
+The supervision support in the filtering connector is shown in Figure \ref{fig:block}.
+
+\begin{figure}
+\input{figures/bloc_diag.tex}
+\caption{Complete embedded filtering gateway\label{fig:block}}
+\end{figure}
+
+\subsubsection{About the flow filtering container}
+
+\paragraph{}
+When interconnecting a security critical subsystem with a communication
+subsystem, the data flow needs to be filtered. An example of such
+interconnection is the control console managing the antenna subsystem. The antenna
+subsystem can receive control commands and data to send.\\
+Some restricted content of the security console should not be emitted. To ensure the confidentiality of these data, any request sent to the
+Antenna subsystem is filtered and only some policy-allowed requests are
+transmitted.\\
+To support this feature, the VE filter shown in figure \ref{fig:block}
+validates the data content before passing it on to the VE sender. This filter
+chain is based on two tasks:
+\begin{itemize}
+\item one filtering task receiving and inspecting data content according
+to a given security policy. The WCET of this task varies, depending on the
+data size and content. If the content is invalid, the packet is dropped.
+\item one sending task, executing a simple send() of the previously filtered
+data. The task execution cost variation is small if the kernel buffer is
+ large enough to support any possible input packet size
+\end{itemize}
+
+\subsubsection{About the diode container}
+
+\paragraph{}
+In some cases, communication should be one way only. This is the
+case when the GPS (General Positioning System) subsystem sends data to the security console. No
+information should be sent back to the GPS subsystem and the current state of
+the security console should not be detected by the GPS subsystem.\\
+The software diode supports such a need. It is a simple forwarder without any variable
+behavior. Its goal is to forward a data flow from its input to its output,
+without impacting the flow. No flow dependent treatment should be done.
+In order to support real-time constraints, the input buffer's behavior is based
+on the ARINC 653\cite{arinc_653} queuing ports. Therefore, the input
+buffer depth does not depend on the input packets' size.\\
+Another property of this container is to guarantee that the sender should not
+be informed of the behavior of the receiver, whatever the receiver state is.
+Otherwise, it would be possible for the sender to get back some information from
+the receiver (with a data coding function of the packet size). This would mean that the diode would not be fully opaque.
+
+\subsubsection{About the sender container}
+
+\paragraph{}
+The VE sender executes a simple task periodically sending a packet if one is received
+from the previous container or sending a random packet otherwise. Its WCET is small. It is separated from the
+diode because this container could be able to be considered as a two-way
+element if needed. In a given filtering connector with no diode container, a two-way
+communication would be accepted.\\
+The period of the sender task defines the maximum throughput of the output flows.
+
+\subsubsection{About security and safety requirements on the output flow profile}
+\label{sec:secu}
+
+\begin{figure}
+\input{figures/paquet_forward.tex}
+\caption{Jitter control in the gateway's input packets forwarder\label{fig:fw}}
+\end{figure}
+
+\paragraph{}
+When interconnecting mixed-security networks, another filter needs to be
+considered. It is possible, using a variable packet rate, to
+send information to the target without transmitting it as a clear
+content. The goal of this filter is thus to avoid any output variable packet
+rate so that no information can be obtained from the flow profile. Such
+information transmission is called a {\it covert channel} and is a well-known
+way to transmit data without sending a single bit of it, as described in
+Requirement \ref{req:sec_covert}.\\
+
+
+\paragraph{}
+However, such a filter should still be compliant with some real-time properties.
+The flow traversal latency should still be upper-bounded, so that a WCTC can
+be calculated.\\
+In order to generate a real-time behavior from the filtering connector, the
+last forwarding task of the connector is executed using a periodic, one-packet
+per job, execution. As shown in Figure \ref{fig:block}, this task is executed
+in VE out.\\
+Such a configuration implies a FIFO input in order to stock waiting packets from
+a previous input burst. The FIFO depth is calculated in terms of the number of
+packets rather than the number of bytes.
+Behave like this, the input FIFO architecture using the same principle as the ARINC queuing
+ports model, as described in \cite{alena_communications_2007} and
+\cite{arinc_653}.\\
+Figure \ref{fig:fw} shows a sample forwarding management executed in a
+given filtering connector, using the task set described in Table \ref{tab:taskset}.\\
+
+\paragraph{}
+When interconnecting mixed-criticality networks, the filtering connector
+guarantees that the receiver will never be flooded, whatever the input flow is.
+Such protection is efficient when the sender is a non-critical, possibly
+unsecured, task (e.g. a smart phone requiring some information from the vehicle,
+such as speed or fuel level). More generally, it is the case for systems which respect of
+Requirement \ref{req:multi_crit}.
+
+\paragraph{}
+A sporadic task set $\tau$ will contain the following tasks:
+\begin{itemize}
+\item $F$, reading and buffering the input flow and filtering the content
+\item $D$, the one-way forwarder which guarantees that the connector is one-way
+  only
+\item $S$, the periodic sender task
+\end{itemize}
+The task set is scheduled using a
+rate-monotonic scheduling scheme, considering $P_E$ as the minimum input flow
+inter-packet period:
+\begin{table}
+\begin{center}
+\begin{tabular}{l|ccc}
+\hline
+Task & WCET & Period & Priority\\
+\hline
+$F$, the filter & $C_F$ & $P_E$ (sporadic) & 1 (less) \\
+$D$, the diode & $C_D$ & $P_E$, (sporadic) & 2 \\
+$S$, the sender & $C_S$ & $P_S$, fixed & 3 \\
+\end{tabular}
+\end{center}
+\caption{Sample filtering task set $\tau$\label{tab:taskset}}
+\end{table}
+
+\paragraph{}
+To support bursts in the input flow, we define the following
+properties that should be respected by the input flow to guarantee
+that no packet is dropped:\\
+\property{The average input flow throughput should be one packet per sender
+  period $P_S$}\\
+\property{The input flow burst size should not be greater than the
+  connector's input buffer depth}\\
+\property{For a given burst, the period between too packets should be fixed
+  to $P_E$}\\
+\property{Another burst can be sent only if the previous one has been
+  completely treated by the connector (the connector's buffer should contain,
+  at most, one packet)}\\
+
+To respect these properties, the input flow profile should respect the following equations:
+
+\subsubsection{Considering a periodic input flow}
+
+Equation \ref{eq:p_1} should be respected.
+\begin{equation}
+P_E = P_S
+\label{eq:p_1}
+\end{equation}
+The Worst Case Traversal Time (WCTT) $C_T$ is then defined in Equation
+\ref{eq:p_2}.
+\begin{equation}
+C_T = P_S + C_S
+\label{eq:p_2}
+\end{equation}
+
+\subsubsection{Considering a burst-based input flow}
+
+\paragraph{}
+The input flow uses a burst period $P_B$ and a burst size of $n$
+packets. Equation \ref{eq:b_1} should be respected.
+\begin{equation}
+  P_B = (n + 1) \times P_S - C_S 
+\label{eq:b_1}
+\end{equation}
+The Worst Case Traversal Time (WCTT) is then defined in Equation
+\ref{eq:b_2}.
+\begin{equation}
+  C_T = n \times P_S + C_S
+\label{eq:b_2}
+\end{equation}
+
+\paragraph{}
+Such a packet scheduling policy is not able to support large packet flows, due to
+the {\it one-packet-per-period} filtering behavior. This behavior has been
+chosen as it is simple to manage and supports the
+security requirements on the output flow profile.
+
+\subsubsection{Empirical measurement of a sample gateway traversal cost}
+\label{subsec:empiric}
+
+\subsubsection{Architecture and configuration}
+
+\paragraph{}
+The device under test and the flow profile used for these measurements are
+shown in Table \ref{tab:dut}.\\
+\begin{center}
+\begin{table}
+\begin{tabular}{l|l}
+  {\bf Item} & {\bf Description} \\
+  \hline
+  {\it Architecture} & i686 core 2 duo 2Ghz \\
+  {\it NICs} & DLINK-RTL8139, VIA VT6105 \\
+  {\it OS} & Debian Squeeze \\
+  {\it Kernel} & linux 3.2.12-rt24 \\
+         & no ACPI support \\
+         & FULL\_PREEMPT mode \\
+  {\it Containers} & LXC containers \\
+  {\it Security} & specific kernel-based protection \\
+  & (memory \& LXC-escaping) \\
+  \hline
+  {\bf Input flow item} & {\bf Description} \\
+  {\it flow mode} & UDP over IPv4 \\
+  {\it payload protocol} & TLV\\
+  & T ({\it Type}) field size 1B \\
+  & L ({\it Length}) field size 1B \\
+  {\it payload types} & 5 types\\
+  {\it payload size} & type 0: 50B \\
+   & type 1: 50B\\
+   & type 2: 30B\\
+   & type 3: 30B\\
+   & type 4: 70B\\
+  {\it payload values} & ASCII content \\
+\end{tabular}
+\caption{Description of the configuration used for measurement\label{tab:dut}}
+\end{table}
+\end{center}
+
+\paragraph{}
+An initial implementation was carried out using Linux Containers to
+separate the filter task, the diode task and the periodic flow generator.
+Each task was spatially separated in a specific container. All the containers
+are executed in the same core, serializing the execution of the forwarding
+tasks.\\
+
+In order to reduce the impact of Linux, the kernel is configured using the
+Real-Time patch, in full-preemptive mode. In such a mode, kernel threads can be
+preempted in order to execute real-time tasks. This configuration reduces the
+overall system latency between each task and reduces the cost of asynchronous events
+management during real-time tasks execution. The capacity of the Linux
+kernel to support soft real-time scheduling has been measured using rt-tests
+\cite{rtlinux}.\\
+
+\begin{figure}
+  \includegraphics[width=8.9cm]{figures/rttest.pdf}
+\caption{Scheduling latency for highest priority task (in usec)\label{fig:rttest}}
+\end{figure}
+
+\paragraph{}
+Figure \ref{fig:rttest} shows that the highest priority task (SCHED\_FIFO,
+priority 99) is executed with a maximum scheduling latency of 300
+microseconds. This measurement was done using the
+cycletest \cite{cycletest} tool over a period of
+5 hours with an input and output flow representative of the gateway needs.
+
+\begin{figure}
+\input{figures/mockup.tex}
+\caption{System architecture used for empirical study}
+\end{figure}
+
+\paragraph{}
+The scheduling policy chosen uses a rate monotonic scheduling sheme with
+the following configuration:
+{\small
+\begin{table}
+\begin{center}
+\scalebox{0.9}{
+\begin{tabular}{l|ccccc}
+Task& Scheduling & task & Scheduling& WCET & Period\\
+ &  policy&   profile &  priority  & (measured) & \\
+\hline
+Filter & SCHED\_FIFO & sporadic &  97 & 90us & 1  ms \\
+Diode & SCHED\_FIFO & sporadic & 98 & 60us & 1 ms \\
+Sender &  SCHED\_FIFO & periodic & 99 (highest) & 80us & 10 ms\\
+\end{tabular}
+}
+\end{center}
+\caption{Scheduling choices for cost measurements\label{tab:mockup}}
+\end{table}
+}
+
+\paragraph{}
+The highest priority is given to the Sender task, then to the Diode
+task, and finally to the Filter task.\\
+Such a policy was chosen in order to reduce the traversal latency, as
+described in \ref{sec:secu}.
+
+\subsubsection{Filtering and Deep Packet Inspection}
+
+\paragraph{}
+In order to define a real Deep Packet Inspection automaton in the Filter task,
+a very simple network protocol was written, based on a TLV
+(Type/Length/Value) structure. This protocol supports five types, each with a
+specific size and content. No recursive TLV structure is used.\\
+This protocol was written in a {\it sender} task, generating a network
+flow traversing the filtering gateway. The same protocol is validated in the
+Filter task automaton, in order to check the content of each packet received.
+
+\paragraph{}
+The TLV protocol used for sample flow is a simple one using five types with no
+recursion. A complete inspection of the packet content is done before passing
+it to the diode container. If the packet is invalid, it is dropped and an
+invalid packet counter is updated.\\
+As shown in Algorithm \ref{algo:dpi} the DPI algorithm is based on a sample
+security policy to decide whether the packet is valid or not.
+\begin{algorithm}
+ \SetAlgoLined
+ \KwData{input packet content}
+ \KwData{input packet policy}
+ \KwResult{input packet validation against the policy}
+ read packet\;
+ \Switch{packet.T}{
+   \Case{packet.T = Policy.T.Val1}{
+     \Switch{packet.L}{
+       \Case{packet.L = Policy.T.Val1.Length}{
+         \Case{packet.V matches Policy.T.Val1.AllowedContent}{
+           \Return Bool.Allowed\;
+         }
+         \Other{
+           \Return Bool.Disallowed\;
+         }
+       }
+       \Other{
+         \Return Bool.Disallowed\;
+       }
+     }
+     \Other{
+       \Return Bool.Disallowed\;
+     }
+   }
+   \Case{packet.T = Policy.T.Val2}{
+     \Switch{packet.L}{
+       \Case{packet.L = Policy.T.Val2.Length}{
+         \Case{packet.V matches Policy.T.Val2.AllowedContent}{
+           \;
+           \Return Bool.Allowed\;
+         }
+       }
+     }
+   }
+   [...] \emph{Same case block for each possible T Value}\;
+ }
+ \caption{Sample TLV protocol inspection using a security policy\label{algo:dpi}}
+\end{algorithm}
+
+\subsubsection{Simple software Diode}
+
+\paragraph{}
+The software diode is a sporadic task of the Diode container. This task simply
+reads the packets received from the Filter containers and writes them toward the
+Sender container without any value added.\\
+The diode behavior does not depend on the packets' content. Only the packets'
+size impact its execution cost, depending on the amount of bytes that should
+be transmitted.\\
+This task is very simple and should have a small execution time variation.
+
+\subsubsection{Periodic sender task}
+
+\paragraph{}
+The sender task is a periodic task treating one packet per period. As a
+consequence, the packet rate is seriously reduced, as shown in
+\ref{sec:secu}.\\
+The gateway output flow profile is generated by this task to avoid
+any inter-packet period variation due to the gateway's internal behavior.
+
+\subsubsection{Communication between containers}
+
+\paragraph{}
+The communication between containers is based on Unix sockets through .sock
+files mapped in shared temporary memory-based file-systems. Such a configuration
+allows only the main memory to be used. At the same time, Unix sockets
+avoid using more costly communication channels like IP stacks.\\
+Because each task is executed in a specific container, spatially separated from the
+others, classical Inter-Process Communication channels such as pipes or
+signals are prohibited by the architecture. This also avoids direct communication
+channels between the Filter container and the Sender container. In order to
+guarantee that the VE diode is a one-way connector, the diode input UNIX socket
+file is mounted in the VE diode as a read-only file-system.\\
+Using UNIX sockets allows us to create a protocol separation
+between the incoming filter half-communication with the emitter and outgoing Sender
+half-communication with the receiver.
+
+\subsubsection{Empirical results}
+
+\paragraph{}
+Various measurements have been carried out in order to validate the efficiency of
+the architecture and its capacity to support real-time requirements. In order
+to demonstrate that the gateway guarantees the periodicity of the emitted flow
+whatever the input flow is, a randomly generated flow was sent to the
+gateway, and the WCET and the period of the three tasks were measured.
+A minimum period for the Filter and Diode tasks was not set. These tasks are
+event-based only.
+
+Table \ref{tab:test1} describes the first measurement test.
+
+\begin{table}[h!]
+  \begin{tabular}{l|l}
+    & {\textbf Test 1} \\
+     \hline
+     input samples & 10,000 \\
+     input flow minimum period & 10 ms \\
+     input flow maximum period & 30 ms \\
+     input flow period variation & random \\
+     input flow content & policy-compliant valid TLV \\
+     input flow payload choice & random \\
+     input flow average bit rate & 68.8 KB/s \\
+     dropped packet(s)  & 0 \\
+  \end{tabular}
+  \caption{Test 1 profile\label{tab:test1}}
+\end{table}
+
+\begin{figure}
+\includegraphics[width=9cm]{figures/measure_all.pdf}
+\caption{Test 1: Measured WCET for Filter, Diode and Generator
+  modules\label{fig:costall}}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=9cm]{figures/period_filter.pdf}
+\caption{Test 1: Period variation of the Filter task\label{fig:filter_p}}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=9cm]{figures/period_diode.pdf}
+\caption{Test 1: Period variation of the Diode task\label{fig:diode_p}}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=9cm]{figures/period_sender.pdf}
+\caption{Test 1: Period variation of the Sender task\label{fig:sender_p}}
+\end{figure}
+
+\paragraph{}
+A first test was made using a randomly generated flow with a minimum
+inter-packet period of 10 milliseconds. The flow profile is given in Table
+\ref{tab:dut}. Figures \ref{fig:filter_p},
+\ref{fig:diode_p} and \ref{fig:sender_p} show the resulting task execution
+profile in the filtering connector. We can see that whatever the
+period of the Filter and Diode task, the Sender task, having the highest
+priority, is executed using a periodic scheme. The small variation of its
+period is the consequence of the kernel scheduling latency, as shown in
+\ref{fig:rttest}. The worst case output flow is then a periodic flow having
+the same period as the Sender task.
+
+\paragraph{}
+In order to stress out the filtering connector, a second flow was generated
+using the profile given in Table \ref{tab:dut}.\\
+Table \ref{tab:test2} describes this second measurement test.
+
+\begin{table}[h!]
+  \begin{tabular}{l|l}
+    & {\textbf Test 2} \\
+     \hline
+     input samples & 10,000 \\
+     input flow minimum period & 1 ms \\
+     input flow maximum period & 1 ms \\
+     input flow content & policy-compliant valid TLV \\
+     input flow payload choice & random \\
+     input flow average bit rate & 688 KB/s \\
+     dropped packet(s)  & 90\% \\
+  \end{tabular}
+  \caption{Test 2 profile\label{tab:test2}}
+\end{table}
+
+
+\paragraph{}
+Because the Filter and the Diode task minimum period is not set, their real
+minimum period is the lowest supported by the operating system, which is 1
+millisecond. Figures \ref{fig:filter_p_2} and \ref{fig:diode_p_2} demonstrate
+this. These figures also show some anomalies in the input flow
+period, generating a latency in both the Filter and Diode tasks.
+At the same time, the Sender task still maintains its period and is neither
+impacted by the scheduling of the Filter and Diode task nor by the input flow
+period anomalies, as shown in Figure \ref{fig:sender_p_2}.
+
+\begin{figure}
+\includegraphics[width=9cm]{figures/period_filter_2.pdf}
+\caption{Test 2: Period variation of the Filter task\label{fig:filter_p_2}}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=9cm]{figures/period_diode_2.pdf}
+\caption{Test 2: Period variation of the Diode task\label{fig:diode_p_2}}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=9cm]{figures/period_sender_2.pdf}
+\caption{Test 2: Period variation of the Sender task\label{fig:sender_p_2}}
+\end{figure}
+
+\section{Limitations and further work}
+\label{sec:future}
+
+\paragraph{}
+In section \ref{sec:secu}, we can see that the filtering connector is not able to support
+a high packet rate. Considering a Sender period $P_S$ reduced to 1 millisecond,
+which is still schedulable with the WCET defined in
+\ref{tab:mockup}, the highest throughput for an input flow using packets with
+a UDP payload of 50 bytes is 68.8 kbytes per second.\\
+There is still work to support flows with high throughput through the use
+of multi-packet bursts with a per-flow timeout management.\\
+Such a policy generates a periodic burst rather than a periodic one-packet send. The
+filter does not execute a periodic poll of one packet, but checks the current
+input buffer threshold. If the threshold or the current buffer
+timeout has been reached, its content is sent.\\
+In this case, defining a worst case traversal time is still possible, and the
+output flow profile remains mastered whatever the input flow is.\\
+Some implementations and measurements need to be done in order to check the
+efficiency of such a solution.
+
+\paragraph{}
+From the security point of view, the software architecture used in this paper
+is not certifiable because the system used is based on a Linux architecture.
+Using a smaller and certifiable architecture based on the same general design
+would provide some security but also better real-time properties.
+
+\paragraph{}
+Nevertheless in the empirical study described in \ref{subsec:empiric},
+the emitter is already not informed about the receiver's behavior whatever
+the input flow is. When packets are dropped because of an input overflow or
+because the receiver is not listening, no information is sent back to a
+supervision controller, as shown in Figure \ref{fig:block}. This communication
+channel should be integrated and its cost should not interfere with the data
+plane treatments scheduling.
+
+\paragraph{}
+Another missing element is the capacity to schedule multiple input flows with
+the capacity to define quality of service to support flows of
+various criticality. The input filter task becomes a task set managing multiple
+flows. Each flow then needs to be differentiated when sent to the Diode task
+and the Sender task in order to manage each output half-communication
+associated to one flow separately.
+
+\paragraph{}
+
+\subsection{Vers une solution modulaire compatible de la certification par composition}
+
+\paragraph{}

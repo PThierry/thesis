@@ -24,6 +24,29 @@ réel sur les flux traité par la passerelle, il devient nécessaire de
 considérer la bonne adéquation de la solution de compartimentation avec les
 contraintes d'exécution (WCET, période, Dead-line) des services de traitement de flux.
 
+\subsection{A propos des exigences temps réelles}
+
+\paragraph{}
+En plus des différentes exigences de sécurité décrite dans le chapitre
+précédant, plusieurs exigences temps-réelles doivent être respectée dans le
+cadre d'une passerelle d'interconnexion entre deux domaines dont les niveaux
+de criticités sont à la fois multiples dans chacun d'entre eux et
+potentiellement différents de chaque coté de la passerelle.
+
+\begin{requirement}
+It should be possible to allow domains with various levels of criticality to communicate\label{req:multi_crit}
+\end{requirement}
+
+\begin{requirement}
+The traversal time between multi-critical networks should be
+upper-bounded\label{req:rt}
+\end{requirement}
+
+\begin{requirement}
+According to the needs, a minimum flow rate should be
+guaranteed for each flow\label{req:debit}
+\end{requirement}
+
 \subsection{De l'ordonnancement hierarchique à la virtualisation}
 
 \subsection{Hiérarchie et Time Division Multiplexing}
