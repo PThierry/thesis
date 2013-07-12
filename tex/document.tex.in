@@ -65,7 +65,7 @@
 %\usepackage[sectionbib]{natbib}
 \usepackage{chapterbib}
 \usepackage{theorem}
-
+\usepackage{etex}
 \usepackage[Glenn]{fncychap}				% 'Glenn' chapter titles
 
 % charts support
@@ -78,9 +78,13 @@
   \usepackage{pst-plot} % For axes
 \end{psinputs}
 \usepackage{these}
+\usepackage{tikz}
 
 % D. Verna FIXME mackage
 \usepackage[margin=true]{fixme}
+\usetikzlibrary{arrows}
+\usetikzlibrary{automata}
+\usetikzlibrary{shapes,arrows}
 
 
 %\usepackage{draftcopy}				% mark doc as 'draft'
@@ -178,7 +182,77 @@
 \theoremheaderfont{\scshape}
 \newtheorem{restrictions}{Restriction}[section]}
 
+{\theoremstyle{marginbreak}
+\theoremstyle{break}
+\theorembodyfont{\itshape}
+\theoremheaderfont{\scshape}
+\newtheorem{proof}{Preuve}[section]}
 
+{\theoremstyle{marginbreak}
+\theoremstyle{break}
+\theorembodyfont{\itshape}
+\theoremheaderfont{\scshape}
+\newtheorem{guess}{Propriété}[section]}
+
+{\theoremstyle{marginbreak}
+\theoremstyle{break}
+\theorembodyfont{\itshape}
+\theoremheaderfont{\scshape}
+\newtheorem{assumption}{Hypothèse}[section]}
+
+{\theoremstyle{marginbreak}
+\theoremstyle{break}
+\theorembodyfont{\itshape}
+\theoremheaderfont{\scshape}
+\newtheorem{theorem}{Théorème}[section]}
+
+{\theoremstyle{marginbreak}
+\theoremstyle{break}
+\theorembodyfont{\itshape}
+\theoremheaderfont{\scshape}
+\newtheorem{definition}{Définition}[section]}
+
+{\theoremstyle{marginbreak}
+\theoremstyle{break}
+\theorembodyfont{\itshape}
+\theoremheaderfont{\scshape}
+\newtheorem{lemma}{Lemme}[section]}
+
+{\theoremstyle{marginbreak}
+\theoremstyle{break}
+\theorembodyfont{\itshape}
+\theoremheaderfont{\scshape}
+\newtheorem{remark}{Remarque}[section]}
+
+{\theoremstyle{marginbreak}
+\theoremstyle{break}
+\theorembodyfont{\itshape}
+\theoremheaderfont{\scshape}
+\newtheorem{exmpl}{Exemple}[section]}
+
+{\theoremstyle{marginbreak}
+\theoremstyle{break}
+\theorembodyfont{\itshape}
+\theoremheaderfont{\scshape}
+\newtheorem{constraint}{Contrainte}[section]}
+
+{\theoremstyle{marginbreak}
+\theoremstyle{break}
+\theorembodyfont{\itshape}
+\theoremheaderfont{\scshape}
+\newtheorem{corollary}{Corollaire}[section]}
+
+{\theoremstyle{marginbreak}
+\theoremstyle{break}
+\theorembodyfont{\itshape}
+\theoremheaderfont{\scshape}
+\newtheorem{condition}{Condition}[section]}
+
+{\theoremstyle{marginbreak}
+\theoremstyle{break}
+\theorembodyfont{\itshape}
+\theoremheaderfont{\scshape}
+\newtheorem{proposition}{Proposition}[section]}
 
 {\theoremstyle{marginbreak}
 \theoremstyle{break}
@@ -192,7 +266,6 @@
 \theoremheaderfont{\scshape}
 \newtheorem{hypothesis}{Hypothèse}[section]}
 
-\newtheorem{assertion}{Assertion}[section]
 
 \input{includes/titlepage.tex}
 

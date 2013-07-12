@@ -11,9 +11,17 @@
 \chapter{La sécurisation d'une plateforme de traitement réseau multi-domaines de sécurité}
 \doMinitoc
 
+\paragraph{}
+{\it Il existe un certain nombre de solutions dont le but est de permettre
+l'interconnexion de domaines de sécurité hétérogènes. Ces solutions répondent
+plutôt à des besoins de type SI, mais les principes que ces solutions
+utilisent restent un très bon point de départ dans le cadre de la définition
+d'une architecture logicielle sécurisée.}
+
 \section{Sécurisation par séparation physique des traitements}
 
 \subsection{Interconnexion sécurisé par passerelle de type diode matérielle}
+\label{sec:diodemat}
 
 \subsubsection{Description de la solution}
 
@@ -43,7 +51,7 @@ sécurité est double:
 
 \paragraph{}
 Le principe d'architecture d'une diode matérielle a été formalisé par Philippe
-Lagadec de la Direction Générale de l'Armement en 2006\cite{sstic2006diode}. Le principe
+Lagadec de la Direction Générale de l'Armement en 2006 \cite{sstic2006diode}. Le principe
 proposé s'appuie sur un élément matériel aux propriétés physiques
 particulières assurant une traversée sens unique, associée à deux {\it
   guichets}, comme décrit dans la Figure \ref{fig:diodephy}. Ces guichets
@@ -67,6 +75,34 @@ Comme le décrit l'auteur, la diode matérielle permet cependant d'assurer à la fo
 \item la confidentialité des données du récepteur
 \item l'intégrité et la disponibilité des données de l'émetteur
 \end{itemize}
+
+\subsection{Firewall d'interconnexion de domaines de sécurité hétérogènes}
+
+\paragraph{}
+Il existe peu de solutions permettant une interconnexion de domaines de
+sécurité disjoint. C'est le cas de la solution TSF 101\cite{tsf101} de Thales
+Security, permettant de faire transiter des données entre domaines de sécurité
+disjoints en fonction d'une politique de sécurité chargée dans l'appliance.
+
+\subsubsection{Description de la solution}
+
+\paragraph{}
+La solution TSF 101 permet de faire transiter des données déclassifiée du
+domaine de sécurité le plus haut au domaine de sécurité le plus bas. Pour
+cela, il s'appuie sur un critère de filtrage prédéfinit et non modifiable
+dans le cadre de son utilisation. La solution est certifié par les critères
+communs au niveau EAL 5.
+
+\subsubsection{Avantages et limitations}
+
+\paragraph{}
+La solution permet d'interconnecter des réseaux de niveau de sensibilité
+différentes. Il s'agit d'une appliance, impliquant un facteur de forme et des
+propriétés d'architecture ne lui permettant pas d'être intégré dans des
+environnements embarqués contraints. La solution ne cible pas non plus de
+propriétés temps réelles, et n'est pas modulaire en terme de services
+logiciels, le besoin auquel cette appliance répond ne nécessitant pas ces
+propriétés.
 
 \section{A propos des architecture MLS (MultiLevel Security) et MILS
 (Multi-Independent Level of Security)}
@@ -95,7 +131,7 @@ sécurité dans les systèmes automatisés était étudiée au travers de principes
 de listes de contrôle d'accès. En 1973\cite{lapadula1}, une méthode de
 gestion de contrôle d'accès définissant le principe de de sujets ayant accès à
 des objets fut définit et démontrée mathématiquement. Il s'agit du RBAC
-(\FIXME cite).
+\cite{ferraiolo1995role}.
 
 \paragraph{}
 En parallèle des travaux de Bell et LaPadula\cite{labadula1}\cite{lapadula2},
@@ -166,7 +202,7 @@ partagé. Elles permettent également la communication au travers d'une
 infrastructure compatible MILS\cite{milssecgrid}. Dans cet article, les auteurs
 décrivent les mécanismes répartis dans le réseau d'interconnexion permettant
 de faire communiquer des domaines de sécurité hétérogène de manière sûre. Les
-quatres propriétés des systèmes MILS sont alors respectées.
+quatre propriétés des systèmes MILS sont alors respectées.
 
 \subsection{Principes généraux du MLS}
 
@@ -241,3 +277,18 @@ Ces travaux considèrent cependant comme hypothèse que l'environnement
 d'exécution est de confiance, travaillant sur une formalisation de
 l'architecture applicative et le protocole de communication entre ces
 dernières.
+
+\section{Synthèse}
+
+\paragraph{}
+Aujourd'hui, les solutions permettant d'interconnecter plusieurs domaines de
+sécurité s'appuient sur une séparation matérielle stricte, impliquant
+plusieurs équipements \cite{sstic2006diode}\cite{tsf101}. Plus globalement,
+les solutions d'interconnexion de domaines de sécurité ne sont pas conçu pour
+la modularité, le temps réel ou encore l'embarqué contraint. En effet, ces
+besoins sont plus récents, dérivant des nouvelles exigences avioniques et
+vétroniques, pour lesquels les produits de sécurité ne sont pas encore
+définis. Dans le cadre de ma thèse, je cherche à déterminer une solution
+logicielle afin de répondre à ces besoins, en m'inspirant dans le même temps
+des solution existantes qui ont su démontrer leur capacités à répondre aux
+exigences sécuritaires.

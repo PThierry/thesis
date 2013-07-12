@@ -11,6 +11,16 @@
 \chapter{A propos de l'état de l'art des solutions de virtualisation}
 \doMinitoc
 
+\paragraph{}
+{\it Les solutions de virtualisation sont un bon candidat pour répondre au besoin
+sécuritaire porté par le MILS (Multi-Independent Level of Security) et le MLS
+(MultiLevel Security). Ces solutions, pour certaines d'entre elles,
+fournissent une architecture logicielle compatible du principe de {\it
+separation kernel} comme décrit il y a plus de 20 ans par John Rushby
+\cite{rushby1989kernels}. Dans ce chapitre, je décrit les différentes
+solutions existantes de type {\it separation kernel}, s'appuyant sur ce même
+principe ou dont le but est la compartimentation logicielle.}
+
 \section{Etude de la sécurité des solutions de virtualisation existantes}
 
 \subsection{Etude de la solution Xen}
@@ -187,11 +197,37 @@ exigences de réactivités sont faibles (supérieur à la milliseconde).
 
 \subsection{La famille L4}
 
+\paragraph{}
+L4 représente une famille de micro-noyaux qui partagent un certain nombre de
+principe d'architecture. Le niveau de sécurité ou la compatibilité avec les
+exigences temps réel varient selon la solution L4 choisie. Ces noyaux dérivent
+du micro-noyau L4, créé par Jochen Liedtke\cite{liedtke1995micro}\cite{liedtke1996toward}.
+
 \subsubsection{Principe}
+
+\paragraph{}
+La famille L4 est composé de différents micro-noyaux écrits en C++, comme
+{\it Fiasco}, {\it Pistachio} ou encore {\it seL4} \cite{klein2009sel4}.
+Fiasco est une solution qui n'a été porté que
+sur architecture x86, limitant fortement son usage. Cependant, Pistachio a été
+porté sur un grand nombre d'architectures, dont ARM, PowerPC ou MIPS. Seul
+les architectures Sparc ne sont pas supportées à ce jour. Le micro-noyau seL4 cible la
+sécurité, mais est limité à deux architectures matérielles: x86 et ARM.
+SeL4 a fait vérifier formellement son API et sa gestion mémoire en
+2009\cite{klein2009sel4}.
 
 \subsubsection{Synthèse}
 
+\paragraph{}
+Des différents micro-noyaux de la famille L4, seL4 est celui qui semble le
+plus proche du besoin sécuritaire. Son faible volume de code (7500 lignes) et
+ses premiers travaux en terme de preuve formelle font de lui un bon candidat
+au besoin MILS. Malheureusement, ce dernier n'est porté que sur deux
+architectures et ne propose à ce jour aucune considération des exigences temps
+réel.
+
 \subsection{L'hyperviseur PikeOS}
+\label{sec:pikeos}
 
 \subsubsection{Principe}
 
@@ -258,4 +294,24 @@ certifiables fait de cette solution logicielle un bon candidat à l'intégration
 des moniteurs de sécurité tels que nécessités par une architecture de type MLS
 ou MILS\cite{pike_baumann2009verifying}.
 
+\section{Synthèse}
 
+\paragraph{}
+L'usage d'une solution logicielle de virtualisation à faible empreinte mémoire
+est un bon candidat au besoin MILS et MLS. Une telle solution permet ainsi
+d'exécuter divers environnements dont les niveaux de sécurité et de sureté de
+fonctionnement peuvent être hétérogènes. Cependant, cela implique une
+compatibilité de la solution de virtualisation logicielle avec à la fois des
+exigences temps réel et de sécurité. Il est de plus nécessaire, afin de
+permettre l'intégration de sécurité, d'avoir la possibilité de faire
+s'exécuter sur l'hyperviseurs d'autres éléments logiciels que des systèmes
+virtualisés. Ainsi, l'hyperviseur doit non seulement permettre l'exécution de
+systèmes d'exploitations virtualisés, mais également des threads directement
+ordonnancé par ce dernier, tout en assurant une compartimentation spatiale et
+temporelle forte.\\
+Parmi les différentes solution de virtualisation étudiées, seule la solution
+PikeOS de Sysgo permet de répondre à l'ensemble de ces besoins. C'est cette
+solution que je considère dans ma thèse afin de répondre à la problématique
+d'architecture de sécurité pour répondre à la fois aux exigences temps réel et
+de sécurité.
+\FIXME{définir les exigences de la solution dans la Problématique}

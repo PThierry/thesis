@@ -12,6 +12,13 @@
 \label{sec:hierarchique}
 \doMinitoc
 
+\paragraph{}
+{\it Afin de répondre au besoin des architectures MILS et MLS, l'usage d'un
+separation kernel est une des solutions logicielles proposée. Cette
+architecture, impliquant potentiellement la virtualisation de certaines
+tâches, induit un ordonnancement hiérarchique de ces dernières. Dans ce
+chapitre est décrit l'état de l'art de l'ordonnancement hiérarchique.}
+
 \section{Principe de l'ordonnancement hiérarchique}
 
 \subsection{Principes généraux et théorie de l'ordonnancement hiérarchique}
@@ -112,7 +119,7 @@ ordonnancer des tâches potentiellement temps réel à côté de machines
 virtuelles. Dans ce cas, les tâches natives (non virtualisées) impactent
 potentiellement fortement l'ordonnancement des machines virtuelles et des jeux
 de tâches associés, comme le décrivent T. Cucinotta, g. Anastasi et L. Abeni
-dans \cite{rtvm}. L'emploi d'un de type CBS (Constant Bandwidth Server\cite{abeni1998integrating})
+dans \cite{rtvm}. L'emploi d'un ordonnanceur de type CBS (Constant Bandwidth Server\cite{abeni1998integrating})
 permet d'assurer une réservation stricte de charge processeur pour les
 différentes machines virtuelles, limitant fortement l'impact des tâches
 natives. La gestion concurrentes de jeux de tâches temps réels virtualisé et
@@ -143,6 +150,7 @@ les deadlines des tâches
 J'ai étudié cette problématique d'ordonnançabilité afin de valider le fait
 que plusieurs jeux de tâches ordonnancés en TDM restaient certifiable en terme
 d'ordonnançabilité pure\cite{tdmsched}.
+
 
 \chapter{A propos de l'état de l'art de l'ordonnancement de tâche à multiple criticité}
 \doMinitoc

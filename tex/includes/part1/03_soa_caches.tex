@@ -12,6 +12,18 @@
 \label{sec:hierarchique}
 \doMinitoc
 
+\paragraph{}
+{\it La gestion des caches, bien que n'étant pas un moyen dans le cadre de la
+définition d'une solution sure et sécurisée, reste une problématique devant
+être considérée tant d'un point de vue sécurité que temps réel. Il est donc
+important d'étudier l'impact du comportement des contrôleur de cache sur la
+bonne exécution de tâches temps réelles, ainsi que leur impact en terme
+sécuritaire, au travers des canaux cachés. En effet, ces derniers sont
+exploitables au travers des analyses de temps d'exécution lors d'un changement
+de contexte impliquant un changement de domaine de sécurité. Ils sont
+également impactant de par leur comportement non temps réel sur
+l'ordonnançabilité de taches temps réel dur.}
+
 \section{Les caches et la sécurité}
 
 \subsection{Principes généraux et limitations}
@@ -120,3 +132,13 @@ Dans \cite{groesbrink2008modular} les auteurs décrivent un mécanisme apparenté
 aux cache-locking afin de limiter l'impact du TLB sur le coût d'exécution des
 tâches temps réelles.
 
+\section{synthèse}
+
+\paragraph{}
+L'usage des caches est aujourd'hui nécessaire afin de pouvoir exploiter
+correctement les capacités des processeurs modernes. Cependant, leur usage
+impacte à la fois la sécurité et le temps réel. Dans le cadre de ma thèse, je
+ne me permet pas de travailler sur un design matériel de contrôleur de cache.
+Néanmoins, je considère la problématique sécuritaire associée à la présence
+d'entités logicielles de domaines de sécurité hétérogène sur une même
+architecture matérielle, et de son impact sur la gestion des caches.

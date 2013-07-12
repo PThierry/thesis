@@ -10,10 +10,10 @@
 %%
 
 \chapter{Vers une passerelle sécurisée et temps réel pour le traitement de
-  flux multi-critique}
+  flux multi-critiques : cas d'usage vehiculaire}
 \doMinitoc
 
-\section{Prise en compte du besoin vétronique}
+\section{Rappel du besoin vétronique}
 
 \subsection{A propos de l'évolution des systèmes véhiculaires}
 
@@ -72,141 +72,171 @@ temporel strict entre les traitements à fortes exigences de sûreté et les
 traitements non sûrs, comme le multimédia. Les réseaux sont également
 strictement séparés afin d'assurer un cloisonnement spatial strict.
 
-%%%% End of update %%%%
-\paragraph{}
-When safety critical and unsafe subsystems are not independent, we call this
-system a {\it systronic system}. An example of a systronic system is a vehicle-embedded system containing at the same time vehicle-related subsystems and various third
-parties for e.g. long distance radio support and cameras communications. Such a system
-is composed of subsystems which must respect various safety levels and sometimes
-various security levels.
-% stem ? transitive verb.
-The conception cost of a systronic system stems from the criticality and security level inheritance.
-This happens when non critical subsystems can influence a critical subsystem's
-behavior, for example when communication exists between them. This is also the case for
-security level inheritance.\\
-This becomes worse when high critical or high security subsystems must be certified as all subsystems should then be certified at the highest level.
-
 \subsection{A propos des problématiques techniques des architectures vetroniques civiles et militaires}
 
-\subsubsection{Problématiques générales du civil}
+\paragraph{}
+Lorsque systèmes critiques et non-sûrs ne sont plus indépendants et que la
+notion de réseau IP apparaît dans le cadre de l'interconnexion de systèmes
+non-sûrs, on parle alors de systèmes {\it systroniques}\FIXME{prévoir notion}.
+C'est le cas principalement dans les véhicules militaires avec l'intégration
+des sous-systèmes de gestion des caméras, de la radio véhiculaire courte,
+moyenne et longue portée mais également au travers des terminaux de gestion
+intégrés nécessitant un cloisonnement sécuritaire fort. En effet, un véhicule
+de ce type émet et reçoit des données dont la confidentialité peut être
+restreinte au pays ou à la coalition. Une telle problématique apparaît également
+dans les véhicules de police ou encore dans les véhicule médicalisés pouvant
+interagir avec une bases de données patients centralisée, du fait des exigences
+de confidentialité associées aux données médicales.\\
+Dans le cas des véhicules militaires, des exigences de sûreté de
+fonctionnement sont également présente sur la partie caméra, lorsque le
+véhicule possède un blindage {\it transparent} (i.e. le conducteur s'appuie
+sur des caméras et des capteurs plutôt que sur des vitres).
 
 \paragraph{}
-Today, some new needs impact Systronic systems. One example is the capacity to get
-various information such as probe values, from critical networks to
-uncritical subsystems like mobile terminals. As a consequence, gateways
-between critical and non critical networks have to guarantee that the critical
-network is protected against any invalid request from the non critical network.
-Moreover, any invalid request should be detected in order to be diagnosed.\\
-At the same time, safety critical subsystems must comply with safety requirements.
-Not all subsystems require the same safety requirements, but when
-communication associates two or more safety critical subsystems, all of them
-need to be compliant to the highest safety critical subsystem requirements.
-Such requirements are costly and highly impact the integration of new components in
-a safety critical network. Avoiding such costs when integrating
-non-critical subsystems is difficult if communication exists between such
-components and a safety critical network.\\ %Respecting \ref{req:multi_crit} avoid such overcost.\\
-However, independent non-communicating systems can have different
-criticality if it is proved that neither communication nor border effect can affect
-the each other.\\
-In newly manufactured vehicles and in military
-vehicles as shown in figure \ref{fig:armoured}, safety critical, non-critical and sometimes security critical subsystems
-are aggregated in a systronic system, and the separation between all these systems
-is more and more difficult to maintain.
-
-\subsubsection{Besoins spécifiques aux architectures militaires}
+Les exigences de certification, tant en terme de sécurité qu'en terme de
+sûreté de fonctionnement, exigent que lorsque deux sous-systèmes
+interagissent directement, ces derniers doivent être compatibles du niveau de
+certifiabilité de celui ayant la plus forte contrainte.\\
+La conséquence directe est bien entendu le coût associé à la certification.
+Cela limite en conséquence la complexité de l'ensemble du système et peut
+interdire certains usages, comme l'intégration de terminaux non-sûrs.
 
 \paragraph{}
-Today, some new needs impact Systronic systems. One example is the capacity to get
-In military systronics, various nodes managing sound, cameras, GPS, and other heterogeneous communicating subsystems are also
-aggregated to a generic vehicle.
-Figure \ref{fig:armoured} shows a simplified systronic architecture of an armoured vehicule like those used by the United Nations.
-Whatever the complexity of the systronic subsystem, it should be able to be completely
-managed through two or three management terminals. These terminals aggregate
-various security and safety levels. In such a system, it is not possible to
-partition various criticality subsystems and security subsystems and to propose 
-a simple human-machine interface. In such cases, communication between
-multi-criticality and multi-security domains should be highly filtered.\\
-% Requirement \ref{req:sec_filter} should be supported.\\
-Covert channels should also be prevented, because content
-filtering is not efficient enough to allow communications between various
-security domains.\\
-% as proposed in Requirement \ref{req:sec_covert}.\\
+Dans les véhicules militaires, la demande pousse vers l'usage de terminaux
+fantassins type smartphone/tablette, à l'instar de la poussée du BYOD (Bring
+Your Own Device) dans les systèmes d'information civils. Bien que maîtrisés
+par le fournisseur, ces terminaux restent par nature non-sûr, de par la
+complexité de leur architecture logicielle. Ils peuvent de plus
+potentiellement être multi-niveaux de sécurité, impliquant une gestion de leur
+interconnexion avec le {\it système d'information} véhiculaire complexe.\\
+Cette problématique là apparaît également sur les terminaux GPS, dont la
+maîtrise par le pays utilisateur n'est pas toujours assuré, la technologie GPS
+étant une solution militaire américaine.
+
+\begin{figure}
+\input{figures/prv.tex}
+\caption{Exemple d'intégration d'un système systronique pour véhicule blindé léger\label{fig:armoured}}
+\end{figure}
 
 \paragraph{}
-Moreover, information received by critical
-subsystems should also be sent to the management terminal in a bounded, short enough, time to be
-treated by the terminal user. Even if the worst case traversal time is not too
-short, it should still be upper-bounded. \\
-%Requirement \ref{req:rt} is the consequence of such need.\\
+Dans les systèmes systroniques sont définit trois réseaux d'interconnexion:
+\begin{itemize}
+  \item Le réseau moteur, basé sur une architecture complexe de bus CAN,
+    permettant de remonter l'ensemble des informations des différentes sondes,
+    mais aussi de contrôler certains relais et fonctions électroniques
+  \item Le réseau critique, ayant de forte exigences de sûreté de
+    fonctionnement, mais pas d'exigence de sécurité lorsqu'il est pris seul.
+    Ce réseau gère les éléments critique du véhicule tels que les caméras ou
+    les systèmes de désactivation des mécanismes défensif en cas d'ouverture
+    de portes
+  \item Le réseau d'interconnexion au système d'information et de
+    commandement, qui gère les antennes, les connexions avec les terminaux
+    fantassin, la gestion de la voix ou encore le GPS
+\end{itemize}
+Aujourd'hui, il est demandé dans les systèmes systroniques une solution
+permettant de faire transiter certaines données entre ces trois réseaux, afin
+principalement de simplifier la supervision de l'ensemble de ces
+sous-systèmes. Cela implique d'interconnecter des réseaux aux exigences de
+sûreté et de sécurité variables. Il devient alors nécessaire de prévoir une
+passerelle permettant de faire transiter certains flux avec un contrôle
+strict, à la fois afin de garantir la sûreté et la sécurité du système entier. 
+Pour des raison de poids, de température et de surface, cette passerelle doit
+être embarcable et de petite taille. Elle doit de plus répondre aux exigences
+physiques en terme de vibration, de température ou encore de résistance à un
+air chargé en particules comme le sable.\\
+Le fait d'interconnecter des réseaux de niveaux de sûreté et de sécurité
+différents implique une architecture de passerelle particulière, permettant
+de maintenir le niveau de sécurité demandé tout en permettant le transfert de
+certaines informations. La passerelle doit également permettre d'interagir
+avec le réseau moteur, tout en assurant un filtrage suffisant pour ne pas
+impacter la sûreté de fonctionnement associée à ce réseau.\\
+Afin de répondre aux problématiques de sécurité, j'ai proposé plusieurs
+moniteurs de sécurité dans le Chapitre \ref{chap:solution_secu}. L'association
+de ces différents moniteurs permet d'assurer le cloisonnement des données
+sensibles. Leur usage sera décrit plus loin dans ce chapitre.
+Il faut également garantir le maintient du niveau de sûreté des réseaux
+moteur et caméras. Pour cela, je propose de m'appuyer sur le moniteur de
+sécurité diode logicielle, permettant d'assurer une remontée d'information à
+sens unique entre sonde moteur et console de supervision d'une part et caméras
+et console conducteur d'autre part. Pour ces deux flux, il est de plus
+important d'assurer une latence maximum garantie. C'est une exigence
+particulièrement critique pour la remontée de flux d'information des caméras
+lorsque le véhicule s'appuie sur un blindage transparent.
 
 \paragraph{}
-As a consequence, network integration is even more complex, because
-multiple independent safety critical networks exist, one for the motor
-management, others for the multiple communications nodes that should be
-partitioned (i.e. local inter-communicators versus communications with allies, etc). 
-In these safety critical networks, security critical nodes are interconnected to a non
-safety-critical network, with different security levels. Such nodes could be,
-for example, management terminals or antenna treatment nodes. Integration of various
-security domains is the consequence of having people with different access
-rights. For example the driver is not allowed to manage some of the
-communication subsystems.\\
-All these networks are not only on CAN buses, but also based on
-switched Ethernet networks, supporting higher rates, sometimes with real-time
-requirements.
+Dans le cadre du réseau d'interconnexion du système d'information, le
+transport de la voix est un élément important. Non seulement il permet aux
+chef de patrouille de communiquer via la radio avec le système d'information
+et de commandement, mais il permet également au personnel de communiquer
+entre eux, le bruit ambiant étant trop élevé pour permettre une discussion
+directe. Cette problématique induit un usage important de l'infrastructure
+VoIP de bord, avec une conséquence en terme de multi-criticité. En effet,
+lorsque la passerelle de traitement de la voix ne permet pas un traitement
+concurrent de l'ensemble des flux voix, la priorité passe aux plus haut gradé,
+impliquant une potentielle coupure du flux d'un (ou plusieurs) des
+subordonnés.
 
 \paragraph{}
-We now summarize the five requirements that a systronic system should meet.
-
+L'interconnexion doit être garantie en terme de bande passante afin de pouvoir
+répondre aux besoins du domaine de sureté le plus faible. C'est un besoin
+important dans le traitement de flux vidéo ou voix émis à partir d'un domaine
+de sureté élevé. Dans ces deux cas, un débit et une latence garantis sont
+nécessaires, comme définit dans l'exigence \ref{req:debit}. C'est également le
+cas de certains flux d'alerte, comme la remonté d'alarme des différentes
+sondes moteur.\\
+Néanmoins, les données transmises peuvent avoir à être filtrées afin d'éviter
+le transfert non maîtrisé de données confidentielles. Parce que les système de
+sureté plus faible ne peuvent être certifiés pour le traitement de flux
+dont le niveau de sureté est supérieur, ces derniers ne peuvent émettre de
+requêtes vers un domaine de sureté supérieur sans validation préalable par un agent de
+confiance. Il peut parfois être exigé que la communication soit garantie à
+sens unique entre deux domaines de sureté hétérogènes. Dans ce dernier cas, un
+moniteur de sécurité de type diode logicielle doit permettre de garantir que
+le flux d'interconnexion est à sens unique. Cela peut être le cas pour les
+sondes moteurs, qui ne devrait pas recevoir de requête de la part d'un élément
+de domaine de sureté plus faible, mais plutôt émettre une information de
+manière périodique, simplifiant dans le même temps leur comportement.
 
 \paragraph{}
-Interconnection should be guaranteed in terms of bandwidth in order to
-respond to the less critical subsystem needs like informational data
-processing. This is the case for video flows in the camera management
-subsystem. For this case, a minimum flow rate should be supported, as
-defined in Requirement \ref{req:debit}.
-It is also the case for some other data flows like alarm management
-for various motor probes. However, transfered data should be filtered
-in order to avoid any transfer of non-approved confidential data. Because less
-critical subsystems can't be certified for highly critical needs, they should
-not be able to send any requests to higher critical subsystems.\\
-Communication between such hybrid critical systems should therefore be in one
-direction (using a {\it diode} behavior) or with guarantees on the content of
-the returning flow.
+Les systèmes systroniques sont basés sur une interconnexion complexe de
+systèmes de niveau de sureté et de sécurité hétérogènes avec un grand nombre
+d'interactions.\\
+Ces interactions nécessite d'être filtrées, validées voire inspectée afin de
+garantir à la fois le besoin sécuritaire et le besoin de sureté des différents
+sous-systèmes présents. Afin de permettre ces différents traitement, un
+équipement d'interconnexion doit être mis en place aux différents points de
+communications inter-domaines, et doit être compatible des exigences de sureté
+et de sécurité des différents domaines qu'il interconnecte.\\
+Dépendant des réseaux qu'il interconnecte, ce dernier doit pouvoir fournir
+différents services à la fois en terme de sécurité et de temps réel. Ainsi,
+la remonté d'informations moteur sur un smartphone ne nécessite pas de
+conformité à des exigences temps réel. A l'inverse, la remonté de flux vidéo à
+partir d'un système de type blindage transparent doit garantir un comportement
+temps réel dur afin d'assurer une bonne vision de l'environnement immédiat du
+véhicule.\\
+En terme de sûreté, l'interconnexion d'une console de gestion du système
+d'arme doit pouvoir accéder aux informations de status de ces dernières, mais
+ne doit pas pouvoir émettre d'ordre de mise en route. En terme de sécurité,
+les données de positionnements auxquelles accède le véhicule ne doivent pas
+être réémise sur l'ensemble des systèmes radios qui sont interconnectés, mais
+uniquement à ceux qui sont utilisés dans le cadre de la coalition voire
+exclusivement du pays utilisateur.\\
+On constate ainsi que les systèmes systroniques, décrit ici dans le cas
+militaires, impliquent à la fois l'interconnexion de systèmes de sureté et de
+sécurité hétérogènes, avec des exigences variables et des données multiples.
+La définition d'un équipement d'interconnexion modulaire est donc important
+pour limiter le coût de la solution complète. Cette problématique se retrouve
+dans différents secteurs, comme le médical ou la police.
 
-\paragraph{}
-The consequence is that systronic systems are based on a
-lot of heterogeneous subsystems that are increasingly interacting with each-other.
-The network interconnections need to be filtered and even inspected in order to
-react to invalid events. Furthermore, intercommunications between various safety
-critical and security critical subsystems need to be guaranteed. Such a filtering bridge should
-respect safety, security and real-time constraints at the same time.\\
-Depending on the network that need to be interconnected, the
-interconnection module behavior may vary in terms of security and real-time needs.
-For example, the interconnection of a motor informational subsystem with a
-smartphone does not have hard real-time requirements but must be guaranteed in
-terms of flow profile in order to avoid any flooding of the high-critical
-subsystem. Interconnecting the cartography and
-GPS subsystem with the weapon management terminal should be guaranteed in terms
-of high-level security, because these two nodes are part of two different
-security domains. Some of such interconnections must be in one way only, others
-must respect hard real-time constraints.\\
 %The consequence of such problematic is that various interconnection node
 %should be deployed, with various behaviors.\\
 % end of updated part. below needs to be updated
 
-\begin{figure}
-\input{figures/prv.tex}
-\caption{Armoured vehicle sample subsystems integration\label{fig:armoured}}
-\end{figure}
+\section{Définition d'une architecture logicielle pour une passerelle systronique}
 
-\section{Associer sécurité et temps-réel}
+\subsection{Terminologie}
 
-\section{De la réponse au besoin à la définition d'une architecture}
-
-\subsection{A propos d'une architecture logicielle pour une passerelle
-  vetronique}
-
-\subsubsection{Terminology}
+\FIXME{la partie terminologie doit être intégrée coté}
 
 \paragraph{}
 In the following, various terms are used in order to describe the proposed
@@ -243,65 +273,117 @@ profile of a given flow. If the flow is not compliant to the policy, it is
 dropped by the filtering connector.}
 \end{itemize}
 
-\subsubsection{Defining a multi-purpose filtering architecture for systronic systems}
+\subsection{Définition d'une architecture de filtrage multi-fonctions pour les systèmes systroniques}
 
 \paragraph{}
-The consequence of the problematic shown in \ref{subsec:problematics}
-is that various filtering connectors with various behaviors need to be
-deployed. These connectors interconnect subnetworks with different levels of criticality and
-support some policy based communication channels flowing through them.
-In order to avoid high validation costs due to multiple filtering
-connector profiles, we contribute to a specific configurable architecture
-which can respond to such needs.
+La conséquence de la problématique montré en \ref{subsec:problematics} et que
+plusieurs type de connecteurs sont nécessaires, à divers endroits du systèmes
+systronique, avec des contraintes différentes, tant en terme de service rendu
+qu'en terme de sécurité et de temps réel.\\
+Définir une solution modulaire, apte à intégrer en entrée une configuration
+extérieur lors de la production serait un atout en terme de coût dans le cadre
+de la définition du système.
 
 \paragraph{}
-This architecture is based on autonomous communicating containers.
-Each container is specialized
-for a specific treatment. Such treatment can be filtering, shaping, one-way
-software diode, or any other treatment needed to respond to the
-systronic needs. In the following, some of these containers are described more
-precisely.\\
-The goal of such a software architecture is to support various container
-configurations according to the needs, without having to rewrite the entire
-software. However, the reused software elements (such as the hypervisor)
-should be able to respond at the same time to higher critical and security
-needs.
+Comme décrit dans le Chapitre \ref{chap:solution_secu}, l'architecture
+logicielle du connecteur est basée sur un ensemble de conteneurs autonomes
+communicants. Chaque conteneur est dédié à un traitement unitaire dont je
+limite la complexité. Ces traitements sont par exemple un filtre DPI, un
+mécanisme de shaping de flux, une diode logiciel assurant un transfert sens
+unique ou tout autre traitement nécessaire au service que doit rendre le
+connecteur. Ces conteneurs ont pour but d'être réutilisables, et ce
+indépendamment des autres conteneurs déployés, afin de limiter le coût de
+réimplémentation des fonctions et de re-certification de ces dernières.\\
+Certains traitements peuvent correspondre à des besoins sécuritaire ou de
+sureté de fonctionnement, comme la diode logicielle. Dans ce cas, le conteneur
+doit pouvoir être certifié afin de garantir la fonction. Dans ce cas, on
+souhaite considérer cette fonction comme un moniteur de sécurité (ou de
+sureté), comme je l'ai décrit dans le Chapitre \ref{chap:solution_secu}. Dans
+d'autre cas, comme par exemple pour le filtre DPI, il peut être nécessaire
+d'intégrer un ensemble de fonctions comme une pile réseau, impliquant un
+volume de code plus grand et accroissant fortement le coût de certification
+associée. L'intérêt des conteneurs est donc de permettre une dissociation de
+la certification des différentes fonction, si ces dernières sont garanties
+disjointes en terme logiciel. C'est par exemple le cas lorsque l'on s'appuie
+pour la séparation spatiale et temporelle sur des compartiments PikeOS
+\ref{sec:pikeos}.\\
+Dans le cadre du besoin systronique, j'ai proposé un premier maquettage de
+plusieurs de ces fonctions:
+\begin{itemize}
+    \item Une fonction diode, assurant le transit en sens unique des données.
+    \item Une fonction DPI, assurant un filtrage des données en fonction d'une
+      politique de filtrage déterminée en avance.
+    \item Un émetteur périodique, assurant un profil de flux en sortie
+      garanti, tout en empêchant l'usage du profil d'entrée pour faire
+      transiter de l'information via un canal caché.
+\end{itemize}
 
 \paragraph{}
-The filtering connector should be able to guarantee a Worst Case Traversal Cost (WCTC)
-for the filtered data flow. It corresponds to the complete traversal time of the filtering connector.
-Considering Figure \ref{fig:block}, the traversal cost measurement starts when a packet is
-received in the {\it VE filter} container and stops when it is sent by the
-{\it VE sender} container.\\
-Respecting a WCTC implies that each flow management task should be considered as
-an element of a real-time task set. In the model, we use the standard POSIX
-real-time FIFO scheduling scheme.\\
-
-\subsubsection{About the supervision containers}
+Ces différents conteneurs peuvent correspondre à une fonction de faible
+empreinte, qui peut être difficile à superviser. En conséquence, ces derniers
+doivent tous fournir une interface de supervision, pour interagir avec un
+conteneur de supervision. Ce dernier a pour but de récolter les différentes
+informations de status voire de débogue associées à ces différents conteneurs,
+pour les renvoyer vers un environnement de supervision déterminé.
 
 \paragraph{}
-The filtering connector uses a given policy to decide whether some specific data should
-be transmitted or not. Any transmission of invalid data should be detected.
-The filtering connector should therefore be supervised to detect invalid
-behaviors. A supervision node then receives informational flow about such
-events and various other counter values from the filtering connector.
-The supervision support in the filtering connector is shown in Figure \ref{fig:block}.
+Dans le cadre du besoin systronique, il est souvent demandé que le connecteur
+soit capable de fournir une garantie de coût de traversée maximum (WCTC -
+Worst Case Traversal Cost) pour les flux qu'il fait transiter.
+Comme décrit dans la Figure \ref{fig:block}, j'ai implémenter un mécanisme de
+mesure du coût de traversée, qui débute lorsqu'un paquet est reçu par le
+conteneur {\it VE filter} et se termine lorsqu'un paquet retransmettant cette
+même donnée est émis par le conteneur {\it VE sender}.\\
+Le respect du WCTC implique que chaque tâche en charge à un instant donné du
+traitement de la donnée à faire transiter doit être considérée comme une tâche
+temps réel, impactant en conséquence la politique d'ordonnancement en charge
+de cette dernière. Dans le cadre du maquettage que j'ai effectué, je me suis
+basé sur la technologie des Cgroups Linux, associée aux politique
+d'ordonnancement temps réel POSIX de type SCHED\_FIFO. L'usage des Cgroups
+dans la maquette impacte l'architecture générale. Ainsi, dans cette dernière,
+il ne s'agit pas d'un ordonnancement hiérarchique mais d'un ordonnancement
+unique par l'ordonnanceur SCHED\_FIFO du noyau Linux.\\ 
+Si la maquette avait été faite sur base d'un ordonnancement hiérarchique,
+comme par exemple via l'usage d'un micro-noyau de virtualisation type PikeOS
+\ref{sec:pikeos}, il aurait alors nécessaire de déterminer correctement à la
+fois l'ordonnancement des différents conteneur et celles des tâches dans ces
+derniers. Pour répondre à cette problématique, j'ai défini cinq
+Équations \ref{sec:hierarchicalrt} permettant de déterminer si le système est
+alors apte à garantir l'ordonnançabilité de l'ensemble des fonctions temps réel.
+
+\subsubsection{A propos du conteneur de supervision}
+
+\paragraph{}
+Comme vu précédemment, le connecteur a souvent une fonction de filtrage, soit
+pour valider le contenu des flux à transiter, soit pour assurer un transit à
+sens unique. Dans ces différents cas, la fonction de filtrage doit pouvoir
+remonter des alerte en cas de non-respect de la politique de filtrage ou en
+cas d'incapacité à exécuter correctement son traitement (e.g. dans le cas
+d'un débit trop important). Ces remontées d'alertes doivent être prises en
+compte et transmises à un équipement dédié à la supervision. C'est ce qui est
+décrit dans la Figure \ref{fig:block}.
 
 \begin{figure}
 \input{figures/bloc_diag.tex}
-\caption{Complete embedded filtering gateway\label{fig:block}}
+\caption{architecture logicielle type d'une passerelle filtrante\label{fig:block}}
 \end{figure}
 
-\subsubsection{About the flow filtering container}
+\subsubsection{A propos du conteneur de filtrage DPI}
 
 \paragraph{}
-When interconnecting a security critical subsystem with a communication
-subsystem, the data flow needs to be filtered. An example of such
-interconnection is the control console managing the antenna subsystem. The antenna
-subsystem can receive control commands and data to send.\\
-Some restricted content of the security console should not be emitted. To ensure the confidentiality of these data, any request sent to the
-Antenna subsystem is filtered and only some policy-allowed requests are
-transmitted.\\
+Il peut être nécessaire dans les systèmes systroniques que les flux transitant
+d'un domaine à un autre soient filtrés afin d'assurer la confidentialité de
+certaines données pour ne faire transiter que celles dont le niveau de
+déclassification est suffisant pour être transmis dans un domaine de moindre
+niveau. C'est par exemple le cas des données de cartographie ou de
+positionnement vis à vis d'un système de communication de type coalition.\\
+Afin d'assurer un tel filtrage, une fonction DPI doit être implémenter et
+prendre en donnée d'entrée une politique de filtrage qui doit être considérée
+pour valider chaque flux en cours de transit, afin de valider ou interdire une
+remontée d'information vers le domaine de plus faible sécurité. Ce conteneur
+est intégré dans la Figure \ref{fig:block} sous la dénomination {\it VE filter}.
+
+%%%% End of update %%%%
 To support this feature, the VE filter shown in figure \ref{fig:block}
 validates the data content before passing it on to the VE sender. This filter
 chain is based on two tasks:
