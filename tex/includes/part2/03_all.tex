@@ -328,13 +328,13 @@ pour les renvoyer vers un environnement de supervision déterminé.
 
 \paragraph{}
 Dans le cadre du besoin systronique, il est souvent demandé que le connecteur
-soit capable de fournir une garantie de coût de traversée maximum (WCTC -
-Worst Case Traversal Cost) pour les flux qu'il fait transiter.
+soit capable de fournir une garantie de coût de traversée maximum (WCTT -
+Worst Case Traversal Time) pour les flux qu'il fait transiter.
 Comme décrit dans la Figure \ref{fig:block}, j'ai implémenter un mécanisme de
 mesure du coût de traversée, qui débute lorsqu'un paquet est reçu par le
 conteneur {\it VE filter} et se termine lorsqu'un paquet retransmettant cette
 même donnée est émis par le conteneur {\it VE sender}.\\
-Le respect du WCTC implique que chaque tâche en charge à un instant donné du
+Le respect du WCTT implique que chaque tâche en charge à un instant donné du
 traitement de la donnée à faire transiter doit être considérée comme une tâche
 temps réel, impactant en conséquence la politique d'ordonnancement en charge
 de cette dernière. Dans le cadre du maquettage que j'ai effectué, je me suis
@@ -377,252 +377,204 @@ certaines données pour ne faire transiter que celles dont le niveau de
 déclassification est suffisant pour être transmis dans un domaine de moindre
 niveau. C'est par exemple le cas des données de cartographie ou de
 positionnement vis à vis d'un système de communication de type coalition.\\
-Afin d'assurer un tel filtrage, une fonction DPI doit être implémenter et
+Afin d'assurer un tel filtrage, une fonction DPI doit être implémentée et
 prendre en donnée d'entrée une politique de filtrage qui doit être considérée
 pour valider chaque flux en cours de transit, afin de valider ou interdire une
 remontée d'information vers le domaine de plus faible sécurité. Ce conteneur
 est intégré dans la Figure \ref{fig:block} sous la dénomination {\it VE filter}.
-
-%%%% End of update %%%%
-To support this feature, the VE filter shown in figure \ref{fig:block}
-validates the data content before passing it on to the VE sender. This filter
-chain is based on two tasks:
+Son traitement consiste en une vérification de la conformité du flux d'entrée
+envers la politique de sécurité avant validation et réémission. La validation
+du flux d'entrée sur la donnée et non sur les en-têtes protocolaires de
+couche quatre du modèle OSI et inférieur. Une fois validée, la donnée est
+réémise après reforgeage de l'en-tête réseau. La {\it VE filter} étant
+considérée de confiance, les en-têtes forgées sont également considérée comme
+telles. Un tel mécanisme est appellée séparation protocolaire et permet
+d'éviter tout usage des en-têtes réseau comme IP ou TCP pour faire transiter
+de l'information.\\
+Les traitements de la VE filter sont décomposés comme suit:
 \begin{itemize}
-\item one filtering task receiving and inspecting data content according
-to a given security policy. The WCET of this task varies, depending on the
-data size and content. If the content is invalid, the packet is dropped.
-\item one sending task, executing a simple send() of the previously filtered
-data. The task execution cost variation is small if the kernel buffer is
- large enough to support any possible input packet size
+  \item Un récepteur de paquet, qui reçoit la donnée et valide son contenu
+    auprès d'une politique de sécurité. Le WCET de cette tâche peut être très
+    variant selon la complexité de la politique de sécurité et du contenu du
+    paquet.
+  \item Un émetteur, récupérant les paquets tagués par le recepteur comme
+    valide et qui les reexpédie vers le compartiment suivant. Le WCET de cette
+    tâche est assez stable, son coût étant dépendant que de la taille de
+    trame.
 \end{itemize}
+Dans le cas d'un véritable système DPI avec une politique de sécurité
+complexe, l'implémentation du filtre serait beaucoup plus complexe. Il
+impliquerait entre autres un mécanisme permettant de concaténer les message
+afin de reconstituer l'information de niveau application avant de pouvoir
+déterminer sa compatibilité avec la politique de sécurité. Il impliquerait de
+plus un mécanisme de gestion de queues de message multiples couplées à une
+politique de qualité de service assurant la priorisation de certains flux par
+rapport à d'autres. Dans le cadre de la maquette, la politique DPI en
+elle-même n'est pas l'élément dont je souhaite démontrer la faisabilité. Cette
+dernière est donc simple et s'appuie sur un protocole TLV qui assure que
+l'information de niveau applicatif est entièrement présente dans une et une
+seule trame réseau.
 
-\subsubsection{About the diode container}
-
-\paragraph{}
-In some cases, communication should be one way only. This is the
-case when the GPS (General Positioning System) subsystem sends data to the security console. No
-information should be sent back to the GPS subsystem and the current state of
-the security console should not be detected by the GPS subsystem.\\
-The software diode supports such a need. It is a simple forwarder without any variable
-behavior. Its goal is to forward a data flow from its input to its output,
-without impacting the flow. No flow dependent treatment should be done.
-In order to support real-time constraints, the input buffer's behavior is based
-on the ARINC 653\cite{arinc_653} queuing ports. Therefore, the input
-buffer depth does not depend on the input packets' size.\\
-Another property of this container is to guarantee that the sender should not
-be informed of the behavior of the receiver, whatever the receiver state is.
-Otherwise, it would be possible for the sender to get back some information from
-the receiver (with a data coding function of the packet size). This would mean that the diode would not be fully opaque.
-
-\subsubsection{About the sender container}
+\subsubsection{A propos du conteneur Diode}
 
 \paragraph{}
-The VE sender executes a simple task periodically sending a packet if one is received
-from the previous container or sending a random packet otherwise. Its WCET is small. It is separated from the
-diode because this container could be able to be considered as a two-way
-element if needed. In a given filtering connector with no diode container, a two-way
-communication would be accepted.\\
-The period of the sender task defines the maximum throughput of the output flows.
+Il arrive dans certains cas que la communication entre deux conteneurs soit
+garantie comme étant en sens unique. C'est le cas lorsque l'on change de
+domaine de sécurité (lors de la remontée d'informations entre un domaine de
+sécurité et un autre de niveau supérieur) mais aussi lorsque l'on change de
+domaine de sûreté (afin d'assurer que le domaine de moindre sûreté ne
+vient pas impacter le domaine de plus fort niveau de sûreté).\\
+Ainsi, dans les systèmes systroniques, les remontées d'informations coalitions
+vers le domaine pays ne doivent dans le même temps assurer que les données
+pays ne sont pas renvoyées vers le domaine coalition. L'usage d'un élément
+certifiable en coupure permet d'assurer cette fonction. C'est le but du
+conteneur Diode.\\
+Le but de ce conteneur est d'assurer un transfert sens unique entre deux
+domaines. Pour des raisons de sécurité liées aux problématiques de canaux
+cachés\FIXME{ref}, ce conteneur doit également assurer que le comportement
+du récepteur de domaine de sécurité plus élevé ne soit jamais connu de
+l'émetteur, dont le domaine de sécurité est plus faible. Ainsi, l'émetteur ne
+peut retirer aucune information du débit de son émission, ce dernier n'étant
+par corrélé au comportement du récepteur.\\
+Une telle architecture a pour conséquence que le conteneur diode peut
+perdre des paquets si le récepteur n'est pas apte à les recevoir. En effet,
+faute d'en informer l'émetteur, le conteneur diode doit alors détruire les
+paquets et lever une alerte auprès d'un environnement de supervision de niveau
+de sécurité apte à traiter cette information.
+Le conteneur de supervision est visible dans la Figure \ref{fig:block}, et a
+entre autre pour but de récupérer les alertes du conteneur Diode.
 
-\subsubsection{About security and safety requirements on the output flow profile}
-\label{sec:secu}
+\subsubsection{A propos du conteneur {\it Sender}}
+
+\paragraph{}
+L'émetteur périodique (nommée VE Sender) exécute une tache périodique pour
+l'émission des paquets en sortie de passerelle. Le but de ce conteneur est
+d'assurer un débit (en nombre de trame) fixe, avec une période inter-trames
+également garantie. Ce conteneur permet de répondre à plusieurs besoins:
+\begin{enumerate}
+  \item En cas d'émission vers un domaine de sûreté élevé, ce conteneur
+    empêche tout flooding d'interface, en limitant le débit à une valeur
+    maîtrisée. Ce comportement permet à la passerelle d'être compatible de
+    l'Exigence \ref{req:multi_crit}.
+  \item Afin d'éviter tout canal caché basé sur la période inter-trame, cette
+    dernière est remaniée à une valeur fixe. Ainsi, l'utilisation d'une
+    variation de période inter-trame par l'émetteur afin d'envoyer de la
+    donnée en morse est bloquée. En cas de non émission de trame, l'émetteur
+    renvoie alors la dernière trame, jusqu'à arrivée d'une nouvelle trame à
+    émettre. Ce comportement permet d'être compatible avec l'Exigence \ref{req:sec_covert}
+\end{enumerate}
+La période d'émission de l'émetteur périodique définit le débit maximum
+supporté par la passerelle.
+
 
 \begin{figure}
+\begin{center}
 \input{figures/paquet_forward.tex}
-\caption{Jitter control in the gateway's input packets forwarder\label{fig:fw}}
+\caption{Contrôle du débit à l'émission de la passerelle par l'émetteur périodique\label{fig:fw}}
+\end{center}
 \end{figure}
 
 \paragraph{}
-When interconnecting mixed-security networks, another filter needs to be
-considered. It is possible, using a variable packet rate, to
-send information to the target without transmitting it as a clear
-content. The goal of this filter is thus to avoid any output variable packet
-rate so that no information can be obtained from the flow profile. Such
-information transmission is called a {\it covert channel} and is a well-known
-way to transmit data without sending a single bit of it, as described in
-Requirement \ref{req:sec_covert}.\\
+Afin d'assurer un comportement temps réel de la passerelle, cette dernière
+doit pouvoir assurer un coût de traversée pire cas (WCTT - Worst Case
+Traversal Time). La tâche d'émission périodique de paquet s'exécute donc selon
+un schéma périodique strict. En fonction du profil de flux entrant, il est
+nécessaire de définir un buffer d'entrée permettant de supporter des bursts.
+Ce buffer est déterminé en nombre de paquets, afin de garantir une profondeur
+dépendante du nombre de paquets exclusivement, sans être impacté par la taille
+de ces derniers. Cela permet ainsi de mieux maîtriser le débit entrant en
+paquet, sans considérer leur variation de taille. Un telle architecture de
+buffer d'entrée s'appuie sur le principe de Queuing Ports de l'ARINC 653
+comme décrit dans \cite{alena_communications_2007} et \cite{arinc_653}\\
+La Figure \ref{fig:fw} montre un exemple de mécanisme de forwarding d'une
+passerelle générique.
 
-
-\paragraph{}
-However, such a filter should still be compliant with some real-time properties.
-The flow traversal latency should still be upper-bounded, so that a WCTC can
-be calculated.\\
-In order to generate a real-time behavior from the filtering connector, the
-last forwarding task of the connector is executed using a periodic, one-packet
-per job, execution. As shown in Figure \ref{fig:block}, this task is executed
-in VE out.\\
-Such a configuration implies a FIFO input in order to stock waiting packets from
-a previous input burst. The FIFO depth is calculated in terms of the number of
-packets rather than the number of bytes.
-Behave like this, the input FIFO architecture using the same principle as the ARINC queuing
-ports model, as described in \cite{alena_communications_2007} and
-\cite{arinc_653}.\\
-Figure \ref{fig:fw} shows a sample forwarding management executed in a
-given filtering connector, using the task set described in Table \ref{tab:taskset}.\\
-
-\paragraph{}
-When interconnecting mixed-criticality networks, the filtering connector
-guarantees that the receiver will never be flooded, whatever the input flow is.
-Such protection is efficient when the sender is a non-critical, possibly
-unsecured, task (e.g. a smart phone requiring some information from the vehicle,
-such as speed or fuel level). More generally, it is the case for systems which respect of
-Requirement \ref{req:multi_crit}.
-
-\paragraph{}
-A sporadic task set $\tau$ will contain the following tasks:
-\begin{itemize}
-\item $F$, reading and buffering the input flow and filtering the content
-\item $D$, the one-way forwarder which guarantees that the connector is one-way
-  only
-\item $S$, the periodic sender task
-\end{itemize}
-The task set is scheduled using a
-rate-monotonic scheduling scheme, considering $P_E$ as the minimum input flow
-inter-packet period:
-\begin{table}
-\begin{center}
-\begin{tabular}{l|ccc}
-\hline
-Task & WCET & Period & Priority\\
-\hline
-$F$, the filter & $C_F$ & $P_E$ (sporadic) & 1 (less) \\
-$D$, the diode & $C_D$ & $P_E$, (sporadic) & 2 \\
-$S$, the sender & $C_S$ & $P_S$, fixed & 3 \\
-\end{tabular}
-\end{center}
-\caption{Sample filtering task set $\tau$\label{tab:taskset}}
-\end{table}
-
-\paragraph{}
-To support bursts in the input flow, we define the following
-properties that should be respected by the input flow to guarantee
-that no packet is dropped:\\
-\begin{property}
- The average input flow throughput should be one packet per sender
-  period $P_S$
-\end{property}
-
-\begin{property}
-  The input flow burst size should not be greater than the
-  connector's input buffer depth
-\end{property}
-
-\begin{property}
-For a given burst, the period between too packets should be fixed
-  to $P_E$
-\end{property}
-
-\begin{property}
-  Another burst can be sent only if the previous one has been
-  completely treated by the connector (the connector's buffer should contain,
-  at most, one packet)
-\end{property}
-
-To respect these properties, the input flow profile should respect the following equations:
-
-\subsubsection{Considering a periodic input flow}
-
-Equation \ref{eq:p_1} should be respected.
-\begin{equation}
-P_E = P_S
-\label{eq:p_1}
-\end{equation}
-The Worst Case Traversal Time (WCTT) $C_T$ is then defined in Equation
-\ref{eq:p_2}.
-\begin{equation}
-C_T = P_S + C_S
-\label{eq:p_2}
-\end{equation}
-
-\subsubsection{Considering a burst-based input flow}
-
-\paragraph{}
-The input flow uses a burst period $P_B$ and a burst size of $n$
-packets. Equation \ref{eq:b_1} should be respected.
-\begin{equation}
-  P_B = (n + 1) \times P_S - C_S 
-\label{eq:b_1}
-\end{equation}
-The Worst Case Traversal Time (WCTT) is then defined in Equation
-\ref{eq:b_2}.
-\begin{equation}
-  C_T = n \times P_S + C_S
-\label{eq:b_2}
-\end{equation}
-
-\paragraph{}
-Such a packet scheduling policy is not able to support large packet flows, due to
-the {\it one-packet-per-period} filtering behavior. This behavior has been
-chosen as it is simple to manage and supports the
-security requirements on the output flow profile.
-
-\subsubsection{Empirical measurement of a sample gateway traversal cost}
+\subsubsection{Mesure empirique du coût de traversée pire cas par caquetage d'une passerelle}
 \label{subsec:empiric}
 
-\subsubsection{Architecture and configuration}
+\subsubsection{Architecture et configuration}
 
 \paragraph{}
-The device under test and the flow profile used for these measurements are
-shown in Table \ref{tab:dut}.\\
-\begin{center}
+La configuration de la maquette est le flux d'entrée est décrit dans la Table \ref{tab:dut}.\\
 \begin{table}
-\begin{tabular}{l|l}
+\begin{center}
+\begin{tabular}{|l|l|}
+  \hline
   {\bf Item} & {\bf Description} \\
+  \hline
   \hline
   {\it Architecture} & i686 core 2 duo 2Ghz \\
   {\it NICs} & DLINK-RTL8139, VIA VT6105 \\
   {\it OS} & Debian Squeeze \\
-  {\it Kernel} & linux 3.2.12-rt24 \\
-         & no ACPI support \\
-         & FULL\_PREEMPT mode \\
-  {\it Containers} & LXC containers \\
-  {\it Security} & specific kernel-based protection \\
-  & (memory \& LXC-escaping) \\
+  {\it Noyau} & linux 3.2.12-rt24 \\
+         & pas de support ACPI \\
+         & mode FULL\_PREEMPT \\
+  {\it Type de compartimentation} & LXC \\
+  {\it Sécurité} & protection noyau (mémoire et durcissement compartimentation LXC) \\
   \hline
-  {\bf Input flow item} & {\bf Description} \\
-  {\it flow mode} & UDP over IPv4 \\
-  {\it payload protocol} & TLV\\
-  & T ({\it Type}) field size 1B \\
-  & L ({\it Length}) field size 1B \\
-  {\it payload types} & 5 types\\
-  {\it payload size} & type 0: 50B \\
-   & type 1: 50B\\
-   & type 2: 30B\\
-   & type 3: 30B\\
-   & type 4: 70B\\
-  {\it payload values} & ASCII content \\
+  {\bf Flux d'entrée} & {\bf Description} \\
+  {\it type de flux} & UDP sur IPv4 \\
+  {\it type de payload} & TLV\\
+  & T ({\it champs Type}) taille de champs de 1 octet \\
+  & L ({\it champs Taille}) taille de champs de 1 octet \\
+  {\it nombre de types} & 5 types\\
+  {\it taille de payload} & type 0: 50B \\
+   & type 1: 50 octets\\
+   & type 2: 30 octets\\
+   & type 3: 30 octets\\
+   & type 4: 70 octets\\
+  {\it contenu de la payload} & contenu ASCII \\
+  \hline
 \end{tabular}
-\caption{Description of the configuration used for measurement\label{tab:dut}}
-\end{table}
+\caption{Description de la configuration utilisée pour la mesure\label{tab:dut}}
 \end{center}
+\end{table}
 
 \paragraph{}
-An initial implementation was carried out using Linux Containers to
-separate the filter task, the diode task and the periodic flow generator.
-Each task was spatially separated in a specific container. All the containers
-are executed in the same core, serializing the execution of the forwarding
-tasks.\\
-
-In order to reduce the impact of Linux, the kernel is configured using the
-Real-Time patch, in full-preemptive mode. In such a mode, kernel threads can be
-preempted in order to execute real-time tasks. This configuration reduces the
-overall system latency between each task and reduces the cost of asynchronous events
-management during real-time tasks execution. The capacity of the Linux
-kernel to support soft real-time scheduling has been measured using rt-tests
+Le maquettage initial a été construit sur l'architecture logicielle de
+conteneurisation LXC (Linux Containers). Cette architecture s'appuie sur un
+seul noyau et un seul ordonnanceur en charge de gérer les tâches des
+différents conteneur. Dans ce cadre, l'ordonnancement n'est pas de type
+hiérarchique, du fait de l'unicité de l'ordonnanceur. Néanmoins, ce dernier
+est apte à différentier les différents conteneurs et donc de gérer une
+politique d'ordonnancement variable par conteneur. Dans le cadre du
+maquettage, la différenciation est limitée à l'affinité CPU, afin de séparer
+les tâches de supervision et de traitement sur des coeurs disjoints.
+Ainsi, les sets de tâches des conteneurs DPI, diode et Émetteur périodique
+sont tous réunis sur un seul c{\oe}ur, avec une politique d'ordonnancement de
+type POSIX SCED\_FIFO.\\
+Afin de valider le comportement temps réel souple de Linux, ce dernier a été
+validé et utilisé avec le patch Linux-RT. Ce patch permet de fortement réduire
+l'impact du système Linux sur l'ordonnancement des tâches temps réel. En effet
+ce dernier permet entre autre de :
+\begin{itemize}
+  \item Supporter le mode FULL\_PREEMPT, rendant le noyau preemptible (à
+    l'exception de certains éléments comme les gestionnaires d'interruption)
+  \item Débrayer les priorités des différents threads kernel, afin qu'ils ne
+    puissent être plus prioritaire que les tâches temps réel
+  \item Limiter l'exécution des différentes {\it softirq} Linux au contexte du
+    thread ksoftirqd, afin qu'elles ne puissent s'exécuter dans un contexte
+    d'appel système
+\end{itemize}
+La capacité du noyau Linux à supporter le temps réel souple a été mesuré dans 
 \cite{rtlinux}.\\
 
 \begin{figure}
-  \includegraphics[width=8.9cm]{figures/rttest.pdf}
-\caption{Scheduling latency for highest priority task (in usec)\label{fig:rttest}}
+\begin{center}
+  \includegraphics[width=12cm]{figures/rttest.pdf}
+\caption{Latence au démarrage de la tâche de priorité la plus élevée\label{fig:rttest}}
+\end{center}
 \end{figure}
 
 \paragraph{}
-Figure \ref{fig:rttest} shows that the highest priority task (SCHED\_FIFO,
-priority 99) is executed with a maximum scheduling latency of 300
-microseconds. This measurement was done using the
-cycletest \cite{cycletest} tool over a period of
-5 hours with an input and output flow representative of the gateway needs.
+La Figure \ref{fig:rttest} montre que la tâche de priorité la plus élevée
+(ordonnancement SCHED\_FIFO, priorité 99) s'exécute avec une latence au
+démarrage d'au maximum 300 microsecondes. Cette mesure a été effectué avec
+l'outillage de mesure temps réel cycletest utilisé dans \cite{cycletest},
+pendant une durée de 5h avec une charge CPU de 40 et un traitement de flux
+représentatif du besoin.
 
+%%%% End of update %%%%
 \begin{figure}
 \input{figures/mockup.tex}
 \caption{System architecture used for empirical study}
@@ -635,13 +587,16 @@ the following configuration:
 \begin{table}
 \begin{center}
 \scalebox{0.9}{
-\begin{tabular}{l|ccccc}
+\begin{tabular}{|l|ccccc|}
+  \hline
 Task& Scheduling & task & Scheduling& WCET & Period\\
  &  policy&   profile &  priority  & (measured) & \\
+\hline
 \hline
 Filter & SCHED\_FIFO & sporadic &  97 & 90us & 1  ms \\
 Diode & SCHED\_FIFO & sporadic & 98 & 60us & 1 ms \\
 Sender &  SCHED\_FIFO & periodic & 99 (highest) & 80us & 10 ms\\
+\hline
 \end{tabular}
 }
 \end{center}
@@ -654,6 +609,7 @@ The highest priority is given to the Sender task, then to the Diode
 task, and finally to the Filter task.\\
 Such a policy was chosen in order to reduce the traversal latency, as
 described in \ref{sec:secu}.
+sec:secu n'existe plus.
 
 \subsubsection{Filtering and Deep Packet Inspection}
 
@@ -764,8 +720,11 @@ event-based only.
 Table \ref{tab:test1} describes the first measurement test.
 
 \begin{table}[h!]
-  \begin{tabular}{l|l}
+  \begin{center}
+  \begin{tabular}{|l|l|}
+     \hline
     & {\textbf Test 1} \\
+     \hline
      \hline
      input samples & 10,000 \\
      input flow minimum period & 10 ms \\
@@ -775,8 +734,10 @@ Table \ref{tab:test1} describes the first measurement test.
      input flow payload choice & random \\
      input flow average bit rate & 68.8 KB/s \\
      dropped packet(s)  & 0 \\
+     \hline
   \end{tabular}
   \caption{Test 1 profile\label{tab:test1}}
+\end{center}
 \end{table}
 
 \begin{figure}
@@ -818,8 +779,11 @@ using the profile given in Table \ref{tab:dut}.\\
 Table \ref{tab:test2} describes this second measurement test.
 
 \begin{table}[h!]
+  \begin{center}
   \begin{tabular}{l|l}
+     \hline
     & {\textbf Test 2} \\
+     \hline
      \hline
      input samples & 10,000 \\
      input flow minimum period & 1 ms \\
@@ -828,8 +792,10 @@ Table \ref{tab:test2} describes this second measurement test.
      input flow payload choice & random \\
      input flow average bit rate & 688 KB/s \\
      dropped packet(s)  & 90\% \\
+     \hline
   \end{tabular}
   \caption{Test 2 profile\label{tab:test2}}
+\end{center}
 \end{table}
 
 

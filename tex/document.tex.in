@@ -86,6 +86,9 @@
 \usetikzlibrary{automata}
 \usetikzlibrary{shapes,arrows}
 
+% minitoc depth
+\setcounter{minitocdepth}{2}
+
 
 %\usepackage{draftcopy}				% mark doc as 'draft'
 %\draftcopyName{Provisoire}
