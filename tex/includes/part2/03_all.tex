@@ -489,10 +489,10 @@ comme décrit dans \cite{alena_communications_2007} et \cite{arinc_653}\\
 La Figure \ref{fig:fw} montre un exemple de mécanisme de forwarding d'une
 passerelle générique.
 
-\subsubsection{Mesure empirique du coût de traversée pire cas par caquetage d'une passerelle}
+\subsubsection{Mesure empirique du coût de traversée pire cas par maquettage d'une passerelle}
 \label{subsec:empiric}
 
-\subsubsection{Architecture et configuration}
+\paragraph{{\it Architecture et configuration}}
 
 \paragraph{}
 La configuration de la maquette est le flux d'entrée est décrit dans la Table \ref{tab:dut}.\\
@@ -572,258 +572,234 @@ La Figure \ref{fig:rttest} montre que la tâche de priorité la plus élevée
 démarrage d'au maximum 300 microsecondes. Cette mesure a été effectué avec
 l'outillage de mesure temps réel cycletest utilisé dans \cite{cycletest},
 pendant une durée de 5h avec une charge CPU de 40 et un traitement de flux
-représentatif du besoin.
+représentatif du besoin, ce qui correspond à un nombre d'échantillons (en
+terme de jobs) supérieur à 100 millions.\\
+La mesure a été faite pour une tâche s'exécutant dans le conteneur {\it VE
+  sender}, avec une interconnexion des conteneurs via sockets unix, comme
+décrit dans la Figure \ref{fig:mockup}.
 
-%%%% End of update %%%%
 \begin{figure}
 \input{figures/mockup.tex}
-\caption{System architecture used for empirical study}
+\caption{Architecture logicielle générale de la maquette\label{fig:mockup}}
 \end{figure}
 
 \paragraph{}
-The scheduling policy chosen uses a rate monotonic scheduling sheme with
-the following configuration:
+Dans le cadre de la maquette, le système a été implémenté avec une politique
+d'ordonnancement de type Rate Monothonic, avec la configuration suivante :
 {\small
 \begin{table}
 \begin{center}
 \scalebox{0.9}{
-\begin{tabular}{|l|ccccc|}
+\begin{tabular}{|l||ccccc|}
   \hline
-Task& Scheduling & task & Scheduling& WCET & Period\\
- &  policy&   profile &  priority  & (measured) & \\
+Tâche & Politique & profil & priorité & WCET  & Période \\
+ & d'ordonnancement & d'ordonnancement & & (mesuré) & \\
 \hline
-\hline
-Filter & SCHED\_FIFO & sporadic &  97 & 90us & 1  ms \\
-Diode & SCHED\_FIFO & sporadic & 98 & 60us & 1 ms \\
-Sender &  SCHED\_FIFO & periodic & 99 (highest) & 80us & 10 ms\\
+Filter (nommée $F$) & SCHED\_FIFO & sporadic &  97 & 90us & 1  ms \\
+Diode (nommée $D$) & SCHED\_FIFO & sporadic & 98 & 60us & 1 ms \\
+Sender (nommée $S$) &  SCHED\_FIFO & periodic & 99 (highest) & 80us & 10 ms\\
 \hline
 \end{tabular}
 }
 \end{center}
-\caption{Scheduling choices for cost measurements\label{tab:mockup}}
+\caption{Description des choix d'ordonnancement de tâches pour la maquette\label{tab:mockup}}
 \end{table}
 }
 
 \paragraph{}
-The highest priority is given to the Sender task, then to the Diode
-task, and finally to the Filter task.\\
-Such a policy was chosen in order to reduce the traversal latency, as
-described in \ref{sec:secu}.
-sec:secu n'existe plus.
+La plus grande priorité est donnée à la tache Sender, puis à la tache Diode et
+enfin à la tache Filter. Ce choix a été fait afin de réduire la latence de
+traversée, en priorisant l'émission de données bufferisée par rapport à la
+réception de nouvelles données.
 
-\subsubsection{Filtering and Deep Packet Inspection}
-
-\paragraph{}
-In order to define a real Deep Packet Inspection automaton in the Filter task,
-a very simple network protocol was written, based on a TLV
-(Type/Length/Value) structure. This protocol supports five types, each with a
-specific size and content. No recursive TLV structure is used.\\
-This protocol was written in a {\it sender} task, generating a network
-flow traversing the filtering gateway. The same protocol is validated in the
-Filter task automaton, in order to check the content of each packet received.
+\paragraph{{\it Filtrage de paquets avancé (DPI)}}
 
 \paragraph{}
-The TLV protocol used for sample flow is a simple one using five types with no
-recursion. A complete inspection of the packet content is done before passing
-it to the diode container. If the packet is invalid, it is dropped and an
-invalid packet counter is updated.\\
-As shown in Algorithm \ref{algo:dpi} the DPI algorithm is based on a sample
-security policy to decide whether the packet is valid or not.
-\begin{algorithm}
- \SetAlgoLined
- \KwData{input packet content}
- \KwData{input packet policy}
- \KwResult{input packet validation against the policy}
- read packet\;
- \Switch{packet.T}{
-   \Case{packet.T = Policy.T.Val1}{
-     \Switch{packet.L}{
-       \Case{packet.L = Policy.T.Val1.Length}{
-         \Case{packet.V matches Policy.T.Val1.AllowedContent}{
-           \Return Bool.Allowed\;
-         }
-         \Other{
-           \Return Bool.Disallowed\;
-         }
-       }
-       \Other{
-         \Return Bool.Disallowed\;
-       }
-     }
-     \Other{
-       \Return Bool.Disallowed\;
-     }
-   }
-   \Case{packet.T = Policy.T.Val2}{
-     \Switch{packet.L}{
-       \Case{packet.L = Policy.T.Val2.Length}{
-         \Case{packet.V matches Policy.T.Val2.AllowedContent}{
-           \;
-           \Return Bool.Allowed\;
-         }
-       }
-     }
-   }
-   [...] \emph{Same case block for each possible T Value}\;
- }
- \caption{Sample TLV protocol inspection using a security policy\label{algo:dpi}}
-\end{algorithm}
+Afin de déterminer un automate de filtrage de paquets dans la tâche Filter,
+j'ai écrit un protocole très simple, basé sur une structure TLV
+(Type/Length/Value). Ce protocole permet 5 types différents, sans récursion.
+Chaque type possède sa propre taille et son propre contenu. Un émetteur est un
+récepteur ont été implémentés pour émettre le flux sur du protocole UDP vers la
+tâche Filter de la passerelle d'une part, et recevoir le flux réencapsulé dans
+du protocole UDP par la tâche Sender de la passerelle d'autre part.
+L'automate de la tâche Filter a pour but de valider les différents types, et
+pour chaque vérifier la taille et la conformité du contenu par rapport à une
+politique de sécurité chargée en mémoire.\\
+Si le paquet est invalide (non conforme à la politique de sécurité) ce dernier
+est droppé et un conteur de statistiques est mis à jour. Dans un cas plus
+complet, ce dernier serait lu par un conteneur de supervision pour remonter
+une alerte.
 
-\subsubsection{Simple software Diode}
+\paragraph{{\it Diode logicielle}}
 
 \paragraph{}
-The software diode is a sporadic task of the Diode container. This task simply
-reads the packets received from the Filter containers and writes them toward the
-Sender container without any value added.\\
-The diode behavior does not depend on the packets' content. Only the packets'
-size impact its execution cost, depending on the amount of bytes that should
-be transmitted.\\
-This task is very simple and should have a small execution time variation.
+La Diode logicielle est une tâche sporadique du conteneur {\it VE Diode}. Cette tâche
+lit les données transmise par la tâche de Filtrage du conteneur {\it VE
+  Filter} et les transmet au conteneur {\it VE Sender}, sans traitement
+complémentaire. Son coût d'exécution est donc assez stable, seule la taille
+des paquets reçus et émis étant impactant.
 
-\subsubsection{Periodic sender task}
+\paragraph{{\it Émetteur périodeique}}
 
 \paragraph{}
-The sender task is a periodic task treating one packet per period. As a
-consequence, the packet rate is seriously reduced, as shown in
-\ref{sec:secu}.\\
-The gateway output flow profile is generated by this task to avoid
-any inter-packet period variation due to the gateway's internal behavior.
+L'émetteur périodique est la tâche du conteneur {\it VE Sender} en charge
+d'assurer la maîtrise du flux de sortie, via un comportement prédictible. En
+effet, cette dernière est périodique et assure l'émission d'un paquet vers
+l'extérieur à chaque période. Ce dernier peut être un nouveau paquet (si le
+buffer d'entrée de la tâche a été remplit par la Diode logicielle) ou le même
+paquet que précédement (si aucun nouveau paquet n'est arrivé).\\
+L'émetteur périodique ne supportant pas, dans le cadre de ce maquettage, un
+mode burst, il est le facteur limitant du débit maximum transféré par la
+passerelle.
 
-\subsubsection{Communication between containers}
-
-\paragraph{}
-The communication between containers is based on Unix sockets through .sock
-files mapped in shared temporary memory-based file-systems. Such a configuration
-allows only the main memory to be used. At the same time, Unix sockets
-avoid using more costly communication channels like IP stacks.\\
-Because each task is executed in a specific container, spatially separated from the
-others, classical Inter-Process Communication channels such as pipes or
-signals are prohibited by the architecture. This also avoids direct communication
-channels between the Filter container and the Sender container. In order to
-guarantee that the VE diode is a one-way connector, the diode input UNIX socket
-file is mounted in the VE diode as a read-only file-system.\\
-Using UNIX sockets allows us to create a protocol separation
-between the incoming filter half-communication with the emitter and outgoing Sender
-half-communication with the receiver.
-
-\subsubsection{Empirical results}
+\paragraph{{\it Communication entre les conteneurs}}
 
 \paragraph{}
-Various measurements have been carried out in order to validate the efficiency of
-the architecture and its capacity to support real-time requirements. In order
-to demonstrate that the gateway guarantees the periodicity of the emitted flow
-whatever the input flow is, a randomly generated flow was sent to the
-gateway, and the WCET and the period of the three tasks were measured.
-A minimum period for the Filter and Diode tasks was not set. These tasks are
-event-based only.
+Comme vu plus haut, dans le cadre du maquettage la communication entre les
+conteneur a été faite au travers de sockets unix, via des sockets nommées
+remappées dans les différents conteneurs. En effet, l'usage d'IPC POSIX
+standard comme les pipes ou les SHM est rendu impossible par la mise en
+conteneur. En effet, le but est de se rapprocher d'une architecture
+logicielle dont les canaux de communications entre conteneurs sont réduits
+exclusivement à ceux explicitement déclaré, comme je l'ai décrit dans le
+Chapitre \ref{sec:donneeaproteger}. De plus, dans le conteneur Diode, la
+socket unix partagée avec le conteneur Filter est montée dans un système de
+fichier virtuel en lecture seule, afin d'assurer qu'une donnée ne peut être
+retransférée vers l'arrière.\\
+L'usage de ces sockets permet de transférer des données sans aucun ajout
+d'en-têtes protocolaires. Ainsi, les couches 1 à 4 du flux réseau entrant
+est décapsulée par la tâche de Filtrage DPI, et seule la tâche Émetteur
+périodique réencapsule les données à l'émission.
 
-Table \ref{tab:test1} describes the first measurement test.
+\paragraph{{\it Résultats empiriques}}
+
+\paragraph{}
+Plusieurs mesures ont été effectuée afin de valider l'efficacité de
+l'architecture logicielle et sa capacité à supporter les exigences temps
+réel. Afin de démontrer que la passerelle garantie la périodicité du flux émis
+quel que soit le profil de flux entrant, un flux entrant dont la période
+inter-trame est aléatoire a été généré afin de valider le comportement de la
+passerelle. Pendant l'émission de ce flux, le WCET et la période des trois
+tâches ont été mesurés. Les périodes minimums de la tâche Filter et Diode
+n'ont pas été définies, ces dernière étant directement dépendantes de la période
+inter-trame du flux entrant.
+
+La Table \ref{tab:test1} décrit le premier jeu de mesures
 
 \begin{table}[h!]
   \begin{center}
   \begin{tabular}{|l|l|}
      \hline
-    & {\textbf Test 1} \\
+     \multicolumn{2}{|c|}{\bf Jeu de test 1} \\
      \hline
      \hline
-     input samples & 10,000 \\
-     input flow minimum period & 10 ms \\
-     input flow maximum period & 30 ms \\
-     input flow period variation & random \\
-     input flow content & policy-compliant valid TLV \\
-     input flow payload choice & random \\
-     input flow average bit rate & 68.8 KB/s \\
-     dropped packet(s)  & 0 \\
+     échantillons en entrée & 10.000 \\
+     période minimum du flux d'entrée & 10 ms \\
+     période maximum du flux d'entrée & 30 ms \\
+     variation de la période du flux d'entrée & aléatoire \\
+     contenu du flux d'entrée & protocole TLV compatible de la politique de sécurité DPI \\
+     choix du type TLV du flux d'entrée & aléatoire \\
+     débit moyen du flux d'entrée & 68.8 Ko/s \\
+     nombre de paquets perdu(s) & 0 \\
      \hline
   \end{tabular}
-  \caption{Test 1 profile\label{tab:test1}}
+  \caption{Profil du jeu de test 1\label{tab:test1}}
 \end{center}
 \end{table}
 
 \begin{figure}
-\includegraphics[width=9cm]{figures/measure_all.pdf}
-\caption{Test 1: Measured WCET for Filter, Diode and Generator
-  modules\label{fig:costall}}
+  \begin{minipage}[b]{.46\linewidth}
+    \centering\includegraphics[width=9cm]{figures/measure_all.pdf}
+    \caption{Test 1: WCET mesurée pour Filtre, Diode et Émetteur périodique\label{fig:costall}}
+  \end{minipage}\hfill
+  \begin{minipage}[b]{.46\linewidth}
+    \centering\includegraphics[width=9cm]{figures/period_filter.pdf}
+    \caption{Test 1: Variation de période pour la tâche Filter\label{fig:filter_p}}
+  \end{minipage}
 \end{figure}
 
 \begin{figure}
-\includegraphics[width=9cm]{figures/period_filter.pdf}
-\caption{Test 1: Period variation of the Filter task\label{fig:filter_p}}
-\end{figure}
-
-\begin{figure}
-\includegraphics[width=9cm]{figures/period_diode.pdf}
-\caption{Test 1: Period variation of the Diode task\label{fig:diode_p}}
-\end{figure}
-
-\begin{figure}
-\includegraphics[width=9cm]{figures/period_sender.pdf}
-\caption{Test 1: Period variation of the Sender task\label{fig:sender_p}}
+  \begin{minipage}[b]{.46\linewidth}
+    \includegraphics[width=9cm]{figures/period_diode.pdf}
+    \caption{Test 1: Variation de période pour la tâche Diode\label{fig:diode_p}}
+  \end{minipage}\hfill
+  \begin{minipage}[b]{.46\linewidth}
+    \includegraphics[width=9cm]{figures/period_sender.pdf}
+    \caption{Test 1: Variation de période pour la tâche Émetteur périodique\label{fig:sender_p}}
+  \end{minipage}
 \end{figure}
 
 \paragraph{}
-A first test was made using a randomly generated flow with a minimum
-inter-packet period of 10 milliseconds. The flow profile is given in Table
-\ref{tab:dut}. Figures \ref{fig:filter_p},
-\ref{fig:diode_p} and \ref{fig:sender_p} show the resulting task execution
-profile in the filtering connector. We can see that whatever the
-period of the Filter and Diode task, the Sender task, having the highest
-priority, is executed using a periodic scheme. The small variation of its
-period is the consequence of the kernel scheduling latency, as shown in
-\ref{fig:rttest}. The worst case output flow is then a periodic flow having
-the same period as the Sender task.
+Un premier jeu de mesure a été fait en utilisant un flux d'entrée généré
+aléatoireement avec une période inter-trame de 10 millisecondes. Le profil de
+flux est donné dans la Table \ref{tab:dut}.\\
+Les Figures \ref{fig:filter_p}, \ref{fig:diode_p} et \ref{fig:sender_p}
+montrent le le profil d'exécution des trois tâches de la passerelle dans le
+cadre du traitement de ce flux. On démontre, au travers de ces mesures, que
+quel que soit le profil de flux entrant et son impact sur les tâches Filter et
+Diode, l'Émetteur périodique garantit un flux maîtrisé en sortie. La faible
+variation de sa période est la conséquence de la variation de la latence
+d'exécution du noyau Linux, qui a été mesuré dans le cadre de la Figure 
+\ref{fig:rttest}. Ainsi, le flux sortant possède une période inter-trame qui
+correspond à la période de l'Émetteur périodique.
 
 \paragraph{}
-In order to stress out the filtering connector, a second flow was generated
-using the profile given in Table \ref{tab:dut}.\\
-Table \ref{tab:test2} describes this second measurement test.
+Afin de vérifier la stabilité de la passerelle, un second flux a été généré
+avec une période inter-trame beaucoup plus courte, et supérieur à la capacité
+d'absorbtion de la passerelle. Ce flux est décrit dans la Table
+\ref{tab:test2}.
 
 \begin{table}[h!]
   \begin{center}
-  \begin{tabular}{l|l}
+  \begin{tabular}{|l|l|}
      \hline
-    & {\textbf Test 2} \\
+     \multicolumn{2}{|c|}{\bf Jeu de test 2} \\
      \hline
      \hline
-     input samples & 10,000 \\
-     input flow minimum period & 1 ms \\
-     input flow maximum period & 1 ms \\
-     input flow content & policy-compliant valid TLV \\
-     input flow payload choice & random \\
-     input flow average bit rate & 688 KB/s \\
-     dropped packet(s)  & 90\% \\
+     échantillon d'entrée & 10.000 \\
+     période minimum du flux d'entrée & 1 ms \\
+     période maximum du flux d'entrée & 1 ms \\
+     contenu du flux d'entrée & protocole TLV compatible de la politique de
+     sécurité\\
+     choix de la payload du flux d'entrée & aléatoire \\
+     débit moyen du flux d'entrée & 688 Ko/s \\
+     paquets perdu(s)  & 90\% \\
      \hline
   \end{tabular}
-  \caption{Test 2 profile\label{tab:test2}}
+  \caption{Profil du jeu de test 2\label{tab:test2}}
 \end{center}
 \end{table}
 
 
 \paragraph{}
-Because the Filter and the Diode task minimum period is not set, their real
-minimum period is the lowest supported by the operating system, which is 1
-millisecond. Figures \ref{fig:filter_p_2} and \ref{fig:diode_p_2} demonstrate
-this. These figures also show some anomalies in the input flow
-period, generating a latency in both the Filter and Diode tasks.
-At the same time, the Sender task still maintains its period and is neither
-impacted by the scheduling of the Filter and Diode task nor by the input flow
-period anomalies, as shown in Figure \ref{fig:sender_p_2}.
+Étant donné que la période minimum des tâches Filter et Diode n'est pas
+spécifiée, leur période minimum correspond à la plus petite période autorisée
+par le système d'exploitation, qui dans le cadre de la maquette a été
+positionnée à 1 milliseconde. Les Figure \ref{fig:filter_p_2} et
+\ref{fig:diode_p_2} le démontre. Ces Figures montrent également des anomalies
+dans la période du flux d'entrée, accroissant la période de ces deux tâches
+avec une probabilité moyenne de 0.02\% dans le cadre de la mesure. Dans le
+même temps, l'Émetteur périodique maintient sa période et n'est d'aucune
+manière impacté par l'ordonnancement des tâches Filter et Diode, comme le
+montre la Figure \ref{fig:sender_p_2}.
 
 \begin{figure}
-\includegraphics[width=9cm]{figures/period_filter_2.pdf}
-\caption{Test 2: Period variation of the Filter task\label{fig:filter_p_2}}
-\end{figure}
-
-\begin{figure}
-\includegraphics[width=9cm]{figures/period_diode_2.pdf}
-\caption{Test 2: Period variation of the Diode task\label{fig:diode_p_2}}
+  \begin{minipage}[b]{.46\linewidth}
+    \centering\includegraphics[width=9cm]{figures/period_filter_2.pdf}
+    \caption{Test 2: Variation de la période de la tâche Filter\label{fig:filter_p_2}}
+  \end{minipage}\hfill
+  \begin{minipage}[b]{.46\linewidth}
+    \includegraphics[width=9cm]{figures/period_diode_2.pdf}
+    \caption{Test 2: Variation de la période de la tâche Diode\label{fig:diode_p_2}}
+  \end{minipage}
 \end{figure}
 
 \begin{figure}
 \includegraphics[width=9cm]{figures/period_sender_2.pdf}
-\caption{Test 2: Period variation of the Sender task\label{fig:sender_p_2}}
+\caption{Test 2: Variation de la période de la tâche Émetteur périodique\label{fig:sender_p_2}}
 \end{figure}
 
+%%%%% EOT %%%%%%
 \section{Limitations and further work}
 \label{sec:future}
 
