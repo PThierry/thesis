@@ -800,51 +800,40 @@ montre la Figure \ref{fig:sender_p_2}.
 \end{figure}
 
 %%%%% EOT %%%%%%
-\section{Limitations and further work}
+\section{Limitations de la solution technique et compléments}
 \label{sec:future}
 
 \paragraph{}
-In section \ref{sec:secu}, we can see that the filtering connector is not able to support
-a high packet rate. Considering a Sender period $P_S$ reduced to 1 millisecond,
-which is still schedulable with the WCET defined in
-\ref{tab:mockup}, the highest throughput for an input flow using packets with
-a UDP payload of 50 bytes is 68.8 kbytes per second.\\
-There is still work to support flows with high throughput through the use
-of multi-packet bursts with a per-flow timeout management.\\
-Such a policy generates a periodic burst rather than a periodic one-packet send. The
-filter does not execute a periodic poll of one packet, but checks the current
-input buffer threshold. If the threshold or the current buffer
-timeout has been reached, its content is sent.\\
-In this case, defining a worst case traversal time is still possible, and the
-output flow profile remains mastered whatever the input flow is.\\
-Some implementations and measurements need to be done in order to check the
-efficiency of such a solution.
+Il est montré dans la Section \ref{sec:secu} que le connecteur ne permet pas
+le transfert d'un grand nombre de paquets par seconde, la limitation venant de
+la période d'exécution de la tâche émetteur périodique. Il est cependant
+possible d'accroître fortement le débit supporté via l'envoi de burst par
+l'émetteur périodique. L'usage de bursts permet d'accroître le débit mais
+implique plusieurs propriétés afin d'assurer malgré tout une maîtrise du
+profil de flux en sortie du connecteur:
+\begin{itemize}
+  \item La taille du burst doit être fixe
+  \item Le profil de flux sortant doit conserver un débit maximum déterminé,
+    afin de permettre le calcul de la profondeur des buffers de l'émetteur
+    périodique en conséquence
+  \item Les profondeurs de buffers doivent être déterminées en nombre de
+    paquets et non en octets, afin de ne pas être impacté par la variation de
+    la taille des paquets.
+\end{itemize}
 
 \paragraph{}
-From the security point of view, the software architecture used in this paper
-is not certifiable because the system used is based on a Linux architecture.
-Using a smaller and certifiable architecture based on the same general design
-would provide some security but also better real-time properties.
+Le maquette est basée sur une solution de compartimentation applicative sous
+Linux. Bien que plusieurs éléments de sécurisation et de temps réel y ait été
+apportés, cette dernière ne permet ni une certification élevée en sécurité, ni
+une certification élevée en temps réel. L'usage d'un micro-noyau temps réel
+est nécessaire. Les différentes fonctions de sécurités étant apportées par les
+moniteurs de sécurités, hors du champ du micro-noyau. Dans le cadre du
+transfert de flux à multiple criticité avec de fortes exigences de sécurité,
+la vérification du flux peut impliquer l'attente de plusieurs paquets
+successifs afin de reconstruire les informations protocolaires de couche
+session et supérieures. Ce traitement, devant être fait au niveau du filtre
+DPI, génère une latence dépendante du nombre de paquets devant être disséqués
+pour déterminer si le flux peut être autorisé selon la politique de sécurité
+locale. Ce calcul est néanmoins réalisable pour un protocole de communication
+donné.
 
-\paragraph{}
-Nevertheless in the empirical study described in \ref{subsec:empiric},
-the emitter is already not informed about the receiver's behavior whatever
-the input flow is. When packets are dropped because of an input overflow or
-because the receiver is not listening, no information is sent back to a
-supervision controller, as shown in Figure \ref{fig:block}. This communication
-channel should be integrated and its cost should not interfere with the data
-plane treatments scheduling.
-
-\paragraph{}
-Another missing element is the capacity to schedule multiple input flows with
-the capacity to define quality of service to support flows of
-various criticality. The input filter task becomes a task set managing multiple
-flows. Each flow then needs to be differentiated when sent to the Diode task
-and the Sender task in order to manage each output half-communication
-associated to one flow separately.
-
-\paragraph{}
-
-\subsection{Vers une solution modulaire compatible de la certification par composition}
-
-\paragraph{}
