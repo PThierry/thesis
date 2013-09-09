@@ -20,76 +20,102 @@ définis.
 \section{Contexte}
 
 \paragraph{}
-
 Ce sujet de thèse est choisi, en accord avec Thales Communications \&
-Security, afin de pouvoir répondre aux nouvelles problématiques de temps réel
-et de sécurité des systèmes embarqués Multi-Processor System on Chip (MPSoC)
-communicants. La thèse cible les nouvelles problématiques véhiculaires mais
-en essayant d'assurer la portabilité de la solution logicielle et de
-l'architecture associée sur des plateformes non embarquées.\\
-
-Cette thèse cible la problématique de partage du matériel avec
-de fortes exigences sur les propriétés du logiciel et du matériel pour
-répondre à la fois aux besoins temps réels et sécuritaire.
-
-\paragraph{}
-Aujourd'hui, les solutions de partage du matériel s'appuie sur le principe de
-virtualisation. Ce dernier, parfois aidé par le matériel, permet de pouvoir
-{\it héberger} plusieurs environnements logiciels autonomes sur un même matériel.
-On parle alors de mutualisation des ressources matérielles, comme décrit dans
-la Figure \ref{fig:virt_simple}.
-
-\begin{center}
-\begin{figure}
-\input{figures/virt_simple_fr.tex}
-\caption{Principe général de virtualisation\label{fig:virt_simple}}
-\end{figure}
-\end{center}
-
-C'est ce principe qui est retenu dans le cadre de cette thèse. Cependant, un
-certain nombre de propriétés tant de temps réel que de sécurité doit être
-considéré afin de valider les propriété de la solution de virtualisation
-considérée.
-
-\section{Objectifs}
+Security, afin de pouvoir répondre dans à la fois aux nouvelles problématiques
+de temps réel et de sécurité des systèmes embarqués de type Multi-Processor
+System on Chip (MPSoC).\\
+Dans le cadres des études amonts dans l'industrie, la coexistance de
+contraintes logicielle de temps-réel et de sécurité est de plus en plus
+fréquente. Cette dernière est la conséquence de l'intégration de plus en plus
+forte du logiciel dans des systèmes initialement dominés par les implémentations
+matérielles du support sécuritaire et temps-réel. 
+\\
+De nos jours, les architectures logicielles pour le temps-réel sont matures et
+performantes, mais souvent considérées hors de toute problématique
+sécuritaire, cette dernière, lorsqu'elle est présente, étant alors reléguée à
+un élément matériel autonome en coupure. Avec la standardisation des
+architectures matérielles et la diminution des budgets dans l'industrie, les
+exigences sécuritaires nécessitent d'être résolues au niveau du logiciel,
+tout en garantissant le maintient des exigences initiales sur le logiciel,
+principalement en terme de temps réel.
 
 \paragraph{}
-L'objectif principal de ma thèse et de définir l'architecture logicielle d'une
-passerelle de communication réseau pour l'embarqué véhiculaire. Cette
-passerelle doit pouvoir répondre à plusieurs classes d'exigences:
-\begin{itemize}
-\item La sécurité des données transitant
-\item Le support d'une borne supérieure pour le traitement d'un flux réseau
-\item L'assurance de traitement de certain flux de manière prioritaire
-\end{itemize}
+Dans le cadre de ma thèse, les architectures matérielles cibles sont de type
+PowerPC QorIQ ou sur une base ARM Cortex A9, A15, A53/57. Ces deux
+architectures matérielles correspondent a la plupart des besoins véhiculaires,
+comme il sera vu dans la problématique, ainsi qu'aux besoins des terminaux
+embarqués portables interagissant avec le système d'information du véhicule
+(téléphonie, radio, écran déporté portable).
 
-\paragraph{}
-La capacité d'optimiser au mieux l'utilisation du matériel embarqué type MPSoC pour exécuter une
-application doit permettre de satisfaire des contraintes applicatives de qualité de
-service exprimées sous la forme  de contraintes de latence de traversée d'un
-flux, de contrainte de temps de réponse de bout en bout pour tout message d'un
-flux ou encore de contrainte de bande passante allouée à un flux. Le niveau de
-criticité de chaque flux lui étant propre, la passerelle doit permettre de
-prioriser au besoin les flux les plus critique dans le cadre de son
-ordonnancement.
 
-\paragraph{}
-Tout en assurant ces propriétés temps réel, il est nécessaire de considérer la
-capacité d'intégrer une politique de sécurité à chacun des flux traités afin
-d'en assurer la confidentialité. Les données associées doivent donc être
-compatible de cette politique de sécurité pour pouvoir être transférés.
-Il est donc nécessaire de permettre l'injection d'une politique de sécurité
-associée à chaque flux et d'assurer un bon cloisonnement entre chacun des
-côtés de la passerelle.
+%communicants. La thèse cible les nouvelles problématiques véhiculaires,
+%impliquant à la fois des besoins de passerelles d'interconnexion de réseaux
+%hétérogènes comme par exemple le réseau moteur et le réseau multimédia. Dans
+%le cadre de mes travaux ont également été considérés les problématiques des
+%terminaux portables avec contraintes de sécurité et de temps réel. Ces
+%derniers s'intègre dans le besoin véhiculaire militaire en interconnexion avec
+%le véhicule, mais également plus généralement, dans la partie sécuritaire,
+%pour les terminaux portables de type téléphones/tablettes avec de fortes
+%contraintes de confidentialité et d'intégrité.
 
-\paragraph{}
-Cette thèse se construit dans un cadre industriel. Ainsi, l'aspect coût doit
-être considéré dans le cadre de la définition de l'architecture logicielle. La
-solution doit donc pouvoir être configurable et évolutive, ceci afin de
-pouvoir la considérer dans une problématique produit.
+%\paragraph{}
+%Aujourd'hui, les solutions de partage du matériel s'appuie sur le principe de
+%virtualisation. Ce dernier, parfois aidé par le matériel, permet de pouvoir
+%{\it héberger} plusieurs environnements logiciels autonomes sur un même matériel.
+%On parle alors de mutualisation des ressources matérielles, comme décrit dans
+%la Figure \ref{fig:virt_simple}.
 
-\paragraph{}
-La validation de l'objectif doit pouvoir se faire dans le cadre d'un
-caquetage validant la solution en terme de sécurité et de temps réel.
+%\begin{center}
+%\begin{figure}
+%\input{figures/virt_simple_fr.tex}
+%\caption{Principe général de virtualisation\label{fig:virt_simple}}
+%\end{figure}
+%\end{center}
 
-\section{présentation du document}
+%C'est ce principe qui est retenu dans le cadre de cette thèse. Cependant, un
+%certain nombre de propriétés tant de temps réel que de sécurité doit être
+%considéré afin de valider les propriété de la solution de virtualisation
+%considérée.
+
+%\section{Objectifs}
+
+%\paragraph{}
+%L'objectif principal de ma thèse et de définir l'architecture logicielle d'une
+%passerelle de communication réseau pour l'embarqué véhiculaire. Cette
+%passerelle doit pouvoir répondre à plusieurs classes d'exigences:
+%\begin{itemize}
+%\item La sécurité des données transitant
+%\item Le support d'une borne supérieure pour le traitement d'un flux réseau
+%\item L'assurance de traitement de certain flux de manière prioritaire
+%\end{itemize}
+
+%\paragraph{}
+%La capacité d'optimiser au mieux l'utilisation du matériel embarqué type MPSoC pour exécuter une
+%application doit permettre de satisfaire des contraintes applicatives de qualité de
+%service exprimées sous la forme  de contraintes de latence de traversée d'un
+%flux, de contrainte de temps de réponse de bout en bout pour tout message d'un
+%flux ou encore de contrainte de bande passante allouée à un flux. Le niveau de
+%criticité de chaque flux lui étant propre, la passerelle doit permettre de
+%prioriser au besoin les flux les plus critique dans le cadre de son
+%ordonnancement.
+
+%\paragraph{}
+%Tout en assurant ces propriétés temps réel, il est nécessaire de considérer la
+%capacité d'intégrer une politique de sécurité à chacun des flux traités afin
+%d'en assurer la confidentialité. Les données associées doivent donc être
+%compatible de cette politique de sécurité pour pouvoir être transférés.
+%Il est donc nécessaire de permettre l'injection d'une politique de sécurité
+%associée à chaque flux et d'assurer un bon cloisonnement entre chacun des
+%côtés de la passerelle.
+
+%\paragraph{}
+%Cette thèse se construit dans un cadre industriel. Ainsi, l'aspect coût doit
+%être considéré dans le cadre de la définition de l'architecture logicielle. La
+%solution doit donc pouvoir être configurable et évolutive, ceci afin de
+%pouvoir la considérer dans une problématique produit.
+
+%\paragraph{}
+%La validation de l'objectif doit pouvoir se faire dans le cadre d'un
+%caquetage validant la solution en terme de sécurité et de temps réel.
+%
+%\section{présentation du document}
