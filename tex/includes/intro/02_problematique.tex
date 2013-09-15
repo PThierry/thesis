@@ -27,8 +27,6 @@ principes de sécurité suivants pour les données qu'il traite:
 \item Confidentialité
 \end{itemize}
 
-\FIXME{texte de Sylvain, à écrire moi même}
-
 \paragraph{Disponibilité}
 La disponibilité est la capacité à accéder à une information à n'importe quel
 moment. Dans la pratique, des mécanismes de redondance des données sont mis en
@@ -47,7 +45,6 @@ accessible qu'à ceux dont l'accès est autorisé. Dans la pratique, la
 confidentialité est assuré par le cloisonnement et la gestion des d'accès aux
 données utilisateurs.
 
-\FIXME{end}
 \paragraph{}
 Avec l'intégration de plus en plus forte des réseaux IP dans les systèmes
 embarqués (véhiculaires, avioniques non temps-réel, transport)
@@ -122,7 +119,7 @@ De nos jours, les véhicules embarquent de plus en plus de matériel et de
 logiciel. Ces derniers sont impliqués pour l'aide à la conduite (ABS, ESP,
 etc) dans le cadre d'un réseau de bord. Ce réseau est en réalité une
 interconnexion d'un grand nombre de réseaux basés sur des bus série de type
-CAN (\FIXME{ref}), aggrégeant l'ensemble des éléments d'aide à la conduite.
+CAN\cite{iso11898}, aggrégeant l'ensemble des éléments d'aide à la conduite.
 Le réseau de bord est principalement basé sur des automates matériels avec une
 faible présence du logiciel. Ce réseau possède de forte contraintes de
 temps-réel, sans considération particulière en terme de sécurité. L'absence de
@@ -134,8 +131,9 @@ véhicules. Un deuxième réseau a fait son apparition au fur et à mesure des
 années. Il s'agit du réseau multimédia. A l'inverse du réseau de bord, ce
 dernier possède de plus faibles exigences de temps réel, et de plus fortes
 exigences de sécurité. Les différentes fonctions qu'il porte n'impactent pas
-la sureté de fonctionnement du véhicule tant que le réseau de bord et le
-réseau multimédia ne sont pas interconnecté. Néanmoins, les services
+la sûreté de fonctionnement du véhicule tant que le réseau de bord et le
+réseau multimédia ne sont pas interconnectés. Cette sûreté découle entre autre du besoin de
+respect des latences pire cas des traitements critiques. Néanmoins, les services
 multimédias fournit par le véhicules nécessitent d'être protégés d'éléments
 logiciels extérieurs non maîtrisés. Ainsi, le système multimédia du véhicule
 doit être protégé contre les terminaux mobiles s'y connectant, comme les
@@ -154,7 +152,7 @@ mission, de communications phoniques ou visiophoniques, de réception ou
 d'émission de positions GPS. Un véhicule équipé d'un tel réseau possède alors
 un système appelé système {\it systronique}.
 
-\subsection{A propos des systèmes systronique}
+\subsection{A propos des systèmes systroniques}
 
 \paragraph{}
 Un véhicule militaire doit également garantir plusieurs exigences
@@ -194,7 +192,7 @@ Afin de pouvoir répondre aux différentes exigences liées au besoin
 véhiculaire, on va alors considérer différentes familles de traitements:
 \begin{itemize}
 \item les traitement à très forte exigence de sûreté ou de sécurité, dont la
-latence d'exécution doit être à tout prix maintenus (système d'arme, blindage
+latence d'exécution doit être à tout prix maintenue (système d'arme, blindage
 transparent)
 \item les traitement à forte exigence de sûreté ou de sécurité, dont la
 latence d'exécution doit être respectée au mieux (caméras extérieures,
@@ -205,95 +203,169 @@ forte priorité génère un coût d'exécution dépassant le coût pire cas
 initialement déterminé. Le système n'étant plus capable d'exécuter les deux
 familles sans dépassement de la latence, il devient nécessaire de modifier
 son comportement afin de garantir malgré tout l'exécution des fonctions les
-plus critiques. On parle dans ce cas d'un système à multiple criticités.
+plus critiques. On parle dans ce cas d'un système à multiple criticités. Un
+tel système permet alors de respecter au mieux à la fois les exigences de
+sécurité et de sûreté de fonctionnement, mais aussi les exigences physique qui
+découlent de l'environnement véhiculaire.
 
-\section{Limitation et Enjeux}
+\section{Enjeux et limitations de l'existant}
 
-%%%
 
-Cependant ces solutions ne
-respectent cependant pas nécessairement des exigences de type temps réel sur
-les traitements logiciel effectués, ces dernières n'étant pas toujours
-exprimées.\\
-\subsection{A propos des besoins véhiculaires}
+\subsection{Les enjeux des systèmes Systroniques}
 
 \paragraph{}
-Les systèmes véhiculaires font partie des différents systèmes embarqués demandant
-une interconnexion de réseaux locaux. Ces derniers peuvent également demander
-à être intégrer avec une infrastructure déportée. Ce besoin est inhérent à
-leur évolution.
+Comme il a été vu précédemment, les enjeux dans les systèmes systroniques sont
+important, du fait de l'intégration continuels de nouveaux systèmes de
+communication, tant en terme de liens de communications locaux/semi-locaux et
+longue distance qu'en terme de traitements graphiques et vidéos. Il en résulte
+un système complexe interconnectant des éléments:
+\begin{itemize}
+  \item Fortement temps-réel
+  \item Temps-réel souple
+  \item Non temps-réel
+\end{itemize}
 
 \paragraph{}
-Aujourd'hui, les véhicules embarquent un grand nombre de sous-systèmes
-critiques. Ces systèmes fournissent des services à valeur ajoutée comme l'ABS
-ou les différents mécanismes d'aide à la conduite. Ces systèmes sont de plus
-en plus nombreux et de plus en plus complexes. C'est par exemple le cas de
-l'aide au créneaux couplé au caméras et radars de recul.
+De manière orthogonale, ces mêmes éléments impliquent des contraintes de
+sécurité variables, se déclinant en plusieurs domaines de sécurité.\\
+L'interconnexion de tous ces domaines (tant de sécurité que temps-réel) est
+néanmoins demandée. En effet, il est nécessaire dans un véhicule muni d'un
+système systronique de:
+\begin{itemize}
+  \item Transférer de l'information désensibilisée d'un domaine de haut niveau
+    de sécurité à un domaine de moindre niveau
+  \item Remonter de l'information d'un domaine de plus bas niveau à un domaine
+    de plus haut niveau de sécurité
+  \item Remonter des données d'un domaine temps-réel dur avec de forte
+    contraintes de sûreté vers un domaine de plus faible niveau de sûreté,
+    avec des contraintes de sécurité plus fortes
+\end{itemize}
 
 \paragraph{}
-Dans leur globalité, les systèmes véhiculaires s'appuient principalement sur
-un maillage complexe de bus CAN, permettant de remonter les informations de
-divers sondes et de corréler de telles informations. A ce réseau de réseaux
-CAN commencent à s'associer un réseau IP, afin d'intégrer un environnement
-multimédia de plus en plus riche (téléphone portable, mécanisme de
-cartographie par internet, etc). Le cloisonnement de ces deux domaines
-s'affaiblit petit à petit avec l'augmentation des services de remontée
-d'informations sur les terminaux utilisateurs. Cette tendance s'accroît avec
-les travaux sur les véhicules autonomes effectués par les différents
-constructeurs automobile ainsi que par Google. Ces travaux impliquent d'intégrer le
-véhicule comme un n{\oe}ud dans un réseau, et en conséquence réduit encore un peu
-plus la capacité à ségréguer les domaines de criticité (forte pour les
-commandes de bord, plus faible pour le multimédia).
+Ces interconnexions sont principalement la conséquence de l'apparition de
+terminaux de contrôles locaux et portatifs agrégeant un grand nombre de
+données. Du fait d'exigences physiques fortes (poids, volume, consommation
+électrique) et d'exigences de certification fortes (principalement liées à la
+résistance au vibrations dans les véhicules), ces derniers ne doivent pas pour
+autant être multipliés. La séparation des domaines de sécurité et parfois de
+sûreté doit donc être faite de manière logique plutôt que physique. Il revient
+alors au logiciel d'assurer cette séparation. Il lui revient également de fournir
+des mécanismes d'interconnexion respectueux de l'ensemble des exigences de
+sécurité et de sûreté.
+
+\subsection{A propos des limitations de l'existant}
 
 \paragraph{}
-Le cas des véhicules militaires est particulier: un grand nombre de sous systèmes
-viennent s'intégrer au véhicule. Il s'agit de la gestion des communications,
-du blindage ou encore de la détection d'attaque. Ces éléments interagissent
-fortement pour répondre au besoin.\\
-Aujourd'hui, un tel système s'appuie sur des éléments de niveaux de criticité
-différents, mais également de niveaux de sécurité différents. Faire
-communiquer ses éléments entre eux implique la prise en compte de la
-problématique de communications entre domaines de criticité différents, mais
-également la problématique de communication entre domaines de sécurité
-différents. Une telle architecture systèmes est très complexe et nécessite des
-passerelles inter-domaines assurant un bon cloisonnement des niveaux de
-criticité et de sécurité tout en permettant une communication contrôlée entre
-les domaines.
+Aujourd'hui, les systèmes systroniques maintiennent trois réseaux complètement
+indépendant:
+\begin{itemize}
+  \item Le réseau de bord
+  \item Le réseau systronique temps-réel
+  \item Le réseau de communications, non temps réel mais avec un grand nombre
+    de contraintes de sécurité
+\end{itemize}
 
 \paragraph{}
-Pour des raisons de place, de température et de consommation, les
-systèmes embarqués véhicules s'appuient sur des embarqués basse consommation.
-Ces derniers doivent être aptes à pouvoir traiter à la fois des données
-véhicules avec des exigences temps réel dur et des exigences de sécurité plus
-souples, et des données métier (cartographie et gestion de mission pour les
-militaires, données médicales pour les services d'urgence) avec des exigences
-de temps réel plus souples mais dont les exigences de sécurité sont elles
-beaucoup plus fortes. Ces dernières peuvent aller jusqu'à une exigence
-législative, comme par exemple la garantie du secret des données médicales.
+Il est demandé de pouvoir interconnecter ces trois réseau afin de remonter des
+informations du réseau de bord au réseau de communications, mais également du
+réseau systronique temps-réel au réseau de communications.\\
+Il est de plus demandé une modification profonde de ce dernier afin de
+permettre un partage de certains moyens de communications semi-locaux et
+distants entre différents domaines de sécurité. En effet, la multiplication
+des antennes génère à la fois un surcout et une problématique radio liée aux
+perturbation que génère les antennes entre elle sur la qualité du signal.\\
+De plus, du fait de l'incompatibilité des exigences de performances avec les
+exigences physiques, l'intégration de solutions aptes à permettre des
+traitements à criticité multiple est nécessaire au niveau de ces éléments
+d'interconnexion entre ces différents domaines. Ces solutions ne sont
+aujourd'hui pas sur le marché chez les industriels, et aucun produit existant
+ne permet ce type de comportement.
 
 \paragraph{}
+Pour la sûreté de fonctionnement, l'existant correspond souvent aux avancées
+technologiques qui ont été faite dans l'avionique. Ces solutions répondent
+parfaitement aux besoins de sûreté de fonctionnement. Elles sont donc tout à
+fait à leur place dans le réseau de bord. Néanmoins, lorsque sûreté et
+sécurité doivent être associés, ces solutions atteignent leurs limitations. Il
+devient alors nécessaire de concevoir des mécanismes logiques (dans le cas de
+la systronique) permettant de respecter à la fois des besoins de sûreté et de
+sécurité.
+
+\paragraph{}
+Pour la sécurité, l'existant est principalement basé sur les travaux qui existent depuis des
+années dans la sécurisation des systèmes d'informations complexes.
+Malheureusement, les solutions existantes s'appuient principalement sur des
+solutions matérielles en coupure et sur la cryptographie.\\
+Les éléments en coupure sont malheureusement difficilement intégrables. En
+effet:
+\begin{itemize}
+  \item Ils sont souvent volumineux et consommateurs de courant
+  \item Il ne sont que rarement certifiable pour les systèmes contraints avec
+    des exigences physiques type résistance aux vibrations
+  \item Leur facteur de forme n'est pas prévu pour de l'embarcabilité
+\end{itemize}
+Les solution de cryptographie ne s'intègrent pas toujours aisément:
+\begin{itemize}
+  \item Dans les systèmes de communications vehiculaires, la cryptographie
+    faite au niveau de l'émetteur/récepteur radio plutôt que dans le réseau
+    local
+  \item Pour la gestion des domaines de sécurité locaux, les chiffreurs utilisés
+    pour les systèmes d'information sont volumineux, lourds et consommateurs
+    de courant, et doivent alors être substitué par un chiffre logiciel ou
+    plus raisonnablement matériel de type carte cryptographique de petite
+    taille intégrable en début de mission
+  \item Les mécanismes d'interconnexion assurant à la fois des exigences de
+    sûreté et de sécurité fortes sont inexistant, du fait de la jeunesse de ce
+    besoin, tant dans le véhiculaire que dans l'avionique.
+\end{itemize}
 
 
 \section{Synthèse}
 
 \paragraph{}
 On constate qu'il devient aujourd'hui difficile d'échapper au besoin d'un
-système communicant multi-critique et multi-niveaux de sécurité. Le besoin de
-passerelles multi-critiques et multi-niveaux de sécurité sont la conséquence
-de la complexification des systèmes embarquées véhiculaires, et doivent pouvoir
-s'insérer dans divers systèmes pour permettre la communication contrôlés entre
-des éléments de criticité et de sécurité différents. Pour cela, cette passerelle
-doit pouvoir être compatible d'exigences à la fois temps réel et de sécurité,
-et fournir des mécanismes sous forme de fonctions certifiables, autonomes et
-agrégeable pour couvrir un maximum de besoin.
+système communicant intégrant de multiples niveaux de sûreté et de sécurité
+interagissants de concert. Pour permettre une interconnexion de ces niveaux
+tout en assurant un cloisonnement suffisant pour ne pas impacter les exigences
+initiales de chacun d'entre eux, de nouveaux mécanismes doivent être étudiés
+afin de pouvoir répondre à l'ensemble des exigences de la Systronique. Les
+exigences que doivent respecter ces solutions sont de trois types:
+\begin{itemize}
+  \item Sûreté de fonctionnement, principalement en terme de garantie de
+    latence, mais également en terme de protection du domaine de plus haut
+    niveau de sûreté
+  \item Sécurité, pour garantir la confidentialité, l'intégrité et la
+    disponibilité des données des différents domaines de sécurité lorsque ces
+    derniers nécessitent d'être interconnectés
+  \item Physique, afin de garantir que le logiciel est suffisamment peu couteux
+    à l'exécution pour ne pas nécessiter un matériel incompatibles des
+    exigences de consommation
+\end{itemize}
 
 \paragraph{}
-Dans le cadre de ma thèse, je cible le besoin d'interconnexion des réseaux
-véhiculaire (également appelé réseaux systroniques lorsque les réseaux véhiculaires
-intègre un ou plusieurs réseau IP).
+Une telle solution doit pouvoir se plier à ces trois familles d'exigences afin
+de ne pas multiplier les produits devant être intégrés au système Systronique.
+C'est un besoin qui dérive à la fois des exigences physiques et des exigences
+financières, le coût des véhicules devant être suffisamment rentable.
 
+\section{Éléments de solution}
 
+\paragraph{}
+Dans le cadre de ma thèse, je propose une solution logicielle pour répondre à
+cette problématique. Le besoin de modularité est pris en compte afin de
+rendre la solution configurable pour répondre aux différents besoins, et
+plusieurs contraintes de sécurité et de sûreté sont considérés afin de
+répondre à plusieurs exigences précises. Dans le cadre de ma thèse, la
+solution logicielle est prévue pour être utilisée en tant que passerelle, tant
+entre les différents domaines de sûreté qu'entre les différents domaines de
+sécurité. Les différents modules proposés ont une faible empreinte et une
+forte autonomie, afin de permettre au besoin une certification du logiciel.
 
-\section{Eléments de solution}
+\paragraph{}
+Afin de déterminer l'architecture logicielle idéale pour répondre au besoin
+Systronique, j'ai fait un état de l'art des solutions existantes et des
+technologies pouvant être choisies pour répondre au besoin Systronique. La
+solution proposée est décrite en terme de sécurité et de garantie de latence
+maximum. Enfin, un exemple de passerelle d'interconnexion modulaire est
+décrite, basée sur les principes proposés dans la solution théorique.
 
-Pour répondre à ...

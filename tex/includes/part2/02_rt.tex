@@ -343,176 +343,153 @@ l'ordonnancement est de $350 \mu s$, comme le montre la Figure \ref{fig:rttest}.
     Linux avec PREEMPT\_RT\label{fig:rttest}}
 \end{figure}
 
-\subsection{Répartition des moniteurs en environnement multi-processeur}
+%\subsection{Répartition des moniteurs en environnement multi-processeur}
 
-\subsubsection{Localisation des moniteurs et des compartiments par domaines de
-sécurité}
+%\subsubsection{Localisation des moniteurs et des compartiments par domaines de
+%sécurité}
 
-\section{Intégration du support des flux à criticité multiple}
+\section{Intégration du support des flux à criticité mixte}
 
-\subsection{Rappels}\label{intro}
-Our work is driven by the increasing trend in embedded systems towards integrating multiple
-functionalities on shared resources. In such systems though, all functionalities do not
-necessarily share a common criticality level. This means that the system may be subject
-to various certification processes, which are only concerned with the validation of a subset
-of the functionalities. Furthermore, the certification processes are carried out using analysis
-methods whose rigor depends on the criticality of the tasks that need to be certified.
-Mixed-criticality systems are an attempt to model systems that need to be certified at various
-levels of assurance. In practice, a task that is subject to multiple certification processes
-will be characterized by multiple estimations of its Worst-Case Execution Time (WCET), some of
-which are more pessimistic than others. This reflects the differences in rigor adopted by the
-certification authorities. The more a certification authority wants to ensure a task will never
-exceed its WCET, the more conservative its estimated value will be. Nevertheless, when certifying
-that a task will meet its constraints, the assurance level that is used for other tasks is equal
-to the criticality of that particular task. This means that when running the system, if another
-task reaches an estimation of its WCET at a level of assurance that is higher than the criticality
-of the initial task, then this task will be suspended, since the conditions that guarantee its
-feasibility are no longer met. Nevertheless, this approach can be overly pessimistic, as lower
-criticality tasks may still have time to complete their execution, or at least to go on with their
-computation for some time, without compromising the temporal constraints of higher criticality tasks.
-Therefore, we applied a strategy previously presented for traditional task sets
-\cite{bougueroua_george_midonnet}, commonly known as sensitivity analysis, and referred to as the
-allowance in this article, to mixed-criticality task sets. The allowance is meant to avoid, or at
-worst to delay at the latest time as possible time, the rise in criticality level in order to
-minimize the number of tasks that will miss their deadline. We then present a simple implementation
-of the allowance that only relies on timers, called the Latest Execution Time (LET). Furthermore,
-we tackle the problem of reducing the criticality of the system. Indeed, if the criticality of
-the system can be reduced, this means that the number of tasks being ignored will drop. We show
-that there exists a time when all tasks can be scheduled again.\\
+\subsection{Rappels}
 
-\subsubsection{Related work}\label{related}
-Mixed-Criticality scheduling is an emerging research domain and one which is gaining
-increasing interest. Vestal \cite{Vestal2007} initially introduced
-the mixed-criticality task model. In his work, he highlighted the difficulty in computing
-exact worst-case execution times, and observed that in practice, the higher the degree
-of assurance required that a task will never exceed its worst-case execution time, the
-more conservative the approximation of the latter becomes. This degree of assurance is
-characterized by a level of criticality. He also suggested a fixed-task-priority strategy
-based on the Audsley priority assignment scheme \cite{Audsley_1991}. Dorin et al.
-\cite{Dorin2010} proved that under the restricted case of independent 
-task systems with constrained-deadlines, Vestal's modified Audsley's approach was optimal
-in the class of fixed-task priority algorithms. Nowadays, the Mixed-Criticality
-(MC)-Schedulability problem is commonly known to arise in two different contexts. The first
-one is concerned with applications that are subject to multiple certification requirements.
-In this context, different Certification Authorities (CA) need to validate the application
-functionalities. Nevertheless, the more critical a functionality is, the more pessimistic
-the CA will be in the approximation of the WCET. Baruah et al. \cite{Baruah2010}
-studied mixed-criticality systems in this context, but restricted their work to a set of
-mixed-criticality jobs. In particular, Baruah \cite{bbalmms} pointed out the intractability
-of the MC-Schedulability problem, and quantified the fundamental limitations of MC-Scheduling
-for certification considerations. To tackle the intractability of MC-Scheduling, they suggest
-two sufficient schedulability conditions, referred to as the WCR-schedulability and
-OCBP-schedulability conditions. Later, Baruah and Li \cite{Li2010} extended
-their previous work and suggested a fixed-job-priority scheduling strategy based on their
-OCBP-schedulability condition. Baruah et al. also adapted the Earliest Deadline First algorithm
-to mixed-criticality systems, by modifying the deadlines of tasks. This approach is known as
-EDF-VD. More recently, Guan et al. \cite{gpmw} presented a new approach for scheduling
-mixed-criticality systems, which relies on an offline fixed-job-priority ordering computation,
-which is then used on-line by the scheduler. At the same time, Baruah et al. \cite{RBaruah2011a}
-formalized the response time analysis for mixed-criticality tasks. \\
-The second context in which mixed-criticality is defined considers that among all functionalities
-deployed on a single computing platform, some might be more critical, in the sense that they are
-more important, than others. In this context, Lakshmanan et al.
-\cite{Niz2009,Lakshmanan2011} observe that a reservation
-based approach, meant to isolate functionalities and prevent interferences, might lead to a
-criticality inversion problem, where a less critical task is favoured over a high critical task
-because the latter exceeded its reserved time partition. They suggested a new approach, termed
-zero-slack scheduling, to avoid this problem.\\
-Sensitivity analysis was previously studied by Bini et al.
-\cite{bini_buttazzo,Bini2006}. They discussed the concept of a feasibility
-region which allows one to determine the space of possible values for a particular task parameter.
-The allowance mechanism was initially introduced by Bougueroua et al. \cite{bougueroua_george_midonnet}
-in the context of traditional task sets subject to WCET overruns faults. Their work focused on
-determining the largest value that could be added to a task's worst-case execution time such that
-the whole task set remains schedulable, assuming a sliding window fault model.
-
-\subsubsection{This research}\label{ourWork}
-This research focuses on relaxing the strictness that occurs when scheduling mixed-criticality task sets.
-We suggest improvements that can be implemented in existing on-line scheduling strategies, such that
-task suspension only occurs when absolutelt necessary, thereby allowing more jobs to meet their deadline.
-We also notice that task suspension can be reversed when the system workload decreases.
+\paragraph{}
+Comme vu dans la problématique, les systèmes Systroniques possèdent des
+exigences impliquant de considérer des niveaux de criticités hétérogènes dans
+un même ensemble de tâches. Ainsi, le WCET des tâches de fortes criticité est
+estimés plusieurs fois, avec des méthodes plus ou moins pessimistes selon le
+niveau de certification demandé. Plus l'autorité de certification veut
+garantir le respect du WCET de la tâche, plus la valeur estimée est
+pessimiste. Cela implique que lors de l'exécution du système, si une autre
+tâche atteint une estimation de son WCET à un niveau d'assurance qui est
+supérieur au niveau de criticité de la tâche initiale, cette dernière est
+alors suspendue, les conditions nécessaires à sa faisabilité n'étant plus
+respectées. Néanmoins, cette approche est clairement pessimiste, les tâches de
+plus faibles criticité pouvant potentiellement continuer de s'exécuter, ou du
+moins continuer leur traitements pour quelques temps sans pour autant
+compromettre les contraintes temporelles des tâches de plus forte criticité.\\
+En conséquence, j'applique une stratégie précédemment proposée pour les ensembles de
+tâches traditionnels\cite{bougueroua_george_midonnet}, habituellement appelée
+{\it analyse de sensibilité} et que je nomme dans ma thèse comme {\it marge de
+  tolérance} dans le cadre des espaces de tâches à criticité mixte.
+Je propose ensuite une implémentation simple de la marge de tolérance qui
+s'appuie exclusivement sur les timers, que j'appelle {\it Latest Execution
+  Time} (LET). Afin d'assurer une bonne continuité de l'exécution de l'espace
+de tâches à criticité mixte, je montre également qu'il existe un instant dans
+l'exécution de l'espace de tâche où il est possible d'exécuter à nouveau
+l'intégralité des tâches de l'ensemble.
 
 %%%%%%%%%% Model and Definitions %%%%%%%%%%
-\subsection{Model and Definitions}\label{modelDef}
-Our study focuses on uniprocessor, preemptive systems. We consider mixed-criticality sporadic task sets
-$\tau = \{\tau_1, \tau_2, ..., \tau_n\}$ where the maximum criticality of a task is bound by
-$\mathnormal{L}$. A task in a mixed-criticality system is characterized by a 5-tuple
-$\tau_i = \{R_i, T_i, D_i, \chi_i, C_i\}$ where:
+\subsection{Modèle et Définitions}\label{modelDef}
+Dans le cadre de ces travaux, la cible est l'ordonnancement préemptif sur
+architecture mono-c{\oe}ur. La cible de ma thèse associant des mécanismes de
+compartimentations et d'affinité, on considère alors que les environnements
+d'exécution nécessitant de la criticité mixte doivent être associés par
+affinité CPU à un et un seul c{\oe}ur, afin de rester compatibles des
+hypothèses nécessaires dans le cadre de l'algorithme LET.\\
+On considère un ensemble de tâche 
+$\tau = \{\tau_1, \tau_2, ..., \tau_n\}$
+où le niveau de criticité maximum d'une tâche est lié à $\mathnormal{L}$.
+Dans un système à criticité mixte, une tâche à criticité mixte est caractérisé
+par un 5-uplet 
+$\tau_i = \{R_i, T_i, D_i, \chi_i, C_i\}$ où:
+%where the maximum criticality of a task is bound by
+%$\mathnormal{L}$. A task in a mixed-criticality system is characterized by a 5-tuple
 \begin{itemize}
-	\item[$\bullet$] $R_i \in \mathbb{N}$ is the release time of the first job of task $\tau_i$;
-	\item[$\bullet$] $T_i \in \mathbb{N}^*$ is the period of task $\tau_i$;
-	\item[$\bullet$] $D_i \in \mathbb{N}^*$ is the deadline of task $\tau_i$, $D_i \leq T_i$;
-	\item[$\bullet$] $\chi_i \in \mathbb{N}$ is the maximum criticality of the task $\tau_i$,
+	\item[$\bullet$] $R_i \in \mathbb{N}$ est la charge associée au
+          premier job de la tâche $\tau_i$;
+	\item[$\bullet$] $T_i \in \mathbb{N}^*$ est la période de la tâche $\tau_i$;
+	\item[$\bullet$] $D_i \in \mathbb{N}^*$ est la deadline de la tâche $\tau_i$, $D_i \leq T_i$;
+	\item[$\bullet$] $\chi_i \in \mathbb{N}$ est le niveau de criticité
+          maximum de la tâche $\tau_i$,
           $\chi_i \leq \mathnormal{L}$;
-	\item[$\bullet$] $C_i \in \mathbb{N}^{\mathnormal{L}}$ is a size $L$ vector of worst-case
-          execution times, where $C_i(\ell)$ is an estimation of the WCET of task $\tau_i$ at
-          criticality level $\ell \in [1,\mathnormal{L}]$.
+	\item[$\bullet$] $C_i \in \mathbb{N}^{\mathnormal{L}}$ est un vecteur
+          de taille $L$ de coûts d'exécution pire cas, où $C_i(\ell)$ est une
+          estimation du WCET de la tâche $\tau_i$ au niveau de criticité $\ell \in [1,\mathnormal{L}]$.
 \end{itemize}
-We assume $C_i(\ell)$ is monotonically increasing for increasing $\ell$. More precisely, for task $\tau_i$:
+We considère $C_i(\ell)$ s'accroît de manière monotone pour un accroissement
+de $\ell$. Plus précisément, pour une tâche $\tau_i$:
 \begin{itemize}
 	\item[$\bullet$] $\forall m \in [1, \chi_i[$, $C_i(m) \leq C_i(m+1)$;
 	\item[$\bullet$] $\forall m \in [\chi_i, \mathnormal{L}[$, $C_i(m) = C_i(\chi_i)$.
 \end{itemize}
-It follows that no task is supposed to execute longer than its worst-case execution time at its
-own criticality level. The $k^\text{th}$ job $J_k^i$ released by a mixed-criticality task $\tau_i$
-is characterized by a 5-tuple $\{r_k^i, d_k^i, \mathcal{X}_k^i, C_k^i, c_k^i\}$ where:
+Cela suppose qu'aucune tâche ne s'exécute plus longtemps que son WCET pour son
+niveau courant de criticité.
+Le $k^\text{n}$-ème job $J_k^i$ instancié par une tâche à criticité multiple $\tau_i$
+est caractérisé par un 5-uplet $\{r_k^i, d_k^i, \mathcal{X}_k^i, C_k^i,
+  c_k^i\}$ où:
 \begin{itemize}
-	\item[$\bullet$] $r_k^i \in \mathbb{N}$ is the time instant at which $J_k^i$ was released.
-          Since we consider sporadic task systems, we have $r_k^i \geq r_{k-1}^i + T_i$, and $r_1^i = R_i$;
-	\item[$\bullet$] $d_k^i \in \mathbb{N}^*$ is the absolute deadline of $J_k^i$. More precisely,
-          $d_k^i = r_k^i + D_i$;
-	\item[$\bullet$] $\mathcal{X}_k^i \in \mathbb{N}$ is the criticality of $J_k^i$, inherited
-          from task $\tau_i$: $\mathcal{X}_k^i = \mathcal{X}_i$;
-	\item[$\bullet$] $C_k^i \in \mathbb{N}^{\mathnormal{L}}$ is a size $L$ vector of worst-case
-          execution times for $J_k^i$, inherited from task $\tau_i$: $C_k^i = C_i$;
-	\item[$\bullet$] $c_k^i \in \mathbb{N}^*$ is the exact execution time of job $J_k^i$. From
-          the specifications of $\tau_i$, we can say that $c_k^i \leq C_i(\mathcal{X}_i)$, but the
-          exact value of $c_k^i$ will not be known until $J_k^i$ completes its execution.
+	\item[$\bullet$] $r_k^i \in \mathbb{N}$ est l'instant où $J_k^i$ est
+          instancié.
+          Étant donné que l'on considère un ensemble de tâches sporadique, on
+          a $r_k^i \geq r_{k-1}^i + T_i$, et $r_1^i = R_i$;
+	\item[$\bullet$] $d_k^i \in \mathbb{N}^*$ est la deadline absolue de
+          $J_k^i$. Plus précisément: $d_k^i = r_k^i + D_i$;
+	\item[$\bullet$] $\mathcal{X}_k^i \in \mathbb{N}$ est la criticité de
+          $J_k^i$, héritée de la tâche $\tau_i$: $\mathcal{X}_k^i = \mathcal{X}_i$;
+	\item[$\bullet$] $C_k^i \in \mathbb{N}^{\mathnormal{L}}$ est la taille
+          $L$ du vecteur de WCETs pour $J_k^i$, hérité de la tâche $\tau_i$: $C_k^i = C_i$;
+	\item[$\bullet$] $c_k^i \in \mathbb{N}^*$ est l'exact coût d'exécution
+          du job $J_k^i$. Du fait des spécifications de $\tau_i$, on peut dire
+          que $c_k^i \leq C_i(\mathcal{X}_i)$, mais la valeur exacte de
+          $c_k^i$ n'est connue que lorsque $J_k^i$ termine sont exécution.
 \end{itemize}
-\begin{definition}
-A task $\tau_i$ of criticality at least $\ell+1$ is subject to a \emph{level-$\ell$ execution overrun},
-if a job released by $\tau_i$ exceeds its worst-case execution time at level $\ell$.
-\end{definition}
-
-At any time $t$, we call the $j^\text{th}$ job $J_j^i$ released by task $\tau_i$ \emph{available} if
-$t \geq r_j^i$ and $J_j^i$ has not yet completed its execution. The actual execution time of job $J_j^i$
-is not known from the specification of $\tau_i$, but will only be discovered when $J_j^i$ completes
-its execution. At any time $t$, we define the \emph{scenario} $s_i^t$ of task $\tau_i$ as the set
-of exact execution times $\{c_1^i, c_2^i, ..., c_k^i\}$ for each of the $k$ jobs $J_j^i$ released
-by $\tau_i$ that already completed their execution at time $t$. The scenario of the mixed-criticality
-task set $\tau$ at time $t$ is defined as $s^t = \{s_1^t, s_2^t, ..., s_n^t\}$.\\
-The \emph{criticality level} of scenario $s^t$ is the smallest integer $\ell$ such that, for each
-$s_i^t \in s^t$, $c_k^i \leq C_i(\ell)\, \forall k$. Intuitively, it represents the smallest criticality
-level such that no task exceeded its worst-case execution time for that particular criticality level.
-If no such $\ell$ exists, then the scenario is said to be \emph{erroneous}, since at least one task
-exceeded its worst-case execution time at its own criticality level ($c_j^i > C_i(\chi_i)$).
 
 \begin{definition}
-A schedule for a scenario $s^t$ of criticality level $\ell$ is feasible if every job $J_j^i \in s_i^t$,
-$\forall i$, with $\chi_i \geq \ell$, receives execution time $c_j^i$ between its release time and its
-deadline.
+Une tache $\tau_i$ de criticité minimum $\ell+1$ est sujette à un \emph{dépassement
+d'exécution de niveau $\ell$}, si un job instancié par $\tau_i$ dépasse sont
+coût d'exécution pire cas de niveau $\ell$.
 \end{definition}
-This definition implies that mixed-criticality scheduling is only concerned with respecting temporal
-constraints of tasks of which criticality level is higher than or equal to the criticality level of
-the scenario.
+
+A tout moment $t$, on appelle le $j^\text{ème}$ job $J_j^i$ instancié par la
+tache $\tau_i$ \emph{disponible} si $t \geq r_j^i$ et $J_j^i$ n'a pas encore
+terminé son exécution. Le coût d'exécution effectif du job $J_j^i$ n'est pas
+mesurable à partir des spécifications de $\tau_i$, mais ne sera connu qu'une
+fois que $J_j^i$ aura terminé sont exécution.
+A tout moment $t$ on appelle le \emph{scénario} $s_i^t$ de la tache $\tau_i$
+comme l'ensemble des coûts d'exécution exacts $\{c_1^i, c_2^i, ..., c_k^i\}$
+pour chacun des $k$ jobs instanciés par $\tau_i$ qui ont déjà terminé leur
+exécution à l'instant $t$. Le scénario de l'ensemble de taches à criticité
+mixte $\tau$ à l'instant $t$ est défini comme $s^t = \{s_1^t, s_2^t, ...,
+  s_n^t\}$\\
+Le \emph{niveau de criticité} du scénario $s^t$ est définit comme le plus
+petit entier $\ell$ pour lequel, pour chaque $s_i^t \in s^t$, $c_k^i \leq C_i(\ell)\, \forall k$
+Intuitivement, il représente le plus petit niveau de criticité dans lequel aucune tâche ne
+dépasse son coût d'exécution pire cas de niveau de criticité correspondant.
+Si cet entier $\ell$ n'existe pas, alors le scénario est dit \emph{erroné},
+car au moins une tâche dépasse son coût d'exécution pire cas de son
+niveau de criticité propre ($c_j^i > C_i(\chi_i)$).
 
 \begin{definition}
-An on-line scheduling policy is correct for a task set $\tau$ if, for any non-erroneous scenario of
-$\tau$, the policy generates a feasible schedule.
+Un ordonnancement pour un scénario $s^t$ de niveau de criticité $\ell$ est
+faisable si tous les jobs $J_j^i \in s_i^t$, $\forall i$, avec $\chi_i \geq \ell$,
+termine sont temps d'exécution $c_j^i$ entre son instanciation et sa deadline.
 \end{definition}
-Since an on-line scheduling policy discovers the exact execution times of the jobs when they complete
-their execution, the criticality level of the scenario is not known beforehand. All available jobs
-are therefore initially scheduled. As soon as a job exceeds its worst-case execution time of level
-$\ell-1$, the criticality of the scenario is raised to level $\ell$, all available jobs of criticality 
-lower than $\ell$ are dropped, and future requests from tasks of which criticality is lower than $\ell$
-are no longer taken into consideration.
+Cette définition implique que l'ordonnancement à criticité mixte n'a pour but
+que de garantir les contraintes temporelles des tâches dont le niveau de
+criticité est supérieur ou égal au niveau de criticité du scénario.
 
 \begin{definition}
-A mixed-criticality task set $\tau$ is MC-schedulable if it admits a correct on-line scheduling policy.
+Une politique d'ordonnancement en ligne est correct pour un ensemble de taches
+$\tau$ si, pour tout scénario non-erroné de $\tau$, la politique génère un
+ordonnancement faisable.
+\end{definition}
+Du fait qu'une politique d'ordonnancement en ligne ne découvre le coût
+d'exécution exact des jobs qu'une fois que ces derniers ont terminé leur
+exécution, le niveau de criticité du scénario ne peut être connu qu'après
+coup. Les jobs instancié sont alors ordonnancés. Dès qu'un job dépasse son
+coût d'exécution pire cas de niveau $\ell-1$, la criticité du scénario est
+accrue au niveau $\ell$, les jobs instancié de criticité inférieure à $\ell$
+sont abandonnés, et les requêtes futures des taches de criticité inférieure à
+$\ell$ ne sont plus considérées.
+
+\begin{definition}
+Un ensemble de tâche de criticité mixte $\tau$ est MC-ordonnançable si il
+admet au moins une politique d'ordonnancement en ligne correcte.
 \end{definition}
 
-Figure \ref{extendedModel} extends the traditional task state model \cite{osekvdx} with additional
-transitions, or transition labels, to take into consideration the task suspension mechanism.
+La Figure \ref{extendedModel} étend le model traditionnel des états des taches
+\cite{osekvdx} avec des transitions complémentaires, afin de prendre en
+considération le mécanisme de suspension de tache.
 
 \begin{figure}[h!]
 	\begin{center}
@@ -523,9 +500,9 @@ transitions, or transition labels, to take into consideration the task suspensio
 		\tikzstyle{trait}=[rectangle,fill=white,inner sep=0pt,rounded corners = 10]
 		\tikzstyle{traite}=[ellipse,fill=white,inner sep=0pt,rounded corners = 10]
 		  
-		\node[state]		(0)		at (10,2.5)					{Running};
-		\node[state]		(1)		at (10,-2.5)				{Ready};
-		\node[state]		(2)		at (14,0)					{Suspended};
+		\node[state]		(0)		at (10,2.5)				{Exécuté};
+		\node[state]		(1)		at (10,-2.5)				{Prêt};
+		\node[state]		(2)		at (14,0)				{Suspendu};
 		
 		\path 	(0)	edge[bend left]			node[below]				{}	(1)
 				(0)	edge[]					node[above,sloped]		{}	(2)
@@ -536,20 +513,20 @@ transitions, or transition labels, to take into consideration the task suspensio
 				
 		
 		\node[trait]		(3)		at (16.1,0.85)					{	\begin{tabular}{c}
-									{\footnotesize Activate }\\
+									{\footnotesize Active }\\
 									{\footnotesize $[\ell > \chi_i]$}
 								\end{tabular}
 							};
-		\node[traite]		(3)		at (13,-2.5)					{\footnotesize Drop};
+		\node[traite]		(3)		at (13,-2.5)					{\footnotesize Abandonne};
 		
 		\node[trait]		(3)		at (12.1,-1.2)					{	\begin{tabular}{c}
-									{\footnotesize Activate }\\
+									{\footnotesize Active }\\
 									{\footnotesize $[\ell \leq \chi_i]$}
 								\end{tabular}
 							};
-		\node[traite]		(3)		at (12,1.25)					{\footnotesize Terminate};
-		\node[traite]		(4)		at (11,0)						{\footnotesize Preempt};
-		\node[traite]		(5)		at (9,0)						{\footnotesize Start};
+		\node[traite]		(3)		at (12,1.25)					{\footnotesize Termine};
+		\node[traite]		(4)		at (11,0)						{\footnotesize Préempte};
+		\node[traite]		(5)		at (9,0)						{\footnotesize Démarre};
 		
 		%\node[traite]		(6)		at (11.5,4)					{\footnotesize [Condition]};
 		%\node[traite]		(7)		at (13.5,4)					{\footnotesize $\langle$Event$\rangle$};
@@ -558,96 +535,125 @@ transitions, or transition labels, to take into consideration the task suspensio
 		\end{tikzpicture}
 		\end{tt}
 	\end{center}
-\caption{Extended task state model}\label{extendedModel}
+\caption{Modèle étendu des états de taches}\label{extendedModel}
 \end{figure}
 
 
-A task can be in one of the following states:
+Une tache ne peut être dans un des états suivants:
 \begin{itemize}
-	\item[$\bullet$] Running: a task $\tau_i$ is running when the scheduler chooses $\tau_i$ for
-          execution. While being in this state, the instructions of $\tau_i$ are processed by the CPU.
-          At any time, at most one task will be in the running state.
-	\item[$\bullet$] Ready: a task $\tau_i$ reaches the ready state if all functional prerequisites 
-          for a transition into the running state exist, and $\tau_i$ is only waiting for election from
-          the scheduler.
-	\item[$\bullet$] Suspended: a task $\tau_i$ reaches the suspended state if it is currently not
-          a candidate for election from the scheduler.
+	\item[$\bullet$] Exécutée: une tache $\tau_i$ est exécutée lorsque
+          l'ordonnanceur choisi $\tau_i$ pour l'exécuter. Dans cet état, les
+          instructions de $\tau_i$ sont traités par le CPU. A tout moment, au
+          plus une tache est dans un état {\it Exécutée}.
+	\item[$\bullet$] Prête: une tache $\tau_i$ atteint l'état prêt si tous
+          les prérequis fonctionnels pour une transition vers l'état {\it
+            Exécutée} sont présents, et $\tau_i$ est en attente uniquement
+          d'une élection de la part de l'ordonnanceur.
+	\item[$\bullet$] Suspendue: une tache $\tau_i$ atteint l'état suspendu
+          si elle n'est actuellement pas candidate à une élection par
+          l'ordonnanceur.
 \end{itemize}
-Transitions have the following meaning:
+Les transition ont les signification suivantes:
+
 \begin{itemize}
-	\item[$\bullet$] Start: The task is selected by the scheduler to be executed.
-	\item[$\bullet$] Preempt: The task is preempted by another task.
-	\item[$\bullet$] Terminate: The task successfully completes its execution.
-	\item[$\bullet$] Drop: The system's criticality reaches a level higher than the task's 
-          criticality, and it is therefore dropped. Notice that this can only happen when $\tau_i$
-          is preempted by a higher priority and higher criticality task.
-	\item[$\bullet$] Activate [$\ell > \chi_i$]: The task wants to release a new job, but the
-          system's criticality is currently higher than the task's criticality.
-	\item[$\bullet$] Activate [$\ell \leq \chi_i$]: The task wants to release a new job, and
-          the system's criticality is currently lower than or equal to the task's criticality.
+	\item[$\bullet$] Démarre: La tache est sélectionnée par l'ordonnanceur
+          pour être exécutée.
+	\item[$\bullet$] Préempte: La tache est préemptée par une autre tache.
+	\item[$\bullet$] Termine: La tache à compléter correctement sont
+          exécution.
+	\item[$\bullet$] Abandonne: La criticité du système atteint un niveau
+          supérieur à celui de la tache, qui est en conséquence abandonnée.
+          Cela n'arrive que lorsque $\tau_i$ est préemptée par une tache de
+          priorité et de criticité supérieure.
+	\item[$\bullet$] Active [$\ell > \chi_i$]: La tache souhaite instancié
+          un nouveau job, mais le niveau courant de criticité du système est
+          supérieur au niveau de criticité de la tache.
+	\item[$\bullet$] Active [$\ell \leq \chi_i$]: La tache souhaite instancié
+          un nouveau job, et le niveau de criticité du système est inférieur
+          ou égal à celui de la tache.
 \end{itemize}
 
 \begin{exmpl}\label{ex:mcTaskSet1}
-Let us consider a triple-criticality ($\mathnormal{L} = 3$) task set $\tau = \{\tau_1, \tau_2, \tau_3\}$ where:
+Considérons un ensemble de taches à triple criticité ($\mathnormal{L} = 3$) 
+$\tau = \{\tau_1, \tau_2, \tau_3\}$, avec:
+  
 \begin{itemize}
 	\item[$\bullet$] $\tau_1: \{0, 5, 5, 1, (1,1,1)\}$;
 	\item[$\bullet$] $\tau_2: \{0, 7, 7, 2, (1,3,3)\}$;
 	\item[$\bullet$] $\tau_3: \{0, 8, 8, 3, (1,3,7)\}$.\\
 \end{itemize}
-Any scenario where no job exceeds an execution time of 1 is of criticality 1, while scenarios where
-jobs of tasks $\tau_2$ and $\tau_3$ execute for at least 2 time unit and at most 3 time units are of
-criticality 2. If some jobs of task $\tau_3$ execute between 4 and 7 time units, then this defines a
-scenario of criticality 3. Finally, all others scenarios are erroneous.
+Tout scénario pour lesquels aucun job ne dépasse un coût d'exécution de 1 est
+de criticité 1, tandis que tout scénarios pour lequel les taches $\tau_2$ et
+$\tau_3$ s'exécutent pour au moins 2 unités de temps et au plus 3 unités de
+temps est de criticité 2. Si tout job de la tache $\tau_3$ s'exécute entre 4
+et 7 unités de temps, alors cela définit un scénario de criticité 3. Pour
+finir, tout autre scénario est erroné.
 \end{exmpl}
 
 \begin{definition}
-The worst-case response time $r_i$ of task $\tau_i$ is the maximum duration to execute $\tau_i$, taking
-into account the execution of all tasks of higher priority than $\tau_i$. We have $r_i \geq C_i(\chi_i)$.
+Le coût d'exécution pire cas $r_i$ de la tache $\tau_i$ est la durée maximum
+pour exécuter la tache $\tau_i$, en prenant en compte l'exécution de toutes
+les taches de priorités supérieures à $\tau_i$. On a $r_i \geq C_i(\chi_i)$.
 \end{definition}
 
 \begin{definition}
-A \emph{critical instant} for a task $\tau_i$ is defined to be an instant at which $\tau_i$ releases
-a job and the response time of that job will be the highest among all jobs released by $\tau_i$.
+  Un \emph{instant critique} pour une tache $\tau_i$ est défini comme étant un
+  instant où $\tau_i$ instancie un job dont le temps de réponse sera le plus
+  grand parmis tous les jobs instanciés par $\tau_i$.
 \end{definition}
 
-Liu \cite{Liu2000} showed that, when considering a traditional task set scheduled with fixed
-priority (FP), a critical instant for a task $\tau_i$ occurs whenever $\tau_i$ releases a job
-simultaneously with all higher priority tasks $\tau_j$. As shown in theorem \ref{theo:criticalInstant},
-this can be extended to mixed-criticality task sets.
+Liu \cite{Liu2000} a montré que, lorsque l'on considère un ensemble de taches
+traditionnel ordonnancé en priorité fixe (FP), un instant critique pour une
+tache $\tau_i$ se présente à chaque fois que $\tau_i$ instancie un job de
+manière simultanée avec toutes les taches $tau_j$ de priorité supérieure.
+Comme montré dans le théorème \ref{theo:criticalInstant}, ce principe peut
+être étendu aux ensemble de taches à criticté mixte.
 
 \begin{theorem}\label{theo:criticalInstant}
-Let $\tau = \{\tau_1, \tau_2, ..., \tau_n\}$ be a sporadic mixed-criticality task set scheduled with a
-fixed priority policy. A critical instant for a task $\tau_i$ occurs whenever $\tau_i$ releases a job
-simultaneously with all higher priority tasks $\tau_j$.
+Soit $\tau = \{\tau_1, \tau_2, ..., \tau_n\}$ un ensemble de taches
+sporadiques à criticité mixte ordonnancé avec une politique d'ordonnancement à
+priorités fixes. L'instant critique d'une tache $\tau_i$ se présente dès lors
+que $\tau_i$ instancie un job simultanément avec toutes les taches $tau_j$ de
+priorité supérieure.
 \end{theorem}
 \begin{proof}
-Since each task $\tau_i$ is certified for a level of assurance that is equal to its own criticality
-$\mathcal{X}_i$, we can map each task $\tau_j \in \tau$ onto a traditional task $\tau_j'$, where the
-worst-case execution time of $\tau_j'$ is equal to $C_j(\mathcal{X}_j)$. Since we obtain a traditional
-task set, the results proved by Liu \cite{Liu2000} can be reused, and this proves our theorem.
+Sachant que chaque tache $\tau_i$ est certifiée pour un niveau d'assurance qui
+est égal à son niveau de criticité $\mathcal{X}_i$, on peut associer chaque
+tache $\tau_j \in \tau$ à une tache traditionnelle $\tau_j'$, pour laquelle le
+coût d'exécution pire cas de $\tau_j'$ est égal à $C_j(\mathcal{X}_j)$. En
+revenant à un ensemble de taches traditionnel, les résultats démontrés par
+Liu \cite{Liu2000} sont réutilisable, ce qui prouve notre théorème.
 \end{proof}
 
-\subsection{Determining MC-Schedulability}\label{sufficientCondition}
-Baruah et al. \cite{bbalmms} proved that the MC-schedulability problem, applied to a finite set of jobs,
-is $\mathsf{NP}$-hard. Instead of relying on exact MC-schedulability conditions, we will focus on a
-\emph{sufficient} condition that can be verified in polynomial time. \\
-The algorithm used to verify this condition, introduced by Vestal \cite{Vestal2007},
-determines off-line a total ordering of the tasks in $\tau$. Each task is assigned a distinct priority
-and jobs inherit the priority of the task that released them. At each instant $t$, the scheduler executes
-the available job with the highest priority. The priority assignment is realized using the Audsley approach
-\cite{Audsley_1991} based on the following definition (priority $n$ is the lowest priority and priority
-1 the highest).
+\subsection{Determinaison de la MC-ordonnançabilité}\label{sufficientCondition}
+
+\paragraph{}
+Baruah et al. \cite{bbalmms} ont démontré que le problème de
+MC-ordonnançabilité, appliqué à un ensemble fini de jobs, est ${NP}$-complet.
+Plutôt que de s'appuyer sur les conditions exactes de la MC-ordonnançabilité,
+on cible une condition \emph{suffisante} qui peut être vérifiée dans un temps
+polynomial.\\
+L'algorithme utilisé pour vérifier cette condition, introduit par Vestal \cite{Vestal2007},
+détermine hors ligne un ordre total des tâches dans $\tau$. Chaque tache est
+assignée à une priorité distincte dont ses jobs héritent. L'assignation des
+priorité est faite en utilisé l'approche d'Audsley \cite{Audsley_1991}, basée
+sur la définition suivante (la priorité $n$ est la plus basse priorité, la
+priorité 1 la plus élevée).
 
 \begin{definition}
-A task $\tau_i$ in a mixed-criticality task set $\tau$ is said to be \emph{viable at the lowest priority
-  level} if all of the following conditions are satisfied:
+  Une tache $\tau_i$ dans un ensemble de taches à criticité mixte $\tau$ est
+  dite \emph{viable au plus bas niveau de priorité} si toutes les conditions
+  suivantes sont satisfaites:
 	\begin{enumerate}
-		\item the lowest priority is assigned to $\tau_i$;
-		\item all other tasks in $\tau$ can be assigned any priority provided that these priorities
-                  are higher than the priority assigned to $\tau_i$;
-		\item every job released by $\tau_i$ meets its deadline when it is executed for at most
-                  $C_i(\chi_i)$ time units and all other tasks $\tau_j$ in $\tau$ generate jobs that run
-                  for at most $C_j(\chi_i)$ time units.
+		\item la plus basse priorité est assignée à $\tau_i$;
+		\item à toutes les autres taches de $\tau$ peut être assignée
+                  n'importe quelle priorité, du moment que cette priorité est
+                  supérieure à celle assignée à $\tau_i$;
+		\item tout job instancié par $\tau_i$ respecte sa deadline
+                  lorsqu'il est exécuté pour au plus $C_i(\chi_i)$ unité de
+                  temps et toutes les autres taches $\tau_j \in \tau$
+                  instancient des jobs qui s'exécutent pour au plus
+                  $C_j(\chi_i)$ unités de temps.
 	\end{enumerate}
 \end{definition}
 
@@ -657,69 +663,91 @@ A task $\tau_i$ in a mixed-criticality task set $\tau$ is said to be \emph{viabl
 \KwIn{$\tau$}
 $\mathsf{pr} \leftarrow |\tau|$ \\
 \While{$\tau \neq \varnothing$}{
-	\If{no task $\tau_i \in \tau$ is viable at the lowest priority level}{
-		\textbf{return} error\;
+	\If{aucune tache $\tau_i \in \tau$ n'est viable à la priorité la plus basse}{
+		\textbf{return} erreur\;
 	}
 	\Else{
-		Let $\tau_i$ be a task viable at the lowest priority level\;
-		assign $\tau_i$ the lowest priority $\mathsf{pr}$\;
+		Soit $\tau_i$ une tache viable à la priorité la plus basse\;
+		assigne $\tau_i$ la priorité la plus basse $\mathsf{pr}$\;
 		$\tau \leftarrow \tau\setminus\{\tau_i\}$\;
 		$\mathsf{pr} \leftarrow \mathsf{pr}-1$\;
 	}
 }
-\caption{Priority Assignment}\label{alg:priorityAssignment}
+\caption{Assignation de priorité}\label{alg:priorityAssignment}
 \end{algorithm}
 
-The priority order is then constructed iteratively using algorithm \ref{alg:priorityAssignment}.
-If such a priority order exists, i.e. if a task viable at the lowest priority level is found at
-each step (w.r.t. the remaining set of unassigned priority tasks), then each task $\tau_i$ is guaranteed
-to meet its deadline if it executes for no more than $C_i(\chi_i)$  time units and no task $\tau_j$
-with a higher priority than $\tau_i$ executes longer than $C_j(\chi_i)$ time units.
+\paragraph{}
+L'ordre de priorité est alors construit de manière itérative en utilisant
+l'algorithme \ref{alg:priorityAssignment}.
+Si un tel ordre de priorité existe, i.e. si une tache viable à la priorité la
+plus basse est trouvé à chaque étape (de l'ensemble restant de taches de
+priorité non assignée), alors chaque tache $\tau_i$ est garantie de respecter
+sa deadline si elle s'exécute pour au plus $C_i(\chi_i)$ unités de temps et
+qu'aucune tache $\tau_j$ de priorité supérieure à $\tau_i$ s'exécute pendant
+plus de $C_j(\chi_i)$ unité de temps.
 
-Because the priority of a task is based on its own criticality level, we say that a task set is
-\emph{Own Criticality Based Priority (or OCPB)-schedulable} if we can find a complete ordering of
-the tasks using algorithm \ref{alg:priorityAssignment}.
+\paragraph{}
+Parce que la priorité d'une tache est basée sur son niveau de criticité, on
+dit qu'un ensemble de taches \emph{ordonnançables selon une priorité basée sur
+  leur propre criticité} (Own Criticality Based Priority (ou
+OCPB)-ordonnançable) si on peut trouvé un ordre complet des taches en
+utilisant l'algorithme \ref{alg:priorityAssignment}.
 
 \begin{theorem}\label{theo:mcschedulability}
-If a mixed-criticality task set $\tau$ is OCBP-schedulable on a given processor, then $\tau$ is
-MC-schedulable on the same processor.
+Si un ensemble de taches à criticité mixte $\tau$ est OCBP-ordonnançable sur
+un processeur donné, alors $\tau$ est MC-ordonnançable sur ce même processeur.
 \end{theorem}
 \begin{proof}
-This proof is mainly inspired by the one presented by Baruah et al. \cite{baruah_li_stougie}. Suppose
-$\tau$ is OCBP-schedulable, and let, after renaming of the tasks, $\tau_1 \vartriangleright
-\tau_2 \vartriangleright ... \vartriangleright \tau_n$ represent a complete ordering that provides
-evidence of this. Let $\tau_i$ be any task in this priority ordering. In order to demonstrate
-MC-schedulability, one has to prove that each job released by $\tau_i$ can receive $C_i(\chi_i)$ units
-of execution between its release date and its deadline in any scenario of criticality level $\chi_i$
-or lower. But in any such scenario, each job released by a task $\tau_j$ executes for no more than
-$C_j(\chi_i)$ time units. And the OCBP-schedulability of $\tau$ with priority ordering
-$\tau_1 \vartriangleright \tau_2 \vartriangleright ... \vartriangleright \tau_n$ implies that each job
-released by task $\tau_i$ will receive $C_i(\chi_i)$ time units if no job released by a task
-$\tau_j \in \{\tau_1, \tau_2, ..., \tau_{i-1}\}$ executed longer that $C_j(\chi_i)$ time units. It
-follows that $\tau_i$ will indeed meet its deadline in any scenario of criticality $\chi_i$ or lower.
+Cette preuve est principalement inspirée par celle présenté par Baruah et al. \cite{baruah_li_stougie}.
+Soit $\tau$ OCBP-ordonnançable, et soit, après renommage des taches, $\tau_1 \vartriangleright
+\tau_2 \vartriangleright ... \vartriangleright \tau_n$ représentant un ordre
+complet des taches de l'ensemble. Soit $\tau_i$ une tache dans cet ordre de
+priorité. Afin de démontrer la MC-ordonnançabilité, on doit pouver que chaque
+job instancié par la tache $\tau_i$ peut avoir $C_i(\chi_i)$ unités de temps
+d'exécution entre son instanciation et sa deadline dans tout scénarion de
+niveau de criticité $\chi_i$ ou inférieur. Mais dans n'importe lequel de ces
+scénarios, chaque job instancié par la tache $\tau_j$ s'exécute pendant pas
+plus de $C_j(\chi_i)$ unités de temps. L'OCBP-ordonnançabilité de $\tau$ avec
+un ordre de priorité $\tau_1 \vartriangleright \tau_2 \vartriangleright ...
+\vartriangleright \tau_n$ implique que chaque job instancié par la tache
+$\tau_i$ aura $C_i(\chi_i)$ unités de temps d'exécution si aucun job instancié par une tache 
+ $\tau_j \in \{\tau_1, \tau_2, ..., \tau_{i-1}\}$ s'exécute plus de
+ $C_j(\chi_i)$ unités de temps. En conséquence, $\tau_i$ respecte
+ effectivement sa deadline dans tout scénario de criticité $chi_i$ ou
+ inférieure.
 \end{proof}
 
+\paragraph{}
 \begin{exmpl}\label{ex:mcTaskSet2}
-Let us consider again the task set $\tau$ presented in example \ref{ex:mcTaskSet1}. A priority
-assignment which makes $\tau$ OCBP-Schedulable is $\tau_3 \vartriangleright \tau_2 \vartriangleright \tau_1$.
-Indeed, since $\tau$ is a periodic task set with simultaneous release times, $t=0$ is a critical 
-instant for every task, and it follows that one does only need to consider the response time of
-the first job of each task to determine schedulability. Task $\tau_1$ can be assigned the lowest
-priority because its response time does not exceed $3 < D_1$ time units when neither of the other
-tasks exceed their worst-case execution time at criticality level 1. Task $\tau_2$ can be assigned
-the middle priority because its response time does not exceed $6 < D_2$ time units when task 
-$\tau_3$ does not exceed its worst-case execution time at criticality level 2. Finally, task
-$\tau_3$ can be assigned the highest priority because its response time does not exceed $7 < D_3$
-time units. Since $\tau$ is OCBP-Schedulable, it follows from theorem \ref{theo:mcschedulability}
-that $\tau$ is also MC-Schedulable.
+Considérons de nouveau l'ensemble de tache $\tau$ présenté dans l'exemple
+\ref{ex:mcTaskSet1}. Une assignation de priorité qui rend $\tau$ ordonnançable
+est $\tau_3 \vartriangleright \tau_2 \vartriangleright \tau_1$.
+Dans ce cas, $\tau$ étant un ensemble de taches périodique à instanciation
+simultanées, $t=0$ est un instant critique pour toutes les taches, ce qui
+implique qu'il est nécessaire de considérer uniquement le temps de réponse du
+premier job de chaque tache pour déterminer l'ordonnançabilité. A La tache
+$\tau_1$ peut être assignée la plus basse priorité car son temps de réponse ne
+dépasse pas $3 < D_1$ unités de temps quand aucune des autres taches ne
+dépasse son coût d'exécution pire cas de niveau de criticité 1. A La tache
+$\tau_2$ peut être assignée la priorité moyenne parce que son temps de rémonse
+ne dépasse pas $6 < D_2$ unités de temps quand la tache $\tau_3$ ne dépasse
+pas son coût d'exécution pire cas de niveau de criticité 2. Pour finir, à la
+tache $\tau_3$ peut être assignée la plus haute priorité car son temps de
+rémonse ne dépasse pas $7 < D_3$ unités de temps. $\tau$ étant
+OCBP-ordonnançable, on peut alors dire, selon le théorème
+\ref{theo:mcschedulability}, que $\tau$ est également MC-ordonnançable.
 \end{exmpl}
 
-In the following section, we will focus on task sets which are OCBP-schedulable. Furthermore,
-Section\ref{sec:allowanceFP} assumes fixed priorities to be assigned according to algorithm
+\paragraph{}
+Dans la section suivante, on considère les ensembles de taches
+OCBP-ordonnançable. De plus, dans la Section \ref{sec:allowanceFP}, les
+priorités fixes sont considérées comme assignées selon l'algorithme 
 \ref{alg:priorityAssignment}.
 
 %%%%%%%%%% delayingCriticalityRising %%%%%%%%%%
-\subsection{Delaying Criticality Rising}\label{delayingCriticalityRising}
+\subsection{Retarder l'accroissement de criticité}\label{delayingCriticalityRising}
+
+%%%%%%%%%
 Traditional mixed-criticality scheduling policies stop a job as soon as the criticality 
 of the scenario becomes higher than the criticality level of that job. In particular, as
 soon as the criticality level of the scenario reaches $\ell$, all tasks $\tau_i$ with

@@ -13,7 +13,7 @@
 %% Document style definition
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\documentclass[twoside,a4paper,12pt,titlepage]{book} 	% document type
+\documentclass[twoside,a4paper,11pt,titlepage]{report} 	% document type
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -53,10 +53,10 @@
             linkcolor=blue
            ]{hyperref}					% allow interal links
            						% and doc content list 
-\usepackage[all]{hypcap}
-\usepackage{multirow}
-\usepackage{multicol}
-\usepackage{times}
+%\usepackage[all]{hypcap}
+%\usepackage{multirow}
+%\usepackage{multicol}
+%\usepackage{times}
 \usepackage{ifpdf}
 \usepackage{appendix} 
 \usepackage{graphicx}
@@ -79,6 +79,7 @@
 \end{psinputs}
 \usepackage{these}
 \usepackage{tikz}
+\usepackage{bookmark}
 
 % D. Verna FIXME mackage
 \usepackage[margin=true]{fixme}
@@ -309,7 +310,7 @@
 \fancyfoot[LO]{}					% Left Odd foot
 
 \cleardoublepage					% double blank page
-\frontmatter						% out of TOC chapterss
+%\frontmatter						% out of TOC chapterss
 
 \input{includes/resume.tex}				% insert abstracts
 
@@ -353,7 +354,7 @@ article en cours:\\
 - définition d'un connecteur multi-niveaux de criticité (exigences TR) et de
 sécurité (exigences de cloisonnement) pour le transfert de flux télécom.
 
-\mainmatter
+%\mainmatter
 
 \input{includes/intro/01_introduction.tex}
 

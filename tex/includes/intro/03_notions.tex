@@ -283,87 +283,87 @@ L'ordonnanceur peut également être de type {\it \index{event-driven}event-driven
 de priorité supérieure à celle en cours d'exécution. C'est le cas par exemple de l'EDF, qui ne préempte que sur l'arrivée d'une
 tache plus prioritaire.
 
-\paragraph{Les ordonnanceurs mixtes}
-
-Selon la priorité de la tache, cette dernière s'exécute sans préemption ou avec préemption.
-
-\subsubsection{Par oisiveté}
-
-\paragraph{Les ordonnanceurs oisifs}
-
-Les ordonnanceurs oisifs ne profitent pas de la
-
-\paragraph{Les ordonnanceurs non oisif}
-
-\subsubsection{Par politique de priorisation}
-
-\paragraph{Les ordonnanceurs à priorité fixe}
-
-La priorité est associée à une tache au moment de sa création. Cette dernière est maintenue tout au long de la vie de cette
-tache.
-
-\paragraph{Les ordonnanceurs à priorité dynamique}
-
-La priorité de la tache varie, en fonction par exemple de son vieillissement et/ou de son historique de consommation CPU.
-C'est le cas de la plupart des ordonnanceurs nom temps réels, comme SFQ (\FIXME à confirmer)n ou encore SCHED\_OTHER (\FIXME trouver
-son vrai nom).
-
-\paragraph{Les ordonnanceurs à priorité hybride}
-
-La priorité peut varier, selon le type de tache. On parle d'ordonnanceurs {\it FP/DP} ({\it Fixed Priority/Dynamic Priority}).
-
-\subsubsection{Cas des ordonnanceurs SMP}
-
-\paragraph{}
-Les grandes familles d'ordonnanceurs SMP temps-réel sont les suivantes :\\
-\begin{enumerate}
-\item \index{Partitioned scheduling}Partitioned scheduling
-\item \index{Global scheduling}Global scheduling
-\item \index{Semi-partitioned scheduling}Semi-partitioned scheduling
-\end{enumerate}
-
-\paragraph{Partitioned scheduling}
-
-Il y a autant de queues de processus que de c{\oe}urs. La répartition des tâches se fait
-statiquement. Cela pose cependant la problématique de l'impact des synchronisations et des locks (besoin de
-précédance entre les tâches).
-
-\paragraph{Global scheduling}
-
-Il y a une et une seule queue de processus pour l'ensemble des tâches. Cela pose le
-problème d'accès en écriture à cette queue dans les différentes instanciations
-de l'algorithme d'ordonnancement (une instance par c{\oe}ur \textit{actif}, afin
-de maintenir une bonne optimisation du coût de l'euristique d'ordonnancement).
-
-\paragraph{Semi-partitioned scheduling}
-Il en existe deux types :
-\begin{itemize}
-\item Job partitioning:\\
-Une instance d'une tâche s'exécute complètement sur un seul c{\oe}ur. Par contre,
-à chaque ré-exécution de la tâche, son positionnement dans les c{\oe}urs peut varier.
-Cette variation est cependant fixée par avance et maîtrisée. Elle respecte donc un schéma
-prédéfini et le ré-exécute indéfiniment.
-\item Instance partitioning:\\
-Un processus en cours d'exécution peut migrer d'un c{\oe}ur à un autre.
-Kato $(jap)$ propose l'algorithme suivant :
-Le WCET de la tâche est découpé en blocs de taille $\frac{D_{i}}{s}$, où
-$D_{i}$ est le temps avant lequel la tâche doit être exécutée, et $s$ le
-nombre de c{\oe}urs \textit{actifs}.\\
-À chaque fin de bloc, le processus migre d'un c{\oe}ur au suivant.
-Cela a pour conséquence de consommer le moins de c{\oe}urs possible, tout
-en les chargeant au maximum. C'est à double tranchant dans le sens où
-toute variation des hypothèses (inexactitude de WCET, surcharge temporelle) impacte violemment
-la capacité d'ordonnancement des tâches.\\
-L'algorithme ne semble donc pas résistant à toute élasticité du WCET, même contrôlée.
-Cette euristique ne possède pas de viabilité (\textit{sustainability} - capacité à résister à
-l'élasticité de valeurs de $c_{i}$, $T_{i}$, ou $D_{i}$, quel que soit la t\^{a}che $\tau_{i}$).\\
-Il s'agit d'une propriété importante du fait que la mesure du WCET
-peut être trop pessimiste (mesure via pire cas du graphe d'exécution,
-mais où le processus ne s'exécute que rarement en suivant cette branche) ou trop optimiste
-(mesure au travers d'une étude empirique sur le comportement du processus, n'ayant pas
-forcément pris en compte le véritable \textit{pire cas} si celui ci ne s'est pas produit).
-\end{itemize}
-
+%\paragraph{Les ordonnanceurs mixtes}
+%
+%Selon la priorité de la tache, cette dernière s'exécute sans préemption ou avec préemption.
+%
+%\subsubsection{Par oisiveté}
+%
+%\paragraph{Les ordonnanceurs oisifs}
+%
+%Les ordonnanceurs oisifs ne profitent pas de la
+%
+%\paragraph{Les ordonnanceurs non oisif}
+%
+%\subsubsection{Par politique de priorisation}
+%
+%\paragraph{Les ordonnanceurs à priorité fixe}
+%
+%La priorité est associée à une tache au moment de sa création. Cette dernière est maintenue tout au long de la vie de cette
+%tache.
+%
+%\paragraph{Les ordonnanceurs à priorité dynamique}
+%
+%La priorité de la tache varie, en fonction par exemple de son vieillissement et/ou de son historique de consommation CPU.
+%C'est le cas de la plupart des ordonnanceurs nom temps réels, comme SFQ (\FIXME à confirmer)n ou encore SCHED\_OTHER (\FIXME trouver
+%son vrai nom).
+%
+%\paragraph{Les ordonnanceurs à priorité hybride}
+%
+%La priorité peut varier, selon le type de tache. On parle d'ordonnanceurs {\it FP/DP} ({\it Fixed Priority/Dynamic Priority}).
+%
+%\subsubsection{Cas des ordonnanceurs SMP}
+%
+%\paragraph{}
+%Les grandes familles d'ordonnanceurs SMP temps-réel sont les suivantes :\\
+%\begin{enumerate}
+%\item \index{Partitioned scheduling}Partitioned scheduling
+%\item \index{Global scheduling}Global scheduling
+%\item \index{Semi-partitioned scheduling}Semi-partitioned scheduling
+%\end{enumerate}
+%
+%\paragraph{Partitioned scheduling}
+%
+%Il y a autant de queues de processus que de c{\oe}urs. La répartition des tâches se fait
+%statiquement. Cela pose cependant la problématique de l'impact des synchronisations et des locks (besoin de
+%précédance entre les tâches).
+%
+%\paragraph{Global scheduling}
+%
+%Il y a une et une seule queue de processus pour l'ensemble des tâches. Cela pose le
+%problème d'accès en écriture à cette queue dans les différentes instanciations
+%de l'algorithme d'ordonnancement (une instance par c{\oe}ur \textit{actif}, afin
+%de maintenir une bonne optimisation du coût de l'euristique d'ordonnancement).
+%
+%\paragraph{Semi-partitioned scheduling}
+%Il en existe deux types :
+%\begin{itemize}
+%\item Job partitioning:\\
+%Une instance d'une tâche s'exécute complètement sur un seul c{\oe}ur. Par contre,
+%à chaque ré-exécution de la tâche, son positionnement dans les c{\oe}urs peut varier.
+%Cette variation est cependant fixée par avance et maîtrisée. Elle respecte donc un schéma
+%prédéfini et le ré-exécute indéfiniment.
+%\item Instance partitioning:\\
+%Un processus en cours d'exécution peut migrer d'un c{\oe}ur à un autre.
+%Kato $(jap)$ propose l'algorithme suivant :
+%Le WCET de la tâche est découpé en blocs de taille $\frac{D_{i}}{s}$, où
+%$D_{i}$ est le temps avant lequel la tâche doit être exécutée, et $s$ le
+%nombre de c{\oe}urs \textit{actifs}.\\
+%À chaque fin de bloc, le processus migre d'un c{\oe}ur au suivant.
+%Cela a pour conséquence de consommer le moins de c{\oe}urs possible, tout
+%en les chargeant au maximum. C'est à double tranchant dans le sens où
+%toute variation des hypothèses (inexactitude de WCET, surcharge temporelle) impacte violemment
+%la capacité d'ordonnancement des tâches.\\
+%L'algorithme ne semble donc pas résistant à toute élasticité du WCET, même contrôlée.
+%Cette euristique ne possède pas de viabilité (\textit{sustainability} - capacité à résister à
+%l'élasticité de valeurs de $c_{i}$, $T_{i}$, ou $D_{i}$, quel que soit la t\^{a}che $\tau_{i}$).\\
+%Il s'agit d'une propriété importante du fait que la mesure du WCET
+%peut être trop pessimiste (mesure via pire cas du graphe d'exécution,
+%mais où le processus ne s'exécute que rarement en suivant cette branche) ou trop optimiste
+%(mesure au travers d'une étude empirique sur le comportement du processus, n'ayant pas
+%forcément pris en compte le véritable \textit{pire cas} si celui ci ne s'est pas produit).
+%\end{itemize}
+%
 \section{Les domaines de sécurité}
 
 \paragraph{}
@@ -382,15 +382,6 @@ une information dont le niveau de sécurité est supérieur au leur.\\
 De manière générale, le noircissement implique un chiffrement des données et
 potenciellement une modification du profil de flux, ceci afin de limiter la
 problématique de cannal auxiliaire dérivant du profil de flux initial.
-
-
-\section{Les domaines de criticité}
-
-\section{Qualité de service dans les réseaux IP}
-
-\subsection{802.1p}
-\subsection{802.1q}
-\subsection{Diffserv et champs ToS}
 
 \section{La virtualisation}
 

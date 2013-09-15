@@ -38,8 +38,13 @@ done
 #done
 
 echo '
+\bookmarksetup{startatroot}
+\input{includes/conclusion.tex}
+%\backmatter
+' >> document.tex
+
+echo '
 %\end{appendices}
-\backmatter
 
 %\printglossary
 

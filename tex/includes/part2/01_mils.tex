@@ -92,10 +92,11 @@ doit donc être compatible des propriétés \ref{pro:noncontournable},
 des architectures MLS.
 
 \paragraph{}
-On a pu constater dans l'état de l'art \FIXME{ref} que les éléments logiciels
-permettant de faire du traitement télécom avec valeur ajoutée ne sont pas
-compatible d'une certification. De manière générale, seul l'usage d'éléments logiciels à
-faible volumétrie de code permet de supporter une certification.\\
+Les solutions logicielles pour du traitement télécom, incluant entre autre
+une implémentation d'une pile TCP/IP, sont trop volumineuse pour être
+compatible d'une certification à haut niveau. De manière générale, seul
+l'usage d'éléments logiciels à faible volumétrie de code permet de supporter
+une telle certification.\\
 
 Parce que l'implémentation logicielle d'un passerelle de type télécom ne peut être certifiée en
 terme de sécurité, les éléments d'implémentation de celle-ci
@@ -159,20 +160,20 @@ l'architecture.
 \paragraph{}
 Comme vu dans le Chapitre \ref{sec:noncert}, l'usage de tels logiciels peut
 être considérés si des éléments certifiables extérieurs sont présents afin de
-rester compatible des quatres exigences initiales des architecture MLS. Dans
-la litérature (\FIXME{ref}, des éléments logiciels certifiable portant une
-fonction de sécurité sont appellés moniteurs de sécurité. On appellera donc
-l'ensemble de ces éléments des moniteurs de sécurité.\\
-Dans le cadre de cette architecture, un grand nombre de moniteurs de sécurité
-est présent. L'ensemble de ses moniteurs définit l'ensemble $Sec$. Ces
-derniers permettent de répondre aux différentes exigences du MLS:
+rester compatible des quatres exigences initiales des architecture MLS. On
+définit donc des éléments logiciels autonomes certifiable portant une
+fonction de sécurité. Par la suite, j'appelle ces éléments logiciels
+des moniteurs de sécurité.\\
+Dans le cadre de la solution que je propose, un grand nombre de moniteurs de
+sécurité est présent. L'ensemble de ses moniteurs définit l'ensemble $Sec$.
+Ces derniers permettent de répondre aux différentes exigences du MLS:
 \begin{itemize}
   \item Ils valident les entrées/sorties des éléments non certifiables
   \item Ils détectent et remontent les évènements invalident auprès d'un tiers
     de confiance
   \item Ils assurent le cloisonnement entre les différents éléments logiciels
     pour assurer l'inviolabilité de l'ensemble des moniteurs de sécurité (dont
-    eux-même)
+    eux-mêmes)
 \end{itemize}
 
 \subsection{Synthèse des choix structuraux}
@@ -291,16 +292,16 @@ sécuritaires en terme de confidentialité, intégrité et disponibilité.
 
 \subsection{De l'intégration des problématiques réseaux}
 
-\subsubsection{Poriblématique générale}
+\subsubsection{Problématique générale}
 
 \paragraph{}
 La solution consiste à permettre l'interconnexion sécurisée de deux domaines
 indépendants, avec des exigences temps réel et sécuritaires.
 Dans le cadre de la définition d'une telle architecture, la gestion des plans
-d'adressage IP est problématique dans le respect de l'Exigence
+d'adressage IP est problématique dans le respect de l'Éxigence
 \ref{req:transit}. Il est en effet nécessaire de permettre l'interconnexion
 de deux services sur deux réseaux disjoints tout en assurant que ces derniers
-ne soient pas capable de déterminer tout ou partie des informations télécom
+ne soient pas capables de déterminer tout ou partie des informations réseaux
 associées à l'autre service. Une telle problématique impacte fortement le
 comportement de la passerelle.
 
@@ -316,8 +317,8 @@ protocolaire. Ce mécanisme doit répondre à plusieurs besoins:
   \item En sortie, de nouvelles en-têtes appartenant au plan d'adressage de
     sortie doivent être construite pour se substituer aux précédante
 \end{itemize}
-On parle alors d'un mécanisme de séparation protocolaire\FIXME{ref}. Ces
-mécanismes implique l'usage d'applications de type proxy, se substituant d'une
+On parle alors d'un mécanisme de séparation protocolaire\cite{baum2002protocol}. Ces
+mécanismes impliquent l'usage d'applications de type proxy, se substituant d'une
 part à la destination et d'autre part à la source afin de permettre une
 interconnexion entre deux services de part et d'autre de la passerelle.
 

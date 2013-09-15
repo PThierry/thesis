@@ -183,10 +183,53 @@ maintenir l'ordonançabilité des tâches critiques, ces dernières ayant alors un
 WCET plus élevé, correspondant à celui du domaine de criticité nouvellement
 actif.
 
-To insert: \cite{handlemulticrit}
+%To insert: \cite{handlemulticrit}
 
 \subsection{A propos De l'ordonnancement d'un taskset multi-critique}
 
-\subsection{Impact de l'ordonnancement hierarchique sur la multi-criticité}
-
+\paragraph{}
+Mixed-Criticality scheduling is an emerging research domain and one which is gaining
+increasing interest. Vestal \cite{Vestal2007} initially introduced
+the mixed-criticality task model. In his work, he highlighted the difficulty in computing
+exact worst-case execution times, and observed that in practice, the higher the degree
+of assurance required that a task will never exceed its worst-case execution time, the
+more conservative the approximation of the latter becomes. This degree of assurance is
+characterized by a level of criticality. He also suggested a fixed-task-priority strategy
+based on the Audsley priority assignment scheme \cite{Audsley_1991}. Dorin et al.
+\cite{Dorin2010} proved that under the restricted case of independent 
+task systems with constrained-deadlines, Vestal's modified Audsley's approach was optimal
+in the class of fixed-task priority algorithms. Nowadays, the Mixed-Criticality
+(MC)-Schedulability problem is commonly known to arise in two different contexts. The first
+one is concerned with applications that are subject to multiple certification requirements.
+In this context, different Certification Authorities (CA) need to validate the application
+functionalities. Nevertheless, the more critical a functionality is, the more pessimistic
+the CA will be in the approximation of the WCET. Baruah et al. \cite{Baruah2010}
+studied mixed-criticality systems in this context, but restricted their work to a set of
+mixed-criticality jobs. In particular, Baruah \cite{bbalmms} pointed out the intractability
+of the MC-Schedulability problem, and quantified the fundamental limitations of MC-Scheduling
+for certification considerations. To tackle the intractability of MC-Scheduling, they suggest
+two sufficient schedulability conditions, referred to as the WCR-schedulability and
+OCBP-schedulability conditions. Later, Baruah and Li \cite{Li2010} extended
+their previous work and suggested a fixed-job-priority scheduling strategy based on their
+OCBP-schedulability condition. Baruah et al. also adapted the Earliest Deadline First algorithm
+to mixed-criticality systems, by modifying the deadlines of tasks. This approach is known as
+EDF-VD. More recently, Guan et al. \cite{gpmw} presented a new approach for scheduling
+mixed-criticality systems, which relies on an offline fixed-job-priority ordering computation,
+which is then used on-line by the scheduler. At the same time, Baruah et al. \cite{RBaruah2011a}
+formalized the response time analysis for mixed-criticality tasks. \\
+The second context in which mixed-criticality is defined considers that among all functionalities
+deployed on a single computing platform, some might be more critical, in the sense that they are
+more important, than others. In this context, Lakshmanan et al.
+\cite{Niz2009,Lakshmanan2011} observe that a reservation
+based approach, meant to isolate functionalities and prevent interferences, might lead to a
+criticality inversion problem, where a less critical task is favoured over a high critical task
+because the latter exceeded its reserved time partition. They suggested a new approach, termed
+zero-slack scheduling, to avoid this problem.\\
+Sensitivity analysis was previously studied by Bini et al.
+\cite{bini_buttazzo,Bini2006}. They discussed the concept of a feasibility
+region which allows one to determine the space of possible values for a particular task parameter.
+The allowance mechanism was initially introduced by Bougueroua et al. \cite{bougueroua_george_midonnet}
+in the context of traditional task sets subject to WCET overruns faults. Their work focused on
+determining the largest value that could be added to a task's worst-case execution time such that
+the whole task set remains schedulable, assuming a sliding window fault model.
 
