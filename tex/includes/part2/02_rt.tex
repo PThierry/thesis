@@ -747,37 +747,46 @@ priorités fixes sont considérées comme assignées selon l'algorithme
 %%%%%%%%%% delayingCriticalityRising %%%%%%%%%%
 \subsection{Retarder l'accroissement de criticité}\label{delayingCriticalityRising}
 
-%%%%%%%%%
-Traditional mixed-criticality scheduling policies stop a job as soon as the criticality 
-of the scenario becomes higher than the criticality level of that job. In particular, as
-soon as the criticality level of the scenario reaches $\ell$, all tasks $\tau_i$ with
-$\chi_i < \ell$ are suspended, even though they could still run for some time without
-compromising the temporal constraints of the active jobs of criticality at least $\ell$.
-This is because the OCBP-schedulability condition presented in Section~\ref{sufficientCondition}
-can no longer guarantee their temporal constraints. \\
-We argue that this principle is too restrictive and can be relaxed under certain conditions.
-In the case of task sets that are OCBP-schedulable, the following lemma already allows us to
-reduce the set of tasks that need to be suspended.
+Les politiques d'ordonnancement à criticité mixte traditionnelles arrêtent un
+job dès lors que la criticité du scénario dépasse celle du job. En
+particulier, dès que le niveau de criticité du scénario atteint $\ell$, toutes
+les taches $\tau_i$ avec $\chi_i < \ell$ sont suspendues, même si elles ont
+encore suffisamment de charge processeur pour pouvoir continuer à s'exécuter
+sans impacter les contraintes temporelles des jobs de criticité d'au moins
+$\ell$.
+Cela est dû à la condition de faisabilité lié à l'OCBP-ordonnançabilité,
+présentée dans la Section~\ref{sufficientCondition} qui ne garantie plus les
+contraintes temporelles.\\
+Nous pensons que ce principe est trop restrictif et peut être réduit sous
+certaintes conditions. Dans le cadre d'un ensemble de taches
+OCBP-ordonnançable, le lemme suivant nous permet déjà de réduire l'ensemble
+des taches à suspendre.
 
 \begin{lemma}\label{lem1}
-Let $\tau$ be a mixed-criticality task set which is OCBP-schedulable, and $\tau_i$ be any
-task in the priority order constructed by algorithm \ref{alg:priorityAssignment}. When a job
-released by $\tau_i$ reaches its worst-case execution time at criticality level
-$\ell \leq \mathcal{X}_i$, it is never necessary to suspend the tasks
-$\tau_j$ with $\chi_j < \ell$ that have a higher priority than $\tau_i$.
+Soit $\tau$ un ensemble de tache à criticité mixte OCBP-ordonnançable, et
+$\tau_i$ n'importe quelle tache dans l'ordre de priorité définit par
+l'algorithme \ref{alg:priorityAssignment}. Quand un job instancié par
+$\tau_i$ atteint son coût d'exécution pire cas de niveau de criticité 
+$\ell \leq \mathcal{X}_i$, il n'est jamais nécessaire e suspendre les taches
+$\tau_j$ avec $\chi_j < \ell$ qui ont une priorité supérieure à $\tau_i$.
 \end{lemma}
+
+
 \begin{proof}
-Let $\tau_i \in \tau$ be a task that reaches its worst-case execution time at criticality
-level $\ell$. Since $\tau$ is OCBP-schedulable, each job released by $\tau_i$ can execute
-up to $C_i(\chi_i)$ time units and still meet its deadline if no higher priority task
-$\tau_j$ executes longer than $C_j(\chi_i)$. Let $\tau_p$ be a higher priority task, whose
-criticality $\chi_p$ is lower than $\chi_i$. Since $\chi_i > \chi_p$, $C_p(\chi_i) = C_p(\chi_p)$,
-and the OCBP-schedulability condition guarantees that each job released by $\tau_i$ will meet
-its deadline, even though lower criticality tasks that have a higher priority than $\tau_i$
-execute for their worst-case execution time at their own criticality level. Therefore, only
-the lower criticality tasks that have a lower priority than $\tau_i$ need to be suspended. \\
+Soit $\tau_i \in \tau$ une tache qui atteint sont coût d'exécution pire cas de
+niveau de criticité $\ell$. $\tau$ étant OCBP-ordonnançable, chaque job
+instancié par $\tau_i$ peut s'exécuter jusqu'à $C_i(\chi_i)$ unités de temps
+et respecter sa deadline si aucune tache de priorité supérieure
+$\tau_j$ s'exécute plus que $C_j(\chi_i)$. Soit $\tau_p$ une tache de priorité
+supérieure, dont le niveau de criticité $chi_p$ est inférieur à $\chi_i$.
+Etant donné que $\chi_i > \chi_p$,  $C_p(\chi_i) = C_p(\chi_p)$, et
+la condition d'OCBP-ordonnançabilité garantie que chaque job instancié par
+$\tau_i$ peut s'exécuter jusqu'à son coût d'exécution pire cas de son propre
+niveau de criticité. En conséquence, seul les taches de plus basse criticité
+qui ont une priorité inférieure à $\tau_i$ doivent être suspendues.\\
 \end{proof}
 
+%%%%%%%%%
 Lemma \ref{lem1} prevents us from aborting lower criticality tasks that would still have enough
 time to fully complete their execution, but we could still go further and allow lower criticality
 tasks that would normally have to be suspended immediately, to proceed with their execution as
@@ -1343,15 +1352,6 @@ mechanism that implements it denoted LET. We then proved that idle times could b
 overall criticality of the system. Experiments furthermore attested that the criticality decreasing mechanism 
 could reduce up to 24\% the number of jobs that had to be suspended, while the allowance could decrease
 this number by an additional 8\%.
-
-
-
-
-%%%% END
-
-
-Changement de criticité: priorisation aux flux dont la QoS IP n'est pas la
-plus élevée
 
 
 \FIXME{exigences de criticité}:\\
