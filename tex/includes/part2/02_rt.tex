@@ -787,81 +787,119 @@ qui ont une priorité inférieure à $\tau_i$ doivent être suspendues.\\
 \end{proof}
 
 %%%%%%%%%
-Lemma \ref{lem1} prevents us from aborting lower criticality tasks that would still have enough
-time to fully complete their execution, but we could still go further and allow lower criticality
-tasks that would normally have to be suspended immediately, to proceed with their execution as
-long as all the jobs are able to meet their deadlines.  This would require to determine for how
-long tasks $\tau_i$ of criticality at least $\ell+1$ could delay the suspension of lower criticality
-tasks in case of a level-$\ell$ execution overrun. We call this duration the $\ell$-\emph{allowance}
-of task $\tau_i$, which is denoted by $A_i(\ell)$. Based on this allowance, we can determine the
-latest instant at which criticality has to be raised, since there is no more hope that all lower
-criticality tasks meet their deadline after. \\
+Le Lemme \ref{lem1} évite la désactivation des taches de plus basse criticité
+pour lesquelles les conditions sont encore suffisantes pour permettre la
+terminaison de leur exécution. Nous pourrions néanmoins aller encore plus
+loin et et autoriser des taches de criticité inférieure tant que les jobs que
+ces dernières instancient sont aptes à respecter leur deadline. Cela revient à
+déterminer combien de temps les taches $\tau_i$ de criticité d'au moins
+$\ell+1$ peuvent reporter la suspension de taches de niveau de criticité
+inférieur en cas de dépassement d'exécution de niveau $\ell$. On appelle cette
+durée la \emph{marge de tolérance de niveau $\ell$} de la tache $\tau_i$,
+dénotée $A_i(\ell)$ En se basant sur cette marge de tolérance, on peut
+déterminer le dernier instant au delà duquel la criticité doit être augmentée
+et les taches de criticité inférieure ne peuvent plus être assurées d'être
+exécutées à temps pour respecter leur deadline.
 
 %%%%%%%%%% Allowance %%%%%%%%%%
-\subsection{Allowance}\label{sec:allowance}
-The $\ell$-allowance of a task $\tau_i$, the criticality of which is at least $\ell+1$, consists
-in computing the margin in its worst-case execution time of level $\ell$. It represents the maximum
-execution time that can be added to $C_i(\ell)$ such that lower criticality tasks $\tau_j$ can
-still meet their deadline if they execute up to $C_j(\chi_j)$ time units and $\tau_i$ executes
-for at most $C_i(\ell) + A_i(\ell)$ time units. The $\ell$-allowance of tasks of which the 
-criticality is less than or equal to $\ell$ will be set to zero.
+\subsection{Marge de tolérance}\label{sec:allowance}
+La marge de tolérance de niveau $\ell$ d'une tache $\tau_i$ dont le niveau de
+criticité est d'au moins $\ell+1$ consiste en le calcul de la marge de son
+coût d'exécution pire cas de level $\ell$. Cela représente le coût d'exécution
+maximum qui peut être ajouté à $C_i(\ell)$ sans impacter les contraintes
+temporelles des taches de criticité inférieure $\tau_j$ si elles s'exécutent
+jusqu'à $C_j(\chi_j)$ unités de temps et $\tau_i$ s'exécute jusqu'à $C_i(\ell)
++ A_i(\ell)$ unité de temps. La marge de tolérance de niveau $\ell$ des taches
+pour lesquelles la criticité est inférieure ou égale à $\ell$ est alors mise à
+zéro.
 
 %%%%%%% Concepts and notations %%%%%%%
-\subsubsection{Concepts and Notations}
-Throughout this section, the following concepts and notations are used:
+\subsubsection{Concepts et Notations}
+Au travers de cette section, les concepts et notation suivantes sont utilisés:
 \begin{itemize}
 	\item[$\bullet$] $U_{\ell} = \sum\limits_{\tau_p \, | \, \chi_p \geq \ell} \dfrac{C_p(\ell)}{T_p}$
-          is the processor utilization factor at criticality level $\ell$.
-	\item[$\bullet$] FP$_\text{MC}$ denotes the preemptive \emph{Fixed Priority Highest
-            Priority First} algorithm, with a priority assignment determined by algorithm
-          \ref{alg:priorityAssignment}, and which only schedules tasks of criticality greater
-          than or equal to the criticality of the scenario.
-	\item[$\bullet$] A fault model denoted $\dfrac{k}{W}$. This means that for each 
-          criticality level $\ell \in [0, L]$, at most $k$ tasks ($0\leq k \leq n$) will be
-          subject to a level-$\ell$ execution overrun, over a sliding window of size $W$. We
-          set $W\leq\min\limits_i(T_i)$ to prevent a task to be subject to multiple level-$\ell$
-          execution overruns in the same window. Indeed, it might be too pessimistic to assume
-          that each task of criticality at least $\ell+1$ will be subject to a level-$\ell$ execution
-          overrun. The value of $k$ is bound to the task set and can be obtained statistically by 
-          observing the real number of level-$\ell$ execution overruns when executing the system,
-          or according to certification constraints.
-	\item[$\bullet$] For any task $\tau_i$ scheduled with FP$_\text{MC}$, and a fault model $\dfrac{k}{W}$:
+          est le facteur d'utilisation processeur au niveau de criticité
+          $\ell$.
+	\item[$\bullet$] FP$_\text{MC}$ dénote l'algorithme préemptif à
+          priorité fixe (\emph{Fixed Priority Highest Priority First}), avec
+          une assignation des priorités déterminée par l'algorithme
+          \ref{alg:priorityAssignment}, et qui ordonnance uniquement les
+          taches de criticité supérieure ou égale à la criticité du scénario.
+	\item[$\bullet$] Un modèle de faute dénoté $\dfrac{k}{W}$. Cela
+          correspond, pour chaque niveau de criticité $\ell \in [0, L]$,
+          d'au moins $k$ taches ($0\leq k \leq n$), au risque de dépassement
+          d'exécution de niveau de criticité $\ell$ pour une fenêtre glissante
+          de taille $W$. On définit $W\leq\min\limits_i(T_i)$ pour éviter
+          à une tache d'être sujette à de multiple démassements de coût
+          d'exécution pire cas de niveau $\ell$ dans une même fenêtre
+          temporelle. Néanmoins, cela peut être trop pessimiste pour supposer
+          que chaque tache de criticité au moins égale à $\ell+1$ sera sujette
+          à un dépassement d'exécution dans la même fenêtre. La valeur de $k$
+          est associée à un ensemble de taches et peut être obtenue de manière
+          statistique en observant le véritable nombre de dépassements
+          d'exécution de niveau de criticité $\ell$ durant l'exécution du
+          système, ou au travers de contraintes de certification.
+	\item[$\bullet$] Pour toute tache $\tau_i$ ordonnancée avec
+          FP$_\text{MC}$, et un modèle de faute $\dfrac{k}{W}$:
 		\begin{itemize}
-			\item[$\circ$] $\mathrm{hp}(i)$: the set of tasks $\tau_j$ having a priority higher than $\tau_i$;
-			\item[$\circ$] $\mathrm{hp}^R(i)$: the set of available jobs released by tasks $\tau_j \in \mathrm{hp}(i)$;
-			\item[$\circ$] $\mathrm{hp}_{k-1}(i,\ell)$: the set of at most $k-1$ tasks $\tau_j$ having a priority higher than $\tau_i$, and a criticality $\chi_j > \ell$. If more than $k-1$ tasks satisfy these conditions, we select the more recurrent tasks, i.e. the $k-1$ tasks of which the periods are the smallest;
-			\item[$\circ$] $\mathrm{lp}(i,\ell)$: the set of tasks $\tau_j$ having a priority lower than $\tau_i$ and a criticality $\chi_j \geq \ell$.
-			\item[$\circ$] $\mathrm{lp}^R(i,\ell)$: the set of available jobs released by tasks $\tau_j \in \mathrm{lp}(i,\ell)$;
-			\item[$\circ$] The following equation allows to compute an upper bound on the worst-case response time $r_i$ of $\tau_i$:
+			\item[$\circ$] $\mathrm{hp}(i)$: l'ensemble des taches
+                          $\tau_j$ ayant une priorité supérieure à $\tau_i$;
+			\item[$\circ$] $\mathrm{hp}^R(i)$: l'ensemble de job
+                          disponibles instanciés par les taches $\tau_j \in \mathrm{hp}(i)$;
+			\item[$\circ$] $\mathrm{hp}_{k-1}(i,\ell)$: l'ensemble
+                          d'au plus $k-1$ taches $\tau_j$ ayant une priorité
+                          supérieure à $\tau_i$, et une criticité $\chi_j >
+                          \ell$. Si plus de $k-1$ taches satisfont ces
+                          conditions, on choisi les taches les plus
+                          récurrentes, i.e. les $k-1$ taches ayant les périodes
+                          les plus petites;
+			\item[$\circ$] $\mathrm{lp}(i,\ell)$: l'ensemble de
+                          taches $\tau_j$ ayant une priorité inférieure à
+                          $\tau_i$ et une criticité $\chi_j \geq \ell$.
+			\item[$\circ$] $\mathrm{lp}^R(i,\ell)$: l'ensemble
+                          des jobs disponibles instanciés par les taches $\tau_j \in \mathrm{lp}(i,\ell)$;
+			\item[$\circ$] L'équation suivante permet de calculer
+                          la borne supérieure du temps de réponse pire cas
+                          $r_i$ de $\tau_i$:
 				\begin{equation}\label{equ:responseTime}
 					r_i = C_i(\chi_i) + \sum\limits_{\tau_p \in \mathrm{hp}(i)} \left\lceil \dfrac{r_i}{T_p} \right\rceil \times C_p(\chi_i)
 				\end{equation}
 		\end{itemize}
 \end{itemize}
-In the following, we will assume a fair distribution of the $\ell$-allowance between all $k$ 
-tasks of criticality at least $\ell+1$, i.e. each task of criticality at least $\ell+1$ is
-granted the same amount of $\ell$-allowance.
+
+Par la suite, on considère unne distribution uniforme de la marge de tolérance
+de niveau $\ell$ entre toutes les $k$ taches de criticité au moins $\ell+1$,
+i.e. chaque tache de criticité au moins égale à $\ell+1$ possède une marge de
+tolérance de niveau $\ell$ identique.
 
 \begin{proposition}
-Let $\tau$ be an MC-schedulable mixed-criticality task set. It follows that for any criticality 
-level $\ell$, the following condition is satisfied:
+Soit $\tau$ un ensemble de taches à criticité mixte MC-ordonnançable. Il en
+découle que pour chaque niveau de criticité $\ell$, la condition suivante est
+satisfaite:
 	\begin{equation}
 		U_{\ell} \leq 1
 	\end{equation}
 \end{proposition}
 
 %%%%%%% Allowance with FP %%%%%%%
-\subsubsection{Allowance with FP}\label{sec:allowanceFP}
-The following theorem shows how to compute the static $\ell$-allowance of a task $\tau_i$ with FP 
-scheduling. The priorities assigned to the tasks are the ones that bear witness to the OCBP-schedulability
-condition. The computation of $A_i(\ell)$ is based on the worst-case response time of the tasks with
-the allowance use.
+\subsubsection{Marge de tolérance en priorité fixe}\label{sec:allowanceFP}
+
+Le théorème suivant décrit comment calculer la marge de tolérance de niveau
+$\ell$ d'une tache $\tau_i$ dans le cadre d'un ordonnancement à priorité fixe.
+Les priorités assignées aux taches sont celles sont celles qui répondent au
+conditions d'OCBP-ordonnançabilité. Le calcul de $A_i(\ell)$ est basé sur le
+temps de réponse pire cas des taches avec la marge de tolérance intégrée.
+
 \begin{theorem}
-Let $\tau = \{\tau_1, \tau_2, ..., \tau_n\}$ be a set of $n$ mixed-criticality periodic tasks scheduled
-with FP, and let $\tau_1 \vartriangleright \tau_2 \vartriangleright ... \vartriangleright \tau_n$ be
-the priority order that yields OCBP-schedulability. The maximum $\ell$-allowance that can be granted
-to a task $\tau_i$, of criticality at least $\ell+1$, with a fair allowance distribution, and a fault
-model $\frac{k}{W}$, is the minimum positive value of $A_i(\ell)$ satisfying the following equations:
+  Soit $\tau = \{\tau_1, \tau_2, ..., \tau_n\}$ un ensemble de $n$ taches
+  périodiques à criticité mixteordonnancé en priorité fixe, et soit $\tau_1
+  \vartriangleright \tau_2 \vartriangleright ... \vartriangleright
+  \tau_n$ l'ordre de priorité qui correspond à une OCBP-ordonnançabilité. La
+  marge de tolérance de niveau $\ell$ qui peut être garantie pour une tache
+  $\tau_i$ de criticité au moins égale à $\ell+1$, avec une distribution
+  uniforme de la marge de tolérance, et un modèle de faute $\frac{k}{W}$, est
+  la valeure positive minimum de $A_i(\ell)$ satisfaisant les équations
+  suivantes:
 	\begin{equation}\label{equ:cond3}
 		C_i(\ell) + A_i(\ell) \leq C_i(\chi_i)
 	\end{equation}
@@ -880,53 +918,69 @@ model $\frac{k}{W}$, is the minimum positive value of $A_i(\ell)$ satisfying the
 	
 \end{theorem}
 \begin{proof}
-Equation (\ref{equ:cond3}) grants that the allowance should not allow a task to execute for
-more than its worst-case execution time at its own criticality level. Equation (\ref{equ:cond1})
-is the processor utilization condition at criticality level $\ell$ updated to take into account
-the $\ell$-allowance consumption of at most $k$ tasks. We want to ensure that lower cri\-ti\-cality
-tasks still meet their deadline in case of a level-$\ell$ execution overrun  of at most $k$
-higher criticality tasks, for a duration limited by the allowance, which leads us to equation
-(\ref{equ:cond2}). This equation represents the worst-case response time of $\tau_j\in lp(i,l)$
-when it executes at its highest criticality level, higher priority tasks $\tau_p$ including
-$\tau_i$ execute for at most $C_p(\chi_j)$ time units, and $k$ higher priority tasks $\tau_r$
-including $\tau_i$ consume their $\ell$-allowance.
-This equation is only verified for tasks having a lower priority than $\tau_i$ because of Lemma\ref{lem1}.
+  L'équation \ref{equ:cond3} garanti que la marge de tolérance n'autorise
+  pas une tache à s'exécuter pour plus que son coût d'exécution pire cas de
+  niveau de criticité $\ell$ modifié pour prendre en compte la consommation de
+  la marge de tolérance de niveau $\ell$ d'au plus $k$ taches. On veut
+  s'assurer que les taches de criticité inférieure puissent continuer à
+  respecter leur deadline en cas de dépassement d'exécution d'au plus $k$
+  taches de criticité supérieure pour une durée limitée par la marge de
+  tolérance, ce qui nous mène à l'équation \ref{equ:cond2}. Cette équation
+  représente le temps de réponse pire cas d'une tache $\tau_j \in lp(i,l)$ lorsqu'elle
+  s'exécute à son plus haut niveau de criticité, les taches de plus haute
+  criticité $\tau_p$ incluant $\tau_i$ s'exécutant pendant au plus
+  $C_p(\chi_j)$ unités de temps et $k$ taches de priorité supérieure $\tau_r$
+  incluant $\tau_i$ consommant leur marge de tolérance.
+  Cette équation ne doit être vérifiée que pour les tachs ayant une priorité
+  inférieure à $\tau_i$ du fait du Lemme \ref{lem1}.
 \end{proof}
 
-It follows that tasks with a criticality $\ell$ should not be dropped until a higher priority
-task $\tau_i$ with criticality $\chi_i > \ell$ executes for more than $C_i(\ell) + A_i(\ell)$
-time units.
+Il en suit que les taches de criticité $\ell$ ne doivent pas être suspendues
+tant qu'une tache de priorité supérieure $\tau_i$ de criticité $\chi_i > \ell$
+ne s'exécute pas plus longtemps que $C_i(\ell) + A_i(\ell)$ unités de temps.
 
 %%%%%%% Allowance with EDF %%%%%%%
-\subsubsection{Allowance with EDF}
-The allowance principle that was initially introduced by Bougueroua et al. \cite{bougueroua_george_midonnet}
-was applied both to Fixed Priority and Earliest Deadline First scheduling strategies, and dealt
-only with traditional task sets. Nevertheless, as the following proposition states, the Earliest
-Deadline First scheduling strategy is not optimal for mixed-criticality task sets.
+\subsubsection{Marge de tolérance avec EDF}
+
+Le principe de la marge de tolérance, initialement introduit par Bougueroua et
+al. \cite{bougueroua_george_midonnet}, a été appliqué à la fois dans les
+politiques d'ordonnancement à priorité fixe et EDF, pour les ensemble de
+taches traditionnels. Néanmoins, la proposition suivante déclare que la
+stratégie EDF (Earliest Deadline First) n'est pas optimale pour les ensembles
+de taches à criticité mixte.
 
 \begin{proposition}
-Every mixed-criticality task set $\tau$ that is MC-Schedulable does not necessarily admit Earliest 
-Deadline First as a correct on-line scheduling policy. In other words, EDF is not optimal for
-mixed-criticality task sets.
+Tout ensemble de taches à criticité mixte $\tau$ qui est MC-ordonnançable
+n'admet pas nécessairement EDF comme une politique d'ordonnancement en ligne
+correcte. En d'autres termes, EDF n'est pas optimal pour les ensembles de
+taches à criticité mixte.
 \end{proposition}
 \begin{proof}
-Let $\tau$ be the mixed-criticality task set which was proven to me MC-Schedulable in example
-\ref{ex:mcTaskSet2}. Figure \ref{fig:edfNotOptimal} shows that the criticality of the scenario
-is not raised soon enough to guarantee the temporal constraint of task $\tau_3$ when all tasks
-execute for their worst-case execution time at their own criticality level.
+Soit $\tau$ un ensemble de taches à criticité mixte qui a été prouvé comme
+MC-ordonnançable dans l'exemple \ref{ex:mcTaskSet2}. La Figure
+\ref{fig:edfNotOptimal} montre que la criticité du scénario n'est pas accrue
+suffisamment pour garantir les contraintes temporelles de la tache $\tau_3$
+quand toutes les taches s'exécute avec leur coût d'exécution pire cas de leur
+propre niveau de criticité.
 \end{proof}
 \begin{figure}[h!]
 	\begin{center}
 		\includegraphics[scale=0.40]{./figures/EDFNonOptimal.png}
-		\caption{Non-Optimality of EDF algorithm.}\label{fig:edfNotOptimal}
+		\caption{Non Optimalité de l'algorithme EDF}\label{fig:edfNotOptimal}
 	\end{center}
 \end{figure}
-Since our study will only focus on task sets $\tau$ which are OCBP-Schedulable, and because this
-property does not allow us to determine if Earliest Deadline first is a correct scheduling policy
-for $\tau$, we will not implement the allowance principle for the Earliest Deadline First algorithm.
+Etant donnée que cette étude cible les ensembles de taches $\tau$ qui sont
+OCBP-ordonnançable, et parce que cette propriété ne permet pas de déterminer
+si Earliest Deadline First est une politique d'ordonnancement correcte pour
+$\tau$, il n'est pas implémenté de principe de marge de tolérance pour
+l'algorithme EDF.
 
 %%%%%%% Allowance Domain %%%%%%%
-\subsubsection{Allowance Domain}\label{sec:allowanceDomain}
+\subsubsection{Domaine de tolérance}\label{sec:allowanceDomain}
+
+
+
+%%%%%%%%%%%%%%
 Section \ref{sec:allowanceFP} showed how to compute a fair $\ell$-allowance for task sets scheduled
 with FP. Nevertheless, one might want to use a different allocation rule for the $\ell$-allowance.
 In this section, we present a way of representing all possible values for the $\ell$-allowance, by
