@@ -49,8 +49,8 @@ echo '
 %\printglossary
 
 % bibliography
-\nocite{*}
-\bibliography{bibliography}
+%\nocite{*}
+\bibliography{bibliography}%{Bibliographie}
 \bibliographystyle{plain}
 
 \printindex

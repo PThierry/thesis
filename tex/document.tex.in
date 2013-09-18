@@ -80,6 +80,7 @@
 \usepackage{these}
 \usepackage{tikz}
 \usepackage{bookmark}
+\usepackage{etoolbox}
 
 % D. Verna FIXME mackage
 \usepackage[margin=true]{fixme}
@@ -284,6 +285,8 @@
 \fancyhf{}						% clear previous headers
 %\addtolength{\headheight}{48pt}				% update header height
 
+\patchcmd{\thebibliography}{\section*{\refname}}{Références}{}{}
+\patchcmd{\thebibliography}{\chapter*{\refname}}{Références}{}{}
 
 %opening
 \begin{document}
@@ -343,12 +346,41 @@
 %
 
 \newpage
-{\Large{Liste des publications}}\\
-\nocite{*}
-\bibliography{own}
-\bibliographystyle{plain}
 
 
+%\chapter*{Liste des publications}
+%\addstarredchapter{Liste des publications}
+\begin{thebibliography}{1}
+
+\bibitem{santy2012relaxing}
+Fran{\c{c}}ois Santy, Laurent George, Philippe Thierry, and Jo{\"e}l Goossens.
+\newblock Relaxing mixed-criticality scheduling strictness for task sets
+  scheduled with fp.
+\newblock In {\em 24th Euromicro Conference on Real-Time Systems (ECRTS)},
+  pages 155--165, Pisa, Italy, July 2012. IEEE.
+
+\bibitem{thierry2011toward}
+Philippe Thierry, Laurent George, J~Hermant, Fabien Germain, Dominique Ragot,
+  and J~Lacroix.
+\newblock Toward a predictable and secure data cache algorithm: a cross-layer
+  approach.
+\newblock In {\em 10th International Symposium on Programming and Systems
+  (ISPS)}, pages 148--155, Algiers, Algeria, April 2011. IEEE.
+
+\bibitem{thierry2011real}
+Philippe Thierry, Laurent George, and Jean-Fran\c{c}ois Hermant.
+\newblock Real-time scheduling analysis for arinc-based virtualized systems.
+\newblock In {\em 10th Workshop on Models and Algorithms for Planning and
+  Scheduling Problems}, page 106, Nymburk, Czech Republic, June 2011.
+
+\bibitem{etfa13}
+Philippe Thierry, Laurent George, and Jean-Marc Lacroix.
+\newblock A framework for a secure embedded filtering connector for
+  multi-criticality systronic systems.
+\newblock In {\em Proceedings of the 18th International Conference on Emerging
+  Technologies \& Factory Automation}, Cagliari, Italy, September 2013. IEEE.
+
+\end{thebibliography}
 
 %\mainmatter
 
