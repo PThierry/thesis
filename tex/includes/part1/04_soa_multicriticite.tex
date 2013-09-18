@@ -56,17 +56,16 @@ classique telle que décrite dans \cite{methodhierarchical}.
 \caption{Répartition type des tâches par jeux autonomes, en fonctions des exigences de réactivité}
 \end{figure}
 
-\paragraph{}
-Analyse de concurrence des systèmes temps réels à ordonnancement hierarchique
-\cite{regehr_evolving_2003}\\
-Calcul du temps de réponse sur un système temps réel à ordonnancement
-hierarchique sur base de priorité fixe
-\cite{balbastre_exact_2009}\\
-Ordonnancement hiérarchique SMP
-\cite{chandra_hierarchical_2008}\\
-Le rôle de la virtualisation dont les systèmes embarqués
-\cite{heiser_role_2008}
-
+%\paragraph{}
+%Analyse de concurrence des systèmes temps réels à ordonnancement hierarchique
+%\cite{regehr_evolving_2003}\\
+%Calcul du temps de réponse sur un système temps réel à ordonnancement
+%hierarchique sur base de priorité fixe
+%\cite{balbastre_exact_2009}\\
+%Ordonnancement hiérarchique SMP
+%\cite{chandra_hierarchical_2008}\\
+%Le rôle de la virtualisation dont les systèmes embarqués
+%\cite{heiser_role_2008}
 
 
 \subsection{Ordonnancement hiérarchique et principe de virtualisation}
@@ -76,7 +75,7 @@ Lorsque la hiérarchisation de
 l'ordonnancement provient du principe de virtualisation, les deux politiques
 d'ordonnancement s'ignorent souvent l'une l'autre. En conséquence, les ordonnanceurs
 en-ligne ne sont plus éligibles pour l'ordonnancement global, faute d'information sur la politique
-d'ordonnancement intérieur à chaque jeu de tâche. Ce dernier est donc en
+d'ordonnancement intérieur à chaque ensemble de tâches. Ce dernier est donc en
 général de type FP (Fixed Priority). Ce type de restriction est décrit dans
 \cite{cucinotta_respecting_2009} où les auteurs expliquent l'impact de
 l'ordonnanceur global sur la capacité des tâches virtualisées à rester
@@ -132,24 +131,23 @@ certifiabilité.
 
 %saewong2002analysis
 
-\section{A propos de l'ordonnancement hiérarchique sur base TDM}
+%\section{A propos de l'ordonnancement hiérarchique sur base TDM}
+%\paragraph{}
+%a considération d'un ordonnancement de jeu de tâche de type TDM est un cas
+%ntéressant d'ordonnancement hiérarchique. Les jeux de tâches sont ordonnancés
+%e manière stricte via la définition d'un motif répétitif d'ordonnancement. La
+%olitique d'ordonnancement des tâches doit donc considérer deux propriétés:
+%begin{itemize}
+%item La charge processeur allouée au compartiment, impactant la capacité à
+%rdonnancer les tâches en terme de charge
+%item La période d'élection du compartiment, impactant la capacité à respecter
+%es deadlines des tâches
+%end{itemize}
 
-\paragraph{}
-La considération d'un ordonnancement de jeu de tâche de type TDM est un cas
-intéressant d'ordonnancement hiérarchique. Les jeux de tâches sont ordonnancés
-de manière stricte via la définition d'un motif répétitif d'ordonnancement. La
-politique d'ordonnancement des tâches doit donc considérer deux propriétés:
-\begin{itemize}
-\item La charge processeur allouée au compartiment, impactant la capacité à
-ordonnancer les tâches en terme de charge
-\item La période d'élection du compartiment, impactant la capacité à respecter
-les deadlines des tâches
-\end{itemize}
-
-\paragraph{}
-J'ai étudié cette problématique d'ordonnançabilité afin de valider le fait
-que plusieurs jeux de tâches ordonnancés en TDM restaient certifiable en terme
-d'ordonnançabilité pure\cite{tdmsched}.
+%paragraph{}
+%'ai étudié cette problématique d'ordonnançabilité afin de valider le fait
+%ue plusieurs ensembles de tâches ordonnancés en TDM restaient certifiables en terme
+%'ordonnançabilité.
 
 
 \chapter{A propos de l'état de l'art de l'ordonnancement de tâche à multiple criticité}
@@ -185,51 +183,61 @@ actif.
 
 %To insert: \cite{handlemulticrit}
 
-\subsection{A propos De l'ordonnancement d'un taskset multi-critique}
+\subsection{A propos De l'ordonnancement d'un ensemble de taches à criticité mixte}
 
 \paragraph{}
-Mixed-Criticality scheduling is an emerging research domain and one which is gaining
-increasing interest. Vestal \cite{Vestal2007} initially introduced
-the mixed-criticality task model. In his work, he highlighted the difficulty in computing
-exact worst-case execution times, and observed that in practice, the higher the degree
-of assurance required that a task will never exceed its worst-case execution time, the
-more conservative the approximation of the latter becomes. This degree of assurance is
-characterized by a level of criticality. He also suggested a fixed-task-priority strategy
-based on the Audsley priority assignment scheme \cite{Audsley_1991}. Dorin et al.
-\cite{Dorin2010} proved that under the restricted case of independent 
-task systems with constrained-deadlines, Vestal's modified Audsley's approach was optimal
-in the class of fixed-task priority algorithms. Nowadays, the Mixed-Criticality
-(MC)-Schedulability problem is commonly known to arise in two different contexts. The first
-one is concerned with applications that are subject to multiple certification requirements.
-In this context, different Certification Authorities (CA) need to validate the application
-functionalities. Nevertheless, the more critical a functionality is, the more pessimistic
-the CA will be in the approximation of the WCET. Baruah et al. \cite{Baruah2010}
-studied mixed-criticality systems in this context, but restricted their work to a set of
-mixed-criticality jobs. In particular, Baruah \cite{bbalmms} pointed out the intractability
-of the MC-Schedulability problem, and quantified the fundamental limitations of MC-Scheduling
-for certification considerations. To tackle the intractability of MC-Scheduling, they suggest
-two sufficient schedulability conditions, referred to as the WCR-schedulability and
-OCBP-schedulability conditions. Later, Baruah and Li \cite{Li2010} extended
-their previous work and suggested a fixed-job-priority scheduling strategy based on their
-OCBP-schedulability condition. Baruah et al. also adapted the Earliest Deadline First algorithm
-to mixed-criticality systems, by modifying the deadlines of tasks. This approach is known as
-EDF-VD. More recently, Guan et al. \cite{gpmw} presented a new approach for scheduling
-mixed-criticality systems, which relies on an offline fixed-job-priority ordering computation,
-which is then used on-line by the scheduler. At the same time, Baruah et al. \cite{RBaruah2011a}
-formalized the response time analysis for mixed-criticality tasks. \\
-The second context in which mixed-criticality is defined considers that among all functionalities
-deployed on a single computing platform, some might be more critical, in the sense that they are
-more important, than others. In this context, Lakshmanan et al.
-\cite{Niz2009,Lakshmanan2011} observe that a reservation
-based approach, meant to isolate functionalities and prevent interferences, might lead to a
-criticality inversion problem, where a less critical task is favoured over a high critical task
-because the latter exceeded its reserved time partition. They suggested a new approach, termed
-zero-slack scheduling, to avoid this problem.\\
-Sensitivity analysis was previously studied by Bini et al.
-\cite{bini_buttazzo,Bini2006}. They discussed the concept of a feasibility
-region which allows one to determine the space of possible values for a particular task parameter.
-The allowance mechanism was initially introduced by Bougueroua et al. \cite{bougueroua_george_midonnet}
-in the context of traditional task sets subject to WCET overruns faults. Their work focused on
-determining the largest value that could be added to a task's worst-case execution time such that
-the whole task set remains schedulable, assuming a sliding window fault model.
+L'ordonnancement à criticité mixte est un domaine de recherche émergeant
+gagnant un intérêt croissant. Vestal \cite{Vestal2007} a initialement
+introduit le modèle de tache à criticité mixte. Dans son travail, il décrivit
+la difficulté à calculer le coût d'exécution pire cas exact, et observa que
+dans la pratique, plus le niveau d'assurance requis est élevé, plus pessimiste
+était l'approximation de la valeur du coût d'exécution pire cas. Ce niveau
+d'assurance est caractérisé par le niveau de criticité. Il suggéra également
+une stratégie basée sur l'ordonnancement à priorité fixe basée sur
+le principe d'assignement de priorité de Audsley \cite{Audsley_1991}. Dorin et
+al. \cite{Dorin2010} ont prouvé que dans le cas restreint des systèmes à
+taches indépendantes à deadline contraintes, l'approche modifié du principe
+d'Audsley par Vestal était optimale pour les algorithmes de priorisation
+d'ensembles de taches à criticité mixte.
+Aujourd'hui, la problématique de criticité mixe (MC-ordonnançabilité) est
+communément connue pour arriver dans deux contextes différents.
+Le premier correspond à des exigences de certifications multiples. Dans ce
+contexte, différentes autorités de certification ont besoin de valider les
+fonctionnalités de l'application. Néanmoins, plus la fonctionnalité est
+critique, plus pessimiste sera l'approximation du WCET. Baruah et al. \cite{Baruah2010}
+ont étudié les systèmes à criticité mixte dans ce contexte, mais ont restreint
+leur travail à un ensemble de jobs à criticité mixte. En particulier, Baruah
+\cite{bbalmms} a montré l'intraitabilité du MC-ordonnançabilité. Ils ont alors
+suggéré deux conditions d'ordonnançabilité suffisantes, dénotés
+condition de WCR-ordonnançabilité et condition d'OCBP-ordonnançabilité.
+Plus tard, Baruah et Li \cite{Li2010} ont étendu leur travaux initiaux et
+proposère une stratégie d'ordonnancement à priorité fixe basée sur la
+condition d'OCBP-ordonnançabilité. Barual et al. ont également adapté
+l'algorithme EDF (Earliest Deadline First) pour les ensemble de taches à
+criticité mixte. Cette approche est connue sous le nom EDF-VD. Plus récement,
+Quan et al. \cite{gpmw} ont présenté une nouvelle approche pour ordonnancer
+des systèmes à criticité mixte, qui s'appuie sur un calcul hors ligne de la
+priorité des jobs, qui est ensuite utilisée par un ordonnanceur en ligne. Au
+même moment, Baruah et al. \cite{RBaruah2011a} formalisèrent l'analyse de
+temps de réponse de taches à criticité mixte.\\
+Le second contexte dans lequel la criticité mixte est définie considère que
+parmis toutes les fonctionnalités déployées sur une unique plateforme de
+calcul, certaines peuvent être plus critiques que d'autre en terme
+d'importance pour le bon fonctionnement général de la solution. C'est le cas
+dans le cadre de la définition d'une passerelle d'interconnexion Systronique.
+Ainsi, certains traitement de flux sont plus critiques, comme le traitement
+du système d'arme que d'autres, comme les caméras extérieures. Dans ce
+contexte, Lakshmanan et al. \cite{Niz2009,Lakshmanan2011} ont observé que
+l'approche basée sur la réservation afin d'isoler les fonctionnalités et
+prévenir les interférences, peuvent avoir pour conséquence un problème
+d'inversion de criticité, où une tache moins critique est favorisée par
+rapport à une tache de plus haute criticité lorsque cette dernière dépasse
+le slot temporel lui ayant été alloué. Ils suggérèrent une nouvelle approche,
+dénommée {\it zero-slack scheduling}, pour éviter ce problème. Dans le cas de
+la passerelle Systronique, la découpe entre tache est maintenue en TDM pour
+des raisons de sécurité, afin d'empêcher l'usage d'un canal caché basé sur la
+variation de durée du slot afin de transmettre de l'information aux autres
+slot au travers l'impact de cette variation.
+
+
 

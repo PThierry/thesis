@@ -343,16 +343,12 @@
 %
 
 \newpage
-articles publiés:\\
-- Algorithme de gestion de cache L1 virtualisable (besoin de sécurité), assurant
-que l'état du cache lors de la reprise de l'exécution d'une partition est
-identique à l'état lors de le précédante préemption. Etude théorique sur la sauvegarde
-du cache dans une SRAM locale\\
-- Workshop sur la définition du problème d'ordonnançabilité d'un système
-hiérarchique fournissant des partitions logicielle de type TDM.\\
-article en cours:\\
-- définition d'un connecteur multi-niveaux de criticité (exigences TR) et de
-sécurité (exigences de cloisonnement) pour le transfert de flux télécom.
+{\Large{Liste des publications}}\\
+\nocite{*}
+\bibliography{own}
+\bibliographystyle{plain}
+
+
 
 %\mainmatter
 
