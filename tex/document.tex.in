@@ -81,6 +81,7 @@
 \usepackage{tikz}
 \usepackage{bookmark}
 \usepackage{etoolbox}
+\usepackage{bytefield}
 
 % D. Verna FIXME mackage
 \usepackage[margin=true]{fixme}

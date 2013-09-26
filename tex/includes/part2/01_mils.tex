@@ -38,7 +38,6 @@ micro-noyau de sécurité, permettant de garantir des propriétés d'isolation. A
 cela, il est nécessaire de définir une architecture logicielle complète pour
 répondre à la problématique. Cette architecture est décrite dans ce chapitre.
 
-
 \section{Définition des hypothèses générales}
 \label{sec:mls_gw_hypothesis}
 
@@ -97,7 +96,6 @@ une implémentation d'une pile TCP/IP, sont trop volumineuse pour être
 compatible d'une certification à haut niveau. De manière générale, seul
 l'usage d'éléments logiciels à faible volumétrie de code permet de supporter
 une telle certification.\\
-
 Parce que l'implémentation logicielle d'un passerelle de type télécom ne peut être certifiée en
 terme de sécurité, les éléments d'implémentation de celle-ci
 sont donc considérés comme ne pouvant pas être de confiance. Il devient alors
@@ -132,13 +130,11 @@ Aucun élément logiciel ne peut être à la fois sûr et non sûr:
 $$Sec \cap Unsec = \emptyset$$
 \end{property}
 
-
 \begin{figure}
   \label{fig:iofilter}
   \input{figures/io_filtering.tex}
   \caption{filtrage par un montieur de confiance des entrées sorties}
 \end{figure}
-
 
 \paragraph{}
 Les éléments logiciels non certifiables doivent donc être entourés d'éléments
@@ -574,7 +570,56 @@ comportement des éléments source et destination du flux.
 
 \subsubsection{De la problématique d'exploitation des canaux auxiliaires: à propos des profils de flux}
 
-Dernier article: émetteur périodique
+\paragraph{}
+La transmission de données entre deux domaines de sécurité nécessite plusieurs
+vérifications. Il y a tout d'abord le filtrage des données selon une politique
+de sécurité donnée. Ce point est décrit dans la Section \ref{sec:dpi}.
+Néanmoins, la vérification des données à transmettre n'est pas suffisante pour
+garantir un cloisonnement efficaces des deux domaines. En effet, indépendamment
+de la donnée à transmettre, il est possible de construire un mécanisme
+permettant de faire fuir de l'information au travers d'un canal caché: la
+période inter-trame. Le principe est le suivant:
+\begin{itemize}
+  \item L'émetteur est le récepteur connaissent le protocole de transmission
+    d'information cachées. Dans le cadre de ma thèse, je considère qu'il
+    s'agit du suivant:
+    \begin{itemize}
+      \item Une période inter-trame de 500 milisecondes correspond à la valeur
+        \emph{0}.
+      \item Une période inter-trame de 1000 milisecondes correspond à la valeur
+        \emph{1}.
+    \end{itemize}
+  \item L'émetteur émet des paquets dont le contenu est compatible de la
+    politique de sécurité avec une période variable, afin d'émettre de
+    l'information binaire
+  \item Le récepteur reçoit les paquets et calcule la période inter-trame. Il
+    détermine si la période est proche des 500 milisecondes (la donnée est
+    alors 0) ou proche de la seconde (la donnée est alors 1)
+\end{itemize}
+
+\paragraph{}
+La durée des période reste élevée dans les deux cas pour que la présence des
+filtres entre l'émetteur et le récepteur ne vienne pas impacter la mesure. En
+s'appuyant sur ce mécanisme, il est possible de transférer une clef symétrique
+de 128 bits dont la confidentialité est restreinte au domaine de plus haut niveau de sécurité
+en moins de deux minutes.
+
+\paragraph{}
+Afin d'empêcher l'usage de ce canal caché, je propose l'implémentation d'un
+moniteur de sécurité appelé émetteur périodique. Le principe est le suivant:
+L'émetteur périodique est placé en bout de chaîne, juste avant l'émission du
+paquet par la passerelle. Il est en charge de bufferiser les données à émettre
+pour les transmettre ensuite de manière périodique ou par burst (selon le
+débit nécessaire). Si aucun paquet ne doit être émis, le dernier est renvoyé.
+Ce type de mécanisme est efficace si le protocole de couche application est
+résistant à la duplication de paquets. C'est le cas si il s'agit d'un
+protocole de type remontée de valeur de sonde. Dans ce cas, chaque paquet est
+indépendant du précédant et du suivant, et la duplication reste efficace.
+C'est le cas d'usage que je considère dans le cadre de ma thèse, car
+correspondant au type de données qu'il est nécessaire de faire transiter entre
+domaines de sécurité dans un système Systronique. Néanmoins, dans un cas
+d'usage plus général, cette solution n'est pas suffisante pour les protocoles
+complexes, comme ceux basés sur des sessions.
 
 % conformité du flux à une politique de sécurité
 \subsection{Conformité des données transmise à la politique de sécurité}
@@ -587,10 +632,51 @@ comportement du flux, afin d'empêcher l'usage d'un canal auxiliaire de type
 temporel.
 
 \subsubsection{Moniteurs de sécurité pour la vérification des données}
+\label{sec:dpi}
 
 \paragraph{}
-Moniteur de filtrage de donnée (DPI), moniteur de vérification
-d'authentification de l'émetteur (non existant aujourd'hui)
+Il est souvent demandé, dans le cadre d'un transfert de données entre deux
+domaines de sécurité, de prévoir un mécanisme garantissant la validité des
+contenus à transmettre auprès d'une politique de sécurité prédéfinie. Il
+s'agit donc d'un filtre dit DPI (Deep Packet Inspection). Un tel moniteur de
+sécurité est plus ou moins complexe selon le besoin.\\
+Étant donné que la passerelle intègre un mécanisme de rupture protocolaire, il
+n'est pas nécessaire, dans le cadre de ce moniteur, de prendre en
+considération les couches transport et inférieures. Seules la couche
+applicative est considérée. Selon le type de protocole de niveau application
+utilisé dans le cadre du transfert de données, il peut être nécessaire
+d'attendre la fin de transmission avant de pouvoir valider les données. C'est
+clairement le cas si l'on fait transiter des données de types XML, trop
+grosses pour être traitées au travers d'un seul paquet. Il devient nécessaire
+de dimensionner la mémoire du moniteur de sécurité afin de lui permettre de
+stocker l'information jusqu'à être apte à la valider auprès d'une politique de
+sécurité. Un tel stockage implique également un accroissement de la latence de
+traversée de la passerelle égale au pire cas d'attente de l'ensemble des
+paquets nécessaire à la validation de l'ensemble du flux.\\
+La complexité du filtre DPI est directement dépendante de la complexité du
+protocole à traiter et de la politique de sécurité afférente. Je considère
+donc qu'un filtre DPI est spécialisé pour un protocole donné. Il en va de même
+pour la politique de sécurité associée pour ce protocole.\\
+Le filtre DPI est directement lié au protocole qu'il traite. Ainsi, une
+passerelle multi-protocoles implique de considérer un ensemble de filtres DPI.
+Je considère dans le cadre de ma thèse que le moniteur de sécurité de filtrage
+DPI gère l'ensemble des filtres DPI associés à l'ensemble des protocoles
+devant être transmis. Ces derniers sont regroupés, pour des raisons de
+performances, dans un seul compartiment, avec une gestion de priorisation et
+d'ordonnancement qu'il est nécessaire de considérer afin de garantir le bon
+fonctionnement de l'ensemble des filtres.
+
+\paragraph{}
+Il est également nécessaire de considérer un mécanisme permettant de flasher dans le cadre
+d'une préparation de mission la politique de sécurité. Ce mécanisme doit être
+actif que durant le cycle de préparation est débrayé une fois la passerelle en
+mode de fonctionnement nominal. En général, on s'appuie sur une connexion
+locale (type série pour des raisons de simplicité du protocole) au travers
+d'un port physique sécurisé une fois placé dans l'enceinte du véhicule.
+Je n'ai pas pris en compte la problématique de gestion du flashage de
+politiques de sécurité, cette dernière ayant déjà des réponses dans le cadre
+des travaux existants dans les radios militaires (sans références dans le
+cadre de ma thèse car soumis à des exigences de confidentialité fortes).
 
 % canaux cachés internes et compartimentation
 \subsection{Compartimentation garantie}
@@ -601,15 +687,513 @@ certifiables (éléments appartenant à l'ensemble $Unsec$). Pour être compatible
 des Exigences MILS et pour pouvoir répondre à l'Exigence \label{req:escape},
 il est nécessaire d'assurer que l'ensemble des canaux de communications
 utilisés sont explicitement ceux qui ont été validés dans le cadre de la
-définition de l'architecture.
+définition de l'architecture. La compartimentation garantie est faite au
+niveau du micro-noyau de sécurité (SSK, Secure Separation Kernel), au travers
+d'un ordonnancement TDM strict avec une séparation spatiale entre chaque
+compartiment logiciel. Le SSK choisi est le micro-noyau PikeOS de la société
+Sysgo, pour sa compatibilité avec les différentes exigences du MILS, comme
+décrit dans la Section \ref{sec:pikeos}.
 
-\subsubsection{Moniteurs de sécurité pour les accès matériel à risque sécuritaire}
+\section{Problématique d'exploitation des canaux auxiliaires: les caches processeur}
+
+\subsection{Caches processeurs et canaux cachés}
 
 \paragraph{}
-Moniteur de gestion du DMA et moniteur de gestion de l'ethernet
+L'usage de canaux auxiliaires basés sur le temps de réponses des accès mémoire
+au travers des contrôleurs de caches est aujourd'hui connu et efficace pour la
+transmission de données entre deux compartiments
+\cite{percival2005cache}\cite{bernstein2005cache}. Il existe différentes
+manières de répondre à ce problème. La plus simple consiste à s'appuyer sur
+des c{\oe}urs processeurs différents pour chaque domaine de sécurité, tout en
+débrayant les caches partagés entre les c{\oe}urs. Selon l'architecture
+matérielle, la désactivation des caches partagés est plus ou moins impactante
+sur les performances du logiciel, au point de rentre ce dernier complètement
+inefficace. Dans ce cas, l'usage d'une architecture multi-CPU en lieu est
+place d'un SoC mono-CPU et multi-c{\oe}urs permet d'éviter un partage trop conséquent des
+contrôleurs de caches. Cependant, dans le cadre de ma thèse, l'usage d'une
+architecture multi-CPU est incompatible des exigences de consommation.\\
+Un autre moyen est de positionner temporellement les domaines de sécurité de
+manière à ce qu'à un instant $t$, un et un seul domaine de sécurité s'exécute.
+Lors du changement de domaine, les caches sont alors flushés afin de ne pas
+transmettre d'information. Il est alors nécessaire de prendre en compte
+l'impact du flush de cache sur l'exécution de la solution, du fait du
+ralentissement à chaque redémarrage du compartiment logiciel, comme le montre
+la Figure \ref{fig:cache_reload}.
 
-\subsubsection{De la problématique d'exploitation des canaux auxiliaires: les caches processeur}
+\begin{figure}
+\label{fig:cache_reload}
+\input{figures/cache_reload_problematic.tex}
+\caption {Impact d'un flush et rechargement de cache sur l'exécution des partitions}
+\end{figure}
 
-Article sur les caches, problématique des flush de cache (à prendre en compte
-dans l'ordonnancement
+J'ai donc proposé un mécanisme permettant de
+supporter le partage de c{\oe}urs processeurs entre domaines de sécurité sans
+permettre les attaques de type analyse de temps de réponse au travers du
+contrôleur de cache.
 
+\subsection{Hypothèses sur le comportement du contrôleur de cache proposé}
+
+\paragraph{}
+Dans le cadre de ma thèse, j'ai travaillé sur un mécanisme de partitionnement
+du contrôleur de cache L1 data. Je m'appuie sur les principes généraux des
+caches partitionnés considérés dans le temps réel \cite{coopcachepart}, mais pour des besoins
+sécuritaire. Je considère que le domaine de moindre sécurité est limité à
+un et un seul compartiment, ordonnancé dans un c{\oe}ur processeur où deux domaines sont
+ordonnancés.
+Le contrôleur de cache n'ayant pas une mémoire extensible, je considère qu'il
+ne peut être compartimenté qu'en huit slots de cache maximum. Chaque
+slot se comporte de manière autonome avec un nombre de ligne de cache
+configurable, ceci afin d'avoir une plus grande liberté dans la découpe du
+contrôleur de cache. Le principe de partitionnement est décrit plus loin.
+Je considère que la politique de substitution des lignes de caches de chaque
+slot reste identique à l'état de l'art. Je considère dans le cadre de ma thèse
+un algorithme de type pseudo-LRU de type 4-ways avec des lignes de caches de
+64 ko. Chaque compartiment doit alors pouvoir fournir un nombre
+de lignes de caches multiple de 4. Je considère par hypothèse que la taille
+mémoire allouée à chaque compartiment est compatible de la politique de
+substitution des lignes de caches qui y est faite.
+
+\subsection{Formalisme de l'interface de contrôle du contrôleur de cache}
+
+\paragraph{}
+Le contrôleur de cache fournit jusqu'à huit slots dans lesquels les
+contextes de caches de chaque domaine de sécurité sont maintenus. Il reste
+nécessaire de pouvoir configurer le contrôleur de cache afin de
+pouvoir passer d'un domaine de cache à un autre. Cette configuration doit être
+faite par un élément de confiance en charge du changement de domaine de
+sécurité, qui correspond, dans le cadre de l'architecture logicielle que j'ai
+choisie, au micro-noyau. Cela implique de la part de la routine de
+configuration du contrôleur certaines propriétés:
+\begin{itemize}
+  \item La routine est positionnée dans un espace mémoire non-cachable ou
+    durant un laps de temps où le cache est débrayé
+  \item La routine doit être la plus petite possible (pour des raison de
+    performances)
+  \item La routine doit être exécutée en mode superviseur exclusivement
+\end{itemize}
+
+\paragraph{}
+Une fois la mécanique de partitionnement active, les canaux auxiliaires
+de type mesure de temps ne doivent plus être utilisables. Les exigences
+suivantes doivent alors être respectées par le contrôleur de cache:
+
+\begin{requirement}
+\label{sec_hyp_1}
+L'usage du contrôleur de cache par une partition logicielle donnée ne dois pas avoir
+d'impact sur l'état du cache d'une autre partition
+\end{requirement}
+\begin{requirement}
+\label{sec_hyp_2}
+Une partition logicielle donnée ne doit pas pouvoir accéder à l'état du cache d'une autre
+partition logicielle
+\end{requirement}
+
+\begin{requirement}
+\label{global_hyp_2}
+L'hyperviseur doit être capable de configurer le contrôleur de cache. La
+configuration du contrôleur de cache. L'activation de cette configuration doit
+avoir pour conséquence un flush du cache afin de retirer toute ligne de cache
+préexistante.
+\end{requirement}
+
+\begin{requirement}
+\label{global_hyp_2}
+L'hyperviseur doit être capable de changer le slot de cache actif. Ce
+changement doit être immédiat et ne doit pas impacter le contenu du slot de
+cache précédemment actif, ni celui venant d'être activé.
+\end{requirement}
+
+
+\begin{requirement}
+\label{global_hyp_3}
+Les évènements externes asynchrones (type interruption matérielle) doivent
+être supportés. La routine de gestion de l'interruption ne doit pas impacter
+la partition de cache en cours d'exécution lors de l'interruption.
+\end{requirement}
+
+\begin{requirement}
+\label{global_hyp_4}
+Le contrôleur de cache doit supporter un mode générique non partitionné, actif
+par défaut à l'initialisation du contrôleur sans aucune configuration par le
+logiciel.
+\end{requirement}
+
+\subsection{Description de l'interface de contrôle du partitionnement du
+  contrôleur de cache}
+
+\subsection{Principe et automate}
+
+Afin de limiter au maximum la surface de code traitant de la configuration du
+contrôleur de cache, cette dernière a été définie sur une base de quelques
+registres mappés en mémoire. 
+
+\begin{figure}[h!]
+\label{fig:arch_design}
+\input{figures/arch_design.tex}
+\caption{Design d'architecture macroscopique du Contrôleur de cache L1 data proposé}
+\end{figure}
+
+Le contrôleur de cache possède plusieurs états:
+\begin{itemize}
+  \item Désactivé. Le contrôleur est alors complètement désactivé et ne fait
+    que transférer les requêtes du processeur vers la mémoire centrale
+  \item configuration générique, le contrôleur se comporte alors comme un
+    contrôleur de cache classique. C'est sa configuration par défaut
+  \item Partitionné. Le contrôleur a été configuré et activé. La partition
+    active est celle qui a été sélectionnée lors de la configuration
+\end{itemize}
+
+
+\begin{figure}[h!]
+	\begin{center}
+		\begin{tt}
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+				            thick,every label/.style={draw,black}]
+		\tikzstyle{every state}=[fill=white,rectangle,draw=black,text=black, rounded corners = 3]
+		\tikzstyle{trait}=[rectangle,fill=white,inner sep=0pt,rounded corners = 10]
+		\tikzstyle{traite}=[ellipse,fill=white,inner sep=0pt,rounded corners = 10]
+		  
+		\node[state]		(desac)		at (0,14) {Désactivé};
+		\node[state]		(gen)		at (0,10) {
+                  \begin{tabular}{c}
+                    Configuration\\
+                    générique
+                  \end{tabular}
+                };
+		\node[state]		(part)		at (0,6) {Partitionné};
+		
+		\path 		(desac)	edge[bend right]        node[left] {\footnotesize Activation}	(gen)
+				(gen)	edge[bend right]	node[right] {
+                                  \begin{tabular}{c}
+                                    \footnotesize Désactivation \\
+                                    \footnotesize $flush$ \\
+                                  \end{tabular}
+                                }	(desac)
+				(gen)	edge[bend right]	node[left] {
+                                  \begin{tabular}{c}
+                                    \footnotesize Validation\\
+                                    \footnotesize de configuration \\
+                                    \footnotesize $flush$ \\
+                                  \end{tabular}
+                                }	(part)
+				(part)	edge[bend right]	node[right] {
+                                  \begin{tabular}{r}
+                                  \footnotesize Reset \\
+                                    \footnotesize $flush$ \\
+                                  \end{tabular}
+                                }	(gen)
+				(part)	edge[bend left=90]	node[left] {
+                                  \begin{tabular}{c}
+                                    \footnotesize Désactivation \\
+                                    \footnotesize $flush$ \\
+                                  \end{tabular}
+                                }	(desac)
+				(gen)	edge[loop right]	node[] {
+                                  \begin{tabular}{c}
+                                    \footnotesize Configuration \\
+                                    \footnotesize du partitionnement
+                                  \end{tabular}
+                                }	(gen);
+		\end{tikzpicture}
+		\end{tt}
+	\end{center}
+        \caption{Automate à état du contrôleur de cache\label{fig:cache_automaton}}
+\end{figure}
+
+\subsubsection{Définition des registres de contrôle}
+
+\paragraph{}
+J'ai défini un premier registre, que je dénote PCR (\emph{Partition Control
+  Registrer}).  Ce dernier est décrit dans la Figure \ref{fig:pcr}\\
+
+%%%%%%%%%%%%%%%%%%%%% PCR register structure %%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+  \begin{figure}[h!]
+    \begin{bytefield}[boxformatting={\centering\itshape},
+      bitwidth=0.8em]{32}
+      \bitheader[b]{31,30,29,14,13,10,9,3,2,1,0} \\
+      \bitbox{1}{\tiny A/B} & \bitbox{1}{\tiny H} & \bitbox{16}{\tiny Reserved} & \bitbox{4}{\tiny slot count} & \bitbox{7}{\tiny Reserved} & \bitbox{1}{\tiny H\\V\\M}& \bitbox{2}{\tiny SBF}\\
+    \end{bytefield}
+    \caption{Structure du registre PCR\label{fig:pcr}}
+  \end{figure}
+\end{center}
+
+La description des différents champs du registre PCR est décrite dans le
+Tableau \ref{tab:pcr}.
+%%%%%%%%%%%%%%%%%%%%% PCR register table %%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+\begin{table}[h!]
+\begin{tabular}{|l|p{12cm}|c|}
+\hline
+\textsc{champ} & \textsc{signification} & \textsc{droits} \\
+\hline
+bit A/B & 
+\begin{minipage}{12cm}
+\vspace{2mm}
+Bit d'activation. Positionné à 0 au boot. Doit être positionné à 1 afin
+d'activer le mécansime de partitionnement du contrôleur de cache. L'ensemble
+de la configuration du contrôleur doit être faite au moment où ce bit est mis
+à 1. La mise à 1 de ce bit implique un changement d'état du contrôleur de
+cache de l'état générique à l'état partitionné. L'ensemble des données en
+cache à cet instant sont flushées.
+\vspace{2mm}
+\end{minipage} &
+RW
+\\
+\hline
+bit H &
+\begin{minipage}{12cm}
+\vspace{2mm}
+Fige la configuration du contrôleur de cache. Si positionné à 1, plus aucune
+configuration des slots du contrôleur de cache ne peut être effectuée, y
+compris par l'hyperviseur. Seul le retour en mode générique peut être
+effectuée, via la mise à 0 du bit A/B.
+\vspace{2mm}
+\end{minipage} &
+RW
+\\
+\hline
+slot count & 
+\begin{minipage}{12cm}
+\vspace{2mm}
+Spécifie le nombre de slots qui seront utilisés. Une fois que l'hyperviseur a
+terminé la configuration, il spécifie le nombre de slots configurés dans ce
+champ, avant de rendre la configuration active. Le nombre de slot doit être
+inférieur au nombre de slots maximum (définit à 8).
+\vspace{2mm}
+\end{minipage} &
+RW
+\\
+\hline
+HVM & 
+\begin{minipage}{12cm}
+\vspace{2mm}
+Active le support HVM (Hardware Virtual Machine). Le but est de permettre une
+gestion par le mécanisme de gestion de la virtualisation plutôt que par
+l'hyperviseur. Il s'agit d'une prise en compte pour un usage futur, et n'est
+pas considéré particulièrement dans le cadre de ma thèse.
+\vspace{2mm}
+\end{minipage} &
+RW
+\\
+\hline
+SBF &
+\begin{minipage}{12cm}
+\vspace{2mm}
+Ce bit (Status Bit Field) est renseigné par le contrôleur de cache une fois le bit A/B. Une
+relecture du registre permet de récupérer la valeur de ce champ. Si SBF vaut
+00, la configuration est valide et le contrôleur est passé en mode partitionné.
+Dans le cas contraire, la configuration est invalide, avec le tableau de
+correspondance ci-dessous:
+\begin{itemize}
+\item {\texttt{00}}: configuration active
+\item {\texttt{01}}: l'espace total consommé est trop grand. Il faut vérifier la taille des
+  slots et leur nombre.
+\item {\texttt{10}}: conflit sur la taille d'un ou plusieurs slots. Le nombre
+  de lignes de caches ne permet pas l'usage de l'algorithme Pseudo-LRU 4-ways
+  (le nombre de lignes de cache doit être un multiple de 4).
+\item {\texttt{11}}: {\it future use}
+\end{itemize}
+\vspace{2mm}
+\end{minipage} &
+RO
+\\
+\hline
+\end{tabular}
+\caption{Description des champs du registre PCR\label{tab:pcr}}
+\end{table}
+\end{center}
+
+Le registre PCR permet d'activer et de valider la configuration globale du
+mode partitionné du cache. Néanmoins, il ne spécifie pas la taille des
+différents slots.
+Dans le cadre de ma thèse, je souhaitait pouvoir supporter des tailles de
+slots configurables. En effet, afin de ne pas sous consommer le cache,
+ou de pouvoir, dans le cadre d'un compartiment logiciel particulier, accroître
+la taille du slot associé pour des raison de performances, j'ai rendu la
+taille de chaque slot configurable. Néanmoins, il existe des restrictions:
+\begin{itemize}
+  \item La taille d'un slot (en nombre de lignes de cache) doit être
+    compatible de l'algorithme pseudo-LRU 4-ways.
+  \item La somme des tailles de slots actifs doit être inférieure ou égale à
+    la taille totale de l'espace mémoire du contrôleur de cache.
+\end{itemize}
+
+La configuration des slots est faite dans les différents registre SCR (Slot
+Configuration Register). Il en existe 8, pour un nombre de slots maximum de 8.
+
+
+%%%%%%%%%%%%%%%%%%%%% SCR table structure %%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+\begin{figure}[h!]
+\begin{bytefield}[boxformatting={\centering\itshape},bitwidth=0.8em]{32}
+\bitheader[b]{31,30,15,14,0} \\
+\bitbox{1}{\tiny A\\B} & \bitbox{16}{\tiny Slot size} & \bitbox{15}{\tiny {\it reserved}}\\
+\wordbox[lr]{1}{} \\
+\skippedwords \\
+\wordbox[lr]{1}{} \\
+\bitbox{1}{\tiny A\\B} & \bitbox{16}{\tiny Slot size} & \bitbox{15}{\tiny {\it reserved}}\\
+\end{bytefield}
+\caption{Slot configuration table\label{fig:sct}}
+\end{figure}
+\end{center}
+
+Chaque registre SCR défini la configuration d'un slot. Sa structure est
+définie dans le Tableau \ref{tab:cssr}. Par défaut, l'ensemble de ces
+registre ont une valeur mise à 0x0.
+
+
+%%%%%%%%%%%%%%%%%%%%% SCR register table %%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+\begin{table}[h!]
+\begin{tabular}{|l|p{12cm}|c|}
+\hline
+\textsc{champ} & \textsc{signification} & \textsc{droits} \\
+\hline
+AB &
+\begin{minipage}{12cm}
+\vspace{2mm}
+Bit d'activation. Sa valeur par défaut est 0. Si l'hyperviseur change sa
+valeur pour 1, le contrôleur de cache, au moment de la validation de la
+configuration, considère le slot actif, et utilise alors les valeurs des
+autres champs pour configurer le slot.
+\vspace{2mm}
+\end{minipage} &
+RW
+\\
+\hline
+Slot size &
+\begin{minipage}{12cm}
+\vspace{2mm}
+Définit le nombre de lignes de caches du slot. Ce nombre doit être un multiple
+de 4.
+\vspace{2mm}
+\end{minipage} &
+RW
+\\
+\hline
+{\it Offset} &
+\begin{minipage}{12cm}
+\vspace{2mm}
+Ce champs est rempli par le contrôleur de cache pour y positionner l'offset en
+mémoire interne du début du slot. Cela lui permet d'accéder directement au
+début du slot lors de son utilisation.
+\vspace{2mm}
+\end{minipage} &
+RO
+\\
+\hline
+\end{tabular}
+\caption{Description des registre de configuration des slots de cache\label{tab:cssr}}
+\end{table}
+\end{center}
+
+Les deux registres précédents permettent l'activation du mode partitionné et
+la configuration des différents slots de cache. Néanmoins, il reste à
+déterminer quel slot est le slot courant, et en informer le contrôleur de
+cache pour permettre le changement de slot. Afin de permettre ce mécanisme,
+je propose un registre supplémentaire dédié à ces deux fonctions. Ce registre
+est nommé CSSR (\emph{Current Slot Selector Register}). Le registre est
+schématisé dans la Figure \ref{fig:cssr}.
+
+
+%%%%%%%%%%%%%%%%%%%%% CSSR register structure %%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+\begin{figure}[h!]
+\begin{bytefield}[boxformatting={\centering\itshape},
+bitwidth=0.8em]{32}
+\bitheader[b]{0,1,15,16,31} \\
+\bitbox{16}{\tiny slot id bitfield SIB} & \bitbox{15}{\tiny Reserved} & \bitbox{1}{\tiny U}\\
+\end{bytefield}
+\caption{structure du registre CSSR\label{fig:cssr}}
+\end{figure}
+\end{center}
+
+La Table \ref{tab:cssr} décrit les différents champs du registre CSSR.
+
+%%%%%%%%%%%%%%%%%%%%% CSSR register table %%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+\begin{table}[h!]
+\begin{tabular}{|l|p{12cm}|c|}
+\hline
+\textsc{champ} & \textsc{signification} & \textsc{droits} \\
+\hline
+SIB &
+\begin{minipage}{12cm}
+\vspace{2mm}
+définit l'identifiant du slot courant. Il s'agit d'un masque où le numéro du
+slot est calculé par rapport au numéro du bit positionné à 1. Ainsi, soit
+$S_{id}$ le numéro du slot, la valeur du champ vaut alors:
+$$SIB = 2^{S_{id}}$$
+\vspace{2mm}
+\end{minipage} &
+RW
+\\
+\hline
+U &
+\begin{minipage}{12cm}
+\vspace{2mm}
+Champ {\it update}. Quand ce champ est positionné à 1 par l'hyperviseur, le
+contrôleur de cache relit le registre et change de slot en cours. Ainsi, dans
+le cadre du fonctionnement nominal du système avec le contrôleur de cache en
+mode partitionné, seul ce registre nécessite une modification pour changer de
+slot.
+\vspace{2mm}
+\end{minipage} &
+RW \\
+\hline
+\end{tabular}
+\caption{Description des champs du registre CSSR\label{tab:cssr}}
+\end{table}
+\end{center}
+
+La configuration initiale du contrôleur de cache doit se faire de la manière
+suivante:
+\begin{enumerate}
+\item Configuration de chaque SCR
+\item Configuration du CSSR, afin de spécifier le slot courant. Le bit {\it
+    update} doit être mis à 1
+\item Configuration du PCR, pour activer le mode partitionné. Si le passage en
+  mode partitionné s'est bien déroulée, le cache est complètement flushé et le
+  slot courant déterminé dans le registre CSSR commence à être utilisé
+\item Vérification du champ SBF du registre PCR, afin de valider le passage en
+  mode partitionné
+\end{enumerate}
+Une fois cette configuration effectuée, le contrôleur de cache utilise donc le
+slot courant défini dans le registre CSSR. Je considère dans ma thèse trois
+slots utilisé dans un cas classique de sécurisation:
+\begin{enumerate}
+  \item Un slot {\it hyperviseur}, utilisé par l'hyperviseur et la gestion des
+    pieds d'interruption. Si les interruptions sont ensuite remontées au
+    niveau des machines virtuelle, l'hyperviseur change de slot avant de
+    donner la main à la machine virtuelle. Cela implique de démarrer le pied
+    d'interruption par un changement de slot vers le slot hyperviseur et un
+    changement de slot juste avant l'ordonnancement de la machine virtuelle
+    pour le traitement de la routine d'interruption associée
+  \item Un slot {\it domaine de sécurité bas}, pour la ou les machines
+    virtuelles de niveau de sécurité bas
+  \item Un slot {\it domaine de sécurité haut}, pour la ou les machines
+    virtuelles de niveau de sécurité haut
+\end{enumerate}
+Les registres de contrôle du contrôleur de cache sont mappé en mémoire,
+permettant un accès aisé par l'hyperviseur.
+Le changement de slot se fait donc facilement, en utilisant une requête de
+type:\\
+{\tt stw <{\it CSSR adress}> 0x10001}
+Ce segment de code ne doit pas être mis en cache, ce dernier impactant le slot
+courant. Il doit donc être positionnable dans un segment mémoire non-cachable
+ou placé dans un espace mémoire dédié type scratchpad.
+
+Dans le cas d'usage que je propose, je n'utilise que 3 slots sur les huit
+présents. Il reste néanmoins possible d'utiliser jusqu'à 8 slots dans le contrôleur de
+cache, afin de supporter une plus grande séparation, en cas d'usage de plus de
+deux domaines de sécurité ou pour des contraintes temps réel.
+
+\paragraph{}
+Dans le cadre de ma thèse, j'ai proposé une solution de cache partitionné pour
+la sécurité dans le cadre de la gestion du contrôleur de cache L1 data. Dans
+le cadre d'une protection contre les canaux cachés basés sur la mesure de
+temps des accès mémoire, une telle solution devrait être prise en compte pour
+la gestion du cache L1 code et pour la gestion du TLB (Translation Lookaside
+Buffer) de la MMU. A défaut, dans le cadre de ma thèse, je considère que ces
+derniers sont flushés lors du changement de domaine de sécurité.
