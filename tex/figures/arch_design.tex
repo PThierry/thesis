@@ -1,0 +1,76 @@
+%%
+%%
+%% arch_design.tex for article in /home/phil/Travail/These/articles
+%%
+%% Made by Philippe THIERRY
+%% Login   <Philippe THIERRYreseau-libre.net>
+%%
+%% Started on  lun. 30 janv. 2012 15:17:54 CET Philippe THIERRY
+%% Last update Thu Feb  9 13:18:14 2012 Philippe THIERRY
+%%
+
+% Generated with LaTeXDraw 2.0.8
+% Mon Jan 30 15:11:39 CET 2012
+% \usepackage[usenames,dvipsnames]{pstricks}
+% \usepackage{epsfig}
+% \usepackage{pst-grad} % For gradients
+% \usepackage{pst-plot} % For axes
+\begin{pdfpic}
+\scalebox{0.68} % Change this value to rescale the drawing.
+{
+\begin{pspicture}(0,-6.64)(12.715313,6.64)
+\definecolor{color6718}{rgb}{0.866,0.105,0.0039}
+\definecolor{color6303b}{rgb}{0.772,0.772,0.772}
+\definecolor{color6259b}{rgb}{0.901,0.901,0.90196}
+\definecolor{color7246}{rgb}{0.788,0.004,0.004}
+\definecolor{color7261}{rgb}{0.674,0.008,0.008}
+\definecolor{color6263b}{rgb}{0.721,1.0,0.612}
+\definecolor{color7027b}{rgb}{0.757,0.8745,0.996}
+\psframe[linewidth=0.03,framearc=0.05,dimen=outer,fillstyle=solid,fillcolor=color6259b](12.56,2.78)(0.14,-5.22)
+\psframe[linewidth=0.03,framearc=0.5,dimen=outer,fillstyle=solid,fillcolor=color6263b](12.58,5.08)(0.0,4.34)
+\rput(6.5335937,4.69){{\it Interconnect}}
+\psframe[linewidth=0.04,dimen=outer,fillstyle=hlines*,hatchwidth=0.032,hatchangle=0.0](5.46,-0.6)(1.7,-4.28)
+\psframe[linewidth=0.04,dimen=outer,fillstyle=hlines*,hatchwidth=0.032,hatchangle=0.0,hatchsep=0.1412](7.46,-0.6)(5.56,-4.28)
+\psframe[linewidth=0.04,dimen=outer,fillstyle=hlines*,hatchwidth=0.03,hatchangle=0.0](3.62,2.62)(2.04,1.88)
+\pspolygon[linewidth=0.04,fillstyle=solid,fillcolor=color6303b](11.5,1.12)(9.5,1.12)(9.32,0.92)(9.52,0.72)(11.5,0.72)
+\psarc[linewidth=0.04,arrowsize=0.05291667cm 3.0,arrowlength=1.4,arrowinset=0.4]{->}(4.27,0.63){0.55}{27.645975}{154.29004}
+\psarc[linewidth=0.04,arrowsize=0.05291667cm 3.0,arrowlength=1.4,arrowinset=0.4]{->}(4.27,0.59){0.55}{167.73523}{258.69006}
+\psarc[linewidth=0.04,arrowsize=0.05291667cm 3.0,arrowlength=1.4,arrowinset=0.4]{->}(4.29,0.57){0.55}{276.34018}{10.491477}
+\pscircle[linewidth=0.04,dimen=outer,fillstyle=solid](4.77,0.77){0.11}
+\pscircle[linewidth=0.04,dimen=outer,fillstyle=solid](3.77,0.79){0.11}
+\pscircle[linewidth=0.04,dimen=outer,fillstyle=solid](4.27,0.05){0.11}
+\rput(2.8989062,0.305){\small 4-ways}
+\rput(2.5671875,-0.015){\small Pseudo LRU}
+\rput(3.574375,-4.475){\small cache lines local copies}
+\rput(6.4932814,-4.475){\small meta-data}
+\psframe[linewidth=0.04,linecolor=color6718,dimen=outer](7.46,-1.46)(1.72,-2.52)
+\psline[linewidth=0.04,arrowsize=0.05291667cm 3.0,arrowlength=1.4,arrowinset=0.4]{->}(5.02,0.34)(8.12,0.34)(8.12,-2.16)(7.42,-2.16)
+\pspolygon[linewidth=0.04,fillstyle=solid,fillcolor=color6303b](11.5,0.64)(9.5,0.64)(9.32,0.44)(9.52,0.24)(11.5,0.24)
+\pspolygon[linewidth=0.04,fillstyle=solid,fillcolor=color6303b](11.5,0.16)(9.5,0.16)(9.32,-0.04)(9.52,-0.24)(11.5,-0.24)
+\pspolygon[linewidth=0.04,fillstyle=solid,fillcolor=color6303b](11.52,-0.32)(9.52,-0.32)(9.34,-0.52)(9.54,-0.72)(11.52,-0.72)
+\pspolygon[linewidth=0.04,fillstyle=solid,fillcolor=color6303b](11.52,-0.8)(9.52,-0.8)(9.34,-1.0)(9.54,-1.2)(11.52,-1.2)
+\pspolygon[linewidth=0.04,fillstyle=solid,fillcolor=color6303b](11.52,-1.28)(9.52,-1.28)(9.34,-1.48)(9.54,-1.68)(11.52,-1.68)
+\rput(4.575156,2.405){\small write back}
+\rput(4.1996875,2.085){\small buffer}
+\rput(10.335313,0.93){PCR}
+\rput(10.362812,0.45){CSSR}
+\rput(11.090938,-4.91){{\it L1 data cache}}
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 3.0,arrowlength=1.4,arrowinset=0.4]{<->}(10.24,4.34)(10.24,1.16)
+\rput(11.508437,3.11){Control plane}
+\rput(6.829219,3.01){Read}
+\rput(3.3275,3.03){Write}
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(2.8,2.64)(2.8,4.34)
+\psline[linewidth=0.04,arrowsize=0.05291667cm 3.0,arrowlength=1.4,arrowinset=0.4]{->}(3.52,0.56)(2.78,0.56)(2.78,1.92)
+\psline[linewidth=0.04,arrowsize=0.05291667cm 3.0,arrowlength=1.4,arrowinset=0.4]{<-}(6.16,4.36)(6.18,0.66)(5.02,0.66)
+\psframe[linewidth=0.03,dimen=outer,fillstyle=solid,fillcolor=color7027b](5.0,6.64)(2.8,5.62)
+\rput(3.86625,6.35){{\it Memory}}
+\rput(3.9003124,5.93){{\it controller}}
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 3.0,arrowlength=1.4,arrowinset=0.4]{<->}(3.9,5.62)(3.9,5.04)
+\rput(1.0476563,-1.855){\small \color{color7246}current}
+\rput(1.3039062,-2.235){\small \color{color7261}slot}
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 3.0,arrowlength=1.4,arrowinset=0.4]{->}(9.32,0.46)(5.0,0.46)
+\psframe[linewidth=0.03,framearc=0.2,dimen=outer](12.58,-5.4)(0.12,-6.64)
+\rput(6.4684377,-5.99){{\it CPU core}}
+\end{pspicture} 
+}
+\end{pdfpic}
