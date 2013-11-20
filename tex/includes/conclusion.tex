@@ -13,4 +13,58 @@
 \label{sec:conclusion}
 
 \paragraph{}
-fixme.
+Le but de ma thèse fut de déterminer un design d'architecture logicielle pour
+la définition d'une passerelle de traitement de flux dans le cadre d'un
+environnement véhiculaire contraint. Cette passerelle doit permettre
+d'interconnecter des domaines de sureté différents. Elle doit également
+permettre d'interconnecter des domaines de sécurité différents. Le design
+d'architecture doit être suffisamment modulaire pour être déclinable en
+fonctions des domaines à interconnecter, afin de réduire le coût induit par le
+déploiement de plusieurs profils de passerelle dans un même véhicule.
+Une telle solution d'architecture doit alors être compatible de l'ensemble des
+exigences de sécurité et de temps-réel, même si ces dernières ne sont pas
+forcément présentes dans leur intégralité.
+
+\paragraph{}
+Dans le cadre de ma thèse, j'ai décrit comment prendre en compte des
+contraintes de sécurité et de performances dans le cadre d'un traitement de
+flux à contraintes temps-réel. Pour cela, je me suis appuyer sur une
+architecture de type MultiLevel Security, basée sur un micro-noyau considéré
+de confiance, compatibles des exigences temps-réel.
+
+\paragraph{}
+Les contraintes de sécurité que j'ai pris en compte dans le cadre de ma thèse
+ciblait la confidentialité et l'intégrité des données. La disponibilité
+n'étant pas considérée, du fait de l'intégration dans le cadre de la chaîne de
+traitement de composants non sécurisables. Ces derniers pouvant faire de la
+rétention de flux. Aux différentes contraintes de sécurité sont associés des
+{\it modules} logiciels, que je dénote moniteurs de sécurité. Ces moniteurs
+sont autonomes et compatibles de l'ensemble des contraintes de temps-réel. La
+sécurité de l'ensemble de la solution se construit au travers du chaînage de
+ces différents modules, en fonction des exigences de sécurité requises. La
+validation des contraintes de sécurité se fait alors sur la validation de
+l'ordonnançabilité de la solution complète. Afin de formaliser une telle
+validation, j'ai définit dans un premier temps un ensemble d'équation
+permettant de valider l'ordonnançabilité de la solution sur une architecture
+MLS, telle qu'utilisée dans ma thèse.
+
+\paragraph{}
+La cible industrielle de ma thèse est un produit embarqué véhiculaire à forte
+contrainte de taille, de poids et de consommation. Cela implique qu'il n'est
+pas possible de dimensionner l'architecture matérielle pour assurer
+l'ordonnançabilité de l'ensemble des traitements avec un calcul du WCET très
+pessimiste. Afin d'assurer malgré tout une garantie de traitement correcte,
+j'ai proposé une solution basée sur de la criticité mixte, déterminant
+hors-ligne quels traitements doivent être assurer et quels traitements peuvent
+être débrayés en cas de dépassement du domaine d'ordonnançabilité. Le choix
+des traitements n'étant pas soumis au choix d'un flux, l'usage de la criticité
+mixte peut être un bon complément à l'usage de la Qualité de Service au sens
+Télécom du terme. Ainsi, plutôt que de prioriser des flux entre eux, il est
+possible de maintenir l'ensemble des flux à faire transiter, tout en modifiant
+le chaînage des traitement à effectuer sur chacun d'entre eux en fonction du
+niveau de criticité de chaque traitement. Dans le cadre de ma thèse, la
+solution cible le transfert de divers flux utilisant divers éléments
+d'entrée/sortie (bus CAN, Ethernet, etc). Elle ne s'appuie donc pas sur le
+principe de Qualité de Service Réseau, cette dernière étant spécifique au type
+de média et de protocole utilisé pour faire transiter les données.
+
