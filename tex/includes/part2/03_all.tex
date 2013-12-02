@@ -77,7 +77,7 @@ strictement séparés afin d'assurer un cloisonnement spatial strict.
 \paragraph{}
 Lorsque systèmes critiques et non-sûrs ne sont plus indépendants et que la
 notion de réseau IP apparaît dans le cadre de l'interconnexion de systèmes
-non-sûrs, on parle alors de systèmes {\it systroniques}\FIXME{prévoir notion}.
+non-sûrs, on parle alors de systèmes {\it systroniques}.
 C'est le cas principalement dans les véhicules militaires avec l'intégration
 des sous-systèmes de gestion des caméras, de la radio véhiculaire courte,
 moyenne et longue portée mais également au travers des terminaux de gestion
@@ -235,43 +235,6 @@ dans différents secteurs, comme le médical ou la police.
 \section{Définition d'une architecture logicielle pour une passerelle systronique}
 
 \subsection{Terminologie}
-
-\FIXME{la partie terminologie doit être intégrée coté}
-
-\paragraph{}
-In the following, various terms are used in order to describe the proposed
-solution. Some are network specific, others are security specific.
-\begin{itemize}
-\item \termino{supervision plane}{The network flow containing supervision
-data (e.g. informational data, counters).}
-\item \termino{data plane}{The network flow in which the utility data
-transit.}
-\item \termino{software diode}{A software implementation which guarantees that its input
-is in read-only mode and its output is in write-only mode. This can permit a
-one-way only connection.}
-\item \termino{software filter}{A software implementation filtering a data flow using a
-specific policy.}
-\item \termino{shaper}{A flow management policy which guarantees that any flow
-passing through is reduced to a specified maximum bandwidth.}
-\item \termino{periodic sender}{A software algorithm which sends network
-packets periodically. Output flow is then a periodic flow.}
-\item \termino{container}{Autonomous space (and potentially time) partition in
-which a specific task set responding to a given need is executed. A container designates
-space and time properties, not its content.}
-\item \termino{Virtual Element}{{\it (VE)} A set of processes executed into a container.
-In the system model of this article, the scheduling of all tasks of all VE is done
-by the hypervisor.}
-\item \termino{hypervisor}{Software element managing the scheduling of the
-various VE and the network interconnections.}
-\item \termino{TLV}{Type-Length-Value. Type of protocol using recursive
-    aggregation of typed values with fixed length.}
-\item \termino{filtering connector}{connector between different criticality
-and/or security networks which guarantees that any data flowing through it is
-compliant to a given policy.}
-\item \termino{policy}{Security or safety requirements on the content and the
-profile of a given flow. If the flow is not compliant to the policy, it is
-dropped by the filtering connector.}
-\end{itemize}
 
 \subsection{Définition d'une architecture de filtrage multi-fonctions pour les systèmes systroniques}
 
@@ -431,7 +394,7 @@ certifiable en coupure permet d'assurer cette fonction. C'est le but du
 conteneur Diode.\\
 Le but de ce conteneur est d'assurer un transfert sens unique entre deux
 domaines. Pour des raisons de sécurité liées aux problématiques de canaux
-cachés\FIXME{ref}, ce conteneur doit également assurer que le comportement
+cachés\cite{lampson1973note}, ce conteneur doit également assurer que le comportement
 du récepteur de domaine de sécurité plus élevé ne soit jamais connu de
 l'émetteur, dont le domaine de sécurité est plus faible. Ainsi, l'émetteur ne
 peut retirer aucune information du débit de son émission, ce dernier n'étant

@@ -12,10 +12,38 @@
 \chapter{Conclusion générale}
 \label{sec:conclusion}
 
+\section{Rappel de la problématique générale}
+
 \paragraph{}
-Le but de ma thèse fut de déterminer un design d'architecture logicielle pour
-la définition d'une passerelle de traitement de flux dans le cadre d'un
-environnement véhiculaire contraint. Cette passerelle doit permettre
+Dans le cadre de ma thèse, j'ai proposé une solution afin de résoudre la
+problématique d'intercommunications des différents réseaux véhiculaires qui
+ont été déployés dans les systèmes des véhicules militaires et qui commencent
+à apparaître pour certains d'entre eux dans les véchicules civils. Il s'agit
+à la fois de réseaux de bord, en général basés sur des bus de type CAN ou
+équivalant et exigeant de forte contraintes de sureté, mais également de
+réseaux multimédia, dont les niveaux de sécurité varient en fonction des
+données qu'ils font transité, et dont le niveau de sureté est plus ou moins
+élevé. L'ensemble de ces réseaux, initialement complètement indépendant,
+nécessitent d'être interconnectés afin de permettre le transfert de données
+vers des interfaces de gestion unifiées. Néanmoins, les domaines de sécurité
+et de suretés associée à ces différents réseaux doivent être respectés.
+En terme de sécurité, une telle contrainte implique que les données transitant
+d'un domaine à l'autre doivent être vérifiées au moment du changement de
+domaine, et autorisées selon la politique de sécurité associée au changement
+de domaine. En terme de sureté de fonctionnement, les domaines de moindre
+sureté ne doivent pas impacter le niveau de sureté des domaines les plus
+contraints, comme par exemple celui associé au réseau de bord.\\
+Cette problématique implique donc le positionnement de passerelles
+trans-domaines pour assurer une étanchéité suffisantes à la fois en terme de
+sureté de fonctionnement et en terme de sécurité. Ces passerelles étant
+déployées dans des véhicules, elles sont également contraintes par des
+exigences de poids, de consommation, de volume, et de certification à
+l'embarcabilité véhiculaire (e.g. support des vibration, de la poussière, de
+la température ambiante).
+
+\paragraph{}
+Le but de ma thèse a été de déterminer un design d'architecture logicielle pour
+la définition d'une telle passerelle. Cette passerelle doit permettre
 d'interconnecter des domaines de sureté différents. Elle doit également
 permettre d'interconnecter des domaines de sécurité différents. Le design
 d'architecture doit être suffisamment modulaire pour être déclinable en
@@ -23,7 +51,7 @@ fonctions des domaines à interconnecter, afin de réduire le coût induit par le
 déploiement de plusieurs profils de passerelle dans un même véhicule.
 Une telle solution d'architecture doit alors être compatible de l'ensemble des
 exigences de sécurité et de temps-réel, même si ces dernières ne sont pas
-forcément présentes dans leur intégralité.
+forcément présentes dans leur intégralité dans chacun des profils demandés.
 
 \paragraph{}
 Dans le cadre de ma thèse, j'ai décrit comment prendre en compte des
@@ -34,15 +62,26 @@ de confiance, compatibles des exigences temps-réel.
 
 \paragraph{}
 Les contraintes de sécurité que j'ai pris en compte dans le cadre de ma thèse
-ciblait la confidentialité et l'intégrité des données. La disponibilité
-n'étant pas considérée, du fait de l'intégration dans le cadre de la chaîne de
-traitement de composants non sécurisables. Ces derniers pouvant faire de la
-rétention de flux. Aux différentes contraintes de sécurité sont associés des
-{\it modules} logiciels, que je dénote moniteurs de sécurité. Ces moniteurs
+ciblaient la confidentialité et l'intégrité des données. La disponibilité
+n'est pas considérée et nécessitera quant à elle une étude complémentaire afin
+de compléter la solution pour intégrer le support des exigences associées.
+Aux différentes contraintes de sécurité sont associés des
+{\it modules} logiciels certifiables, visant à implémenter une fonction de
+sécuritée donnée. Je dénote ces modules {\it moniteurs de sécurité}. Ces moniteurs
 sont autonomes et compatibles de l'ensemble des contraintes de temps-réel. La
 sécurité de l'ensemble de la solution se construit au travers du chaînage de
-ces différents modules, en fonction des exigences de sécurité requises. La
-validation des contraintes de sécurité se fait alors sur la validation de
+ces différents modules, en fonction des exigences de sécurité requises. 
+Je les associe, selon le besoin, à des machines virtuelles hébergeant un
+système d'exploitation riche, afin de pouvoir profiter de l'implémentation de
+piles protocolaires préexistantes. Les machines virtuelles, à l'inverse des
+moniteurs de sécurité, ne sont pas certifiable du fait de leur voluétrie, et
+nécessite donc l'intégration en entrée et en sortie de moniteurs de sécurité
+en charge de valider les traitements qu'ils effectuent.
+La solution complète correspond donc à un chaînage plus ou moins riche de
+compartiments strictement séparés temporellement et spatialement. Une telle
+architecture s'apparente, dans sa construction, à un système à ordonnancement
+hierarchique.
+La validation des contraintes de temps-réel se fait alors sur la validation de
 l'ordonnançabilité de la solution complète. Afin de formaliser une telle
 validation, j'ai définit dans un premier temps un ensemble d'équation
 permettant de valider l'ordonnançabilité de la solution sur une architecture
@@ -67,4 +106,12 @@ solution cible le transfert de divers flux utilisant divers éléments
 d'entrée/sortie (bus CAN, Ethernet, etc). Elle ne s'appuie donc pas sur le
 principe de Qualité de Service Réseau, cette dernière étant spécifique au type
 de média et de protocole utilisé pour faire transiter les données.
+
+\section{La solution proposée}
+
+\paragraph{}
+
+\section{Les limites de la solution et propositions d'évolution}
+
+\paragraph{}
 
