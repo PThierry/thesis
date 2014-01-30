@@ -32,35 +32,59 @@ industrielle du temps réel qu'il a su me faire partager.
 De nos jours, les problématiques sécuritaires des systèmes d'informations
 sont de plus en plus présentes dans le cadre des systèmes embarqués
 véhiculaires. C'est le cas dans les véhicules militaires, mais également dans
-d'autre domaines comme le médical (accès aux données médical du patient dans le
+d'autres domaines comme le médical (accès aux données médicales du patient dans le
 véhicule) ou la police (accès au différentes bases de données). Dans le même
-temps, les exigences de temps-réel et de sûreté de fonctionnement restent
-fortement présentes, comme, dans le cadre des véhicules militaires, pour la
-gestion des caméras des systèmes de blindage
-transparents ou encore pour la gestion du système d'arme.\\
-La collision de deux mondes jusqu'à présent séparés que sont le
-temps réel et la sécurité impliquent l'usage de nouvelles architectures
-logicielles, avec un plus grand nombre de contraintes. Les exigences temps réel et sécuritaires
-n'étant pas toujours naturellement compatibles, elles nécessitent des
-solutions mixtes, où domaines de sécurité et domaines de criticité sont
-traités sur un même matériel, avec suffisamment de cloisonnement pour
-garantir à la fois le respect des exigences de sûreté de fonctionnement,
-portées par les éléments temps réel véhiculaires comme la gestion du moteur et
-des sondes, et le respect des exigences sécuritaires, portées par la présence
-de données confidentielles liées à la mission en cours. L'usage d'un matériel
-partagé entre ces différents domaines est de plus en plus exigés, à la fois
-pour des raisons de poids et de consommation, mais également pour des raisons
-de budget, de plus en plus prépondérant ces dernières années.\\
-Dans le cadre de ma thèse, je propose une architecture logicielle modulaire,
-permettant de répondre à différents besoins véhiculaires, tout en prenant en
-compte à la fois des contraintes de temps réel et de sécurité. J'ai proposé des
-solutions pour répondre au besoin sécuritaire qui permettent de conserver les
-exigences temps réel, et validé, au travers de plusieurs maquettages, leur
-faisabilité technique. La solution que je propose a pour but d'être un
+temps, les exigences de temps-réel et de fiabilité restent fortement présentes
+dans le cadre des véhicules militaires. Ainsi la fiabilité de la gestion du système
+d'arme, en charge de débrayer les mécanismes d'attaque lors de l'ouverture d'une
+des portes du véhicule, est critique, afin d'éviter tout accident. De la même
+manière, les contraintes de temps réel sont fortement présentent dans le cas du
+système de gestion du blindage transparent, en charge de remonter l'ensemble des
+flux vidéos des caméras extérieures au conducteur, dans un véhicules sans fenêtre.\\
+
+Jusqu'à présent, les domaines à fortes contraintes de temps réel, de
+fiabilité et de sécurité restaient physiquement séparés. De nos jours, avec l'accroissement de la complexité des
+éléments déployés dans les véhicules, il est fortement demandé par les différents clients étatiques de fusionner
+ces domaines sur un même matériel, à la seule exception des éléments à forte
+contrainte de fiabilité, afin de limiter le poids, le volume et la
+consommation des différents éléments technologiques présents.\\
+
+De plus, il est également demandé de permettre une
+meilleure centralisation de la supervision des différents composants, que ces
+derniers fassent partie d'un domaine à forte contrainte de temps réel, de
+fiabilité ou d'un domaine à forte contrainte sécuritaire.
+
+Ainsi, il devient nécessaire de définir une passerelle permettant d'interagir à la fois avec des
+domaines à fortes contraintes temps réel, des domaines à fortes contraintes de
+fiabilité et plusieurs domaines de sécurité. Cette passerelle doit alors
+assurer à la fois :
+\begin{itemize}
+  \item un cloisonnement strict des domaines de sécurité disjoints
+  \item le transfert de données du domaine temps réel tout en assurant une
+    latence de traversée maximum garantie
+  \item le transfert de données de supervision du domaine à fortes contraintes de
+    fiabilité sans pour autant impacter ses éléments
+\end{itemize}
+
+Dans le cadre de ma thèse, je propose une nouvelle architecture logicielle
+modulaire ciblant une telle passerelle. Cette architecture doit
+permettre de répondre à différents besoins véhiculaires, tout en prenant en
+compte à la fois des contraintes de temps réel et de sécurité.
+La solution que je propose est de plus basée sur une
+évolution du principe de criticité mixte (confer Chapitre \ref{sec:mixedcriticity}),
+permettant d'assurer au mieux l'ensemble des traitements requis sur un matériel
+à faible consommation et faible volume, pour répondre aux exigences des
+véhicules militaires.
+
+La faisabilité
+technique de la solution que je propose est validée au travers de plusieurs
+maquettages. Elle a de plus pour but d'être un
 framework ouvert, où il est possible d'ajouter ou de retirer des modules
 sécuritaires ou temps réel en fonction du besoin, tout en restant sur la même
 architecture générale dont le but est de garantir un cloisonnement efficace, à
-la fois spatial et temporel.
+la fois spatial et temporel. Ce principe permet ainsi de limiter le coût
+d'instanciation d'une telle passerelle dans divers type de véhicules
+militaires pour lesquelles les contraintes peuvent varier.
 
 \chapter*{Abstract}
 \addstarredchapter{Abstract}

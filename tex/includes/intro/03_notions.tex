@@ -15,21 +15,93 @@
 
 \section{Principes généraux de la sécurité}
 
-\subsection{A propos des besoin de confidentialité, d'intégrité et de
-disponibilité}
+\subsection{Terminologie militaire de la sécurité}
+
+\subsubsection{Les niveaux de confidentialité}
 
 \paragraph{}
-Dans le cadre du besoin sécuritaire, on considère initialement trois propriété
-potentiellement séparables selon les exigences d'entrées:
-\begin{enumerate}
-\item La confidentialité:\\propriété assurant qu'une information n'est pas
-divulguée à toute entité (utilisateur, processus, périphérique) si cette
-dernière n'est pas initialement autorisé à y accéder.
-\item L'intégrité:\\propriété assurant qu'une donnée n'a pas été
-modifié sans autorisation préalable.
-\item La disponibilité:\\propriété assurant qu'une donnée est à tout moment
-accessible à toute entité ayant l'autorisation d'y accéder.
-\end{enumerate}
+Il existe un grand nombre de niveaux de confidentialité formalisés dans le vocabulaire
+militaire. Pour la France, on parle des niveaux suivants, du plus faible au
+plus élevé :
+\begin{itemize}
+  \item Diffusion Restreinte (DR). Bien que très employé, c'est le seul niveau pour
+    lequel aucune peine n'est définie dans le code pénal en cas de non-respect
+    des exigences de confidentialité associées.
+  \item Confidentiel Défense (CD). Premier niveau impliquant un risque pénal. Ce
+    niveau peut être présent jusque dans les véhicules blindés positionné sur
+    le théâtre d'opération.
+  \item Secret Défense (SD). Ce niveau est en général présent jusque dans les
+    centre de contrôle militaire locaux au théâtre d'opération. Il s'agit des
+    centres de contrôle militaire déployés dans les pays en guerre dans les
+    bâtiments civils protégés (type aéroport) ou dans des bâtiments militaires
+    proche de la zone de conflit (frégate, porte-avions).
+  \item Très secret défense (TSD). Plus haut niveau de sécurité.
+\end{itemize}
+Il existe de plus un grand nombre de niveaux de confidentialité lié à l'OTAN
+(Organisation du Traité de l'Atlantique Nord, NATO en anglais), ou à diverses organisations
+impliquant une force armée. Il existe ainsi les niveaux Nato Restricted (NR),
+Nato Confidential (NC), Nato Secret (NS) et encore bien d'autres niveaux. Il
+existe une problématique claire de comparaison des niveaux France avec les
+niveaux OTAN. Ainsi, peut-on transférer des données du niveau NS au niveau SD
+? Cette problématique est encore aujourd'hui traité au cas par cas.
+
+\paragraph{}
+Lorsqu'un niveau de confidentialité est mis en place, c'est au travers d'un
+système d'information respectueux d'une politique de sécurité donnée. Cette
+politique de sécurité (nommée PSSI - Politique de Sécurité d'un Système
+d'Information) définit des exigences de sécurité pour assurer la
+confidentialité, l'intégrité et la disponibilité (au sens sécuritaire du
+terme) du domaine. Ces exigences sont mise en place sous forme:
+\begin{itemize}
+  \item d'un choix d'architecture réseau, logicielle et matérielle
+  \item de la définition d'algorithmes de chiffrements spécifiques et de
+    solutions implémentant ses algorithmes
+  \item d'une définition d'un processus de gestion du domaine (protection physique et logique)
+  \item d'une définition des responsabilités et des rôles de chaque
+    intervenant dans le domaine
+\end{itemize}
+Plus le niveau de confidentialité est élevé, plus la PSSI est stricte et
+complexe.
+
+\subsubsection{Changement de niveau et problématique rouge/noir}
+
+\paragraph{}
+On appelle domaine rouge un domaine de sécurité dans lequel les données
+transitant ne sont pas protégées. On parle alors de données rouges. Le réseau
+faisant transiter ces données dans un domaine rouge est alors appelé réseau
+rouge.
+
+\paragraph{}
+On appelle domaine noir un domaine de sécurité dans lequel les données
+transitant sont modifiées pour en assurer la confidentialité, l'intégrité et
+la disponibilité. On dit alors que les données sont noircies. En général, un
+domaine noir est en charge de faire transiter des données dont le niveau de sécurité
+est supérieur à celui du domaine lui-même. Ainsi, faire
+transiter des données de niveau Confidentiel Défense dans un domaine de niveau
+Diffusion Restreinte ne peut être fait que si ces données sont préalablement
+noircies.\\
+Noircir des données implique en général un chiffrement de ces dernière, mais
+pas seulement. Le profil de flux peut être modifié afin de rendre difficile
+la détection du type de communication sur la base de son profil. Du bruit peut
+ainsi être généré et du {\it padding} incorporé afin d'empêcher toute déduction sur
+simple écoute du flux noir.
+
+\paragraph{}
+La problématique de passage d'un domaine rouge à un domaine noir est appelé
+problématique rouge/noir. On la retrouve principalement dans les réseaux radio
+militaires, mais reste un principe général applicable à toute interconnexion
+de réseaux militaires.
+
+\subsubsection{niveau de confidentialité et droit d'en connaître}
+\paragraph{}
+On appelle droit d'en connaître l'ensemble de connaissances minimum suffisant
+pour un sujet (une personne ou encore un processus logiciel) pour mener à bien
+une tâche. Ainsi, une personne ayant une habilitation Confidentiel Défense sur
+un projet donné n'a pas besoin pour autant de connaître l'ensemble des
+informations classifiées Confidentiel Défense de ce dernier. On lui fournit alors
+uniquement les informations nécessaires à son travail, appelé droit d'en
+connaître. Le principe est le même pour les processus logiciel faisant du
+traitement sur des données d'un niveau de confidentialité donné.
 
 \subsection{Fuite d'informations: Canaux cachés et canaux auxiliaires}
 
@@ -47,16 +119,16 @@ Le principe d'un canal auxiliaire consiste à s'appuyer sur une etude
 comportementale non-invasive sur des fonctions ou des traitements afin de
 récupérer des informations sur les données traitées. La plupart des études sur
 le sujet sont dans le domaine de la
-cryptanalyse\cite{sidechancube}\cite{sidechan}. Ces
-différentes études démontrent la capacité, au travers l'étude de la consommation électrique
-des différents éléments d'un processeur\cite{sidechancube} ou via l'étude de
+cryptanalyse \cite{sidechancube}\cite{sidechan}. Ces
+différentes études démontrent la capacité, au travers de l'étude de la consommation électrique
+des différents éléments d'un processeur \cite{sidechancube} ou via l'étude de
 l'impact des caches processeurs sur le comportement temporel de
-l'algorithmique\cite{sidechan}, de récupérer des données sur la clef
+l'algorithmique \cite{sidechan}, de récupérer des données sur la clef
 de chiffrement utilisée.\\
 Le risque lié au canal auxiliaire est connu depuis longtemps et ont permis de
 démontrer que des algorithmes cryptographique réputés sûr restent fragiles à
-ce type d'attaque. C'est le cas par exemple d'AES\cite{aes} ou de
-Serpent\cite{serpent}.
+ce type d'attaque. C'est le cas par exemple d'AES \cite{aes} ou de
+Serpent \cite{serpent}.
 
 \subsubsection{Canal caché pour le transfert de données}
 
@@ -65,14 +137,18 @@ Le principe d'un canal caché consiste en la capacité à utiliser la bande
 passante d'un canal logiciel ou matériel pour faire transiter des données
 pour lesquels il n'est pas initialement prévu. L'usage d'un canal caché
 implique un usage volontaire de part et d'autre pour émettre les données et
-pour les recevoir.\\
+pour les recevoir. Il est donc invasif, contrairement aux canaux auxiliaires.\\
 Un exemple typique est de s'appuyer sur la période inter trame d'un flux
-réseau donné pour fournir une information. En faisant varier la période, il
+réseau donné pour fournir une information \cite{berk2005detection}. En faisant varier la période, il
 est possible d'émettre de l'information, qui peut être ainsi interprété par un
 récepteur. De manière générale, les canaux cachés permettent l'émission de
 données de faible taille, car leur débit est en général très faible. Ils sont
 cependant tout à fait suffisant pour faire transiter des données de type
-cryptographie (clefs symétrique et/ou asymétrique) ou des messages courts.
+cryptographie (clefs symétrique et/ou asymétrique) ou des messages courts.\\
+Le principe d'exploitation d'un canal caché est également utilisé dans les
+systèmes virtualisés pour transmettre de l'information entre les machines
+virtuelles. C'est en général le comportement des contrôleurs de caches qui
+sont alors exploités \cite{xu2011exploration}\cite{zhang2012cross}.
 
 \subsection{Ce que cible la sécurité logicielle}
 
@@ -90,7 +166,7 @@ comme par exemple les systèmes DAC (Discretionary Access Control), MAC
 
 \paragraph{}
 La complexité du système dépend du besoin de certifiabilité. On définit
-initialement une {\it TOE} (Target Of Evaluation), définissant ce qui, dans le
+initialement une {\it TOE} (Target Of Evaluation) \cite{cnssi_4009}, définissant ce qui, dans le
 système cible, doit être évalué, ainsi que le niveau de l'évaluation. Les
 Critères Communs définissent une échelle dans l'évaluation sécuritaire
 dénotée EAL (Evaluation Assurance Level) allant de 1 (la plus basse) à 7 (la
@@ -103,7 +179,7 @@ si ce dernier est connecté à un réseau. Il en va de même en cas de
 modification même légère du TOE.
 
 \paragraph{}
-Associé à la TOE, on définit la {\it Trusted Computing Base} (TCB). Cette
+Associé à la TOE, on définit la {\it Trusted Computing Base} (TCB) \cite{cnssi_4009}. Cette
 notion définit l'ensemble des éléments logiciels et matériels de
 la solution cible qui sont considérés comme de confiance. La corruption de
 tout élément de cet ensemble génère en conséquence une faille dans les

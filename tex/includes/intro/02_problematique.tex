@@ -27,6 +27,12 @@ principes de sécurité suivants pour les données qu'il traite:
 \item Confidentialité
 \end{itemize}
 
+\paragraph{}
+Les définitions suivantes correspondent à des principes sécuritaires. Elles
+peuvent ne pas correspondre à la définition du domaine de la sûreté de
+fonctionnement.
+On constate ainsi une divergence dans la définition de la disponibilité.
+
 \paragraph{Disponibilité}
 La disponibilité assure une garantie d'accès à une information à n'importe quel
 moment. Dans la pratique, des mécanismes de redondance des données sont mis en
@@ -42,44 +48,40 @@ souvent vérifiée par des algorithmes de hashage ou des sommes de contrôle
 \paragraph{Confidentialité}
 La confidentialité est le fait de s'assurer que l'information n'est seulement
 accessible qu'à ceux dont l'accès est autorisé. Dans la pratique, la
-confidentialité est assuré par le chiffrement, le cloisonnement des
+confidentialité est assurée par le chiffrement, le cloisonnement des
 environnements et la gestion des d'accès aux données utilisateurs.
 
 \paragraph{}
 Avec l'intégration de plus en plus forte des réseaux IP dans les systèmes
 embarqués (véhiculaires, avioniques non temps-réel, transport)
-l'interconnexion de réseaux locaux initialement disjoint et de réseau locaux
-et d'infrastructure est de plus en plus courant, avec des exigences
-sécuritaires pouvant être forte.\\
+l'interconnexion de réseaux locaux initialement disjoints avec un ou des
+réseau(x) d'infrastructure est de plus en plus courante. Les exigences
+sécuritaires qui sont alors associées à une telle interconnexion peuvent être
+fortes, selon le type de données transmises.\\
 L'interconnexion des réseaux locaux est poussée par différents besoins. Dans le
 cadre des systèmes embarqués véhiculaires, le besoin initial, toujours fort aujourd'hui
 et dont la résolution reste complexe, correspond à l'intégration sur un même
-matériel de plusieurs réseau indépendants. Il s'agit d'un partage, sur un
+matériel de plusieurs réseaux indépendants. Il s'agit d'un partage, sur un
 unique matériel pour des raisons d'exigences de volume, de poids ou de
 consommation, de plusieurs traitements logiques dont le cloisonnement doit être
-garanti. Ce cloisonnement est exigé pour des raisons de sureté pour que le
+garanti. Ce cloisonnement est exigé pour des raisons de sureté afin que le
 partage du matériel ne vienne pas impacter le bon fonctionnement des
 environnements logiciels.
 
 \paragraph{}
 Dans les systèmes embarqués militaires, des réseaux dont la confidentialité,
-l'intégrité et la disponibilité des données peut être différentes nécessitent
-d'être interconnectés. On parle alors de réseaux de différents domaines de
+l'intégrité et la disponibilité des données peuvent être différentes nécessitent
+déjà d'être interconnectés. On parle alors de réseaux de différents domaines de
 sécurité.\\
 De telles architectures ont des réponses dans les systèmes d'informations,
 au travers de l'usage de chiffreurs, de filtres et d'éléments matériels en
-coupure. Ces solutions restent difficile à intégrer sur les systèmes embarqués
-du fait de leur volume, de leur poids et de leur consommation électrique.
-
-\paragraph{}
-Dans les systèmes embarqués militaires, des réseaux dont la confidentialité,
-l'intégrité et/ou la disponibilité des données peuvent être différentes nécessitent
-d'être interconnectés. On parle alors de réseaux de différents domaines de
-sécurité.\\
-L'interconnexion de domaines de sécurité hétérogènes a été solutionnée dans les systèmes d'informations,
-au travers de l'usage de chiffreurs, de filtres et d'éléments matériels en
-coupure. Ces solutions restent difficile à intégrer sur les systèmes embarqués
-du fait de leur volume, de leur poids et de leur consommation électrique.
+coupure \cite{tsf101}. Ces solutions restent ajourd'hui difficile à intégrer
+sur les systèmes embarqués. En effet, il s'agit la plupart du temps de
+solutions impliquant plusieurs éléments matériels disjoints, principalement
+sur des architectures de type x86 et sont en général intégrables
+sous formes d'une lame format 1U ou supérieur. De telles solutions ne
+sont alors pas intégrable dans un réseau embarqué véhiculaire pour des raison
+de poids, de volume, de consommation et de dégagement de chaleur.
 
 \paragraph{}
 Le niveau de sécurité d'un système dépend de l'impact de la non-garantie d'une
@@ -93,11 +95,24 @@ cadre de l'étude du système.
 
 \paragraph{}
 Les systèmes véhiculaires militaires intègrent des fonctions impactant la vie
-des passagers. En conséquence, ils ont également des contraintes de sûreté.\\
+des passagers. En conséquence, ils ont également des contraintes de fiabilité
+et des contraîne de temps réel.\\
+
+\begin{definition}
 On appelle système critique un système pouvant mettre en danger des vies
 humaines ou du matériel en cas de défaillance. C'est le cas par exemple des
-systèmes avioniques ou véhiculaires. Plus les dégâts consécutifs à une panne
-sont importants, plus le niveau d'exigence de temps-réel est élevé.
+systèmes avioniques ou véhiculaires.
+\end{definition}
+
+\begin{definition}
+On appelle niveau d'assurance le niveau de certification exigé sur les
+différents composants logiciels et matériels en terme de fiabilité et de temps
+réel. Dans le cadre des systèmes véhiculaires, on s'appuie sur le norme SIL
+\FIXME{ref SIL}
+\end{definition}
+
+Plus les dégâts consécutifs à une panne
+sont importants, plus le niveau d'assurance demandé est élevé.
 
 \paragraph{}
 Pour définir des systèmes logiciels temps-réels, on définit, pour chaque tâche
