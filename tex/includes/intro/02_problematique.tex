@@ -16,7 +16,55 @@
 
 \section{Concepts généraux}
 
+\subsection{Concepts d'architecture}
+
+\paragraph{}
+Dans le cadre des architecture véhiculaire, il existes un grand nombre de
+systèmes.
+\begin{definition}
+  On appelle système un ensemble d'éléments matériels et logiciels
+  interagissant ensemble dans le but d'effectuer une fonction ou un ensembles
+  de fonctions connexes donnée(s).
+\end{definition}
+
+\begin{definition}
+  On appelle système de systèmes un ensemble complexe faisant s'interconnecter
+  plusieurs systèmes entre eux. Une telle interconnexion peut être par exemple la
+  conséquence d'un besoin de supervision centralisé.
+\end{definition}
+
+Dans un véhicule militaire, on retrouve un système de systèmes, en charge de
+gérer, entre autres:
+\begin{itemize}
+\item Le système d'armes, en charge de gérer l'armement et le blindage
+\item Le système de bord (appellé aussi réseau de bord du fait de son très
+grand nombre de lien d'interconnexion), en charge de gérer les composants moteur
+\item Le système de communication, en charge de gérer les communications entre
+le véhicules et l'extérieur (autres véhicules, le quartier général, etc)
+\end{itemize}
+
+\begin{definition}
+Lorsqu'un système de systèmes est construit pour être intégré à un véhicule, et
+est en charge d'associer des systèmes véhiculaires (réseau de bord) à des
+systèmes de communications complexes, on parle alors de système Systronique.
+\end{definition}
+
+Pour être intégrable dans un véhicule, un élément matériel doit être
+compatible d'un facteur de forme spécifique.
+
+\begin{definition}
+On appelle facteur de forme les dimentions, le type d'alimation, le nomre de
+ports ou encore le positionnement des connecteurs. Il existe un grand nombre
+de facteurs de formes industriels, comme le microTCA \cite{walrod2008open}. 
+\end{definition}
+
+Dans le cadre de ma thèse, je cible les problématiques d'interconnexions
+internes aux systèmes Systroniques.
+
 \subsection{Concepts de sécurité}
+\label{subsec:secu}
+
+\subsubsection{Principes généraux de la sécurité}
 
 \paragraph{}
 Un système d'information est dit sécurisé lorsqu'il respecte les 3
@@ -29,27 +77,62 @@ principes de sécurité suivants pour les données qu'il traite:
 
 \paragraph{}
 Les définitions suivantes correspondent à des principes sécuritaires. Elles
-peuvent ne pas correspondre à la définition du domaine de la sûreté de
-fonctionnement.
-On constate ainsi une divergence dans la définition de la disponibilité.
+peuvent ne pas correspondre aux définitions liées à la sûreté de
+fonctionnement. Ces définitions sont présentes dans le National Information
+Assurance Glossary \cite{cnssi_4009}.
 
-\paragraph{Disponibilité}
-La disponibilité assure une garantie d'accès à une information à n'importe quel
-moment. Dans la pratique, des mécanismes de redondance des données sont mis en
-place pour permettre un accès continu aux données, même en cas de
-défaillance partielle.
+\begin{definition}
+La disponibilité est la propriété d'un objet à être accessible et utilisable
+sur demande d'une entité autorisée.
+\end{definition}
 
-\paragraph{Intégrité}
-L'intégrité d'une donnée informatique correspond à une garantie de non-modification
-de cette donnée dans le temps. Dans la pratique, l'intégrité des données est le plus
+\begin{definition}
+L'intégrité est une propriété d'un objet a ne pas avoir été modifié par
+un quelconque sujet non autorisé.
+\end{definition}
+
+\paragraph{}
+Dans la pratique, l'intégrité des données est le plus
 souvent vérifiée par des algorithmes de hashage ou des sommes de contrôle
-(par exemple le CRC32 des trames réseau Ethernet).
+(par exemple le CRC32 des trames réseau Ethernet). On s'appuie également sur
+la cryptographie asymétrique pour générer des signatures, afin de garantir
+l'intégrité de la somme de contrôle.
 
-\paragraph{Confidentialité}
-La confidentialité est le fait de s'assurer que l'information n'est seulement
-accessible qu'à ceux dont l'accès est autorisé. Dans la pratique, la
-confidentialité est assurée par le chiffrement, le cloisonnement des
-environnements et la gestion des d'accès aux données utilisateurs.
+\begin{definition}
+La confidentialité est la propriété d'un objet a n'être accessible qu'à des
+sujets ayant les droits suffisant pour accéder à l'information qu'il porte.
+\end{definition}
+
+\begin{definition}
+On appelle domaine de sécurité un système dans lequel l'ensemble des éléments
+doivent respecter les même contraintes d'intégrité, de confidentialité et de
+disponibilité.
+\end{definition}
+
+\begin{definition}
+Pour garantir la sécurité d'un domaine de sécurité donné, on définit une
+politique de sécurité, en charge de définir l'ensemble des fonctions de
+sécurité nécessaire au respect des contraintes de sécurité du domaine.
+\end{definition}
+
+\paragraph{}
+Le niveau de sécurité d'un système se détermine grâce à un standard
+international, les Critères Communs pour l'évaluation sécuritaires des
+technologies de l'information \cite{cc_docs}. On parle plus régulièrement des Critère Communs
+(dénotés CC). Les Critères Communs définissent 7 niveaux, appelés EAL
+(Evaluation Assurance Level), de EAL 1 (le plus faible) à EAL 7 (le plus
+élevé.
+
+La fragilité d'un système en terme de sécurité dépend entre autre de sa surface d'attaque.
+\begin{definition}
+On appelle surface d'attaque l'ensemble des chemins permettant d'impacter la
+sécurité du système. Il peut s'agir d'une interface réseau non protégée ou
+encore de processus logiciels possédant des failles exploitables. La mise en
+place de fonctions de sécurité (comme par exemple un pare-feu) permet de
+réduire la surface d'attaque.
+\end{definition}
+
+\subsubsection{A propos de la sécurité dans les systèmes systroniques}
 
 \paragraph{}
 Avec l'intégration de plus en plus forte des réseaux IP dans les systèmes
@@ -91,12 +174,19 @@ sécurité} sont implémentées. Ces dernières peuvent être logicielles ou matériell
 permettent de répondre à tout ou partie des risques sécuritaires définis dans le
 cadre de l'étude du système.
 
-\subsection{Concept de temps-réel}
+\subsection{Concept liés à la fiabilité et au temps réel}
 
 \paragraph{}
 Les systèmes véhiculaires militaires intègrent des fonctions impactant la vie
-des passagers. En conséquence, ils ont également des contraintes de fiabilité
-et des contraîne de temps réel.\\
+des passagers. En conséquence, ils possèdent des contraintes de fiabilité
+et des contraintes de temps réel.\\
+La fiabilité définit la capacité d'un système à exécuter ses traitements sans erreur. Ainsi, un
+système fiable à 99,9\% assure un traitement sans erreur dans 99,9\% de sa
+durée d'exécution. Plus le système assure une fiabilité proche de 100\%, plus
+son niveau de fiabilité est élevé.\\
+On dit qu'un système est temps réel lorsqu'il doit garantir des délais
+maximums dans l'exécution de ses fonctions. Il est en charge d'exécuter un ensemble de
+tâches. Une tâche correspond à une fonction donnée du système.
 
 \begin{definition}
 On appelle système critique un système pouvant mettre en danger des vies
@@ -106,38 +196,54 @@ systèmes avioniques ou véhiculaires.
 
 \begin{definition}
 On appelle niveau d'assurance le niveau de certification exigé sur les
-différents composants logiciels et matériels en terme de fiabilité et de temps
-réel. Dans le cadre des systèmes véhiculaires, on s'appuie sur le norme SIL
-\FIXME{ref SIL}
+différents composants logiciels et matériels en terme de fiabilité ou de temps
+réel. Dans le cadre des systèmes véhiculaires, on s'appuie sur la norme SIL
+(Safety Integrity Level) \cite{smith2010safety}, graduée de 1 (niveau le plus faible)
+à 4 (niveau le plus fort). Cette dernière s'instancie, dans le cadre du
+logiciel embarqué véhiculaire, au travers des règles édictées par
+l'association MISRA (Motor Industry Software Reliability Association)
+\cite{misraweb}.
 \end{definition}
 
-Plus les dégâts consécutifs à une panne
-sont importants, plus le niveau d'assurance demandé est élevé.
+\begin{definition}
+  Un système est dit sûr si son niveau d'assurance est compatible de son niveau
+  de criticité. Il possède donc des
+  propriétés de fiabilité et des propriétés de temps-réel adequates pour assurer
+  la protection des vies humaines ou du matériel correspondant à son niveau de
+  criticité. Les problématiques de sécurité telles que définies dans la
+  Section \ref{subsec:secu} ne font pas partie des propriétés d'un système sûr.
+\end{definition}
 
 \paragraph{}
-Pour définir des systèmes logiciels temps-réels, on définit, pour chaque tâche
-logicielle devant être exécutée:
+Il existe trois modèles d'exécution temps réel:
 \begin{itemize}
-\item Un coût d'exécution pire cas, nommé WCET (Worst Case Execution Time)
-\item Une période, déterminant la durée minimum entre deux demandes d'activation de la tâche
-\item Une deadline, correspondant à la latence maximum entre la demande
-d'activation et la terminaison de la tâche pour que le traitement soit correct
+  \item Le modèle périodique: Les instanciations successives d'une tâche
+    (appelées travail) s'effectuent avec une inter-arrivée constante.
+  \item Le modèle sporadique: Les instanciations successives d'une tâche
+    s'effectuent avec une inter-arrivée variable, mais dont la plus petite
+    inter-arrivée est connue et non-nulle.
+  \item Le modèle apériodique: Il n'y a pas d'instanciations successives d'une
+    tâche, et donc pas de principe d'inter-arrivée.
 \end{itemize}
-Un système logiciel temps réel gère un ensemble de tâches et doit garantir
-que toute ses tâches soient exécutées à temps afin de terminer leur traitement
-avant leur deadline.\\
-En s'appuyant sur ces trois propriétés, il est possible, pour un système
-donné, de déterminer la latence maximum pour un traîtement donné impliquant
-plusieurs tâches.
+Dans le cadre de ma thèse, les traitements sont induits par des évènements
+extérieurs asynchrones (correspondant à des flux réseau). En
+conséquence, je m'appuie sur un modèle sporadique. C'est ce dernier qui est
+donc considéré par la suite.
 
 \paragraph{}
-dans le cadre de l'avionique comme dans le véhiculaire, la problématique
-de garantie de latence maximum se pose lorsqu'il s'agit de remonter des
-informations du véhicule (e.g. altitude, température extérieure, vitesse) dans
-un délai borné. on parle alors de système temps-réel.
-aujourd'hui, le passage d'un domaine critique à un domaine non critique se
-fait via l'emploi de diodes matérielle \cite{sstic2006diode}. ces dernières
-garantissent que les données ne transitent que dans un seul sens.
+Chaque tâche temps réel se définit par les propriétés suivantes:
+\begin{itemize}
+\item Un coût d'exécution pire cas, dénoté WCET (Worst Case Execution Time).
+\item Une période, déterminant l'inter-arrivée minimum entre deux travaux de la
+  tâche.
+\item Une échéance, correspondant à la durée maximum entre l'instanciation du
+  travail et la terminaison de son exécution.
+\end{itemize}
+Un système logiciel temps réel est en charge d'assurer que l'ensemble des
+travaux terminent leur exécution avant leur échéance. Pour cela il s'appuie
+sur des algorithmes d'ordonnancement. Ceux-ci sont en charge d'assurer un
+ordonnancement de l'exécution des travaux respectueux de l'ensemble de leurs
+échéances.
 
 \section{Concepts véhiculaires}
 
@@ -172,15 +278,15 @@ téléphones portables ou les tablettes.
 Dans le cadre du besoin véhiculaire militaire, le réseau multimédia fournit
 principalement des mécanismes de communication radio entre véhicules (au sein d'un
 groupe) et entre le véhicule et sa base de commandement. Il fournit également
-des mécanisme de supervision locaux, comme la gestion des caméras extérieures
+des mécanismes de supervision locaux, comme la gestion des caméras extérieures
 et/ou intérieures ou du système d'arme si ce dernier existe.
 Le réseau d'interconnexion du véhicule est riche et hétérogène. En effet, ce
-dernier s'appuie sur différent type d'interconnexions (courte portée, longue
+dernier s'appuie sur différents types d'interconnexions (courte portée, longue
 portée, satellitaire, etc). Ces différents réseaux sont utilisés pour un
 grand nombre de transmissions. Il peut s'agir de la réception des ordres de
-mission, de communications phoniques ou visiophoniques, de réception ou
-d'émission de positions GPS. Un véhicule équipé d'un tel réseau possède alors
-un système appelé système {\it systronique}.
+mission, de communications phoniques ou visiophoniques, de la réception ou
+de l'émission de positions GPS. Le véhicule possède donc un véritable système
+Systronique.
 
 \subsection{A propos des systèmes systroniques}
 
@@ -208,8 +314,8 @@ désactivation du système d'arme lors de l'ouverture d'une porte extérieure.\\
 Ces différents éléments ont des exigences de temps-réel plus ou moins
 nombreuses. Afin de limiter le coût de certification et les contraintes
 physiques des éléments de la chaîne de traitement temps-réel, le calcul du
-temps d'exécution pire cas de celle-ci est plus ou moins pessimiste.\\
-Si ce le calcul du coût d'exécution pire cas est faiblement 
+coût d'exécution pire cas de celle-ci est plus ou moins pessimiste.\\
+Si le calcul du coût d'exécution pire cas est faiblement 
 pessimiste, il peut arriver, avec une faible occurrence, que le coût
 d'exécution dépasse le coût d'exécution pire cas considéré dans le design du
 système. Si le calcul est fortement pessimiste, le dépassement n'est en
@@ -226,28 +332,27 @@ latence d'exécution doit être à tout prix maintenue (système d'arme, blindage
 transparent)
 \item les traitements à forte exigence de sûreté ou de sécurité, dont la
 latence d'exécution doit être respectée au mieux (caméras extérieures,
-communications)
+communications avec les autres véhicules)
 \end{itemize}
-Les deux familles sont donc exécutées en parallèle, sauf si la famille de plus
+Les deux familles sont donc exécutées de manière conjointe, sauf si la famille de plus
 forte priorité génère un coût d'exécution dépassant le coût pire cas
 initialement déterminé. Le système n'étant plus capable d'exécuter les deux
 familles sans dépassement de la latence, il devient nécessaire de modifier
 son comportement afin de garantir malgré tout l'exécution des fonctions les
-plus critiques. On parle dans ce cas d'un système à criticité mixte. Un
+plus critiques. On parle dans ce cas d'un système à criticité mixte, comme
+décrit dans le Chapitre \ref{sec:mixedcriticity}. Un
 tel système permet alors de respecter au mieux à la fois les exigences de
-sécurité et de sûreté de fonctionnement, mais aussi les exigences physique qui
+sécurité et de sûreté de fonctionnement, mais aussi les exigences physiques qui
 découlent de l'environnement véhiculaire.
 
 \section{Enjeux et limitations de l'existant}
 
+\subsection{Les enjeux des systèmes systroniques}
 
-\subsection{Les enjeux des systèmes Systroniques}
-
-\paragraph{}
 \paragraph{}
 Comme il a été vu précédemment, les enjeux dans les systèmes systroniques sont
-important, du fait de l'intégration continuels de nouveaux systèmes de
-communication, tant en terme de liens de communications locaux/semi-locaux et
+importants, du fait de l'intégration continue de nouveaux systèmes de
+communications, tant en terme de liens de communications locaux/semi-locaux et
 longue distance qu'en terme de traitements graphiques et vidéos. Il en résulte
 un système complexe interconnectant des éléments:
 \begin{itemize}
@@ -255,6 +360,11 @@ un système complexe interconnectant des éléments:
   \item Temps-réel souple
   \item Non temps-réel
 \end{itemize}
+Aux contraintes temporelles auxquelles répondent les modèles temps réel,
+s'ajoutent des contraintes de fiabilité. Elles sont présentes sur la grande
+majorité des éléments d'un système Systronique, du fait de l'impact de ce
+système sur les vies humaines. Ainsi, il est impératif que le système d'arme
+soit fiable.
 
 \paragraph{}
 De manière orthogonale, ces mêmes éléments impliquent des contraintes de
@@ -265,9 +375,9 @@ système systronique de:
 \begin{itemize}
   \item Transférer de l'information désensibilisée d'un domaine de haut niveau
     de sécurité à un domaine de moindre niveau
-  \item Remonter de l'information d'un domaine de plus bas niveau à un domaine
+  \item Remonter de l'information d'un domaine de plus bas niveau de sécurité à un domaine
     de plus haut niveau de sécurité
-  \item Remonter des données d'un domaine temps-réel dur avec de forte
+  \item Remonter des données d'un domaine temps-réel dur avec de fortes
     contraintes de sûreté vers un domaine de plus faible niveau de sûreté,
     avec des contraintes de sécurité plus fortes
 \end{itemize}
@@ -276,10 +386,11 @@ système systronique de:
 Ces interconnexions sont principalement la conséquence de l'apparition de
 terminaux de contrôles locaux et portatifs agrégeant un grand nombre de
 données. Du fait d'exigences physiques fortes (poids, volume, consommation
-électrique) et d'exigences de certification fortes (principalement liées à la
-résistance au vibrations dans les véhicules), ces derniers ne doivent pas pour
+électrique) et d'exigences de certification fortes (principalement liées à la temps-réel
+résistance aux vibrations dans les véhicules), ces derniers ne doivent pas pour
 autant être multipliés. La séparation des domaines de sécurité et parfois de
-sûreté doit donc être faite de manière logique plutôt que physique. Il revient
+sûreté n'est donc pas toujours physique. On s'appuie alors sur une séparation
+logique de ces domaines. Il revient
 alors au logiciel d'assurer cette séparation. Il lui revient également de fournir
 des mécanismes d'interconnexion respectueux de l'ensemble des exigences de
 sécurité et de sûreté.
@@ -290,21 +401,23 @@ sécurité et de sûreté.
 Aujourd'hui, les systèmes systroniques maintiennent trois réseaux complètement
 indépendant:
 \begin{itemize}
-  \item Le réseau de bord, en charge des éléments d'aide à la conduite
-  \item Le réseau Systronique temps-réel
-  \item Le réseau de communications, non temps réel mais avec un grand nombre
-    de contraintes de sécurité
+  \item Le système de bord, en charge des éléments d'aide à la conduite et
+  devant respecter des contraintes temps réel
+  \item Le système d'arme, ayant également des propriétés temps réel
+  \item Le système de communication, sans propriétés temps réel mais avec un
+  grand nombre de contraintes de sécurité
 \end{itemize}
 
 \paragraph{}
-Il est demandé de pouvoir interconnecter ces trois réseaux afin de remonter des
-informations du réseau de bord au réseau de communications, mais également du
-réseau systronique temps-réel au réseau de communications.\\
-Il est de plus demandé une modification profonde de ce dernier afin de
-permettre un partage de certains moyens de communications semi-locaux et
-distants entre différents domaines de sécurité. En effet, la multiplication
-des antennes génère à la fois un surcout et une problématique radio liée aux
-perturbations que génère les antennes entre elle sur la qualité du signal.\\
+Il est demandé de pouvoir interconnecter ces trois systèmes afin de remonter des
+informations du système de bord au système de communication, mais également du
+système d'arme au système de communication.\\
+Il est de plus demandé une modification profonde du système de communication afin de
+permettre un partage de certains moyens de communications semi-locaux (i.e.
+entre des véhicules d'une même patrouille) et distants (entre la patrouille et
+les quartiers généraux) entre différents domaines de sécurité. En effet, la multiplication
+des antennes génère à la fois un surcout et une problématique de qualité de
+signal radio liée aux interférences mutuelles des antennes.\\
 De plus, du fait de l'incompatibilité des exigences de performances avec les
 exigences physiques, l'intégration de solutions aptes à permettre des
 traitements à criticité multiple est nécessaire au niveau de ces éléments
@@ -316,26 +429,28 @@ ne permet ce type de comportement.
 Pour la sûreté de fonctionnement, l'existant correspond souvent aux avancées
 technologiques qui ont été faite dans l'avionique, telles que l'IMA
 (Integrated Modular Architecture), permettant une répartition optimisée des
-fonctions pour assurer le respect des contraintes temps réel. Ces solutions répondent
-parfaitement aux besoins de sûreté de fonctionnement. Elles sont donc tout à
+fonctions pour assurer le respect des contraintes temps réel. Les niveaux
+élevé d'assurance (DO-178B pour le logiciel et DO-254 pour le matériel) assurent
+également une grande fiabilité. Ces solutions répondent donc
+parfaitement aux besoins de sûreté de fonctionnement. Elles sont alors tout à
 fait à leur place dans le réseau de bord. Néanmoins, lorsque sûreté et
 sécurité doivent être associés, ces solutions atteignent leurs limites. Il
-devient alors nécessaire de concevoir des mécanismes logiques (dans le cas de
-la systronique) permettant de respecter à la fois des besoins de sûreté et de
+devient nécessaire de concevoir des mécanismes logiques (dans le cas des
+systèmes systronique) permettant de respecter à la fois des besoins de sûreté et de
 sécurité.
 
 \paragraph{}
-Pour la sécurité, l'existant est principalement basé sur les travaux qui existent depuis des
+Pour la sécurité, l'existant est principalement basé sur les travaux intégrés depuis des
 années dans la sécurisation des systèmes d'informations complexes.
-Malheureusement, les solutions existantes s'appuient principalement sur des
-solutions matérielles positionnées en coupure entre chaque domaine de sécurité et sur la cryptographie.\\
+Malheureusement, ces solutions s'appuient principalement sur des
+éléments matériels positionnées en coupure entre chaque domaine de sécurité et sur la cryptographie.\\
 Les éléments en coupure sont malheureusement difficilement intégrables. En
 effet:
 \begin{itemize}
   \item Ils sont souvent volumineux et consommateurs de courant
   \item Il ne sont pas certifiable pour les systèmes contraints avec
     des exigences physiques type résistance aux vibrations
-  \item Leur facteur de forme n'est pas prévu pour de l'embarcabilité
+  \item Leur facteur de forme n'est pas prévu pour de l'embarqué
 \end{itemize}
 Les solution de cryptographie ne s'intègrent pas toujours aisément:
 \begin{itemize}
@@ -361,7 +476,7 @@ système communicant intégrant de multiples niveaux de sûreté et de sécurité
 interagissants de concert. Pour permettre une interconnexion de ces niveaux
 tout en assurant un cloisonnement suffisant pour ne pas impacter les exigences
 initiales de chacun d'entre eux, de nouveaux mécanismes doivent être étudiés
-afin de pouvoir répondre à l'ensemble des exigences de la Systronique. Les
+afin de pouvoir répondre à l'ensemble des exigences des systèmes systroniques. Les
 exigences que doivent respecter ces solutions sont de trois types:
 \begin{itemize}
   \item Sûreté de fonctionnement, principalement en terme de garantie de
@@ -371,52 +486,31 @@ exigences que doivent respecter ces solutions sont de trois types:
     disponibilité des données des différents domaines de sécurité lorsque ces
     derniers nécessitent d'être interconnectés
   \item Physique, afin de garantir que le logiciel est suffisamment peu couteux
-    à l'exécution pour ne pas nécessiter un matériel incompatibles des
-    exigences de consommation
+    à l'exécution pour respecter les exigences de consommation
 \end{itemize}
 
 \paragraph{}
 Une telle solution doit pouvoir se plier à ces trois familles d'exigences afin
 de ne pas multiplier les produits devant être intégrés au système Systronique.
 C'est un besoin qui dérive à la fois des exigences physiques et des exigences
-financières, le coût des véhicules devant être suffisamment rentable.
+financières, le coût des véhicules devant être maîtrisé.
 
 \section{Éléments de solution}
 
-%\paragraph{}
-%Dans le cadre de ma thèse, je propose une solution logicielle pour répondre à
-%cette problématique. Le besoin de modularité est pris en compte afin de
-%rendre la solution configurable pour répondre aux différents besoins, et
-%plusieurs contraintes de sécurité et de sûreté sont considérés afin de
-%répondre à plusieurs exigences précises. Dans le cadre de ma thèse, la
-%solution logicielle est prévue pour être utilisée en tant que passerelle, tant
-%entre les différents domaines de sûreté qu'entre les différents domaines de
-%sécurité. Les différents modules proposés ont une faible empreinte et une
-%forte autonomie, afin de permettre au besoin une certification du logiciel.
-
-%\paragraph{}
-%Afin de déterminer l'architecture logicielle idéale pour répondre au besoin
-%Systronique, j'ai fait un état de l'art des solutions existantes et des
-%technologies pouvant être choisies pour répondre au besoin Systronique. La
-%solution proposée est décrite en terme de sécurité et de garantie de latence
-%maximum. Enfin, un exemple de passerelle d'interconnexion modulaire est
-%décrite, basée sur les principes proposés dans la solution théorique.
 \paragraph{}
 Dans le cadre de ma thèse, je propose une solution logicielle pour répondre à
 la problématique d'interconnexion des réseaux véhiculaires dans le cadre d'un
 système Systronique. Le besoin de modularité est pris en compte afin de
 rendre la solution configurable pour répondre aux différents besoins
-d'interconnexion de réseaux, et plusieurs contraintes de sécurité et de sûreté sont considérées afin de
-répondre à plusieurs exigences précises:
+d'interconnexion de réseaux, et plusieurs contraintes de sécurité et de sûreté sont considérées afin de répondre à plusieurs exigences précises:
 \begin{itemize}
 \item Garantie de transfert de données à sens unique
 \item Filtrage des données selon une politique de sécurité
-\item Maîtrise du profil de flux transféré pour garantir la sûreté du domaine
+\item Maîtrise du profil des flux transférés pour garantir la sûreté du domaine
 de sortie
-\item Réduction des risques de transfert de données non homologués par la
-politique de sécurité au travers de canaux cachés et canaux auxiliaires
+\item Réduction des risques de transfert de données non homologués
 \item Prise en compte dans le transfert de flux des différences de criticité
-des données à faire transiter
+des flux à faire transiter et des traitements à effectuer sur ces derniers
 \end{itemize}
 Dans le cadre de ma thèse, la
 solution logicielle est prévue pour être utilisée en tant que passerelle, tant
@@ -458,8 +552,9 @@ l'usage d'un ordonnancement de type hiérarchique, sur base TDM (Time Division
 Multiplexing). Afin de
 définir une méthode pour déterminer l'ordonnançabilité de tâches temps-réel
 sur une base d'ordonnancement TDM, nous avons formalisé les propriétés
-nécessaires au respects des latences \cite{thierry2011real} au travers d'une
-formalisation de la définition de la taille des slots temporels du TDM.
+nécessaires au respect des latences \cite{thierry2011real} permettant de
+définitir la taille des slots temporels du TDM. Cette formalisation est
+décrite dans le Chapitre \ref{sec:hierarchicalrt}
 
 \paragraph{}
 Les principales exigences des systèmes Systroniques sont des exigences de
@@ -469,18 +564,19 @@ l'ordonnançabilité de l'ensemble des tâches lorsque les calculs de coûts
 d'exécution sont pessimistes. Afin de pouvoir intégrer à la fois des tâches
 fortement critiques et des tâches plus faiblement critique, il faut prévoir,
 dans le cadre de l'intégration de l'ensemble des tâches, de potentiels
-débordements de la part des tâches très critique. On s'appuie, dans le cadre
-du choix de la mécanique d'ordonnancement, sur un ordonnancement à
-criticité mixte. Afin de pouvoir gérer au mieux la problématique de
-criticité mixte, une étude a été faite \cite{santy2012relaxing} afin de:
+débordements de la part des tâches très critique. On s'appuie sur un ordonnancement à
+criticité mixte. Afin de pouvoir gérer au mieux cette problématique,
+ une étude a été faite \cite{santy2012relaxing} afin de:
 \begin{itemize}
   \item réduire les contraintes du changement de niveau de criticité, afin de
   limiter le nombre de taches devant être désactivées
   \item Déporter au maximum le changement de niveau criticité, au travers de
-  l'intégration de la marge de tolérance déjà exploitée dans les ensembles de
-  taches traditionnels
-  \item Formaliser l'instant où la criticité peut être réduite
+  l'intégration de la marge de tolérance \cite{bougueroua_george_midonnet}
+  sur les durées de dépassement des WCET
+  \item Formaliser l'instant où le niveau de criticité peut être réduit
 \end{itemize}
+La problématique de changement de niveau de criticité et de réduction de ce
+dernier est étudiée dans le Chapitre \ref{sec:mixedcrit}
 
 \paragraph{}
 Afin de valider la solution générale et intégrer plusieurs moniteurs de
@@ -497,5 +593,4 @@ La fonction diode a également été implémentée dans le cadre d'une maquette répon
 l'ensemble des exigences sécuritaires (architecture MLS, compartimentation
 forte, usage d'un ordonnancement TDM, nettoyage du cache lors du changement de
 domaine) et une pré-évaluation EAL5+ a été faite, associée à un dépôt de brevet en cours.
-
 
