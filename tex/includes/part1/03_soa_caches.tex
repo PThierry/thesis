@@ -85,20 +85,20 @@ reprend son exécution.
 \subsection{Principes généraux et limitations}
 
 \paragraph{}
-Les caches processeurs sont également impactant pour le respect du temps réel.
-Leur comportement probabiliste impacte l'exécution des différentes tâches temps
-réelles si ces dernières sont exécutées avec une politique d'ordonnancement
-préemptive. Dans les systèmes très exigeants en terme de temps réel, les
+Les caches processeurs sont également impactant dans le cadre du respect des
+contraintes temps réel.
+Dans les systèmes très exigeants en terme de temps réel, les
 caches sont en général désactivés. Malheureusement, une telle configuration
 est de plus en plus difficile à mettre en {\oe}uvre. En effet, les
-architectures matérielles et logicielles sont de plus en plus construite pour
-être performante grâce aux contrôleur de caches (usage de 2 voir 3 niveaux de
+architectures matérielles et logicielles sont de plus en plus construites pour
+être performante grâce aux contrôleurs de caches (usage de 2 voir 3 niveaux de
 caches, mécanisme de synchronisation avancé dans le cadre des architectures
 MPSoC, etc). La désactivation des caches génère un ralentissement difficile à
 accepter selon les hypothèses de performances initiales.
 
 
 \subsection{A propos de l'état de l'art de la prise en comptes des algorithmes de caches dans le temps réel}
+\label{sec:soacache_wcet}
 
 \paragraph{}
 Il existe un grand nombre de travaux sur la prise en compte des contrôleurs de
@@ -110,6 +110,15 @@ familles:
   \item Caclul des pire cas de cache-miss au travers de l'étude de l'arbre
     d'exécution des différentes tâches en exécution concurrente
 \end{itemize}
+
+Dans \cite{guan2012wcet}, les auteurs ont montré qu'il était possible de
+prendre en compte l'impact d'un contrôleur de cache s'appuyant sur
+l'algorithme MRU dans le calcul du WCET d'une tâche. Ils ont
+ainsi montré qu'il était possible de déterminer, sous certaines conditions,
+que le maintient de certaines lignes de caches dans le contrôleur pouvait être
+prédictible, réduisant ainsi fortement le pessimisme dans la mesure du WCET.
+
+
 
 \subsection{Etat de l'art des problématiques temps réel dans le support MMU}
 

@@ -109,13 +109,13 @@ traitement sur des données d'un niveau de confidentialité donné.
 Assurer la confidentialité est une tâche complexe. En effet, limiter l'accès à
 la donnée n'est pas suffisant pour assurer sa protection. En effet, il est
 possible de récupérer des informations sur la donnée de plusieurs manières,
-sans y accéder directement. On parle alors de cannal auxiliaire ou de cannal
+sans y accéder directement. On parle alors de canal auxiliaire ou de canal
 caché, selon la méthode.
 
 \subsubsection{Canal auxiliaire et étude comportementale}
 
 \paragraph{}
-Le principe d'un canal auxiliaire consiste à s'appuyer sur une etude
+Le principe d'un canal auxiliaire consiste à s'appuyer sur une étude
 comportementale non-invasive sur des fonctions ou des traitements afin de
 récupérer des informations sur les données traitées. La plupart des études sur
 le sujet sont dans le domaine de la
@@ -190,7 +190,7 @@ Chapitre \ref{sec:mils}
 
 \section{Principes généraux des systèmes temps réel}
 
-subsection{Rappels sur les politiques d'ordonnancement}
+\subsection{Rappels sur les politiques d'ordonnancement}
 
 \paragraph{}
 Il existe différents ordonnanceurs temps réel. Il existe deux grandes familles
@@ -207,7 +207,7 @@ de taches, mais n'est pas réactive en cas d'impact non prévu sur la dynamique d'
 de bus, WCET trop grand ou trop faible, etc).
 
 \paragraph{}
-Parmis tous ces ordonnanceurs, certains peuvent préempter un travail en cours
+Parmi tous ces ordonnanceurs, certains peuvent préempter un travail en cours
 d'exécution avant sa terminaison. On parle alors d'ordonnancement préemptifs. A
 l'inverse, si un travail en cours d'exécution ne peut être arrêté avant sa
 terminaison, on parle d'ordonnancement non-préemptif. La préemption peut être
@@ -224,7 +224,7 @@ Dans le cadre de ma thèse, je cible deux ordonnanceurs:
 Un domaine de sécurité est un environnement ou un contexte incluant un
 ensemble de ressources systèmes et d'entités respectant une même politique de
 sécurité.\\
-Les interactions intra-domaines ne sont pas soumises à des exigences fortes de
+Les interactions à l'intérieur d'un domaine ne sont pas soumises à des exigences fortes de
 sécurité. Cependant, il arrive qu'un même domaine de sécurité soit
 physiquement séparé en plusieurs sous-systèmes qui, pour communiquer, doivent
 traverser des domaines de sécurité différents. Les passerelles
@@ -234,7 +234,7 @@ confidentialité des données de diverses manière afin d'assurer que les
 domaines par lesquels transitent ces données ne soient pas aptes à en tirer
 une information dont le niveau de sécurité est supérieur au leur.\\
 De manière générale, le noircissement implique un chiffrement des données et
-potenciellement une modification du profil de flux, ceci afin de limiter la
+potentiellement une modification du profil de flux, ceci afin de limiter la
 problématique de canal auxiliaire dérivant du profil de flux initial \cite{berk2005detection}.
 
 \section{La virtualisation}
@@ -343,9 +343,9 @@ exécutant le traitement initial avec les droits qui sont les siens, soit en
 simulant le traitement.
 
 \paragraph{}
-Il existe un certain nombre de solutionis implémentant les mécanismes de paravirtualisation.
+Il existe un certain nombre de solutions implémentant les mécanismes de paravirtualisation.
 C'est par exemple le cas de Xen ou encore de la solution propriétaire PikeOS
-de Sysgo. La limitation du principe de virtualisation est dûe à la nécessité 
+de Sysgo. La limitation du principe de virtualisation est due à la nécessité 
 d'adaptation du noyau invité à l'Application Programming Interface (API) du moniteur de machine virtuelle. Cette
 API n'étant pas normalisée, cela implique une implémentation souvent
 spécifique à la solution de virtualisation utilisée. Cela implique également
@@ -376,7 +376,7 @@ portabilité.
 \subsection{Les solution de virtualisation type II}
 
 \paragraph{}
-Les soltions de virtualisation type II s'appuient sur la présence d'un hôte qui
+Les solutions de virtualisation type II s'appuient sur la présence d'un hôte qui
 accueille le moniteur de machine virtuelle comme un processus. Ce dernier est
 donc lui-même ordonnancé par l'hôte. Ce type de solution de virtualisation
 correspond à des produits tels que VMWare Workstation ou encore VirtualBox.
@@ -450,8 +450,8 @@ sections, dont entre autres:
 \end{itemize}
 
 \paragraph{}
-Lorsque plusieurs applicatifs s'exécutent de manière concurente, il est
-important de les cloisonnner dans des environnement logiques séparés, ceci
+Lorsque plusieurs applicatifs s'exécutent en concurrence, il est
+important de les cloisonner dans des environnement logiques séparés, ceci
 afin d'éviter que ces derniers puissent interagir sans contrôle, par simple
 accès à la mémoire physique.
 
@@ -473,7 +473,7 @@ l'adresse physique de sa pile est connue.
 \item Décomposition de la mémoire physique en segment.  Il s'agit du mode  de  segmentation  présent
 uniquement sur les processeur de la famille x86.  Ce mode étant aujourd'hui remplacé  par  le
 système de pagination, il ne sera pas décrit ici.
-\item En s'appuyant sur une abstraction de la mémoire physique, appellé {\it mémoire virtuelle}. On
+\item En s'appuyant sur une abstraction de la mémoire physique, appelé {\it mémoire virtuelle}. On
 parle alors de mode dit de  {\it  pagination  mémoire}.   Un  processus  donné  possède  son  propre
 environnement mémoire appelé Espace d'adressage (AS pour Address Space), dont la taille correspond à la valeur maximum d'un mot mémoire (e.g. dans un
 processeur 32 bits, l'environnement  mémoire  virtuelle  à  une  taille  de  quatre  giga-octets).\\
@@ -485,7 +485,7 @@ Unit (MMU).
 
 \paragraph{}
 La gestion de la pagination est gérée par la MMU, sous les ordres du
-noyau du système d'exloitation. Ce dernier construit l'association entre
+noyau du système d'exploitation. Ce dernier construit l'association entre
 mémoire physique et mémoire virtuelle dans des structures en mémoire nommées
 tables de pages (Pages Tables). Sur les architectures x86, ces dernières sont accédées par la MMU
 via un registre nommé PDBR. Ce dernier pointe vers la racine de l'arbre de
@@ -540,14 +540,14 @@ Une des attaques les plus classiques est l'injection  de  {\it  shellcode}.   L'
 intégrer quelque part dans l'espace d'adressage du processus  une  suite  d'instructions,  avant  de
 corrompre   sa   pile   pour   provoquer   un   branchement   vers   ce    bloc    d'instructions.\\
 Cette attaque est donc faite en deux temps, en positionnant des instructions
-en  mémoire puis en forçant le branchement.En général, les shellcodes sont placés dans la pile,  en
+en  mémoire puis en forçant le branchement. En général, les shellcodes sont placés dans la pile,  en
 amont du positionnement courant du pointeur de pile. Il convient, pour éviter ce type d'attaque, de
 rendre l'espace mémoire utilisé pour la pile non-exécutable.  A l'inverse, l'espace  mémoire  où  se
 situe le code du processus doit lui être exécutable, mais ne doit pas  être
 accessible en écriture,  ce  dernier étant immuable durant l'exécution du processus.\\
 On définit ici des droits d'accès à des  espaces  mémoire  (lecture,  écriture,  exécution)  variants
 selon le type de données qui y sont hébergées. Les MMU modernes, lors de la création d'une association
-entre mémoire physique et mémoire virtuelle,  définissent  ces  trois  propriétés,  fournissant  un
+entre mémoire physique et mémoire virtuelle, supportent  ces  trois  propriétés,  fournissant  un
 durcissement   supplémentaire   pour   réduire   les   risques   de   corruption   d'un   processus.
 
 \subsection{A propos des contrôleurs de cache}
@@ -562,7 +562,7 @@ directement  par  ce dernier  sans nécessité de  transfert   sur   le   bus \cit
 
 \paragraph{}
 La figure \ref{fig:cache_soa} montre une architecture mémoire générique, avec plusieurs  niveaux  de
-cache, suivis d'un bus d'accès mémoire et  du  controlleur  mémoire.
+cache, suivis d'un bus d'accès mémoire et  du  contrôleur  mémoire.
 
 \begin{figure}
 \input{figures/cache_architecture.tex}
@@ -610,7 +610,7 @@ Les algorithmes de cache ont divers niveaux d'associativité :
 et une seule cellule de cache.  Il s'agit d'un algorithme surjectif, du fait de la taille du  cache.
 Le choix de remplacement étant de type $1:1$, aucun algorithme spécifique n'est utilisé. Les données
 sont écrites au seul emplacement possible en cache.
-\item Les algorithmes de type {\textit{N-way associative}} associe une cellule mémoire avec
+\item Les algorithmes de type {\textit{N-way associative}} associent une cellule mémoire avec
 {\it N} (resp. 2, 4, 8, ...)
 cellules de cache. Cette associativité permet d'optimiser l'écrasement des cellules du cache en donnant
 un choix de positionnement à la cellule mémoire à mettre en cache.  Les algorithmes de  ce  type  se
@@ -638,15 +638,15 @@ de    la    mémoire    centrale.
 \paragraph{}
 Il existe plusieurs algorithmes de gestion du cache, souvent de type
 probabiliste. De récents travaux de recherche tendent à montrer que ces caches
-peuvent être pris en compte dans les architectures temps réel \cite{guan2012wcet}.\\
-Cependant, les systèmes temps réel très  contraints d'aujourd'hui,  comme  dans  l'aviation  ou  le  spatial,
-utilisent encore parfois des architectures avec cache désactivé.
+peuvent être pris en compte dans les architectures temps réel \cite{guan2012wcet}. Cependant, les systèmes
+temps réel très  contraints d'aujourd'hui,  comme  dans  l'aviation  ou  le  spatial,
+utilisent encore beaucoup des architectures avec caches désactivés.
 
 \subsubsection{Positionnement du cache}
 
 \paragraph{Cache \index{Cache!Look-aside}look-aside}
-Cette architecture place le cache et la mémoire centrale côte à côte.  Ainsi, le CPU peut accéder  à
-la mémoire centrale sans passer par le cache.\\
+Cette architecture place le cache et la mémoire centrale côte à côte.  Ainsi,
+le c{\oe}ur du processeur peut accéder  à la mémoire centrale sans passer par le cache.\\
 Le principe de fonctionnement est le suivant :
 \begin{itemize}
 \renewcommand{\labelitemi}{\textbullet}
@@ -665,7 +665,7 @@ processeur,  et  espionne  les  données  transitant  sur  le  bus  afin  de  se 
 
 
 \paragraph{Cache \index{Cache!Look-through}look-through}
-Cette architecture place le cache en coupure entre le processeur et la mémoire
+Cette architecture place le cache en coupure entre le c{\oe}ur du processeur et la mémoire
 centrale. Le processeur passe donc par le cache pour l'accès mémoire.\\
 Le principe est le suivant :
 \begin{itemize}
@@ -683,24 +683,23 @@ centrale renvoie la donnée, qui est mise en cache en même temps qu'elle est renv
 \end{figure}
 
 Cette architecture provoque des cache miss plus long (vérification par le cache avant  de  faire  la
-requête au contrôleur de bus), mais permet d'utiliser le cache indépendamment des autres processeurs
-(pour un cache local).
-
-%%%%%%%%%%%%%%%%%%%%% END OF CORRECTION
+requête au contrôleur de bus), mais permet d'utiliser le cache indépendamment
+des autres c{\oe}urs du processeurs (pour un cache local).
 
 \subsubsection{\index{Cache!Consistance}Consistance du cache}
 
 \paragraph{}
 Du fait que le cache contient des duplicatas d'une partie de la mémoire, il est important de s'assurer
-que la copie  est  l'originale  restent  identique.   À  défaut,  cela  peut  entraîner  des  bogues
-logiciels,  difficilement  détectables.
+que la copie  et  l'originale  restent  identiques.   À  défaut,  cela  peut
+entraîner  des  erreurs logicielles,  difficilement  détectables.
 
 \paragraph{}
-La consistance du cache peut être impactée de différentes manières, dont voici une liste non-exhaustive :
+La consistance du cache peut être impactée dans différentes situations, comme
+par exemple les suivantes:
 \begin{itemize}
 \renewcommand{\labelitemi}{\textbullet}
 \item Mise à jour de la mémoire par un contrôleur DMA
-\item  Écriture  en  mémoire  par  un  autre  processeur  (architecture   multi-CPU/culti-c{\oe}urs)
+\item Écriture  en  mémoire  par  un  autre  processeur  (architecture   multi-CPU/multi-c{\oe}urs)
 \item Modification de la donnée en cache sur un autre processeur
 \end{itemize}
 
@@ -714,9 +713,9 @@ Il y a deux manières de réagir à une détection positive :
 \begin{itemize}
 \renewcommand{\labelitemi}{\textbullet}
 \item Prévoir un rechargement de la cellule impactée (méthode dite {\it write-back}). Le rechargement ne
-se fait pas nécessairement sur le moment, mais peut être ordonnancée pour s'exécuter au moment du prochain
+se fait pas nécessairement sur le moment, mais peut être ordonnancé pour s'exécuter au moment du prochain
 accès à cette cellule, ou avant, selon les implémentations.
-\item Désactiver la cellule impactée.  Le prochain accès au données de cette cellule  provoquera  un
+\item Désactiver la cellule impactée.  Le prochain accès aux données de cette cellule  provoquera  un
 {\it    cache-miss},    suivi    d'une    recopie    à    partir    de    la    mémoire    centrale.
 \end{itemize}
 
@@ -725,47 +724,50 @@ Le snarfing consiste à associer la détection d'une modification d'une donnée en 
 bus de donnée. En espionnant le bus, il est capable à tout instant de mettre à jour la cellule impactée,
 et de maintenir la consistance.
 
-\subsubsection{Synchronisation caches/mémoire centrale}
+\subsubsection{Synchronisation entre le cache et la mémoire centrale}
 
 \paragraph{}
 Lorsque des données sont modifiées en local sur le cache, il est nécessaire de mettre à jour la mémoire
 centrale afin de prendre en compte ce changement.
 
 \paragraph{write-back}
-Le cache garde en mémoire, pour chaque cellule, sont état. Lorsque la cellule est écrasée, ou que le cache
+Le cache garde en mémoire, pour chaque cellule, son état. Lorsque la cellule est écrasée, ou que le cache
 est  vidé,  les  données  modifiées  localement  sont  synchronisées  avec  la  mémoire  centrale.\\
 La mise à jour de la mémoire centrale n'est pas synchrone avec la modification locale. Cela implique, au
-niveau logiciel, de prévoir les problèmes d'incohérence sur les architectures multi-c{\oe}urs, au travers
-de l'usage des {\it \index{Memory barrier}memory barriers}.
+niveau logiciel, de prévoir les problèmes d'incohérence sur les architectures
+multi-c{\oe}urs ou multi-processeurs, au travers de l'usage des {\it
+  \index{Memory barrier}memory barriers}. Ces dernières ont pour but de
+fournir des mécanismes de synchronisation entre les différents c{\oe}urs afin
+d'assurer la cohérence d'une donnée partagée entre plusieurs instances logicielles
+exécutées en parallèle.
+L'implémentation des barrières mémoires est dépendante de l'architecture
+matérielle.
 
 \paragraph{write-through}
 Une écriture sur cache implique une remontée synchrone de la mise à jour de la donnée, afin de maintenir
-une cohésion.
+une cohérence entre le contenu du cache et la mémoire.
 
 \subsubsection{Les algorithmes de gestion de cache}
 
 \paragraph{\index{Cache!LRU}Least Recently Used}
 L'algorithme LRU s'appuie sur les dates d'accès aux items du cache. En cas de cache-miss, c'est l'élément
-qui a été accédé il y a le plus longtemps qui est remplacé.\\
-Pour des processus faisant des accès fréquents à un même espace mémoire, comme dans le cas de processus
-calculatoires par exemple, LRU est efficace.
+qui a été accédé il y a le plus longtemps qui est remplacé.
 
 \paragraph{\index{Cache!MRU}Most Recently Used}
 L'algorithme MRU, à l'opposé du LRU, remplace l'élément dont l'accès est le plus récent. Il considère
 l'hypothèse  selon  laquelle  un  élément  accédé   très   récemment   ne   le   sera   plus   avant
-une    certaine    durée.\\
-MRU   est   plus   efficace   pour   des   processus   faisant   des   accès   mémoire    cycliques.
+une    certaine    durée.
 
 \paragraph{\index{Cache!Pseudo-LRU}Pseudo-LRU}
 L'algorithme Pseudo-LRU utilise un arbre binaire représentant l'ensemble des cellules de caches pouvant
-être remplacées. Chaque ensemble de cellules posséde un tag fournissant une indication sur l'emplacement
+être remplacées. Chaque ensemble de cellules possède un tag fournissant une indication sur l'emplacement
 (branche droite, branche gauche) de la cellule qui sera remplacée.  Ce tag est mis à jour  à  chaque
 traversée de l'arbre.
 
 \paragraph{}
 Il s'agit d'un algorithme jugé efficace en comparaison au LRU pour les caches dont l'associativité est
 supérieure à 4.  Il est utilisé dans les architectures Intel 486, et dans les architecture  PowerPC,
-comme le PowerPC G4 de Freescale \cite{plru}. Le schéma \ref{fig:cache_plru_e300} est tiré du manuel
+comme le PowerQuicc de Freescale \cite{plru}. Le schéma \ref{fig:cache_plru_e300} est tiré du manuel
 de   référence    du    processeur    e300,    utilisé    dans    les    power    quicc    2    pro.
 
 \begin{figure}
@@ -777,14 +779,14 @@ de   référence    du    processeur    e300,    utilisé    dans    les    power  
 
 \paragraph{\index{Cache!Segmented-LRU}Segmented LRU}
 L'algorithme SLRU utilise deux segments de caches complémentaires, dont les cellules sont ordonnées de
-la dernière utilisée (MRU) à la plus anciennement utilisée (LRU) :
+la dernière utilisée à la plus anciennement utilisée :
 
 \begin{itemize}
 \renewcommand{\labelitemi}{\textbullet}
-\item Le premier segment, nommé {\it probationary segment}, est celui sur lequel sont mises les données
+\item Le segment probatoire, ({\it probationary segment}), qui est celui sur lequel sont mises les données
 mémoire, en cas de cache miss. C'est également le seul segment où des données peuvent être retirées
 du cache.
-\item Le second segment, nommé {\it protected segment}, contient la liste des cellules de cache ayant
+\item Le segment protégé, ({\it protected segment}), qui contient la liste des cellules de cache ayant
 été accédées au moins deux fois.
 \end{itemize}
 Le schéma \ref{fig:slru_1} montre ainsi que l'algorithme de cache fait une différence entre des données
@@ -804,9 +806,9 @@ accédées à faible fréquence et des données accédées régulièrement.
 
 \paragraph{}
 En effet, lorsqu'une cellule est accédée une seconde fois après un premier cache miss, celle-ci  est
-transférée  sur  le  segment  protégé,  en  tête  de  liste  coté  MRU   (Most   Recently   Used).\\
+transférée  sur  le  segment  protégé,  en  tête  de  liste.\\
 Cela a pour conséquence, si le segment protégé est plein, de faire descendre la cellule la plus anciennement
-accédée sur le segment probatoire, en tête de liste coté MRU, ceci afin de donner une deuxième chance à
+accédée sur le segment probatoire. Elle est alors positionnée en tête de liste, ceci afin de donner une deuxième chance à
 toute donnée accédée au moins deux fois. Lorsque le segment probatoire est plein et que de nouvelles
 données y sont intégrées, que ce soit via un déplacement d'une cellule du segment protégé ou du fait d'un
 cache miss, la cellule la moins récemment utilisée et écrasée.
@@ -828,5 +830,31 @@ Lors d'un cache miss, la cellule utilisée pour charger les données mémoire est c
 utilisé le moins fréquemment. En cas d'égalité de fréquence, l'algorithme LRU est utilisé pour départager
 les cellules.
 
+\subsubsection{Synthèse}
 
-
+\paragraph{}
+La compatibilité des différents algorithmes de cache vu ici est étudié dans le Chapitre \ref{sec:soacache_wcet}.
+Dans le cadre de ma thèse, je m'appuie sur du matériel existant, de type
+PowerPC pour des raison de certifiabilité. En effet, les
+architecture PowerPC sont celles ayant le moins de bugs matériels référencés
+parmi les grandes familles (ARM, PowerPC, x86 et Sparc). Elles ont comme bonne
+propriété d'allier une consommation raisonnable à une de bonnes performances.
+Aujourd'hui, les contrôleurs de caches utilisés par les c{\oe}urs PowerQuicc
+sont de type Pseudo-LRU, comme vu plus haut. Les c{\oe}urs e500mc, succédants
+au c{\oe}urs e300 des PowerQuicc 2, fournissent de plus plusieurs propriétés
+intéressantes, dans les cadre des archtiectures QorIQ de Freescale
+\cite{QorIQP4080}:
+\begin{itemize}
+  \item La capacité de dériver une partie du contrôleur de cache L2 en mémoire
+    SRAM utilisable par le logiciel
+  \item Le support du {\it secure boot}, qui permet, via l'injection d'une
+    clef de chiffrement dans une mémoire au travers de fusibles à usage
+    unique, d'assurer l'intégrité des différents éléments de la chaîne de boot
+    (bootloader, puis noyau du système d'exploitation).
+  \item La présence de PAMU (Peripherical Access Management Unit) dont le but
+    est de permettre au logiciel d'injecter une politique de filtrage des accès
+    des différents composants matériels initiateurs sur le bus.
+\end{itemize}
+Les mécanismes de secure boot et de PAMU, du fait de leur récente intégration
+et pour des raisons de confidentialité liés au travaux de Thales autour de
+leur usage, ne sont pas étudié dans ma thèse.
