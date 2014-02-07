@@ -536,9 +536,9 @@ plusieurs niveaux:
 \begin{itemize}
   \item Via l'usage d'une architecture de type MLS (MultiLevel Security),
     intégrant des éléments logiciels de confiance en coupure entre ces deux
-    domaines. Ces éléments logiciels doivent être certifiable et performants,
+    domaines. Ces éléments logiciels doivent être certifiables et performants,
     et sont donc définis comme des éléments simples devant répondre à une
-    seule fonction. Ces éléments sont nommés dans ma thèse des moniteurs de
+    seule fonction. Dans ma thèse, j'appelle ces éléments des moniteurs de
     sécurité.
   \item Via la prise en compte de la problématique de canaux cachés et
     canaux auxiliaires, mécanismes permettant de faire transiter de
@@ -547,7 +547,7 @@ plusieurs niveaux:
     permet, via des mesures de temps d'exécution, de récupérer de l'information
     sur le comportement d'un autre logiciel exécuté sur le même CPU. Afin de
     répondre à cette problématique, nous avons proposé une solution \cite{thierry2011toward}
-    permettant de mieux contrôleur le comportement du cache L1, afin de
+    permettant de mieux contrôler le comportement du cache L1, afin de
     contrecarrer cette attaque.
 \end{itemize}
 
@@ -560,7 +560,7 @@ définir une méthode pour déterminer l'ordonnançabilité de tâches temps-réel
 sur une base d'ordonnancement TDM, nous avons formalisé les propriétés
 nécessaires au respect des latences \cite{thierry2011real} permettant de
 définitir la taille des slots temporels du TDM. Cette formalisation est
-décrite dans le Chapitre \ref{sec:hierarchicalrt}
+décrite dans le Chapitre \ref{sec:hierarchicalrt}.
 
 \paragraph{}
 Les principales exigences des systèmes Systroniques sont des exigences de
@@ -568,15 +568,15 @@ poids, de volume et de consommation. Leur impact principal est la limitation
 de la puissance processeur embarquée, impactant potentiellement
 l'ordonnançabilité de l'ensemble des tâches lorsque les calculs de coûts
 d'exécution sont pessimistes. Afin de pouvoir intégrer à la fois des tâches
-fortement critiques et des tâches plus faiblement critique, il faut prévoir,
+fortement critique et des tâches plus faiblement critique, il faut prévoir,
 dans le cadre de l'intégration de l'ensemble des tâches, de potentiels
 débordements de la part des tâches très critique. On s'appuie sur un ordonnancement à
 criticité mixte. Afin de pouvoir gérer au mieux cette problématique,
  une étude a été faite \cite{santy2012relaxing} afin de:
 \begin{itemize}
   \item réduire les contraintes du changement de niveau de criticité, afin de
-  limiter le nombre de taches devant être désactivées
-  \item Déporter au maximum le changement de niveau criticité, au travers de
+  limiter le nombre de tâches devant être désactivées
+  \item Déporter au maximum le changement de niveau de criticité, au travers de
   l'intégration de la marge de tolérance \cite{bougueroua_george_midonnet}
   sur les durées de dépassement des WCET
   \item Formaliser l'instant où le niveau de criticité peut être réduit
@@ -591,9 +591,9 @@ effectuées \cite{etfa13}. Trois moniteurs de sécurité ont été réalisés:
 \begin{itemize}
   \item Une diode logicielle garantissant un transfert de données à sens unique
   \item Un filtre DPI (Deep Packet Inspection) pour valider le contenu des
-    données transitant
+    données en transit
   \item Un émetteur périodique, afin de décorréler le profil de flux reçu du
-    profil de flux émit, pour éviter un canal caché sur l'étude de ce profil.
+    profil de flux émis, pour éviter un canal caché sur l'étude de ce profil.
 \end{itemize}
 La fonction diode a également été implémentée dans le cadre d'une maquette répondant à
 l'ensemble des exigences sécuritaires (architecture MLS, compartimentation
