@@ -207,6 +207,18 @@ non-certifiable). On leur impose alors une exigence d'{\it inviolabilité},
 comme décrite dans les exigences générales des systèmes MILS. Ces dernières
 sont rappelées dans le Chapitre \ref{sec:mils} 
 
+\paragraph{}
+Lorsque l'on s'appuie sur une architecture de type compartimentation stricte
+de fonctions exécutées de manière autonomes (comme par exemple via des
+technologies de virtualisation), la solution peut être compatible du principe
+de certification par composition.
+\begin{definition}
+On appelle certification par composition une principe permettant, lorsque la
+TCB est non modifiée, de ne certifier que les nouveaux composants
+venant s'appuyer sur cette dernière. Il n'est alors pas nécessaire de
+certifier à nouveau l'ensemble de l'architecture logicielle, TCB comprise.
+\end{definition}
+
 \section{Principes généraux des systèmes temps réel}
 
 \subsection{Rappels sur les politiques d'ordonnancement}
