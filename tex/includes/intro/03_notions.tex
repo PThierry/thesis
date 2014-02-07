@@ -28,22 +28,22 @@ plus élevé :
     lequel aucune peine n'est définie dans le code pénal en cas de non-respect
     des exigences de confidentialité associées.
   \item Confidentiel Défense (CD). Premier niveau impliquant un risque pénal. Ce
-    niveau peut être présent jusque dans les véhicules blindés positionné sur
+    niveau peut être présent jusque dans les véhicules blindés positionnés sur
     le théâtre d'opération.
   \item Secret Défense (SD). Ce niveau est en général présent jusque dans les
-    centre de contrôle militaire locaux au théâtre d'opération. Il s'agit des
-    centres de contrôle militaire déployés dans les pays en guerre dans les
+    centres de contrôle militaires locaux au théâtre d'opération. Il s'agit des
+    centres de contrôle militaires déployés dans les pays en guerre dans les
     bâtiments civils protégés (type aéroport) ou dans des bâtiments militaires
-    proche de la zone de conflit (frégate, porte-avions).
+    proches de la zone de conflit (frégate, porte-avions).
   \item Très secret défense (TSD). Plus haut niveau de sécurité.
 \end{itemize}
-Il existe de plus un grand nombre de niveaux de confidentialité lié à l'OTAN
+Il existe de plus un grand nombre de niveaux de confidentialité liés à l'OTAN
 (Organisation du Traité de l'Atlantique Nord, NATO en anglais), ou à diverses organisations
 impliquant une force armée. Il existe ainsi les niveaux Nato Restricted (NR),
 Nato Confidential (NC), Nato Secret (NS) et encore bien d'autres niveaux. Il
 existe une problématique claire de comparaison des niveaux France avec les
 niveaux OTAN. Ainsi, peut-on transférer des données du niveau NS au niveau SD
-? Cette problématique est encore aujourd'hui traité au cas par cas.
+? Cette problématique est encore aujourd'hui traitée au cas par cas.
 
 \paragraph{}
 Lorsqu'un niveau de confidentialité est mis en place, c'est au travers d'un
@@ -51,7 +51,7 @@ système d'information respectueux d'une politique de sécurité donnée. Cette
 politique de sécurité (nommée PSSI - Politique de Sécurité d'un Système
 d'Information) définit des exigences de sécurité pour assurer la
 confidentialité, l'intégrité et la disponibilité (au sens sécuritaire du
-terme) du domaine. Ces exigences sont mise en place sous forme:
+terme) du domaine. Ces exigences sont mises en place sous forme:
 \begin{itemize}
   \item d'un choix d'architecture réseau, logicielle et matérielle
   \item de la définition d'algorithmes de chiffrements spécifiques et de
@@ -80,7 +80,7 @@ est supérieur à celui du domaine lui-même. Ainsi, faire
 transiter des données de niveau Confidentiel Défense dans un domaine de niveau
 Diffusion Restreinte ne peut être fait que si ces données sont préalablement
 noircies.\\
-Noircir des données implique en général un chiffrement de ces dernière, mais
+Noircir des données implique en général un chiffrement de ces dernières, mais
 pas seulement. Le profil de flux peut être modifié afin de rendre difficile
 la détection du type de communication sur la base de son profil. Du bruit peut
 ainsi être généré et du {\it padding} incorporé afin d'empêcher toute déduction sur
@@ -92,22 +92,27 @@ problématique rouge/noir. On la retrouve principalement dans les réseaux radio
 militaires, mais reste un principe général applicable à toute interconnexion
 de réseaux militaires.
 
-\subsubsection{niveau de confidentialité et droit d'en connaître}
-\paragraph{}
+\subsubsection{Niveaux de confidentialité et droit d'en connaître}
+
+\begin{definition}
 On appelle droit d'en connaître l'ensemble de connaissances minimum suffisant
 pour un sujet (une personne ou encore un processus logiciel) pour mener à bien
-une tâche. Ainsi, une personne ayant une habilitation Confidentiel Défense sur
+une tâche.
+\end{definition}
+
+\paragraph{}
+Ainsi, une personne ayant une habilitation Confidentiel Défense sur
 un projet donné n'a pas besoin pour autant de connaître l'ensemble des
 informations classifiées Confidentiel Défense de ce dernier. On lui fournit alors
 uniquement les informations nécessaires à son travail, appelé droit d'en
-connaître. Le principe est le même pour les processus logiciel faisant du
+connaître. Le principe est le même pour les processus logiciels faisant du
 traitement sur des données d'un niveau de confidentialité donné.
 
 \subsection{Fuite d'informations: Canaux cachés et canaux auxiliaires}
 
 \paragraph{}
 Assurer la confidentialité est une tâche complexe. En effet, limiter l'accès à
-la donnée n'est pas suffisant pour assurer sa protection. En effet, il est
+la donnée n'est pas suffisant pour assurer sa protection. Ainsi, il est
 possible de récupérer des informations sur la donnée de plusieurs manières,
 sans y accéder directement. On parle alors de canal auxiliaire ou de canal
 caché, selon la méthode.
@@ -125,8 +130,8 @@ des différents éléments d'un processeur \cite{sidechancube} ou via l'étude de
 l'impact des caches processeurs sur le comportement temporel de
 l'algorithmique \cite{sidechan}, de récupérer des données sur la clef
 de chiffrement utilisée.\\
-Le risque lié au canal auxiliaire est connu depuis longtemps et ont permis de
-démontrer que des algorithmes cryptographique réputés sûr restent fragiles à
+Le risque lié au canal auxiliaire est connu depuis longtemps et a permis de
+démontrer que des algorithmes cryptographiques réputés sûrs restent fragiles à
 ce type d'attaque. C'est le cas par exemple d'AES \cite{aes} ou de
 Serpent \cite{serpent}.
 
@@ -135,20 +140,33 @@ Serpent \cite{serpent}.
 \paragraph{}
 Le principe d'un canal caché consiste en la capacité à utiliser la bande
 passante d'un canal logiciel ou matériel pour faire transiter des données
-pour lesquels il n'est pas initialement prévu. L'usage d'un canal caché
+pour lesquelles il n'est pas initialement prévu. L'usage d'un canal caché
 implique un usage volontaire de part et d'autre pour émettre les données et
 pour les recevoir. Il est donc invasif, contrairement aux canaux auxiliaires.\\
-Un exemple typique est de s'appuyer sur la période inter trame d'un flux
+Un exemple typique est de s'appuyer sur la période intertrame d'un flux
 réseau donné pour fournir une information \cite{berk2005detection}. En faisant varier la période, il
-est possible d'émettre de l'information, qui peut être ainsi interprété par un
+est possible d'émettre de l'information, qui peut être ainsi interprétée par un
 récepteur. De manière générale, les canaux cachés permettent l'émission de
 données de faible taille, car leur débit est en général très faible. Ils sont
-cependant tout à fait suffisant pour faire transiter des données de type
-cryptographie (clefs symétrique et/ou asymétrique) ou des messages courts.\\
+cependant tout à fait suffisants pour faire transiter des données de type
+cryptographie (clefs symétriques et/ou asymétriques) ou des messages courts.\\
 Le principe d'exploitation d'un canal caché est également utilisé dans les
 systèmes virtualisés pour transmettre de l'information entre les machines
 virtuelles. C'est en général le comportement des contrôleurs de caches qui
 sont alors exploités \cite{xu2011exploration}\cite{zhang2012cross}.
+
+\paragraph{}
+Lorsque un transfert de données non autorisé a lieu entre deux domaines de
+sécurité, il est important de pouvoir en imputer la responsabilité. On parle
+alors d'imputabilité.
+
+\begin{definition}
+On appelle imputabilité la garantie de traçabilité entre une action effectuée
+sur le système et l'identité de l'utilisateur responsable de cette action.
+\end{definition}
+
+Du fait des contraintes légales liées aux niveaux de confidentialité, le besoin
+d'imputabilité est omniprésent dans les systèmes militaires.
 
 \subsection{Ce que cible la sécurité logicielle}
 
@@ -166,17 +184,18 @@ comme par exemple les systèmes DAC (Discretionary Access Control), MAC
 
 \paragraph{}
 La complexité du système dépend du besoin de certifiabilité. On définit
-initialement une {\it TOE} (Target Of Evaluation) \cite{cnssi_4009}, intégrant ce qui, dans le
+initialement une cible d'évaluation (couramment appelée {\it TOE}, pour Target Of Evaluation)
+\cite{cnssi_4009}, intégrant ce qui, dans le
 système cible, doit être évalué, ainsi que le niveau de l'évaluation, au sens
 des Critères Communs. Le niveau de sécurité du TOE est donc dépendant du niveau
 souhaité. Les systèmes Linux bien configurés en terme de sécurité peuvent
 atteindre un niveau de certification de l'ordre de l'EAL 4. Il faut cependant
-prendre soin d'étudier précisément quel est la TOE. En effet, le niveau de
+prendre soin d'étudier précisément quelle est la TOE. En effet, le niveau de
 sécurité d'un système certifié dans le cadre d'un fonctionnement autonome n'est plus assuré
 si ce dernier est connecté à un réseau.
 
 \paragraph{}
-Associé à la TOE, on définit la {\it Trusted Computing Base} (TCB) \cite{cnssi_4009}. Cette
+Associé à la TOE, on définit le socle de confiance (couramment appelé {\it Trusted Computing Base} (TCB) \cite{cnssi_4009}. Cette
 notion définit l'ensemble des éléments logiciels et matériels de
 la solution cible qui sont considérés comme de confiance. La corruption de
 tout élément de cet ensemble génère en conséquence une faille dans les
@@ -185,16 +204,16 @@ non seulement être certifiables au plus haut niveau souhaité dans le cadre de
 l'évaluation du système, mais doivent être également protégés contre toute
 corruption extérieure (comme par exemple à partir d'un élément
 non-certifiable). On leur impose alors une exigence d'{\it inviolabilité},
-comme décrit dans les exigences générales des systèmes MILS, décrit dans le
-Chapitre \ref{sec:mils} 
+comme décrite dans les exigences générales des systèmes MILS. Ces dernières
+sont rappelées dans le Chapitre \ref{sec:mils} 
 
 \section{Principes généraux des systèmes temps réel}
 
 \subsection{Rappels sur les politiques d'ordonnancement}
 
 \paragraph{}
-Il existe différents ordonnanceurs temps réel. Il existe deux grandes familles
-d'ordonnanceurs, les ordonnanceurs en-ligne et hors ligne.
+Il existe différents ordonnanceurs temps réel. Ces derniers sont divisés en deux grandes familles
+d'ordonnanceurs, les ordonnanceurs en ligne et hors ligne.
 
 \paragraph{L'ordonnancement en ligne}
 Les choix d'ordonnancement se font durant l'exécution, en fonction de la liste
@@ -203,15 +222,15 @@ relatives).
 
 \paragraph{L'ordonnancement hors ligne}
 La politique d'ordonnancement est définie par avance. Elle est donc optimisée pour un cas particulier de jeu
-de taches, mais n'est pas réactive en cas d'impact non prévu sur la dynamique d'exécution (effets de caches, de surcharge
+de tâches, mais n'est pas réactive en cas d'impact non prévu sur la dynamique d'exécution (effets de caches, de surcharge
 de bus, WCET trop grand ou trop faible, etc).
 
 \paragraph{}
 Parmi tous ces ordonnanceurs, certains peuvent préempter un travail en cours
-d'exécution avant sa terminaison. On parle alors d'ordonnancement préemptifs. A
+d'exécution avant sa terminaison. On parle alors d'ordonnancement préemptif. A
 l'inverse, si un travail en cours d'exécution ne peut être arrêté avant sa
 terminaison, on parle d'ordonnancement non-préemptif. La préemption peut être
-liée à un paramètre temporel (time-driven) ou évènementiel (event-driven).\\
+liée à un paramètre temporel (time-driven) ou événementiel (event-driven).\\
 Dans le cadre de ma thèse, je cible deux ordonnanceurs:
 \begin{itemize}
 \item L'ordonnancement TDM (hors ligne, préemptif de type time-driven)
@@ -229,8 +248,8 @@ sécurité. Cependant, il arrive qu'un même domaine de sécurité soit
 physiquement séparé en plusieurs sous-systèmes qui, pour communiquer, doivent
 traverser des domaines de sécurité différents. Les passerelles
 d'interconnexion doivent alors assurer le {\it noircissement} des données à
-faire transiter. L'action de noircissement consiste à assurer la
-confidentialité des données de diverses manière afin d'assurer que les
+faire transiter. L'action de noircir consiste à assurer la
+confidentialité des données de diverses manières afin d'assurer que les
 domaines par lesquels transitent ces données ne soient pas aptes à en tirer
 une information dont le niveau de sécurité est supérieur au leur.\\
 De manière générale, le noircissement implique un chiffrement des données et
@@ -240,15 +259,15 @@ problématique de canal auxiliaire dérivant du profil de flux initial \cite{berk2
 \section{La virtualisation}
 
 \paragraph{}
-Il existe plusieurs type de virtualisation, en fonction de l'architecture
+Il existe plusieurs types de virtualisation, en fonction de l'architecture
 logicielle et parfois matérielle qui entre en compte dans la solution.
 
 \subsection{Concepts liés à la virtualisation et la compartimentation}
 
 \begin{definition}
-On appelle machine virtuelle (ou VM, Virtual Machine), est une implémentation
+On appelle machine virtuelle (ou VM, Virtual Machine) une implémentation
 logicielle d'une machine (i.e d'un ordinateur) qui exécute des programmes
-comme une machine physique. Il existe deux famille de machines virtuelles:
+comme une machine physique. Il existe deux familles de machines virtuelles:
 \begin{itemize}
 \item Une machine virtuelle système, représentant une plateforme matérielle
 complète et qui supporte l'exécution d'un système d'exploitation.
@@ -266,7 +285,7 @@ ou plusieurs machines virtuelles.
 
 \begin{definition}
 On appelle Environnement Virtuel (ou VE, Virtual Environment) un compartiment
-logiciel en charge d'exécuter un environnement logiciel complet, a l'exception
+logiciel en charge d'exécuter un environnement logiciel complet, à l'exception
 du noyau. C'est le cas par exemple des technologies OpenVZ ou LXC
 \cite{bhanage2011experimental}. Une telle architecture logicielle ne nécessite
 pas de moniteur de machine virtuelle (ou VMM).
@@ -300,34 +319,34 @@ Pour répondre à ce besoin, il existe trois solutions:
 \subsubsection{Principe de la virtualisation complète}
 
 \paragraph{}
-Historiquement la plus ancienne, elle fut formalisée en terme d'exigences par
-G.J. Popek et R.P. Goldbergi \cite{popek} dès 1974. Le principe est de pouvoir
+Historiquement la plus ancienne, elle fut formalisée sous forme d'exigences par
+G.J. Popek et R.P. Goldberg \cite{popek} dès 1974. Le principe est de pouvoir
 exécuter un environnement logiciel dans une machine virtuelle tout en
-assurant que son comportement est identique à une exécution native.
+assurant que son comportement soit identique à une exécution native.
 L'environnement invité n'est pas modifié, et c'est au travers des exceptions
-processeurs dues à l'exécution en tant qu'environnement invité que le moniteur
+processeur dues à l'exécution en tant qu'environnement invité que le moniteur
 de machine virtuelle réagit à des traitements qui ne peuvent être exécutés
 directement par l'environnement invité sans impact sur la sécurité et la
 sûreté du système.\\
 Dans leur Article \cite{popek}, G.J. Popek et R.P. Goldberg  décrivent les
 incompatibilités du matériel avec ce type de principe. En effet, seules les instructions générant
 des exceptions processeur peuvent être substituées par le moniteur de machine
-virtuelles. Les
+virtuelle. Les
 instructions sensibles \cite{popek} ne générant pas d'exception sont une problématique
-fortes car ces dernières peuvent s'exécuter sans que le moniteur de machines
-virtuelles en soit informé. La conséquence peut être plus ou moins grave car
+fortes car ces dernières peuvent s'exécuter sans que le moniteur de machine
+virtuelle en soit informé. La conséquence peut être plus ou moins grave car
 ces dernières impactent la sûreté et la sécurité du système.
 
 \paragraph{}
 Afin de pouvoir virtualiser des environnements logiciels sans l'aide du matériel
 et sans modifier l'environnement à virtualiser, plusieurs solutions ont été
-mises en place, entre autre par VMWare. Dans ses
+mises en place, entre autres par VMWare. Dans ses
 solutions, ce dernier est capable de déterminer les instructions sensibles qui seront
 demandées par l'environnement invité et de modifier ces dernières afin
 d'injecter des traitements simulés en lieu et place. Ce type de solution est
 transparent pour l'environnement invité, mais génère des variations dans le
 coût d'exécution de ces traitements, du fait de la simulation. La mesure de
-ces variations par le logiciel font parties des mécanismes lui permettant de détecter que
+ces variations par le logiciel fait partie des mécanismes lui permettant de détecter que
 son environnement d'exécution est virtualisé.
 
 \subsubsection{Principe de la paravirtualisation}
@@ -358,22 +377,22 @@ terme d'environnements paravirtualisables.
 Définie initialement par IBM, puis reprise depuis le début des années 2000 par
 Intel et AMD, la virtualisation matérielle consiste à intégrer dans le
 matériel des aides à la virtualisation. Le but est de limiter la complexité du
-moniteur de machines virtuelles, ce dernier reposant sur des instructions
+moniteur de machine virtuelle, ce dernier reposant sur des instructions
 privilégiées de configuration du matériel pour gérer des environnements
 matériels d'exécution des machines virtuelles séparés. Un exemple de solution
 est l'architecture VT-d d'Intel, proposant des structures de configuration et
-d'hébergement matérielles nommée VMCS (Virtual Machine Control Structure) qui
-dupliquent les registres sensibles comme le PDBR. Lorsque le moniteur de
+d'hébergement matérielles nommées VMCS (Virtual Machine Control Structure) qui
+dupliquent les registres sensibles du processeur. Lorsque le moniteur de
 machine virtuelle ordonnance l'environnement virtualisé, il indique au
 processeur le VMCS à utiliser en lieu et place des registres utilisés
-par le moniteur lui même. La solution s'appuie également sur des élément de
-filtrage d'accès au périphériques (nommés I/OMMU pour Intel, SMMU pour ARM
+par le moniteur lui-même. La solution s'appuie également sur des éléments de
+filtrage d'accès aux périphériques (nommés I/OMMU pour Intel, SMMU pour ARM
 Cortex A15, A53 et A57). Il n'existe à ce jour aucune norme et chaque fondeur possède
 ses propres instructions.\\
 Cette solution n'est pas considérée ici car incompatible avec les exigences de
 portabilité.
 
-\subsection{Les solution de virtualisation type II}
+\subsection{Les solutions de virtualisation type II}
 
 \paragraph{}
 Les solutions de virtualisation type II s'appuient sur la présence d'un hôte qui
@@ -405,13 +424,13 @@ l'ordonnanceur de l'environnement hôte).
 \subsection{Les solutions de virtualisation applicative}
 
 \paragraph{}
-Les solutions de virtualisation applicative sont parentes des solution de
-virtualisation de type II dans le sens où elles s'appuie sur un hôte.
+Les solutions de virtualisation applicative sont parentes des solutions de
+virtualisation de type II dans le sens où elles s'appuient sur un hôte.
 Cependant, celles-ci ne nécessite pas la présence de noyau invité. Elles
 permettent d'instancier des Environnements Virtuels dont le noyau est partagé
-entre ces derniers ainsi qu'avec l'hôte. La gestion de
-l'ordonnancement des taches des VEs est géré directement par
-l'ordonnanceur de l'hôte, sous forme de groupes de tâches autonomes. Ce type
+entre ces derniers ainsi qu'avec l'hôte.
+L'ordonnancement des tâches des VEs est géré directement par
+l'ordonnanceur de l'hôte, sous forme d'un groupe de tâches autonome. Ce type
 d'ordonnancement se rapproche ainsi du principe d'ordonnancement hiérarchique
 qui sera décrit dans le Chapitre \ref{sec:hierarchique}.\\
 Un exemple de solution de virtualisation applicative est la solution LXC
@@ -436,22 +455,23 @@ vision du stockage de masse sont séparés.
 \paragraph{}
 Un applicatif, construit dans un fichier binaire lors de l'édition de lien, possède un certain nombre de sections
 servant de conteneur à des données différentes, et ayant en conséquence des propriétés de sécurité (en terme d'accès)
-également différente. De ce fait, lors du déploiement de ces différentes section en mémoire vive, il est nécessaire
+également différentes. De ce fait, lors du déploiement de ces différentes
+sections en mémoire vive, il est nécessaire
 de   considérer   pour   chacune   de   ces   sections   des    propriétés    d'accès    spécifiques.
 
 \paragraph{}
 Dans un fichier binaire au format ELF \cite{DefElf}, il existe plusieurs
 sections, dont entre autres:
 \begin{itemize}
-  \item la section .text, contenant la partie exécutable du programme
-  \item la section .rodata, contenant les données en lecture seule (e.g. les chaînes de
+  \item la section {\tt .text}, contenant la partie exécutable du programme
+  \item la section {\tt .rodata}, contenant les données en lecture seule (e.g. les chaînes de
     caractères)
-  \item la section .data, contenant les donneés en lecture et écriture
+  \item la section {\tt .data}, contenant les données en lecture et écriture
 \end{itemize}
 
 \paragraph{}
 Lorsque plusieurs applicatifs s'exécutent en concurrence, il est
-important de les cloisonner dans des environnement logiques séparés, ceci
+important de les cloisonner dans des environnements logiques séparés, ceci
 afin d'éviter que ces derniers puissent interagir sans contrôle, par simple
 accès à la mémoire physique.
 
@@ -464,14 +484,14 @@ Ainsi,  ils  connaissent  leur  position  en mémoire,   et    ont    une    visi
 sur    l'ensemble    de    la    mémoire    physique.\\
 De ce fait, il leur est possible d'accéder au contenu des autres applicatifs en  cours  d'exécution.
 Il devient ainsi aisé d'espionner les sections d'autres logiciels, comme les
-section .data ou .rodata, dans  lesquelles   il   est   possible   de   récupérer   par   exemple   des   mots   de   passe.\\
+sections .data ou .rodata, dans  lesquelles   il   est   possible   de   récupérer   par   exemple   des   mots   de   passe.\\
 De plus, l'accès à la pile des autres applicatifs peut permettre de dériver
 leur exécution vers un bloc de code spécifique, en remplaçant l'adresse de la fonction parente par une adresse  dont  on
 maîtrise le contenu. Du fait que la pile est par essence accessible en écriture, tous les processus
 peuvent modifier les champs d'un processus donné en mode {\it flat memory}, à partir  du  moment  où
 l'adresse physique de sa pile est connue.
-\item Décomposition de la mémoire physique en segment.  Il s'agit du mode  de  segmentation  présent
-uniquement sur les processeur de la famille x86.  Ce mode étant aujourd'hui remplacé  par  le
+\item Décomposition de la mémoire physique en segments.  Il s'agit du mode  de  segmentation  présent
+uniquement sur les processeurs de la famille x86.  Ce mode étant aujourd'hui remplacé  par  le
 système de pagination, il ne sera pas décrit ici.
 \item En s'appuyant sur une abstraction de la mémoire physique, appelé {\it mémoire virtuelle}. On
 parle alors de mode dit de  {\it  pagination  mémoire}.   Un  processus  donné  possède  son  propre
@@ -507,20 +527,21 @@ création d'un processus, seules les adresses physiques correspondant  à  ces  pr
 intégrées à l'espace d'adressage, interdisant à ce dernier  d'accéder  aux  données  de  tout  autre
 processus.
 \item De plus, la gestion de la fragmentation de la mémoire centrale, dépendant des  allocations  et
-désallocations successives de la mémoire, est rendue opaque en mémoire virtuelle. Des espace mémoire
+désallocations successives de la mémoire, est rendue opaque en mémoire
+virtuelle. Des espaces mémoires
 physiques disjoints peuvent être positionnés de manière contigüe dans l'espace
 d'adressage virtuel,  faisant croire  au  processus  que  ses  données  sont
 contigües  sans  pour autant  qu'elles  le   soient.
 \item Le contrôleur MMU permet d'associer à chaque page mémoire des propriétés
-en terme d'accès:\\
-\begin{itemize}
-  \item Niveau d'exécution minimum (mode administrateur ou utilisateur)
-  \item droits d'accès (lecture, écriture et exécution)
-\end{itemize}
+en terme d'accès:
+  \begin{itemize}
+    \item Niveau d'exécution minimum (mode administrateur ou utilisateur)
+    \item Droits d'accès (lecture, écriture et exécution)
+  \end{itemize}
 Ces droits d'accès permettent, dans un espace d'adressage donné, de limiter
 les accès à chaque page. Ainsi, les sections .rodata ou .text du processus ne
 sont pas accessibles en écriture. Une telle protection réduit la surface
-d'attaque, rendant plus difficile la corruption de de l'application.
+d'attaque, rendant plus difficile la corruption de l'application.
 \end{itemize}
 La Figure \ref{fig:mmu} décrit le principe général de pagination entre mémoire
 physique et mémoire virtuelle.
@@ -536,8 +557,9 @@ d'adressage des processus}
 Les attaques entre les différents processus ne sont pas les  seules  possibles.   Il  est  également
 possible de corrompre le comportement d'un processus donné, pour lui faire faire un  traitement  non
 prévu.\\
-Une des attaques les plus classiques est l'injection  de  {\it  shellcode}.   L'attaque  consiste  à
-intégrer quelque part dans l'espace d'adressage du processus  une  suite  d'instructions,  avant  de
+Une des attaques les plus classiques est l'injection  de  {\it  shellcode}.
+Un shellcode est un morceau de code binaire intégré sous forme d'une chaîne de
+caractère. Il est utilisé afin d'être intégré quelque part dans l'espace d'adressage du processus,  avant  de
 corrompre   sa   pile   pour   provoquer   un   branchement   vers   ce    bloc    d'instructions.\\
 Cette attaque est donc faite en deux temps, en positionnant des instructions
 en  mémoire puis en forçant le branchement. En général, les shellcodes sont placés dans la pile,  en
@@ -579,7 +601,8 @@ data},   pour   le   reste   des    données.
 \item Le cache niveau 2, de taille plus  conséquente,  mais  dont  l'accès  est  moins  rapide  que  le
 cache L1. Ce cache n'est pas spécialisé.
 \item Le cache niveau  3,  de  taille encore plus  grande. Ce dernier est en
-  général partagé  entre  les  c{\oe}urs  sur  les architectures multi-c{\oe}urs. Ce cache n'est pas spécialisé. Ce dernier n'est pas toujours présent.
+  général partagé  entre  les  c{\oe}urs  sur  les architectures
+  multi-c{\oe}urs. Ce cache n'est pas spécialisé et n'est pas toujours présent.
 \end{enumerate}
 
 \begin{table}[h]
@@ -640,7 +663,7 @@ Il existe plusieurs algorithmes de gestion du cache, souvent de type
 probabiliste. De récents travaux de recherche tendent à montrer que ces caches
 peuvent être pris en compte dans les architectures temps réel \cite{guan2012wcet}. Cependant, les systèmes
 temps réel très  contraints d'aujourd'hui,  comme  dans  l'aviation  ou  le  spatial,
-utilisent encore beaucoup des architectures avec caches désactivés.
+utilisent encore beaucoup d'architectures avec caches désactivés.
 
 \subsubsection{Positionnement du cache}
 
@@ -670,9 +693,9 @@ centrale. Le processeur passe donc par le cache pour l'accès mémoire.\\
 Le principe est le suivant :
 \begin{itemize}
 \renewcommand{\labelitemi}{\textbullet}
-\item Le processeur démarre un cycle de lecture
+\item Le processeur démarre un cycle de lecture.
 \item Si  le  cache  possède  la  donnée  en  local  (cache  hit),   il   répond   au   processeur.
-\item Si le cache ne possède pas la donnée, il transfert la requête de lecture sur le bus. La mémoire
+\item Si le cache ne possède pas la donnée, il transfère la requête de lecture sur le bus. La mémoire
 centrale renvoie la donnée, qui est mise en cache en même temps qu'elle est renvoyé  au  processeur.
 \end{itemize}
 
@@ -682,20 +705,20 @@ centrale renvoie la donnée, qui est mise en cache en même temps qu'elle est renv
 \label{fig:cache_look_through}
 \end{figure}
 
-Cette architecture provoque des cache miss plus long (vérification par le cache avant  de  faire  la
+Cette architecture provoque des cache-miss plus long (vérification par le cache avant  de  faire  la
 requête au contrôleur de bus), mais permet d'utiliser le cache indépendamment
 des autres c{\oe}urs du processeurs (pour un cache local).
 
 \subsubsection{\index{Cache!Consistance}Consistance du cache}
 
 \paragraph{}
-Du fait que le cache contient des duplicatas d'une partie de la mémoire, il est important de s'assurer
+Du fait que le cache contienne des duplicatas d'une partie de la mémoire, il est important de s'assurer
 que la copie  et  l'originale  restent  identiques.   À  défaut,  cela  peut
-entraîner  des  erreurs logicielles,  difficilement  détectables.
+entraîner  des  erreurs logicielles  difficilement  détectables.
 
 \paragraph{}
 La consistance du cache peut être impactée dans différentes situations, comme
-par exemple les suivantes:
+par exemple :
 \begin{itemize}
 \renewcommand{\labelitemi}{\textbullet}
 \item Mise à jour de la mémoire par un contrôleur DMA
@@ -703,8 +726,8 @@ par exemple les suivantes:
 \item Modification de la donnée en cache sur un autre processeur
 \end{itemize}
 
-Il existe différentes méthodes permettant de garantir la consistance des données en caches. En voici
-deux largement utilisées :
+Il existe différentes méthodes permettant de garantir la consistance des
+données en cache, comme par exemple :
 
 \paragraph{\index{Cache!Snooping}Snooping}
 Le snooping consiste en l'espionnage du bus d'adresse, afin de détecter  une  modification  sur  une
@@ -716,12 +739,12 @@ Il y a deux manières de réagir à une détection positive :
 se fait pas nécessairement sur le moment, mais peut être ordonnancé pour s'exécuter au moment du prochain
 accès à cette cellule, ou avant, selon les implémentations.
 \item Désactiver la cellule impactée.  Le prochain accès aux données de cette cellule  provoquera  un
-{\it    cache-miss},    suivi    d'une    recopie    à    partir    de    la    mémoire    centrale.
+cache-miss,    suivi    d'une    recopie    à    partir    de    la    mémoire    centrale.
 \end{itemize}
 
 \paragraph{\index{Cache!Snarfing}Snarfing}
 Le snarfing consiste à associer la détection d'une modification d'une donnée en cache à l'espionnage du
-bus de donnée. En espionnant le bus, il est capable à tout instant de mettre à jour la cellule impactée,
+bus de donnée. En espionnant le bus, il est capable à tout instant de mettre à jour la cellule impactée
 et de maintenir la consistance.
 
 \subsubsection{Synchronisation entre le cache et la mémoire centrale}
@@ -730,20 +753,20 @@ et de maintenir la consistance.
 Lorsque des données sont modifiées en local sur le cache, il est nécessaire de mettre à jour la mémoire
 centrale afin de prendre en compte ce changement.
 
-\paragraph{write-back}
+\paragraph{Write-back}
 Le cache garde en mémoire, pour chaque cellule, son état. Lorsque la cellule est écrasée, ou que le cache
 est  vidé,  les  données  modifiées  localement  sont  synchronisées  avec  la  mémoire  centrale.\\
 La mise à jour de la mémoire centrale n'est pas synchrone avec la modification locale. Cela implique, au
 niveau logiciel, de prévoir les problèmes d'incohérence sur les architectures
 multi-c{\oe}urs ou multi-processeurs, au travers de l'usage des {\it
-  \index{Memory barrier}memory barriers}. Ces dernières ont pour but de
+\index{Memory barrier}memory barriers}. Ces dernières ont pour but de
 fournir des mécanismes de synchronisation entre les différents c{\oe}urs afin
 d'assurer la cohérence d'une donnée partagée entre plusieurs instances logicielles
 exécutées en parallèle.
 L'implémentation des barrières mémoires est dépendante de l'architecture
 matérielle.
 
-\paragraph{write-through}
+\paragraph{Write-through}
 Une écriture sur cache implique une remontée synchrone de la mise à jour de la donnée, afin de maintenir
 une cohérence entre le contenu du cache et la mémoire.
 
@@ -766,9 +789,9 @@ traversée de l'arbre.
 
 \paragraph{}
 Il s'agit d'un algorithme jugé efficace en comparaison au LRU pour les caches dont l'associativité est
-supérieure à 4.  Il est utilisé dans les architectures Intel 486, et dans les architecture  PowerPC,
-comme le PowerQuicc de Freescale \cite{plru}. Le schéma \ref{fig:cache_plru_e300} est tiré du manuel
-de   référence    du    processeur    e300,    utilisé    dans    les    power    quicc    2    pro.
+supérieure à 4.  Il est utilisé dans les architectures Intel 486, et dans les
+architectures PowerPC, comme le PowerQuicc de Freescale \cite{plru}. Le schéma \ref{fig:cache_plru_e300} est tiré du manuel
+de   référence    du    processeur    e300,    utilisé    dans    les PowerQuicc 2 pro.
 
 \begin{figure}
 \input{figures/cache_plru_e300.tex}
@@ -783,10 +806,10 @@ la dernière utilisée à la plus anciennement utilisée :
 
 \begin{itemize}
 \renewcommand{\labelitemi}{\textbullet}
-\item Le segment probatoire, ({\it probationary segment}), qui est celui sur lequel sont mises les données
+\item Le segment probatoire ({\it probationary segment}), qui est celui sur lequel sont mises les données
 mémoire, en cas de cache miss. C'est également le seul segment où des données peuvent être retirées
 du cache.
-\item Le segment protégé, ({\it protected segment}), qui contient la liste des cellules de cache ayant
+\item Le segment protégé ({\it protected segment}), qui contient la liste des cellules de cache ayant
 été accédées au moins deux fois.
 \end{itemize}
 Le schéma \ref{fig:slru_1} montre ainsi que l'algorithme de cache fait une différence entre des données
@@ -811,7 +834,7 @@ Cela a pour conséquence, si le segment protégé est plein, de faire descendre la 
 accédée sur le segment probatoire. Elle est alors positionnée en tête de liste, ceci afin de donner une deuxième chance à
 toute donnée accédée au moins deux fois. Lorsque le segment probatoire est plein et que de nouvelles
 données y sont intégrées, que ce soit via un déplacement d'une cellule du segment protégé ou du fait d'un
-cache miss, la cellule la moins récemment utilisée et écrasée.
+cache miss, la cellule la moins récemment utilisée est écrasée.
 
 \begin{figure}
 \input{figures/slru_3.tex}
@@ -819,8 +842,8 @@ cache miss, la cellule la moins récemment utilisée et écrasée.
 \end{figure}
 
 \paragraph{}
-Cet algorithme fait donc une différence entre les données accédées souvent (au moins deux fois) et les
-données   accédées   rarement   (une   fois)   pendant    leur    durée    de    vie    en    cache.
+Cet algorithme fait donc une différence entre les données souvent accédées (au moins deux fois) et les
+données rarement accédées (une   fois)   pendant    leur    durée    de    vie    en    cache.
 Il  permet  donc  d'optimiser  la  gestion  du  cache  lors   d'accès   mémoire   peu   fréquents.\\
 La  taille  des  deux   segments   est   dépendante   dynamiquement   du   schéma   d'entrée/sortie.
 
@@ -833,17 +856,17 @@ les cellules.
 \subsubsection{Synthèse}
 
 \paragraph{}
-La compatibilité des différents algorithmes de cache vu ici est étudié dans le Chapitre \ref{sec:soacache_wcet}.
+La compatibilité des différents algorithmes de cache vu ici est étudiée dans le Chapitre \ref{sec:soacache_wcet}.
 Dans le cadre de ma thèse, je m'appuie sur du matériel existant, de type
-PowerPC pour des raison de certifiabilité. En effet, les
-architecture PowerPC sont celles ayant le moins de bugs matériels référencés
+PowerPC pour des raisons de certifiabilité. En effet, les
+architectures PowerPC sont celles ayant le moins de bugs matériels référencés
 parmi les grandes familles (ARM, PowerPC, x86 et Sparc). Elles ont comme bonne
-propriété d'allier une consommation raisonnable à une de bonnes performances.
+propriété d'allier une consommation raisonnable à de bonnes performances.
 Aujourd'hui, les contrôleurs de caches utilisés par les c{\oe}urs PowerQuicc
-sont de type Pseudo-LRU, comme vu plus haut. Les c{\oe}urs e500mc, succédants
-au c{\oe}urs e300 des PowerQuicc 2, fournissent de plus plusieurs propriétés
-intéressantes, dans les cadre des archtiectures QorIQ de Freescale
-\cite{QorIQP4080}:
+sont de type Pseudo-LRU, comme vu plus haut. Les c{\oe}urs e500mc, succédant
+aux c{\oe}urs e300 des PowerQuicc 2, fournissent de plus plusieurs propriétés
+intéressantes, dans le cadre des archtiectures QorIQ de Freescale
+\cite{QorIQP4080} :
 \begin{itemize}
   \item La capacité de dériver une partie du contrôleur de cache L2 en mémoire
     SRAM utilisable par le logiciel
@@ -856,5 +879,5 @@ intéressantes, dans les cadre des archtiectures QorIQ de Freescale
     des différents composants matériels initiateurs sur le bus.
 \end{itemize}
 Les mécanismes de secure boot et de PAMU, du fait de leur récente intégration
-et pour des raisons de confidentialité liés au travaux de Thales autour de
-leur usage, ne sont pas étudié dans ma thèse.
+et pour des raisons de confidentialité liés aux travaux de Thales autour de
+leur usage, ne sont pas étudiés dans ma thèse.
