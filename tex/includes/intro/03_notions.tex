@@ -865,11 +865,147 @@ Lors d'un cache miss, la cellule utilisée pour charger les données mémoire est c
 utilisé le moins fréquemment. En cas d'égalité de fréquence, l'algorithme LRU est utilisé pour départager
 les cellules.
 
+\subsection{Les algorithmes de gestion de caches}
+\label{subsec:cachealgo}
+\doMinitoc
+
+\subsubsection{Les caches et la sécurité}
+
+%\subsection{Principes généraux et limitations}
+\paragraph{}
+L'impact des caches processeurs est non-nul sur la sécurisation d'un systèmes lorsque deux domaines de
+sécurités sont ordonnancés sur un même matériel. Cela est encore plus vrai si
+ces deux domaines sont ordonnancés sur un c{\oe}ur processeur.\\
+En effet, la modification de l'état des caches du processeur est induit par le
+comportement des différentes applications en cours d'exécution, générant un
+canal auxiliaire entre ses dernières, comme décrit plus loin.
+
+\paragraph{}
+Dans \cite{percival2005cache}, l'auteur a ainsi démontré qu'il était possible, au travers de
+mesures des coûts d'accès mémoire d'une tâche, de détecter l'impact d'une
+autre tâche exécutée en concurrence, dans le cadre d'un ordonnancement
+préemptif. Cet impact étant variant selon le comportement de cette dernière,
+il est alors possible d'en déduire certaines informations sur l'arbre
+d'exécution associé, et donc sur les choix qui ont été effectués par cette
+tâche. Une telle information est utile si l'attaquant a connaissance du code source
+de la tâche cible, afin d'associer l'arbre d'exécution détecté à une
+succession algorithmes connus. Cette hypothèse est aujourd'hui plus réaliste dans le monde
+de l'open-source. Un tel mécanisme a été montré fonctionnel dans
+\cite{bernstein2005cache}\cite{bonneau2006cache} et dans \cite{banescu2011cache}, où les auteurs
+démontrent la capacité pour une tâche à récupérer des
+informations sur les données d'entrée d'algorithmes cryptographiques utilisées
+par une tâche concurrente, grâce à l'étude de l'arbre d'exécution détecté.
+Dans \cite{bernstein2005cache}, la démonstration a été effectuée dans le cadre de deux tâches
+exécutées de manière simultanée sur un processeur Pentium 4 supportant
+l'hyperthreading. Dans \cite{banescu2011cache}, l'auteur n'impose pas l'usage simultané du c{\oe}ur
+processeur. L'espionnage se fait au travers de l'étude de son propre comportement en terme
+de mesure de temps d'accès mémoire, induit par le comportement de la tâche
+concurrente (grâce à la mesure des caches-miss imprévus).\\
+De manière générale, l'espionnage des algorithmes cryptographique au travers
+des collisions des lignes de caches est facilité par les implémentations des
+algortithmes cryptographiques, ces derniers s'appuyant sur des tables de
+taille fixe présentes en mémoire à des emplacements disjoints. A ce jour, les
+clefs de chiffrement restent donc un élément confidentiel difficile à
+protéger si tout ou partie de l'architecture logicielle est corrompue.
+
+\paragraph{}
+Aujourd'hui, lorsque deux compartiments s'exécutent en concurrence sur un même
+c{\oe}ur processeur, il est d'usage de flusher et réécrire le contenu des cellules des caches à chaque préemption
+des compartiments. On considère ainsi qu'un compartiment donné ne protège pas
+ses propre tâches entre elles, mais que deux compartiments concurrents doivent être
+ordonnancés avec un cache dont le contenu est connu et prédictible.\\
+Avec une telle architecture logicielle, la fonction de sécurité correspondant
+au flush de cache est considérée suffisante. Cette dernière peut en effet être
+bornée dans le temps, et garanti le contenu des cellules du cache lorsque le compartiment
+reprend son exécution.
+
+\subsubsection{Les caches et le temps réel}
+\label{sec:soacache_wcet}
+
+\paragraph{}
+Les caches processeurs sont également impactant dans le cadre du respect des
+contraintes temps réel.
+Dans les systèmes industriels très exigeants, les caches sont souvent désactivés.
+Malheureusement, une telle configuration est de plus en plus difficile à mettre en {\oe}uvre. En effet, les
+architectures matérielles et logicielles sont de plus en plus construites pour
+être performantes grâce aux contrôleurs de cache (grâce à la présence de deux
+voir trois niveaux de
+cache, ou encore de mécanismes de synchronisation avancée dans le cadre des architectures
+MPSoC, etc). La désactivation des caches génère un ralentissement difficile à
+accepter selon les hypothèses de performances initiales.
+
+\paragraph{}
+Il existe un grand nombre de travaux sur la prise en compte des contrôleurs de
+caches dans le temps réel. Ces travaux sont séparables en deux grandes
+familles:
+\begin{itemize}
+  \item Prise en compte des besoins temps réel dans le design du contrôleur de caches
+    et optimisation des cache-miss (cache locks et cache partitioning)
+  \item Caclul des pire cas de cache-miss au travers de l'étude de l'arbre
+    d'exécution des différentes tâches en exécution concurrente sur un cache
+    sans propriétés d'aide au temps réel
+\end{itemize}
+
+\paragraph{}
+Des travaux existent sur l'usage des méthodes de cache-locking afin de limiter le nombre de cache-miss
+\cite{campoy2001static}\cite{puaut2006wcet}, grâce au blocage de certaines lignes
+de cache dans le contrôleur, afin d'en assurer la présence lors d'un
+accès ultérieur. Il faut alors choisir judicieusement les lignes de cache
+devant être maintenues, sans pour autant réduire trop fortement le nombre de
+lignes de cache pouvant être remplacées pour ne pas impacter trop fortement
+l'exécution des autres tâches.
+
+\paragraph{}
+Lorsque les contrôleurs de caches ne permettent pas un tel contrôle par le
+logiciel, il faut alors étudier leur comportement en terme d'algorithme de
+remplacement de ligne de cache, afin de déterminer, en fonction du chemin
+d'exécution de la tâche courante, le taux de cache-miss associés. Le but est
+dans ce cas d'intégrer au mieux l'impact positif de la présence du cache du
+processeur sur l'exécution de la tâche.\\
+Ainsi, dans \cite{guan2012wcet}, les auteurs ont montré qu'il était possible de
+prendre en compte l'impact d'un contrôleur de cache s'appuyant sur
+l'algorithme MRU dans le calcul du WCET d'une tâche. Ils ont
+ainsi montré qu'il était possible de déterminer, sous certaines conditions,
+que le maintient de certaines lignes de caches dans le contrôleur pouvait être
+prédictible, réduisant ainsi fortement le pessimisme dans la mesure du WCET.
+
+\subsubsection{État de l'art des problématiques temps réel dans le support MMU}
+
+\paragraph{}
+Les contrôleurs de caches des CPU ont un impact reconnu sur le respect des
+contraintes temps réel d'un système. Il en va de même pour la TLB
+(Translation Lookaside Buffer).\\
+Le TLB est le cache spécialisé permettant d'optimiser la translation
+d'adresse que la MMU effectue entre l'adressage logique (tel que vu par le
+c{\oe}ur processeur) et l'adressage physique (tel que vu au niveau du bus
+d'interconnexion). La présence du TLB découle du fait que les données de
+translation sont gérée en mémoire centrale, induisant des accès mémoire
+fréquents par le contrôleur MMU afin de faire l'association mémoire
+logique/mémoire physique. Le TLB est donc un cache local permettant de garder
+une mémoire les translations d'adresses afin d'éviter une
+surconsommation des accès mémoire centrale par le contrôleur MMU.\\
+Le contenu du TLB est impacté par l'ordonnancement de tâches, et doit donc
+être considéré dans le cadre de la gestion de tâches avec des contraintes temps réel dur.
+Dans \cite{groesbrink2008modular} les auteurs décrivent un mécanisme apparenté
+aux cache-locking afin de limiter l'impact du TLB sur le coût d'exécution des
+tâches temps réel.
+
 \subsubsection{Synthèse}
 
 \paragraph{}
-La compatibilité des différents algorithmes de cache vu ici est étudiée dans le Chapitre \ref{sec:soacache_wcet}.
-Dans le cadre de ma thèse, je m'appuie sur du matériel existant, de type
+L'usage des caches est aujourd'hui nécessaire afin de pouvoir exploiter
+correctement les capacités des processeurs modernes. Cependant, leur usage
+impacte à la fois la sécurité et le temps réel. Dans le cadre de ma thèse, je
+ne me permet pas de travailler sur un design matériel de contrôleur de cache.
+Néanmoins, je propose un axe de solution, décrit dans le Chapitre \ref{sec:caches},
+afin de limiter l'impact des contraintes de sécurité sur les performances et
+le temps réel. Plus généralement, je considère la problématique sécuritaire associée à la présence
+d'entités logicielles de domaines de sécurité hétérogènes sur une même
+architecture matérielle, et son impact sur la gestion des caches.
+
+\paragraph{}
+Dans le cadre de la définition de la solution finale, je m'appuie néanmoins,
+sur demande de Thales, sur du matériel existant de type
 PowerPC pour des raisons de certifiabilité. En effet, les
 architectures PowerPC sont celles ayant le moins de bugs matériels référencés
 parmi les grandes familles (ARM, PowerPC, x86 et Sparc). Elles ont comme bonne
@@ -893,3 +1029,4 @@ intéressantes, dans le cadre des archtiectures QorIQ de Freescale
 Les mécanismes de secure boot et de PAMU, du fait de leur récente intégration
 et pour des raisons de confidentialité liés aux travaux de Thales autour de
 leur usage, ne sont pas étudiés dans ma thèse.
+
