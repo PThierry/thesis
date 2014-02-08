@@ -1,0 +1,301 @@
+\NeedsTeXFormat{LaTeX2e}
+
+\ProvidesPackage{Packages/myPhDTitlePage}[2013/04/29 Extension personnelle, V1.0]
+
+\RequirePackage{forloop}
+
+\makeatletter
+
+\newcommand{\phdNewline}{\noexpand\par \noexpand\mbox{}\noexpand\hfill}
+
+\newcommand{\phdSmallVSpace}{\vspace*{0.0cm}}
+\newcommand{\phdMediumVSpace}{\vspace*{0.6cm}}
+\newcommand{\phdLargeVSpace}{\vspace*{1.2cm}}
+
+\newskip\@phdbigflushglue \@phdbigflushglue = -100pt plus 1fil
+\def\phdbigcenter{\trivlist \phdbigcentering\item\relax}
+\def\phdbigcentering{\let\\\@centercr\rightskip\@phdbigflushglue%
+\leftskip\@phdbigflushglue
+\parindent\z@\parfillskip\z@skip}
+\def\endphdbigcenter{\endtrivlist}
+
+\newcommand{\phdAuthorFirstName}[1]{\def\phd@authorFirstName{#1}}
+\newcommand{\phdAuthorLastName}[1]{\def\phd@authorLastName{#1}}
+\phdAuthorFirstName{firstName}
+\phdAuthorLastName{lastName}
+
+\newcommand{\phdUniversityTitle}[1]{\def\phd@universityTitle{#1}}
+\phdUniversityTitle{\Huge \textsc{\textbf{My University}}\\ \noindent \normalsize \textbf{My Doctoral School (Name, E.D. number)}}
+
+\newcommand{\phdUniversity}[1]{\def\phd@university{#1}}
+\phdUniversity{My University}
+
+\newcommand{\phdSpeciality}[1]{\def\phd@speciality{#1}}
+\phdSpeciality{My Speciality}
+
+\newcommand{\phdMainTitle}[1]{\def\phd@maintitle{#1}}
+\newcommand{\phdTitleFrench}[1]{\def\phd@titleFrench{#1}}
+\newcommand{\phdTitleEnglish}[1]{\def\phd@titleEnglish{#1}}
+\newcommand{\phdGetMainTitle}[1]{\phd@maintitle}
+\newcommand{\phdGetTitleFrench}[1]{\phd@titleFrench}
+\newcommand{\phdGetTitleEnglish}[1]{\phd@titleEnglish}
+\phdTitleFrench{Mon Titre}
+\phdTitleEnglish{My Title}
+\phdMainTitle{\phdGetTitleEnglish}
+
+\newcommand{\phdDate}[1]{\def\phd@date{#1}}
+\phdDate{My Defended Date}
+
+\newcommand{\phdKeywordsEnglish}[1]{\def\phd@keywordsEnglish{#1}}
+\newcommand{\phdKeywordsFrench}[1]{\def\phd@keywordsFrench{#1}}
+\phdKeywordsEnglish{Keyword}
+\phdKeywordsFrench{Mot cl{\'e}}
+
+\newcommand{\phdAbstractEnglish}[1]{\def\phd@abstractEnglish{#1}}
+\newcommand{\phdAbstractFrench}[1]{\def\phd@abstractFrench{#1}}
+\phdAbstractEnglish{Abstract}
+\phdAbstractFrench{R{\'e}sum{\'e}}
+
+
+\newcounter{cntTemp}
+
+\newcounter{cntTempAdvisorMax}
+\newcounter{cntAdvisorNumber}
+\newcommand*\phdAddAdvisor[3]{%
+	\stepcounter{cntAdvisorNumber}
+	\global \expandafter \edef \csname phdAdvisorFirstName\thecntAdvisorNumber\endcsname {#1}
+	\global \expandafter \edef \csname phdAdvisorLastName\thecntAdvisorNumber\endcsname {#2}
+	\global \expandafter \edef \csname phdAdvisorAffiliation\thecntAdvisorNumber\endcsname {#3}
+}
+\newcommand\phdGetAdvisorFirstName[1]{\csuse{phdAdvisorFirstName#1}}
+\newcommand\phdGetAdvisorLastName[1]{\csuse{phdAdvisorLastName#1}}
+\newcommand\phdGetAdvisorAffiliation[1]{\csuse{phdAdvisorAffiliation#1}}
+
+\newif\if@haspresident
+\@haspresidentfalse
+\newcommand*\phdPresident[3]{%
+	\@haspresidenttrue
+	\def\phdPresidentFirstName{#1}
+	\def\phdPresidentLastName{#2}
+	\def\phdPresidentAffiliation{#3}
+}
+%\phdPresident{FirstName}{LastName}{Affiliation}
+
+\newcounter{cntTempExaminatorMax}
+\newcounter{cntExaminatorNumber}
+\newcommand*\phdAddExaminator[3]{%
+	\stepcounter{cntExaminatorNumber}
+	\global \expandafter \edef \csname phdExaminatorFirstName\thecntExaminatorNumber\endcsname {#1}
+	\global \expandafter \edef \csname phdExaminatorLastName\thecntExaminatorNumber\endcsname {#2}
+	\global \expandafter \edef \csname phdExaminatorAffiliation\thecntExaminatorNumber\endcsname {#3}
+}
+\newcommand\phdGetExaminatorFirstName[1]{\csuse{phdExaminatorFirstName#1}}
+\newcommand\phdGetExaminatorLastName[1]{\csuse{phdExaminatorLastName#1}}
+\newcommand\phdGetExaminatorAffiliation[1]{\csuse{phdExaminatorAffiliation#1}}
+
+\newcounter{cntTempReviewerMax}
+\newcounter{cntReviewerNumber}
+\newcommand*\phdAddReviewer[3]{%
+	\stepcounter{cntReviewerNumber}
+	\global \expandafter \edef \csname phdReviewerFirstName\thecntReviewerNumber\endcsname {#1}
+	\global \expandafter \edef \csname phdReviewerLastName\thecntReviewerNumber\endcsname {#2}
+	\global \expandafter \edef \csname phdReviewerAffiliation\thecntReviewerNumber\endcsname {#3}
+}
+\newcommand\phdGetReviewerFirstName[1]{\csuse{phdReviewerFirstName#1}}
+\newcommand\phdGetReviewerLastName[1]{\csuse{phdReviewerLastName#1}}
+\newcommand\phdGetReviewerAffiliation[1]{\csuse{phdReviewerAffiliation#1}}
+
+\newif\if@affiliationFirst
+\@affiliationFirstfalse
+\newcommand*\phdAddAffiliationFirst[2]{%
+	\@affiliationFirsttrue
+	\def\phdAffiliationFirstLogo{#1}
+	\def\phdAffiliationFirstText{#2}
+}
+\newif\if@affiliationSecond
+\@affiliationSecondfalse
+\newcommand*\phdAddAffiliationSecond[2]{%
+	\@affiliationSecondtrue
+	\def\phdAffiliationSecondLogo{#1}
+	\def\phdAffiliationSecondText{#2}
+}
+
+\newcommand*\phdDedication[1]{%
+	\def\phd@dedication{#1}
+}
+\phdDedication{To Me}
+
+\newcommand{\phdPrintTitlePage}{
+	\newgeometry{right=1.5cm,left=1.5cm,top=1cm,bottom=1cm}
+	\thispagestyle{empty}%
+	{
+	%\AddToShipoutPicture*{\BackgroundPic{ECE_LOGO_OLD.png}}
+	
+	\begin{phdbigcenter}	
+		\phd@universityTitle \par
+		%\phdMediumVSpace
+		\noindent \huge \textsc{\textbf{\iflanguage{frenchb}{T H \`E S E}{P h D\ \ T H E S I S}}} \par
+		\phdSmallVSpace
+		\noindent \normalsize {\iflanguage{frenchb}{en vue de l'obtention du titre de}{to obtain the title of}} \par
+		\phdMediumVSpace
+		\noindent \Large \textsc{\textbf{\iflanguage{frenchb}{Docteur}{PhD in Science}}} \par
+		\phdSmallVSpace
+		\noindent \large {\iflanguage{frenchb}{de}{of the} \phd@university} \par
+		\phdMediumVSpace
+		\noindent \large \textbf{\iflanguage{frenchb}{Sp{\'e}cialit{\'e} :}{Speciality:} \textsc{\phd@speciality}} \par
+		\vfill
+		\noindent \LARGE {\textsc{\phd@authorFirstName}~\textsc{\phd@authorLastName}} \par
+	\end{phdbigcenter}
+	\begin{center}
+		\vfill
+		\rule[0.5ex]{\textwidth}{1pt} \par
+		%\noindent \huge \textbf{\iflanguage{frenchb}{\phd@titleFrench}{\phd@titleEnglish}} \par
+		\noindent \huge \textbf{\phd@maintitle} \par
+		\rule[0.5ex]{\textwidth}{1pt} \par
+		\vfill
+	\end{center}
+	\begin{phdbigcenter}
+		\noindent \normalsize \textbf{\iflanguage{frenchb}{soutenue le}{defended on}} \phd@date \par
+		\phdLargeVSpace
+	\end{phdbigcenter}
+	\begin{phdbigcenter}
+		\normalsize \textbf{Jury} \par
+		\phdMediumVSpace
+		
+		\setcounter{cntTempAdvisorMax}{\thecntAdvisorNumber}
+		\stepcounter{cntTempAdvisorMax}
+		\iflanguage{frenchb}
+		{\ifthenelse{\value{cntTempAdvisorMax} > 2}{\def\phd@advisor{Directeurs :}}{\def\phd@advisor{Directeur :}}}
+		{\ifthenelse{\value{cntTempAdvisorMax} > 2}{\def\phd@advisor{Advisors:}}{\def\phd@advisor{Advisor:}}}
+		
+		\setcounter{cntTempReviewerMax}{\thecntReviewerNumber}
+		\stepcounter{cntTempReviewerMax}
+		\iflanguage{frenchb}
+		{\ifthenelse{\value{cntTempReviewerMax} > 2}{\def\phd@reviewer{Rapporteurs :}}{\def\phd@reviewer{Rapporteur :}}}
+		{\ifthenelse{\value{cntTempReviewerMax} > 2}{\def\phd@reviewer{Reviewers:}}{\def\phd@reviewer{Reviewer:}}}
+		
+		\setcounter{cntTempExaminatorMax}{\thecntExaminatorNumber}
+		\stepcounter{cntTempExaminatorMax}
+		\iflanguage{frenchb}
+		{\ifthenelse{\value{cntTempExaminatorMax} > 2}{\def\phd@examinator{Examinateurs :}}{\def\phd@examinator{Examinateur :}}}
+		{\ifthenelse{\value{cntTempExaminatorMax} > 2}{\def\phd@examinator{Examinators:}}{\def\phd@examinator{Examinator:}}}
+		
+		\iflanguage{frenchb}
+		{\def\phd@president{Pr{\'e}sident :}}
+		{\def\phd@president{President:}}
+		\begin{tabular}{llcl}
+			\if@haspresident
+				\textit{\phd@president}	&	\textbf{\textsc{\phdPresidentFirstName}~\textsc{\phdPresidentLastName}}		& -- &	\phdPresidentAffiliation \\
+			\fi
+			\forloop{cntTemp}{1}{\value{cntTemp} < 2}{\textit{\phd@advisor} & 
+				\textbf{\textsc{\phdGetAdvisorFirstName{\thecntTemp}}~\textsc{\phdGetAdvisorLastName{\thecntTemp}}} & -- &
+				\phdGetAdvisorAffiliation{\thecntTemp}\\
+			}\forloop{cntTemp}{2}{\value{cntTemp} < \value{cntTempAdvisorMax}}{ & 
+				\textbf{\textsc{\phdGetAdvisorFirstName{\thecntTemp}}~\textsc{\phdGetAdvisorLastName{\thecntTemp}}} & -- &
+				\phdGetAdvisorAffiliation{\thecntTemp}\\
+			}\forloop{cntTemp}{1}{\value{cntTemp} < 2}{\textit{\phd@reviewer} & 
+				\textbf{\textsc{\phdGetReviewerFirstName{\thecntTemp}}~\textsc{\phdGetReviewerLastName{\thecntTemp}}} & -- &
+				\phdGetReviewerAffiliation{\thecntTemp}\\
+			}\forloop{cntTemp}{2}{\value{cntTemp} < \value{cntTempReviewerMax}}{ & 
+				\textbf{\textsc{\phdGetReviewerFirstName{\thecntTemp}}~\textsc{\phdGetReviewerLastName{\thecntTemp}}} & -- &
+				\phdGetReviewerAffiliation{\thecntTemp}\\
+			}\forloop{cntTemp}{1}{\value{cntTemp} < 2}{\textit{\phd@examinator} & 
+				\textbf{\textsc{\phdGetExaminatorFirstName{\thecntTemp}}~\textsc{\phdGetExaminatorLastName{\thecntTemp}}} & -- &
+				\phdGetExaminatorAffiliation{\thecntTemp}\\
+			}\forloop{cntTemp}{2}{\value{cntTemp} < \value{cntTempExaminatorMax}}{ & 
+				\textbf{\textsc{\phdGetExaminatorFirstName{\thecntTemp}}~\textsc{\phdGetExaminatorLastName{\thecntTemp}}} & -- &
+				\phdGetExaminatorAffiliation{\thecntTemp}\\
+			}
+		\end{tabular}
+	\end{phdbigcenter}
+	}
+	\restoregeometry
+	
+	\newpage%
+	\thispagestyle{empty}%
+	{
+	\newgeometry{bottom=1cm}
+	\null%
+	\vfill%
+	\begin{phdbigcenter}
+		\footnotesize%
+		\if@affiliationFirst
+			\begin{tabular}{p{0.3\textwidth} p{0.75\textwidth}}
+				\includegraphics[width=0.3\textwidth]{\phdAffiliationFirstLogo}	&	\begin{tabular}{l}\phdAffiliationFirstText \end{tabular}%
+			\end{tabular}
+		\fi
+		\if@affiliationSecond
+			\phdMediumVSpace \par
+			\begin{tabular}{p{0.3\textwidth} p{0.75\textwidth}}
+				\includegraphics[width=0.3\textwidth]{\phdAffiliationSecondLogo}&	\begin{tabular}{l}\phdAffiliationSecondText \end{tabular}%
+			\end{tabular}
+		\fi
+	\end{phdbigcenter}
+	}
+	\restoregeometry
+	\sloppy 
+}
+
+\newcommand{\phdPrintAbstracts}{
+	\newpage
+	\newgeometry{right=2cm,left=2cm,top=2cm,bottom=2cm}
+	\thispagestyle{empty}%
+	{
+		\small
+		\begin{otherlanguage}{english}
+			\begin{center}
+				\textsc{\phd@titleEnglish} \par
+				\phdMediumVSpace
+				\textbf{Abstract}
+			\end{center}
+			{\footnotesize \phd@abstractEnglish} \par
+			\phdMediumVSpace
+			{\footnotesize \textbf{Keywords:} \phd@keywordsEnglish}
+		\end{otherlanguage}
+		
+		\vfill%\phdSmallVSpace
+		\begin{center}
+			\noindent \rule[0.5ex]{0.5\textwidth}{1pt} \par
+		\end{center}
+		\vfill%\phdSmallVSpace
+		
+		\begin{otherlanguage}{frenchb}
+			\begin{center}
+				\textsc{\phd@titleFrench} \par
+				\phdMediumVSpace
+				\textbf{R{\'e}sum{\'e}}
+			\end{center}
+			{\footnotesize \phd@abstractFrench} \par
+			\phdMediumVSpace
+			{\footnotesize \textbf{Mots-cl{\'e}s :} \phd@keywordsFrench}
+		\end{otherlanguage}
+	}
+	\restoregeometry
+}
+
+\newcommand{\phdPrintDedication}{
+	\cleardoublepage
+	\newgeometry{right=2cm}
+	\thispagestyle{empty}%
+	{
+		~\vfill
+		\mbox{}\hfill \textit{\normalsize \phd@dedication}
+		\vfill
+	}
+	\restoregeometry
+}
+
+\newcommand{\phdPDFInfos}{
+	\@ifpackageloaded{hyperref}{
+		\hypersetup{
+			pdftitle = \iflanguage{frenchb}{\phd@titleFrench}{\phd@titleEnglish},
+			pdfauthor = \phd@authorFirstName~\phd@authorLastName, 
+			pdfsubject = \iflanguage{frenchb}{These}{PhD Thesis}~--~\phd@speciality~--~\phd@university, %subject of the document
+			pdfkeywords =  \iflanguage{frenchb}{\phd@keywordsFrench}{\phd@keywordsEnglish},
+		}
+	}{
+		\PackageWarning{myPhDTitlePage}{hyperref package not loaded: I can't apply PDF info for your thesis. Please, load hyperref before calling}
+	}
+}
+
+\makeatother

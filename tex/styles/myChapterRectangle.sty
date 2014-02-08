@@ -1,0 +1,211 @@
+\NeedsTeXFormat{LaTeX2e}
+
+\ProvidesPackage{Packages/myChapterRectangle}[2013/07/26 Extension personnelle, V1.0]
+ 
+% extensions
+\RequirePackage{tikz}
+\RequirePackage{calc}
+\RequirePackage{etoolbox}
+\RequirePackage{ifthen}
+\RequirePackage{fancyhdr}
+\RequirePackage{totcount}
+\RequirePackage[usenames,dvipsnames]{xcolor}
+
+\usetikzlibrary{calc}
+
+\newlength{\chapterRectangleWidth}
+\setlength{\chapterRectangleWidth}{2cm}
+\newlength{\chapterRectangleSectionWidth}
+\setlength{\chapterRectangleSectionWidth}{1cm}
+\newlength{\chapterRectangleSubSectionWidth}
+\setlength{\chapterRectangleSubSectionWidth}{0.5cm}
+
+\newcommand\chapterRectangleRatioPageHeight{0.8}
+\newcommand\chapterRectangleDefaultColor{white}
+\newcommand\chapterRectangleSectionDefaultColor{black}
+\newcommand\chapterRectangleSubSectionDefaultColor{gray}
+
+
+\makeatletter
+
+\newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
+
+\define@key{chapterRectangle}{chapter}[]{\def\chapterRectangle@chapter{#1}}
+\define@key{chapterRectangle}{section}[]{\def\chapterRectangle@section{#1}}
+\define@key{chapterRectangle}{subsection}[]{\def\chapterRectangle@subsection{#1}}
+\define@key{chapterRectangle}{color}[\chapterRectangleDefaultColor]{\def\chapterRectangle@color{#1}}
+\setkeys{chapterRectangle}{chapter,section,subsection,color}
+
+\newcounter{chapterRectangleNumberOfChapter}
+\setcounter{chapterRectangleNumberOfChapter}{0}
+\newcommand*\addChapterRectangleColor[1][]{ 	
+	\begingroup 
+		\setkeys{chapterRectangle}{#1}%	
+		\stepcounter{chapterRectangleNumberOfChapter}
+		\global \expandafter \edef \csname ChapterRectangleColor\chapterRectangle@chapter\endcsname {\chapterRectangle@color}
+		\global \expandafter \edef \csname ChapterRectanglePosition\chapterRectangle@chapter\endcsname {\thechapterRectangleNumberOfChapter}
+		\global \expandafter \edef \csname ChapterRectangleNbSection\chapterRectangle@chapter\endcsname {\chapterRectangle@section}
+	\endgroup
+}
+\newcommand\chapterRectangleGetColor[1]{\ifcsdef{ChapterRectangleColor#1}{\csuse{ChapterRectangleColor#1}}{\chapterRectangleDefaultColor}}
+\newcommand\chapterRectangleGetPosition[1]{\ifcsdef{ChapterRectanglePosition#1}{\csuse{ChapterRectanglePosition#1}}{0}}
+\newcommand\chapterRectangleGetNbSection[1]{\ifcsdef{ChapterRectangleNbSection#1}{\csuse{ChapterRectangleNbSection#1}}{0}}
+
+
+
+\newcommand*\addChapterRectangleColorSection[1][]{ 	
+	\begingroup 
+		\setkeys{chapterRectangle}{#1}%	
+		\global \expandafter \edef \csname ChapterRectangleNbSubSection{\chapterRectangle@chapter}Sec\chapterRectangle@section\endcsname {\chapterRectangle@subsection}
+	\endgroup
+}
+\newcommand\chapterRectangleGetNbSubSection[2]{\ifcsdef{ChapterRectangleNbSubSection{#1}Sec#2}{\csuse{ChapterRectangleNbSubSection{#1}Sec#2}}{0}}
+
+
+
+
+
+
+
+
+
+\newlength{\chapterRectangleHeight}
+\newlength{\chapterRectangleTemp}
+
+\newlength{\chapterRectangleSectionHeight}
+\newlength{\chapterRectangleSectionTemp}
+
+\newlength{\chapterRectangleSubSectionHeight}
+\newlength{\chapterRectangleSubSectionTemp}
+
+\newcommand*\drawChapterRectangleEven[1][]{
+	\begingroup \setkeys{chapterRectangle}{#1}%	
+		\setlength{\chapterRectangleHeight}{\chapterRectangleRatioPageHeight\paperheight/\thechapterRectangleNumberOfChapter}
+		\setlength{\chapterRectangleTemp}{(\paperheight-\chapterRectangleRatioPageHeight\paperheight)/2+\chapterRectangleGetPosition{\chapterRectangle@chapter}\chapterRectangleHeight-\chapterRectangleHeight}
+		\begin{tikzpicture}[remember picture, overlay]
+			\coordinate (StartW) at (current page.north west);
+		    \filldraw[draw=\chapterRectangleGetColor{\chapterRectangle@chapter},fill=\chapterRectangleGetColor{\chapterRectangle@chapter}] 
+		    ($ (StartW) + (\chapterRectangleWidth,-\chapterRectangleTemp) $)
+		    rectangle 
+		    ($ (StartW) + (0cm,-\chapterRectangleTemp-\chapterRectangleHeight) $);
+		\end{tikzpicture}
+		\ifthenelse{\myTotalNbSection{\chapterRectangle@chapter} > 0}
+		{
+			\setlength{\chapterRectangleSectionHeight}{\chapterRectangleHeight/\myTotalNbSection{\chapterRectangle@chapter}}
+			\ifthenelse{\chapterRectangle@section > 0}
+			{
+				\setlength{\chapterRectangleSectionTemp}{\chapterRectangleTemp+\chapterRectangle@section\chapterRectangleSectionHeight-\chapterRectangleSectionHeight}
+				\begin{tikzpicture}[remember picture, overlay]
+					\coordinate (StartW) at (current page.north west);
+				    \filldraw[draw=\chapterRectangleSectionDefaultColor,fill=\chapterRectangleSectionDefaultColor] 
+				    ($ (StartW) + (\chapterRectangleSectionWidth,-\chapterRectangleSectionTemp) $)
+				    rectangle 
+				    ($ (StartW) + (0cm,-\chapterRectangleSectionTemp-\chapterRectangleSectionHeight) $);
+				\end{tikzpicture}
+				\ifthenelse{\myTotalNbSubSection{\chapterRectangle@chapter}{\chapterRectangle@section} > 0}
+				{
+					\setlength{\chapterRectangleSubSectionHeight}{\chapterRectangleSectionHeight/\myTotalNbSubSection{\chapterRectangle@chapter}{\chapterRectangle@section}}
+					\ifthenelse{\chapterRectangle@subsection > 0}
+					{
+						\setlength{\chapterRectangleSubSectionTemp}{\chapterRectangleSectionTemp+\chapterRectangle@subsection\chapterRectangleSubSectionHeight-\chapterRectangleSubSectionHeight}
+						\begin{tikzpicture}[remember picture, overlay]
+							\coordinate (StartW) at (current page.north west);
+						    \filldraw[draw=\chapterRectangleSubSectionDefaultColor,fill=\chapterRectangleSubSectionDefaultColor] 
+						    %($ (StartW) + (\chapterRectangleSubSectionWidth,-\chapterRectangleSubSectionTemp) $)
+						    ($ (StartW) + (\chapterRectangleSectionWidth,-\chapterRectangleSubSectionTemp) $)
+						    rectangle 
+						    %($ (StartW) + (0cm,-\chapterRectangleSubSectionTemp-\chapterRectangleSubSectionHeight) $);
+						    ($ (StartW) + (\chapterRectangleSectionWidth-\chapterRectangleSubSectionWidth,-\chapterRectangleSubSectionTemp-\chapterRectangleSubSectionHeight) $);
+						\end{tikzpicture}
+					}
+					{}
+				}
+				{}
+			}
+			{}
+		}
+		{}
+	\endgroup
+}
+\newcommand*\drawChapterRectangleOdd[1][]{{\begingroup \setkeys{chapterRectangle}{#1}%	
+		\setlength{\chapterRectangleHeight}{\chapterRectangleRatioPageHeight\paperheight/\thechapterRectangleNumberOfChapter}
+		\setlength{\chapterRectangleTemp}{(\paperheight-\chapterRectangleRatioPageHeight\paperheight)/2+\chapterRectangleGetPosition{\chapterRectangle@chapter}\chapterRectangleHeight-\chapterRectangleHeight}
+		\begin{tikzpicture}[remember picture, overlay]
+			\coordinate (StartE) at (current page.north east) + (-0.5cm, 0);	 			\filldraw[draw=\chapterRectangleGetColor{\chapterRectangle@chapter},fill=\chapterRectangleGetColor{\chapterRectangle@chapter}] 
+		    ($ (StartE) + (-\chapterRectangleWidth,-\chapterRectangleTemp) $)
+		    rectangle 
+		    ($ (StartE) + (0cm,-\chapterRectangleTemp-\chapterRectangleHeight) $);
+		\end{tikzpicture}
+		\ifthenelse{\myTotalNbSection{\chapterRectangle@chapter} > 0}
+		{
+			\setlength{\chapterRectangleSectionHeight}{\chapterRectangleHeight/\myTotalNbSection{\chapterRectangle@chapter}}
+			\ifthenelse{\chapterRectangle@section > 0}
+			{
+				\setlength{\chapterRectangleSectionTemp}{\chapterRectangleTemp+\chapterRectangle@section\chapterRectangleSectionHeight-\chapterRectangleSectionHeight}
+				\begin{tikzpicture}[remember picture, overlay]
+					\coordinate (StartE) at (current page.north east) + (-0.5cm, 0);
+				    \filldraw[draw=\chapterRectangleSectionDefaultColor,fill=\chapterRectangleSectionDefaultColor] 
+				    ($ (StartE) + (-\chapterRectangleSectionWidth,-\chapterRectangleSectionTemp) $)
+				    rectangle 
+				    ($ (StartE) + (0cm,-\chapterRectangleSectionTemp-\chapterRectangleSectionHeight) $);
+				\end{tikzpicture}
+				\ifthenelse{\myTotalNbSubSection{\chapterRectangle@chapter}{\chapterRectangle@section} > 0}
+				{
+					\setlength{\chapterRectangleSubSectionHeight}{\chapterRectangleSectionHeight/\myTotalNbSubSection{\chapterRectangle@chapter}{\chapterRectangle@section}}
+					\ifthenelse{\chapterRectangle@subsection > 0}
+					{
+						\setlength{\chapterRectangleSubSectionTemp}{\chapterRectangleSectionTemp+\chapterRectangle@subsection\chapterRectangleSubSectionHeight-\chapterRectangleSubSectionHeight}
+						\begin{tikzpicture}[remember picture, overlay]
+							\coordinate (StartW) at (current page.north east);
+						    \filldraw[draw=\chapterRectangleSubSectionDefaultColor,fill=\chapterRectangleSubSectionDefaultColor] 
+						    %($ (StartE) + (-\chapterRectangleSubSectionWidth,-\chapterRectangleSubSectionTemp) $)
+						    ($ (StartE) + (-\chapterRectangleSectionWidth,-\chapterRectangleSubSectionTemp) $)
+						    rectangle 
+						    %($ (StartE) + (0cm,-\chapterRectangleSubSectionTemp-\chapterRectangleSubSectionHeight) $);
+						    ($ (StartE) + (-\chapterRectangleSectionWidth+\chapterRectangleSubSectionWidth,-\chapterRectangleSubSectionTemp-\chapterRectangleSubSectionHeight) $);
+						\end{tikzpicture}
+					}
+					{}
+				}
+				{}
+			}
+			{}
+		}
+		{}
+	\endgroup}}
+
+\newcommand{\myTheCounter}[1]{\csuse{the#1}}
+
+\newcounter{chapterRectangleCurrentChapterCounter}
+\newcommand*{\saved@chapter}{}
+\let\saved@chapter\chapter
+\renewcommand*{\chapter}{%
+	\begingroup
+	\toks@{\endgroup\saved@chapter}%
+	\@ifstar{%
+		\toks@\expandafter{\the\toks@*}%
+		\final@chapterstar
+	}{\next@chapter}%
+}
+\newcommand*{\final@chapter}[1]{%
+\the\toks@{#1}%
+\setcounter{chapterRectangleCurrentChapterCounter}{\thechapter}
+}
+\newcommand*{\final@chapterstar}[1]{%
+\the\toks@{#1}%
+\setcounter{chapterRectangleCurrentChapterCounter}{0}
+}
+\newcommand*{\next@chapter}{%
+	\@ifnextchar[{\opt@chapter}{\final@chapter}%
+}
+\newcommand*{\opt@chapter}{}
+\def\opt@chapter[#1]{%
+	\toks@\expandafter{\the\toks@[{#1}]}%
+	\final@chapter
+}
+
+\newcommand{\myTotalNbSection}[1]{\chapterRectangleGetNbSection{#1}}
+\newcommand{\myTotalNbSubSection}[2]{\chapterRectangleGetNbSubSection{#1}{#2}}
+
+
+\makeatother

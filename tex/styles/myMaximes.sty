@@ -1,0 +1,152 @@
+\NeedsTeXFormat{LaTeX2e}
+
+\ProvidesPackage{Packages/myMaximes}[2013/04/29 Extension personnelle, V1.0]
+ 
+% extensions
+\RequirePackage{ifthen}
+\RequirePackage{xparse}
+\RequirePackage{etoolbox}
+\RequirePackage{pdftexcmds}
+\RequirePackage{xkeyval}
+\RequirePackage{xstring}
+
+\makeatletter
+
+\newcommand{\maximeRatioText}{0.6}
+\newcommand{\maximeRatioMiddleLine}{0.3}
+\newcommand{\maximeTopLineHeight}{0.0mm}
+\newcommand{\maximeMiddleLineHeight}{0.1mm}
+\newcommand{\maximeBottomLineHeight}{0.1mm}
+
+\newcommand{\maximeDeleteAllMaxime}{
+	\setcounter{cntCurrentMaximeNumber}{\value{cntMaximeNumber}}
+	\addtocounter{cntCurrentMaximeNumber}{1}
+}
+% commandes personnelles
+% Add a maxime : \addMaxime{Author}{Texte}
+% Display a maxime : \maximeGet 
+% Reset maximeGet from beginning : \maximeReset
+
+%Author, Texte
+\newcounter{cntMaximeNumber}
+
+\define@key{maxime}{author}[Me]{\def\maxime@author{#1}}
+\define@key{maxime}{fr}[none]{\def\maxime@fr{#1}}
+\define@key{maxime}{en}[none]{\def\maxime@en{#1}}
+\define@key{maxime}{cite}[]{\def\maxime@cite{#1}}
+\define@key{maxime}{choose}[en,fr]{\def\maxime@choose{#1}}
+\define@key{maxime}{ratio}[]{\def\maxime@ratio{#1}}
+\setkeys{maxime}{author,fr,en,cite,choose,ratio}
+
+\newcommand{\maximeNewline}{\noexpand\par \noexpand\mbox{}\noexpand\hfill}
+
+\newcommand*\addMaxime[1][]{%
+	\begingroup \setkeys{maxime}{#1}%
+		\stepcounter{cntMaximeNumber}
+		\global \expandafter \edef \csname MaximeAuthor\thecntMaximeNumber\endcsname {\maxime@author}
+  		\global \expandafter \edef \csname MaximeTextfr\thecntMaximeNumber\endcsname {\maxime@fr}
+  		\global \expandafter \edef \csname MaximeTexten\thecntMaximeNumber\endcsname {\maxime@en}
+  		\global \expandafter \edef \csname MaximeCite\thecntMaximeNumber\endcsname {\maxime@cite}	
+  		\global \expandafter \edef \csname MaximeChoose\thecntMaximeNumber\endcsname {\maxime@choose}	
+  		\global \expandafter \edef \csname MaximeRatio\thecntMaximeNumber\endcsname {\maxime@ratio}			
+	\endgroup
+}
+
+\newcommand\maximeGetAuthor[1]{\csuse{MaximeAuthor#1}}
+\newcommand\maximeGetTextfr[1]{\csuse{MaximeTextfr#1}}
+\newcommand\maximeGetTexten[1]{\csuse{MaximeTexten#1}}
+\newcommand\maximeGetCite[1]{\csuse{MaximeCite#1}}
+\newcommand\maximeGetChoose[1]{\csuse{MaximeChoose#1}}
+\newcommand\maximeGetRatio[1]{\csuse{MaximeRatio#1}}
+
+
+\define@key{maximeEnv}{author}[Me]{\def\maximeEnv@author{#1}}
+\define@key{maximeEnv}{cite}[]{\def\maximeEnv@cite{#1}}
+\define@key{maximeEnv}{ratio}[\maximeRatioText]{\def\maximeEnv@ratio{#1}}
+\define@key{maximeEnv}{top-line-height}[\maximeTopLineHeight]{\def\maximeEnv@toplineheight{#1}}
+\define@key{maximeEnv}{bottom-line-height}[\maximeBottomLineHeight]{\def\maximeEnv@bottomlineheight{#1}}
+\setkeys{maximeEnv}{author,cite,ratio,top-line-height,bottom-line-height}
+
+\newenvironment{maxime}[1][]
+{
+	\setkeys{maximeEnv}{author,cite,ratio,top-line-height,bottom-line-height}
+	\begingroup \setkeys{maximeEnv}{#1}%
+	\hfill % Right Aligned
+    \begin{minipage}{\maximeEnv@ratio\textwidth}%
+    	\rule[0.5ex]{\textwidth}{\maximeEnv@toplineheight} %Horizontal line
+    	\it
+}
+{
+		\ifnum\pdf@strcmp{\maximeEnv@cite}{}=0
+		
+			\vspace{1em}
+			\leavevmode \leaders \hrule height \maximeEnv@bottomlineheight \hfill $\:$ {\normalsize \bf \maximeEnv@author}
+		\else
+		
+			\vspace{1em}
+			\leavevmode \leaders \hrule height \maximeEnv@bottomlineheight \hfill $\:$ {\normalsize \bf \maximeEnv@author~\cite{\maximeEnv@cite}}
+		\fi
+		\vspace*{0.5cm}%
+    \end{minipage}\parend%
+    \endgroup
+}
+
+\newcounter{cntCurrentMaximeNumber}
+\setcounter{cntCurrentMaximeNumber}{1}
+\newcounter{cntCurrentMaximeNumberTemp}
+
+\newcommand{\resetMaxime}{%
+	\setcounter{cntCurrentMaximeNumber}{\value{1}}
+}
+
+\define@key{maximeEnvCom}{ratio-text}[\maximeRatioText]{\def\maximeEnvCom@ratiotext{#1}}
+\define@key{maximeEnvCom}{ratio-middle-line}[\maximeRatioMiddleLine]{\def\maximeEnvCom@ratiomiddleline{#1}}
+\define@key{maximeEnvCom}{top-line-height}[\maximeTopLineHeight]{\def\maximeEnvCom@toplineheight{#1}}
+\define@key{maximeEnvCom}{bottom-line-height}[\maximeBottomLineHeight]{\def\maximeEnvCom@bottomlineheight{#1}}
+\define@key{maximeEnvCom}{middle-line-height}[\maximeMiddleLineHeight]{\def\maximeEnvCom@middlelineheight{#1}}
+\setkeys{maximeEnvCom}{ratio-text,ratio-middle-line,top-line-height,bottom-line-height,middle-line-height}
+
+\newcommand{\maximeTempRatio}{}
+\newcommand{\getMaxime}[1][]{%
+	\setcounter{cntCurrentMaximeNumberTemp}{\value{cntMaximeNumber}}
+	\addtocounter{cntCurrentMaximeNumberTemp}{1}
+	
+	\ifthenelse{\value{cntCurrentMaximeNumber} < \value{cntCurrentMaximeNumberTemp}}
+	{
+		\setkeys{maximeEnvCom}{ratio-text,ratio-middle-line,top-line-height,bottom-line-height,middle-line-height}
+		\begingroup 
+			\setkeys{maximeEnvCom}{#1}%
+						
+			\IfStrEq{\maximeGetRatio{\thecntCurrentMaximeNumber}}{}
+			{
+				\renewcommand{\maximeTempRatio}{\maximeEnvCom@ratiotext}
+			}
+			{
+				\renewcommand{\maximeTempRatio}{\maximeGetRatio{\thecntCurrentMaximeNumber}}
+			}
+			\begin{maxime}[author=\maximeGetAuthor{\thecntCurrentMaximeNumber}, cite=\maximeGetCite{\thecntCurrentMaximeNumber}, bottom-line-height=\maximeEnvCom@bottomlineheight, top-line-height=\maximeEnvCom@toplineheight, ratio=\maximeTempRatio]
+				\IfSubStr{\maximeGetChoose{\thecntCurrentMaximeNumber}}{fr}
+				{
+					\mbox{}\hfill \footnotesize \maximeGetTextfr{\thecntCurrentMaximeNumber}
+					
+				}
+				{
+				}
+				
+				\IfSubStr{\maximeGetChoose{\thecntCurrentMaximeNumber}}{en}
+				{
+				{\centering \rule[0.5ex]{\maximeEnvCom@ratiomiddleline\textwidth}{\maximeEnvCom@middlelineheight} \par}
+					\mbox{}\hfill \footnotesize \maximeGetTexten{\thecntCurrentMaximeNumber}
+					
+				}
+				{
+				}
+			\end{maxime}
+		\endgroup
+		\addtocounter{cntCurrentMaximeNumber}{1}
+	}
+		{}
+}
+
+
+\makeatother

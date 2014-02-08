@@ -1,0 +1,142 @@
+%Packages
+%\usepackage{...}
+
+%%%%%%%%%%%%%%%%
+% Define some Maximes
+\addMaxime[author=Cioran, % Author
+fr=N'a de convictions que celui qui n'a rien approfondi., % First version
+en=Has convictions the one who deepened nothing., % Second version
+choose=fr{,}en, % Display fr and en version
+ratio=0.6] % Ratio of \textwidth use for the maxime.
+
+\addMaxime[author=Charles Darwin's brother Erasmus, % Author
+fr=Finalement{,} le raisonnement à priori est si satisfaisant pour moi que si\maximeNewline les faits ne correspondent pas{,} mon sentiment est : tant pis pour les faits.,  % First version
+en=In fact the à priori reasoning is so entirely satisfactory to me that if\maximeNewline the facts won't fit in{,} why so much the worse for the facts is my feeling., % Second version
+cite=Erasmus_Darwin, % Citation key (use cite{})
+choose=fr, % Display only fr version
+ratio=0.77] % Ratio of \textwidth use for the maxime.
+
+
+%%%%%%%%%%%%%%%%
+% Define some Glossaries
+\addAcronymAndGlossary{wcrt} % key
+{WCRT} % Short form, singular
+{WCRTs} % Short form, plural
+{\textbf{W}orst \textbf{C}ase \textbf{R}esponse \textbf{T}ime} % Full form, singular
+{\textbf{W}orst \textbf{C}ase \textbf{R}esponse \textbf{T}imes} % Full form, plural
+{The \gls{wcrt} of a task is the maximum duration between the activation of the task and the moment it finishes its execution} % Glossary entry (automatically add the entry in Acronyms, even if you never use it, be careful.
+
+\addAcronymAndGlossary{rt} % key
+{RT} % Short form, singular
+{} % No short form in plural 
+{\textbf{R}eal-\textbf{T}ime} % Full form, singular
+{} % No full form in plural
+{} % No glossary entry
+
+%%%%%%%%%%%%%%%%
+% Define the bibliographie file
+\addbibresource{Bibliography/Bibliography}
+
+%%%%%%%%%%%%%%%%
+% Define the informations for the Title Page
+\phdAuthorFirstName{Pierre}
+\phdAuthorLastName{Courbin}
+\phdUniversityTitle{\includegraphics[width=1\textwidth]{MSTIC_LOGO} \par \vfill}
+\phdUniversity{l'Universit{\'e} Paris-Est}
+\phdSpeciality{Informatique}
+
+\phdTitleEnglish{Scheduling Hard Sequential or Parallel Pre-emptive Real-Time Tasks upon Identical Multiprocessor platforms}
+\phdTitleFrench{Ordonnancement de T{\^a}ches Temps R{\'e}el Dures Pr{\'e}emptives S{\'e}quentielles ou Parall{\`e}les sur plateformes mutiprocesseur identique}
+\phdDate{vendredi 13 Décembre 2013}
+
+\phdAbstractFrench{Mon résumé en français}
+
+\phdAbstractEnglish{Mon résumé en anglais}
+
+\phdKeywordsEnglish{real-time, scheduling, multiprocessor, parallel, fork-join}
+\phdKeywordsFrench{temps réel, ordonnancement, multiprocesseur, parallèlle, fork-join}
+
+\phdAddAdvisor{Laurent}{George}{Université Paris-Est (LIGM), France}
+\phdPresident{Pascal}{Richard}{ENSMA (LIAS), France}
+\phdAddReviewer{Alan}{Burns}{University of York (ARTIST), U.K}
+\phdAddReviewer{Pascal}{Richard}{ENSMA (LIAS), France}
+\phdAddExaminator{Jo\"el}{Goossens}{Universit{\'e} Libre de Bruxelles (PARTS), Belgium}
+\phdAddExaminator{Yves}{Sorel}{INRIA Rocquencourt (AOSTE), France}
+
+\phdAddAffiliationFirst{ECE_LOGO_EN}{PhD prepared at \\ \textbf{ECE Paris -- LACSC} \\ Laboratoire d'Analyse et Contr{\^o}le des Syst{\`e}mes Complexe \\ 37, Quai de Grenelle \\ CS 71520 \\ 75725 PARIS CEDEX 15}
+\phdAddAffiliationSecond{LISSI_LOGO}{PhD in collaboration with \\ \textbf{UPEC -- LiSSi (EA 3956)} \\ Laboratoire Images, Signaux et Syst{\`e}mes Intelligents \\ Domaine Ch{\'e}rioux \\ 122 rue Paul Armangot \\ 94400 Vitry sur Seine}
+
+\phdDedication{\`A mes parents,\phdNewline
+\`A mes grands parents, encore là ou déjà partis,\phdNewline
+\`A mes nombreux frères et s\oe urs,\phdNewline
+\`A toute ma famille,\phdNewline
+\`A tous mes amis,\phdNewline
+\`A toutes les personnes que j'ai eu le privilège de croiser.\phdNewline\phdNewline
+Parce que chaque personne rencontrée, même brièvement,\phdNewline est une occasion exceptionnelle de se re-découvrir\phdNewline et de s'émerveiller.\phdNewline
+\vfill\phdNewline
+\vfill\phdNewline
+\vfill\phdNewline
+To my parents,\phdNewline
+To my grandparents, still there or already gone,\phdNewline
+To my many brothers and sisters,\phdNewline
+To all my family,\phdNewline
+To all my friends,\phdNewline
+To all the people who have graced my life.\phdNewline\phdNewline
+Because each encounter, even a brief one,\phdNewline is an occasion to re-imagine oneself\phdNewline and to marvel.}
+
+\phdPDFInfos %% Add all theses informations in my PDF metadatas
+
+%%%%%%%%%%%%%%%%
+% Define the chapterRectangle informations
+\makeatletter
+\if@chapterRectangle
+	\setlength{\chapterRectangleWidth}{0.9cm} %% Chapter rectangle width
+	\setlength{\chapterRectangleSectionWidth}{0.3cm} %% Section rectangle width
+	\setlength{\chapterRectangleSubSectionWidth}{0.1cm} %% SubSection rectangle width
+	\renewcommand\chapterRectangleRatioPageHeight{0.50} %% Ratio of the page height used to display rectangles
+	
+	\addChapterRectangleColor[chapter=1, color=red, section=3]
+	\addChapterRectangleColorSection[chapter=1, section=3, subsection=2]
+	\addChapterRectangleColor[chapter=2, color=green, section=0] %% Put 0 to section if you have only one and you don't want to display the gray rectangle of section
+	
+\fi
+\makeatother
+
+
+%%%%%%%%%%%%%%%%
+% Configure hyperref
+% Configuration of HyperLink Color
+\definecolor{linkcol}{rgb}{0,0,0.4} 
+\definecolor{citecol}{rgb}{0.5,0,0} 
+
+\hypersetup{
+	linkcolor=linkcol, %couleur des liens hypertextes internes
+	citecolor=citecol, %couleur des liens pour les citations
+	urlcolor=linkcol, %couleur des liens pour les url
+}
+
+%%%%%%%%%%%%%%%%
+% Configure package listings
+\lstset{
+	language=XML,
+	% list your attributes here
+	morekeywords={xmlns,version,algoName,name,autoPath,path,fileName,deadline,distribution,minU,maxU,nbMinTasks,number,nbProcessors,type,Scale}
+}
+
+%%%%%%%%%%%%%%%%
+% Others definitions
+
+%Modifier la profondeur de numérotation des sections etc
+\setcounter{secnumdepth}{4} 
+\setcounter{tocdepth}{4}
+
+%Définitions
+\newcommand{\equals}{\stackrel{\mathrm{def}}{=}}
+\newcommand{\task}{\tau}
+\newcommand{\proc}{\pi}
+\newcommand{\thop}{\operatorname{th}}
+\newcommand{\suchthat}{\slash}
+\newcommand{\itemStyle}[1]{\emph{\textbf{#1}}}
+
+%Emplacement des images
+\graphicspath{{./}{Images/}}

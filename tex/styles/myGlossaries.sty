@@ -1,0 +1,62 @@
+\NeedsTeXFormat{LaTeX2e}
+
+\ProvidesPackage{Packages/myGlossaries}[2013/04/29 Extension personnelle, V1.0]
+ 
+% extensions
+\RequirePackage{xifthen}% provides \isempty test
+\RequirePackage[style=altlist,section,acronym,toc]{glossaries}
+\makeatletter
+
+% Pour compiler les glossaires et les acronymes : 
+% 1. Compiler PDLatex/Latex
+% 2. Compiler les glossaires : makeglossaries %
+%
+%
+% Pour compiler uniquement le glossaire
+% 1. Compiler avec PDFLaTex/Latex
+% 2. Compiler le glossaire : makeindex -s  %.ist -t $1.glg -o $1.gls $1.glo
+% 
+%
+% Pour compiler uniquement les acronymes
+% 1. Compiler avec PDFLaTex/Latex
+% 2. Compiler les acronymes : makeindex -s %.ist -t %.alg -o %.acr %.acn
+% 
+
+%% USE : 
+%% \addAcronymAndGlossary{key}{name}{fullname}{description}; 
+%% Then call \gls{key}
+%% First time, we will display : "fullname (name)".
+%% Then : "name"
+%%
+%% If description is not empty, a glossary entry is also created with the description.
+%% Add a new Acronym with Glossary 
+%% 1 : key
+%% 2 : Abbrev
+%% 3 : Abbrev plural
+%% 4 : Full
+%% 5 : Full plural
+%% 6 : Glossary entry
+\newcommand\addAcronymAndGlossary[6]{%
+	\ifthenelse{\isempty{#3}}{\def\abbrvPlural{#2}}{\def\abbrvPlural{#3}}
+	\ifthenelse{\isempty{#5}}{\def\fullPlural{#4}}{\def\fullPlural{#5}}
+	
+	\ifthenelse{\isempty{#6}}
+    {
+    	\newglossaryentry{#1}{type=\acronymtype, name={#2}, plural={\abbrvPlural}, text={#2}, first={#4 (#2)}, firstplural={\fullPlural\ (\abbrvPlural)}, description={\emph{#4}}}
+    }
+    {
+    	\newglossaryentry{#1}{type=\acronymtype, name={#2\glsadd{#1_g}}, plural={\abbrvPlural}, text={#2}, first={#4 (#2)}, firstplural={\fullPlural\ (\abbrvPlural)}, description={\emph{#4}}, see=[\newline---\hfill\emph{Glossary:}]{#1_g}}
+    	%\newglossaryentry{#1}{type=\acronymtype, name={#2\glsadd{#1_g}}, description={\emph{#3}}, first={#3 (#2)}, see=[Glossary:]{#1_g}, text={#3}}
+		\newglossaryentry{#1_g}{name={#2},description={#6}}
+    }
+}
+
+\newcommand\glsentrytextLink[1]{
+	\glslink{#1}{\textcolor{black}{\glsentrytext{#1}}}
+}
+\newcommand\glsentryfirstLink[1]{
+	\glslink{#1}{\textcolor{black}{\glsentryfirst{#1}}}
+}
+
+
+\makeatother
