@@ -68,6 +68,7 @@ pdf :
 	while [ `cat $(SOURCE:.tex=.log) | grep 'may have changed.' | wc -l` -ge 1 ]; do $(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE); done
 	mv $(SOURCE:.tex=.pdf) $(TARGET).pdf
 
+
 clean : 
 	$(RM) $(RMFLAGS) $(OBJS) $(TODEL)
 

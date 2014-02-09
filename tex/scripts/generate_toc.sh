@@ -50,8 +50,10 @@ echo '
 
 % bibliography
 %\nocite{*}
-\bibliography{bibliography}%{Bibliographie}
-\bibliographystyle{plain}
+%\bibliography{bibliography}%{Bibliographie}
+%\bibliographystyle{plain}
+%\printbibliography
+\printbibliography[title=Bibliographie,filter=notown]
 
 \printindex
 

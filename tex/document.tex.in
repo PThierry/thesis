@@ -45,10 +45,11 @@
 \usepackage{chngpage}					% change page layout localy
 \usepackage{minitoc}
 \usepackage{setspace}
+\usepackage[backref=true,backend=bibtex,backrefstyle=none,style=alphabetic,labelalpha=true,block=none,maxbibnames=5,maxcitenames=3,abbreviate=false,sorting=nty]{biblatex}
 %
 \usepackage{makeidx}
 \usepackage[pdftex,
-            pagebackref=true,
+            pagebackref=false,
             colorlinks=true,
             linkcolor=blue
            ]{hyperref}					% allow interal links
@@ -63,7 +64,7 @@
 \usepackage{float}
 \usepackage{alltt}
 %\usepackage[sectionbib]{natbib}
-\usepackage{chapterbib}
+%\usepackage{chapterbib}
 \usepackage{theorem}
 \usepackage{etex}
 \usepackage[Glenn]{fncychap}				% 'Glenn' chapter titles
@@ -83,6 +84,19 @@
 \usepackage{etoolbox}
 \usepackage{bytefield}
 \usepackage{myPhDTitlePage}
+
+% own bib
+%\bibliography{bibliography}
+\addbibresource{bibliography.bib}
+\addbibresource{own.bib}
+
+\defbibfilter{own}{%
+  \keyword{own}
+}
+
+\defbibfilter{notown}{%
+  \not \keyword{own}
+}
 
 % D. Verna FIXME mackage
 \usepackage[margin=true]{fixme}
@@ -357,39 +371,42 @@
 
 
 %\chapter*{Liste des publications}
+\nocite{*}
+\printbibliography[title=Liste des publications,filter=own]
+
 %\addstarredchapter{Liste des publications}
-\begin{thebibliography}{1}
-
-\bibitem{santy2012relaxing}
-Fran{\c{c}}ois Santy, Laurent George, Philippe Thierry, and Jo{\"e}l Goossens.
-\newblock Relaxing mixed-criticality scheduling strictness for task sets
-  scheduled with fp.
-\newblock In {\em 24th Euromicro Conference on Real-Time Systems (ECRTS)},
-  pages 155--165, Pisa, Italy, July 2012. IEEE.
-
-\bibitem{thierry2011toward}
-Philippe Thierry, Laurent George, J~Hermant, Fabien Germain, Dominique Ragot,
-  and J~Lacroix.
-\newblock Toward a predictable and secure data cache algorithm: a cross-layer
-  approach.
-\newblock In {\em 10th International Symposium on Programming and Systems
-  (ISPS)}, pages 148--155, Algiers, Algeria, April 2011. IEEE.
-
-\bibitem{thierry2011real}
-Philippe Thierry, Laurent George, and Jean-Fran\c{c}ois Hermant.
-\newblock Real-time scheduling analysis for arinc-based virtualized systems.
-\newblock In {\em 10th Workshop on Models and Algorithms for Planning and
-  Scheduling Problems}, page 106, Nymburk, Czech Republic, June 2011.
-
-\bibitem{etfa13}
-Philippe Thierry, Laurent George, and Jean-Marc Lacroix.
-\newblock A framework for a secure embedded filtering connector for
-  multi-criticality systronic systems.
-\newblock In {\em Proceedings of the 18th International Conference on Emerging
-  Technologies \& Factory Automation}, Cagliari, Italy, September 2013. IEEE.
-
-\end{thebibliography}
-
+% \begin{thebibliography}{1}
+% 
+% \bibitem{santy2012relaxing}
+% Fran{\c{c}}ois Santy, Laurent George, Philippe Thierry, and Jo{\"e}l Goossens.
+% \newblock Relaxing mixed-criticality scheduling strictness for task sets
+%   scheduled with fp.
+% \newblock In {\em 24th Euromicro Conference on Real-Time Systems (ECRTS)},
+%   pages 155--165, Pisa, Italy, July 2012. IEEE.
+% 
+% \bibitem{thierry2011toward}
+% Philippe Thierry, Laurent George, J~Hermant, Fabien Germain, Dominique Ragot,
+%   and J~Lacroix.
+% \newblock Toward a predictable and secure data cache algorithm: a cross-layer
+%   approach.
+% \newblock In {\em 10th International Symposium on Programming and Systems
+%   (ISPS)}, pages 148--155, Algiers, Algeria, April 2011. IEEE.
+% 
+% \bibitem{thierry2011real}
+% Philippe Thierry, Laurent George, and Jean-Fran\c{c}ois Hermant.
+% \newblock Real-time scheduling analysis for arinc-based virtualized systems.
+% \newblock In {\em 10th Workshop on Models and Algorithms for Planning and
+%   Scheduling Problems}, page 106, Nymburk, Czech Republic, June 2011.
+% 
+% \bibitem{etfa13}
+% Philippe Thierry, Laurent George, and Jean-Marc Lacroix.
+% \newblock A framework for a secure embedded filtering connector for
+%   multi-criticality systronic systems.
+% \newblock In {\em Proceedings of the 18th International Conference on Emerging
+%   Technologies \& Factory Automation}, Cagliari, Italy, September 2013. IEEE.
+% 
+% \end{thebibliography}
+% 
 %\mainmatter
 
 \input{includes/intro/01_introduction.tex}
