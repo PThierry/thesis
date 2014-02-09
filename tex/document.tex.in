@@ -371,7 +371,11 @@
 
 
 %\chapter*{Liste des publications}
-\nocite{*}
+\nocite{tdmsched}
+\nocite{santy2012relaxing}
+\nocite{thierry2011toward}
+\nocite{thierry2011real}
+\nocite{thierry2013etfa}
 \printbibliography[title=Liste des publications,filter=own]
 
 %\addstarredchapter{Liste des publications}

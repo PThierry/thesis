@@ -49,12 +49,6 @@ echo '
 %\printglossary
 
 % bibliography
-%\nocite{*}
-%\bibliography{bibliography}%{Bibliographie}
-%\bibliographystyle{plain}
-%\printbibliography
 \printbibliography[title=Bibliographie,filter=notown]
-
-\printindex
 
 \end{document}' >> document.tex

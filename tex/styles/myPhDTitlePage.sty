@@ -81,6 +81,19 @@
 }
 %\phdPresident{FirstName}{LastName}{Affiliation}
 
+\newcounter{cntTempScientificManagerMax}
+\newcounter{cntScientificManagerNumber}
+\newcommand*\phdAddScientificManager[3]{%
+	\stepcounter{cntScientificManagerNumber}
+	\global \expandafter \edef \csname phdScientificManagerFirstName\thecntScientificManagerNumber\endcsname {#1}
+	\global \expandafter \edef \csname phdScientificManagerLastName\thecntScientificManagerNumber\endcsname {#2}
+	\global \expandafter \edef \csname phdScientificManagerAffiliation\thecntScientificManagerNumber\endcsname {#3}
+}
+\newcommand\phdGetScientificManagerFirstName[1]{\csuse{phdScientificManagerFirstName#1}}
+\newcommand\phdGetScientificManagerLastName[1]{\csuse{phdScientificManagerLastName#1}}
+\newcommand\phdGetScientificManagerAffiliation[1]{\csuse{phdScientificManagerAffiliation#1}}
+
+
 \newcounter{cntTempExaminatorMax}
 \newcounter{cntExaminatorNumber}
 \newcommand*\phdAddExaminator[3]{%
@@ -92,6 +105,7 @@
 \newcommand\phdGetExaminatorFirstName[1]{\csuse{phdExaminatorFirstName#1}}
 \newcommand\phdGetExaminatorLastName[1]{\csuse{phdExaminatorLastName#1}}
 \newcommand\phdGetExaminatorAffiliation[1]{\csuse{phdExaminatorAffiliation#1}}
+
 
 \newcounter{cntTempReviewerMax}
 \newcounter{cntReviewerNumber}
@@ -167,6 +181,12 @@
 		\iflanguage{frenchb}
 		{\ifthenelse{\value{cntTempAdvisorMax} > 2}{\def\phd@advisor{Directeurs :}}{\def\phd@advisor{Directeur :}}}
 		{\ifthenelse{\value{cntTempAdvisorMax} > 2}{\def\phd@advisor{Advisors:}}{\def\phd@advisor{Advisor:}}}
+
+                \setcounter{cntTempScientificManagerMax}{\thecntScientificManagerNumber}
+		\stepcounter{cntTempScientificManagerMax}
+		\iflanguage{frenchb}
+		{\ifthenelse{\value{cntTempScientificManagerMax} > 2}{\def\phd@scientific{Responsables scientifiques :}}{\def\phd@scientific{Responsable scientifique :}}}
+		{\ifthenelse{\value{cntTempScientificManagerMax} > 2}{\def\phd@scientific{Scientific managers:}}{\def\phd@scientific{Scientific Manager:}}}
 		
 		\setcounter{cntTempReviewerMax}{\thecntReviewerNumber}
 		\stepcounter{cntTempReviewerMax}
@@ -193,6 +213,12 @@
 			}\forloop{cntTemp}{2}{\value{cntTemp} < \value{cntTempAdvisorMax}}{ & 
 				\textbf{\textsc{\phdGetAdvisorFirstName{\thecntTemp}}~\textsc{\phdGetAdvisorLastName{\thecntTemp}}} & -- &
 				\phdGetAdvisorAffiliation{\thecntTemp}\\
+                        }\forloop{cntTemp}{1}{\value{cntTemp} < 2}{\textit{\phd@scientific} & 
+				\textbf{\textsc{\phdGetScientificManagerFirstName{\thecntTemp}}~\textsc{\phdGetScientificManagerLastName{\thecntTemp}}} & -- &
+				\phdGetScientificManagerAffiliation{\thecntTemp}\\
+			}\forloop{cntTemp}{2}{\value{cntTemp} < \value{cntTempScientificManagerMax}}{ & 
+				\textbf{\textsc{\phdGetScientificManagerFirstName{\thecntTemp}}~\textsc{\phdGetScientificManagerLastName{\thecntTemp}}} & -- &
+				\phdGetScientificManagerAffiliation{\thecntTemp}\\
 			}\forloop{cntTemp}{1}{\value{cntTemp} < 2}{\textit{\phd@reviewer} & 
 				\textbf{\textsc{\phdGetReviewerFirstName{\thecntTemp}}~\textsc{\phdGetReviewerLastName{\thecntTemp}}} & -- &
 				\phdGetReviewerAffiliation{\thecntTemp}\\
