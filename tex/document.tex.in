@@ -13,7 +13,7 @@
 %% Document style definition
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\documentclass[twoside,a4paper,11pt,titlepage]{report} 	% document type
+\documentclass[twoside,a4paper,11pt,titlepage]{book} 	% document type
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -82,6 +82,7 @@
 \usepackage{bookmark}
 \usepackage{etoolbox}
 \usepackage{bytefield}
+\usepackage{myPhDTitlePage}
 
 % D. Verna FIXME mackage
 \usepackage[margin=true]{fixme}
@@ -273,7 +274,7 @@
 \newtheorem{hypothesis}{Hypothèse}[section]}
 
 
-\input{includes/titlepage.tex}
+%\input{includes/titlepage.tex}
 
 % Set chaptername lowercase
 \ChNameLowerCase
@@ -298,6 +299,7 @@
   \selectlanguage{english}
 }
 
+
 \dominitoc
 \dominilot
 \dominilof
@@ -307,11 +309,16 @@
 
 \fancyhead{}
 \fancyfoot{}
-\thesisTitle						% print title page
+
+\phdPrintTitlePage
+
+%\thesisTitle						% print title page
 \fancyfoot[RO]{\thepage/\pageref{LastPage}}		% Right Odd foot
 \fancyfoot[RE]{}					% Right Even foot
 \fancyfoot[LE]{\thepage/\pageref{LastPage}}		% Left Even foot
 \fancyfoot[LO]{}					% Left Odd foot
+
+\phdPrintDedication
 
 \cleardoublepage					% double blank page
 %\frontmatter						% out of TOC chapterss
