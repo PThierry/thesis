@@ -16,11 +16,11 @@
 sécuritaire porté par le MILS (Multi-Independent Level of Security) et le MLS
 (MultiLevel Security). Ces solutions, pour certaines d'entre elles,
 fournissent une architecture logicielle compatible avec le principe de {\it
-separation kernel} comme décrit il y a plus de 20 ans par John Rushby
+Separation Kernel} comme décrit il y a plus de 20 ans par John Rushby
 \cite{rushby1989kernels}. Le but d'un Separation Kernel est d'assurer un
 cloisonnement strict entre des environnements logiciels, tout en ayant les
-propriétés nécessaire pour être intégrer dans la TCB. Dans ce chapitre, je décrit les différentes
-solutions existantes candidates au principe de {\it separation kernel}.}
+propriétés nécessaires pour être intégré dans la TCB. Dans ce chapitre, je décris les différentes
+solutions existantes candidates au principe de {\it Separation Kernel}.}
 
 \section{Étude de la sécurité des solutions de virtualisation existantes}
 
@@ -29,7 +29,7 @@ solutions existantes candidates au principe de {\it separation kernel}.}
 \subsubsection{Principe}
 \paragraph{}
 Xen \cite{barham2003xen} est un hyperviseur s'appuyant sur une architecture de type micro-noyau. Ce
-dernier fournit les élements de base pour la gestion et le déploiement des
+dernier fournit les éléments de base pour la gestion et le déploiement des
 machines virtuelles, sous le contrôle d'une machine virtuelle particulière
 correspondant à un domaine d'administration, appelé dans le cas de Xen {\it
   dom0} \cite{fraser2004safe}.
@@ -51,7 +51,7 @@ manières:
     d'administrateur sur la machine
   \item Via de la virtualisation matérielle. Dans ce cas, l'hyperviseur
     s'appuie sur les mécanismes de virtualisation matérielle tels que Intel-VT
-    ou AMD-V pour gérer la ségrégation des accès au périphériques et à la
+    ou AMD-V pour gérer la ségrégation des accès aux périphériques et à la
     mémoire. Cela permet d'exécuter des noyaux virtualisés non modifiés, comme
     le noyau Windows.
 \end{enumerate}
@@ -73,7 +73,7 @@ type Time Division Multiplexing.
 Les tâches des machines virtuelles sont exécutées et ordonnancées par le noyau
 invité de chacune d'entre elle. L'hyperviseur n'a donc pas la visibilité sur
 la charge ou la manière dont sont ordonnancées les tâches hébergées dans les
-machines virtuelles. Cependant, il est apte à réagir aux évènements matériels
+machines virtuelles. Cependant, il est apte à réagir aux événements matériels
 asynchrones, en adaptant l'ordonnancement des machines virtuelles pour
 limiter la latence de traitement. Cependant, un tel ordonnancement est
 difficilement compatible de contraintes temps réel.
@@ -90,7 +90,7 @@ Section \ref{subsec:l4} de ce chapitre.
 La gestion du réseau dans la solution Xen s'appuie exclusivement sur la pile
 réseau du domaine d'administration. Ainsi, la définition du réseau virtuel se
 fait via l'usage de bridges dans ce domaine, générant un overhead non nul dans
-le chemin de donnée réseau d'une machine virtuelle utilisateur.\\
+le chemin de données réseau d'une machine virtuelle utilisateur.\\
 Ainsi, lorsque deux machines virtuelles communiquent, l'ordonnancement du
 domaine d'administration est nécessaire pour permettre au flux d'être reçu
 de l'émetteur puis renvoyé vers le destinataire \cite{apparao2006characterization}.
