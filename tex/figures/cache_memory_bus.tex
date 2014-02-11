@@ -10,34 +10,30 @@
 %%
 
 \begin{pdfpic}
-\scalebox{1}
+% Generated with LaTeXDraw 2.0.8
+% Tue Feb 11 17:44:23 CET 2014
+% \usepackage[usenames,dvipsnames]{pstricks}
+% \usepackage{epsfig}
+% \usepackage{pst-grad} % For gradients
+% \usepackage{pst-plot} % For axes
+\scalebox{1} % Change this value to rescale the drawing.
 {
-\begin{pspicture}(0,0)(11,8)
-\psset{fillstyle=solid}
-% cache look aside architecture
-\psframe[linewidth=0.04cm](1,1)(4,2)% cpu
-\rput(2.5,1.5){CPU Core}
-\psframe[linewidth=0.04cm](3,3)(4,5)% cache
-\rput{-90}(3.5,4){cache}
-\psframe[linewidth=0.04cm](1,6)(4,7)% memory controller
-\rput(2.5,6.5){Memory}
-% cache look through architecture
-\psframe[linewidth=0.04cm](7,1)(10,2)% cpu
-\rput(8.5,1.5){CPU Core}
-\psframe[linewidth=0.04cm](7.5,3)(9.5,4)% cache
-\rput(8.5,3.5){cache}
-\psframe[linewidth=0.04cm](7,6)(10,7)% memory controller
-\rput(8.5,6.5){Memory}
-% arrows
-\psset{arrowsize=0.2cm 1.5}
-\psset{arrowlength=1.2}
-\psset{arrowinset=0}
-% arrows for cache lookaside
-\psline[linewidth=0.2cm]{->}(2.5,2)(2.5,6)
-\psline[linewidth=0.2cm]{->}(2.5,4)(3,4)
-% arrows for cache look through
-\psline[linewidth=0.2cm](8.5,2)(8.5,3)
-\psline[linewidth=0.2cm]{->}(8.5,4)(8.5,6)
-\end{pspicture}
+\begin{pspicture}(0,-2.6)(8.12,2.6)
+\psframe[linewidth=0.04,dimen=outer,fillstyle=solid](3.16,1.0)(2.16,-1.0)
+\rput{-90.0}(2.5696874,2.7065625){\rput(2.6178124,0.0442188){Cache}}
+\psframe[linewidth=0.04,dimen=outer,fillstyle=solid](3.08,2.6)(0.08,1.6)
+\rput(1.526875,2.12){Mémoire}
+\psframe[linewidth=0.04,dimen=outer,fillstyle=solid](8.12,-1.6)(4.86,-2.6)
+\rput(6.4848437,-2.1){Coeur processeur}
+\psframe[linewidth=0.04,dimen=outer,fillstyle=solid](7.98,2.6)(4.98,1.6)
+\rput(6.3868747,2.12){Mémoire}
+\psline[linewidth=0.2cm,arrowsize=0.2cm 1.5,arrowlength=1.2,arrowinset=0.0]{->}(1.6,-1.58)(1.6,1.64)
+\psline[linewidth=0.2cm,arrowsize=0.2cm 1.5,arrowlength=1.2,arrowinset=0.0]{->}(1.66,0.0)(2.16,0.0)
+\psline[linewidth=0.2cm,arrowsize=0.2cm 1.5,arrowlength=1.2,arrowinset=0.0]{->}(6.46,-1.62)(6.46,1.6)
+\psframe[linewidth=0.04,dimen=outer,fillstyle=solid](7.48,0.22)(5.48,-0.78)
+\rput(6.4420314,-0.24){Cache}
+\psframe[linewidth=0.04,dimen=outer,fillstyle=solid](3.26,-1.58)(0.0,-2.58)
+\rput(1.6048437,-2.08){Coeur processeur}
+\end{pspicture} 
 }
 \end{pdfpic}

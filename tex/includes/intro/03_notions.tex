@@ -184,8 +184,8 @@ comme par exemple les systèmes DAC (Discretionary Access Control), MAC
 
 \paragraph{}
 La complexité du système dépend du besoin de certifiabilité. On définit
-initialement une cible d'évaluation (couramment appelée {\it TOE}, pour Target Of Evaluation)
-\cite{cnssi_4009}, intégrant ce qui, dans le
+initialement une cible d'évaluation (couramment appelée TOE, pour {\it Target
+Of Evaluation}) \cite{cnssi_4009}, intégrant ce qui, dans le
 système cible, doit être évalué, ainsi que le niveau de l'évaluation, au sens
 des Critères Communs. Le niveau de sécurité du TOE est donc dépendant du niveau
 souhaité. Les systèmes Linux bien configurés en terme de sécurité peuvent
@@ -195,7 +195,8 @@ sécurité d'un système certifié dans le cadre d'un fonctionnement autonome n'est 
 si ce dernier est connecté à un réseau.
 
 \paragraph{}
-Associé à la TOE, on définit le socle de confiance (couramment appelé {\it Trusted Computing Base} (TCB) \cite{cnssi_4009}. Cette
+Associé à la TOE, on définit le socle de confiance (couramment appelé
+TCB, pour {\it Trusted Computing Base}) \cite{cnssi_4009}. Cette
 notion définit l'ensemble des éléments logiciels et matériels de
 la solution cible qui sont considérés comme de confiance. La corruption de
 tout élément de cet ensemble génère en conséquence une faille dans les
@@ -209,11 +210,11 @@ sont rappelées dans le Chapitre \ref{sec:mils}
 
 \paragraph{}
 Lorsque l'on s'appuie sur une architecture de type compartimentation stricte
-de fonctions exécutées de manière autonomes (comme par exemple via des
+de fonctions exécutées de manière autonome (comme par exemple via des
 technologies de virtualisation), la solution peut être compatible du principe
 de certification par composition.
 \begin{definition}
-On appelle certification par composition une principe permettant, lorsque la
+On appelle certification par composition un principe permettant, lorsque la
 TCB est non modifiée, de ne certifier que les nouveaux composants
 venant s'appuyer sur cette dernière. Il n'est alors pas nécessaire de
 certifier à nouveau l'ensemble de l'architecture logicielle, TCB comprise.
@@ -235,7 +236,7 @@ relatives).
 \paragraph{L'ordonnancement hors ligne}
 La politique d'ordonnancement est définie par avance. Elle est donc optimisée pour un cas particulier de jeu
 de tâches, mais n'est pas réactive en cas d'impact non prévu sur la dynamique d'exécution (effets de caches, de surcharge
-de bus, WCET trop grand ou trop faible, etc).
+de bus, WCET trop grand ou trop faible, etc.).
 
 \paragraph{}
 Parmi tous ces ordonnanceurs, certains peuvent préempter un travail en cours
@@ -345,7 +346,7 @@ incompatibilités du matériel avec ce type de principe. En effet, seules les inst
 des exceptions processeur peuvent être substituées par le moniteur de machine
 virtuelle. Les
 instructions sensibles \cite{popek} ne générant pas d'exception sont une problématique
-fortes car ces dernières peuvent s'exécuter sans que le moniteur de machine
+forte car ces dernières peuvent s'exécuter sans que le moniteur de machine
 virtuelle en soit informé. La conséquence peut être plus ou moins grave car
 ces dernières impactent la sûreté et la sécurité du système.
 
@@ -438,7 +439,7 @@ l'ordonnanceur de l'environnement hôte).
 \paragraph{}
 Les solutions de virtualisation applicative sont parentes des solutions de
 virtualisation de type II dans le sens où elles s'appuient sur un hôte.
-Cependant, celles-ci ne nécessite pas la présence de noyau invité. Elles
+Cependant, celles-ci ne nécessitent pas la présence de noyau invité. Elles
 permettent d'instancier des Environnements Virtuels dont le noyau est partagé
 entre ces derniers ainsi qu'avec l'hôte.
 L'ordonnancement des tâches des VEs est géré directement par
@@ -680,7 +681,8 @@ utilisent encore beaucoup d'architectures avec caches désactivés.
 \subsubsection{Positionnement du cache}
 
 \paragraph{Cache \index{Cache!Look-aside}look-aside}
-Cette architecture place le cache et la mémoire centrale côte à côte.  Ainsi,
+Cette architecture place le cache et la mémoire centrale côte à côte, comme le
+montre la partie gauche de la Figure \ref{fig:cache_arch}.  Ainsi,
 le c{\oe}ur du processeur peut accéder  à la mémoire centrale sans passer par le cache.\\
 Le principe de fonctionnement est le suivant :
 \begin{itemize}
@@ -694,14 +696,14 @@ processeur,  et  espionne  les  données  transitant  sur  le  bus  afin  de  se 
 
 \begin{figure}[h]
 \input{figures/cache_memory_bus.tex}
-\caption{Comparaison   des   architectures   de   type   cache   through   et    cache    lookaside}
-\label{fig:cache_look_aside}
+\caption{Comparaison des architectures de types cache through et cache lookaside}
+\label{fig:cache_arch}
 \end{figure}
 
 
 \paragraph{Cache \index{Cache!Look-through}look-through}
 Cette architecture place le cache en coupure entre le c{\oe}ur du processeur et la mémoire
-centrale. Le processeur passe donc par le cache pour l'accès mémoire.\\
+centrale, comme le montre la partie droite de la Figure \ref{fig:cache_arch}. Le processeur passe donc par le cache pour l'accès mémoire.\\
 Le principe est le suivant :
 \begin{itemize}
 \renewcommand{\labelitemi}{\textbullet}
@@ -710,12 +712,6 @@ Le principe est le suivant :
 \item Si le cache ne possède pas la donnée, il transfère la requête de lecture sur le bus. La mémoire
 centrale renvoie la donnée, qui est mise en cache en même temps qu'elle est renvoyé  au  processeur.
 \end{itemize}
-
-\begin{figure}[h]
-\input{figures/cache_look_through.tex}
-\caption{Architecture de cache en mode {\it look-through}}
-\label{fig:cache_look_through}
-\end{figure}
 
 Cette architecture provoque des cache-miss plus long (vérification par le cache avant  de  faire  la
 requête au contrôleur de bus), mais permet d'utiliser le cache indépendamment
@@ -770,8 +766,7 @@ Le cache garde en mémoire, pour chaque cellule, son état. Lorsque la cellule est
 est  vidé,  les  données  modifiées  localement  sont  synchronisées  avec  la  mémoire  centrale.\\
 La mise à jour de la mémoire centrale n'est pas synchrone avec la modification locale. Cela implique, au
 niveau logiciel, de prévoir les problèmes d'incohérence sur les architectures
-multi-c{\oe}urs ou multi-processeurs, au travers de l'usage des {\it
-\index{Memory barrier}memory barriers}. Ces dernières ont pour but de
+multi-c{\oe}urs ou multi-processeurs, au travers de l'usage des {\it \index{Memory barrier}memory barriers}. Ces dernières ont pour but de
 fournir des mécanismes de synchronisation entre les différents c{\oe}urs afin
 d'assurer la cohérence d'une donnée partagée entre plusieurs instances logicielles
 exécutées en parallèle.
@@ -870,39 +865,38 @@ les cellules.
 
 \subsubsection{Les caches et la sécurité}
 
-%\subsection{Principes généraux et limitations}
 \paragraph{}
-L'impact des caches processeurs est non-nul sur la sécurisation d'un systèmes lorsque deux domaines de
-sécurités sont ordonnancés sur un même matériel. Cela est encore plus vrai si
-ces deux domaines sont ordonnancés sur un c{\oe}ur processeur.\\
+L'impact des caches processeurs est non nul sur la sécurisation d'un système lorsque deux domaines de
+sécurité sont ordonnancés sur un même matériel. Cela est encore plus vrai si
+ces deux domaines sont ordonnancés sur un même c{\oe}ur du processeur.\\
 En effet, la modification de l'état des caches du processeur est induit par le
 comportement des différentes applications en cours d'exécution, générant un
-canal auxiliaire entre ses dernières, comme décrit plus loin.
+canal auxiliaire entre ces dernières, comme décrit plus loin.
 
 \paragraph{}
 Dans \cite{percival2005cache}, l'auteur a ainsi démontré qu'il était possible, au travers de
 mesures des coûts d'accès mémoire d'une tâche, de détecter l'impact d'une
 autre tâche exécutée en concurrence, dans le cadre d'un ordonnancement
-préemptif. Cet impact étant variant selon le comportement de cette dernière,
+préemptif. Cet impact étant variant selon le comportement de celle-ci,
 il est alors possible d'en déduire certaines informations sur l'arbre
 d'exécution associé, et donc sur les choix qui ont été effectués par cette
 tâche. Une telle information est utile si l'attaquant a connaissance du code source
-de la tâche cible, afin d'associer l'arbre d'exécution détecté à une
-succession algorithmes connus. Cette hypothèse est aujourd'hui plus réaliste dans le monde
+de la tâche cible, afin d'associer le chemin d'exécution détecté à une
+succession d'algorithmes connus. Cette hypothèse est aujourd'hui plus réaliste dans le monde
 de l'open-source. Un tel mécanisme a été montré fonctionnel dans
 \cite{bernstein2005cache}\cite{bonneau2006cache} et dans \cite{banescu2011cache}, où les auteurs
 démontrent la capacité pour une tâche à récupérer des
 informations sur les données d'entrée d'algorithmes cryptographiques utilisées
-par une tâche concurrente, grâce à l'étude de l'arbre d'exécution détecté.
+par une tâche concurrente, grâce à l'étude du chemin d'exécution détecté.
 Dans \cite{bernstein2005cache}, la démonstration a été effectuée dans le cadre de deux tâches
 exécutées de manière simultanée sur un processeur Pentium 4 supportant
 l'hyperthreading. Dans \cite{banescu2011cache}, l'auteur n'impose pas l'usage simultané du c{\oe}ur
 processeur. L'espionnage se fait au travers de l'étude de son propre comportement en terme
 de mesure de temps d'accès mémoire, induit par le comportement de la tâche
 concurrente (grâce à la mesure des caches-miss imprévus).\\
-De manière générale, l'espionnage des algorithmes cryptographique au travers
-des collisions des lignes de caches est facilité par les implémentations des
-algortithmes cryptographiques, ces derniers s'appuyant sur des tables de
+De manière générale, l'espionnage des algorithmes cryptographiques au travers
+des collisions des lignes de caches est facilité par leur implémentation.
+En effet, ils s'appuyent sur des tables de
 taille fixe présentes en mémoire à des emplacements disjoints. A ce jour, les
 clefs de chiffrement restent donc un élément confidentiel difficile à
 protéger si tout ou partie de l'architecture logicielle est corrompue.
@@ -911,11 +905,11 @@ protéger si tout ou partie de l'architecture logicielle est corrompue.
 Aujourd'hui, lorsque deux compartiments s'exécutent en concurrence sur un même
 c{\oe}ur processeur, il est d'usage de flusher et réécrire le contenu des cellules des caches à chaque préemption
 des compartiments. On considère ainsi qu'un compartiment donné ne protège pas
-ses propre tâches entre elles, mais que deux compartiments concurrents doivent être
+ses propres tâches entre elles, mais que deux compartiments concurrents doivent être
 ordonnancés avec un cache dont le contenu est connu et prédictible.\\
 Avec une telle architecture logicielle, la fonction de sécurité correspondant
 au flush de cache est considérée suffisante. Cette dernière peut en effet être
-bornée dans le temps, et garanti le contenu des cellules du cache lorsque le compartiment
+bornée dans le temps, et garantit le contenu des cellules du cache lorsque le compartiment
 reprend son exécution.
 
 \subsubsection{Les caches et le temps réel}
@@ -928,9 +922,9 @@ Dans les systèmes industriels très exigeants, les caches sont souvent désactivés
 Malheureusement, une telle configuration est de plus en plus difficile à mettre en {\oe}uvre. En effet, les
 architectures matérielles et logicielles sont de plus en plus construites pour
 être performantes grâce aux contrôleurs de cache (grâce à la présence de deux
-voir trois niveaux de
+voire trois niveaux de
 cache, ou encore de mécanismes de synchronisation avancée dans le cadre des architectures
-MPSoC, etc). La désactivation des caches génère un ralentissement difficile à
+MPSoC, etc.). La désactivation des caches génère un ralentissement difficile à
 accepter selon les hypothèses de performances initiales.
 
 \paragraph{}
@@ -940,9 +934,9 @@ familles:
 \begin{itemize}
   \item Prise en compte des besoins temps réel dans le design du contrôleur de caches
     et optimisation des cache-miss (cache locks et cache partitioning)
-  \item Caclul des pire cas de cache-miss au travers de l'étude de l'arbre
-    d'exécution des différentes tâches en exécution concurrente sur un cache
-    sans propriétés d'aide au temps réel
+  \item Caclul du nombre pire cas de cache-miss au travers de l'étude du chemin
+    d'exécution des différentes tâches en exécution concurrente, avec ou sans
+    l'aide du contrôleur de cache
 \end{itemize}
 
 \paragraph{}
@@ -965,7 +959,7 @@ Ainsi, dans \cite{guan2012wcet}, les auteurs ont montré qu'il était possible de
 prendre en compte l'impact d'un contrôleur de cache s'appuyant sur
 l'algorithme MRU dans le calcul du WCET d'une tâche. Ils ont
 ainsi montré qu'il était possible de déterminer, sous certaines conditions,
-que le maintient de certaines lignes de caches dans le contrôleur pouvait être
+que le maintien de certaines lignes de caches dans le contrôleur pouvait être
 prédictible, réduisant ainsi fortement le pessimisme dans la mesure du WCET.
 
 \subsubsection{État de l'art des problématiques temps réel dans le support MMU}
@@ -974,17 +968,18 @@ prédictible, réduisant ainsi fortement le pessimisme dans la mesure du WCET.
 Les contrôleurs de caches des CPU ont un impact reconnu sur le respect des
 contraintes temps réel d'un système. Il en va de même pour la TLB
 (Translation Lookaside Buffer).\\
-Le TLB est le cache spécialisé permettant d'optimiser la translation
+Le TLB est le cache spécialisé permettant d'optimiser la traduction
 d'adresse que la MMU effectue entre l'adressage logique (tel que vu par le
 c{\oe}ur processeur) et l'adressage physique (tel que vu au niveau du bus
 d'interconnexion). La présence du TLB découle du fait que les données de
-translation sont gérée en mémoire centrale, induisant des accès mémoire
+traduction sont gérées en mémoire centrale, induisant des accès mémoire
 fréquents par le contrôleur MMU afin de faire l'association mémoire
 logique/mémoire physique. Le TLB est donc un cache local permettant de garder
-une mémoire les translations d'adresses afin d'éviter une
+en mémoire les dernières traductions d'adresses afin d'éviter une
 surconsommation des accès mémoire centrale par le contrôleur MMU.\\
 Le contenu du TLB est impacté par l'ordonnancement de tâches, et doit donc
-être considéré dans le cadre de la gestion de tâches avec des contraintes temps réel dur.
+être considéré dans le cadre de la gestion de tâches avec des contraintes de
+temps-réel dur.
 Dans \cite{groesbrink2008modular} les auteurs décrivent un mécanisme apparenté
 aux cache-locking afin de limiter l'impact du TLB sur le coût d'exécution des
 tâches temps réel.
@@ -995,7 +990,7 @@ tâches temps réel.
 L'usage des caches est aujourd'hui nécessaire afin de pouvoir exploiter
 correctement les capacités des processeurs modernes. Cependant, leur usage
 impacte à la fois la sécurité et le temps réel. Dans le cadre de ma thèse, je
-ne me permet pas de travailler sur un design matériel de contrôleur de cache.
+ne propose pas de design matériel de contrôleur de cache.
 Néanmoins, je propose un axe de solution, décrit dans le Chapitre \ref{sec:caches},
 afin de limiter l'impact des contraintes de sécurité sur les performances et
 le temps réel. Plus généralement, je considère la problématique sécuritaire associée à la présence
@@ -1016,7 +1011,7 @@ intéressantes, dans le cadre des archtiectures QorIQ de Freescale
 \cite{QorIQP4080} :
 \begin{itemize}
   \item La capacité de dériver une partie du contrôleur de cache L2 en mémoire
-    SRAM utilisable par le logiciel
+    SRAM utilisable par le logiciel.
   \item Le support du {\it secure boot}, qui permet, via l'injection d'une
     clef de chiffrement dans une mémoire au travers de fusibles à usage
     unique, d'assurer l'intégrité des différents éléments de la chaîne de boot
