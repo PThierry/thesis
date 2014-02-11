@@ -67,7 +67,7 @@
 %\usepackage{chapterbib}
 \usepackage{theorem}
 \usepackage{etex}
-\usepackage[Glenn]{fncychap}				% 'Glenn' chapter titles
+%\usepackage[Glenn]{fncychap}				% 'Glenn' chapter titles
 
 % charts support
 \usepackage{pdftricks}
@@ -287,16 +287,34 @@
 \theoremheaderfont{\scshape}
 \newtheorem{hypothesis}{Hypothèse}[section]}
 
-
 %\input{includes/titlepage.tex}
 
+
+%%% Fancy
+
+% Clear Header Style on the Last Empty Odd pages
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else%
+\hbox{}%
+\thispagestyle{empty}%              % Empty header styles
+\newpage%
+\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+
+
+
+\fancypagestyle{plain}{%
+        \fancyhf{} % clear all header and footer fields
+        \renewcommand{\headrulewidth}{0pt}
+        \renewcommand{\footrulewidth}{0pt}
+}
+
 % Set chaptername lowercase
-\ChNameLowerCase
+%\ChNameLowerCase
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Headers and footers configuration
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\pagestyle{fancy}					% specify page style
+%\pagestyle{fancy}					% specify page style
+
 \pagenumbering{roman}					% specify page numbering
 \fancyhf{}						% clear previous headers
 %\addtolength{\headheight}{48pt}				% update header height
@@ -325,6 +343,19 @@
 \fancyfoot{}
 
 \phdPrintTitlePage
+
+%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\headrulewidth}{1.0pt}
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyhead[LE,RO]{\bfseries\thepage}    % Page number (boldface) in left on even
+\fancyhead[RE]{\bfseries\nouppercase{\leftmark}}      % Chapter in the right on even pages
+\fancyhead[LO]{\bfseries\nouppercase{\rightmark}}     % Section in the left on odd pages
+
+
+
+%%%%%%%%%%%%%%%%%%%%%
 
 %\thesisTitle						% print title page
 \fancyfoot[RO]{\thepage/\pageref{LastPage}}		% Right Odd foot

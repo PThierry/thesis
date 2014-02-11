@@ -21,7 +21,7 @@ pu grâce à lui enrichir toute la partie sécurité en m'appuyant sur des
 outils méthodologique reconnus comme la méthode EBIOS.\\
 Merci également à Laurent pour toute la formation qu'il m'a donné sur les
 aspects temps-réel et ordonnancement, ainsi qu'à Jean-Marc pour sa vision
-industrielle du temps réel qu'il a su me faire partager.
+industrielle du temps-réel qu'il a su me faire partager.
 \end{minipage}
 
 \chapter*{Résumé}
@@ -38,11 +38,11 @@ temps, les exigences de temps-réel et de fiabilité restent fortement présentes
 dans le cadre des véhicules militaires. Ainsi la fiabilité de la gestion du système
 d'arme, en charge de débrayer les mécanismes d'attaque lors de l'ouverture d'une
 des portes du véhicule, est critique, afin d'éviter tout accident. De la même
-manière, les contraintes de temps réel sont fortement présentent dans le cas du
+manière, les contraintes de temps-réel sont fortement présentes dans le cas du
 système de gestion du blindage transparent, en charge de remonter l'ensemble des
-flux vidéos des caméras extérieures au conducteur, dans un véhicules sans fenêtre.\\
+flux des caméras extérieures au conducteur, dans un véhicule sans fenêtre.\\
 
-Jusqu'à présent, les domaines à fortes contraintes de temps réel, de
+Jusqu'à présent, les domaines à fortes contraintes de temps-réel, de
 fiabilité et de sécurité restaient physiquement séparés. De nos jours, avec l'accroissement de la complexité des
 éléments déployés dans les véhicules, il est fortement demandé par les différents clients étatiques de fusionner
 ces domaines sur un même matériel, à la seule exception des éléments à forte
@@ -51,25 +51,25 @@ consommation des différents éléments technologiques présents.\\
 
 De plus, il est également demandé de permettre une
 meilleure centralisation de la supervision des différents composants, que ces
-derniers fassent partie d'un domaine à forte contrainte de temps réel, de
+derniers fassent partie d'un domaine à forte contrainte de temps-réel, de
 fiabilité ou d'un domaine à forte contrainte sécuritaire.
 
 Ainsi, il devient nécessaire de définir une passerelle permettant d'interagir à la fois avec des
-domaines à fortes contraintes temps réel, des domaines à fortes contraintes de
+domaines à fortes contraintes temps-réel, des domaines à fortes contraintes de
 fiabilité et plusieurs domaines de sécurité. Cette passerelle doit alors
 assurer à la fois :
 \begin{itemize}
   \item un cloisonnement strict des domaines de sécurité disjoints
-  \item le transfert de données du domaine temps réel tout en assurant une
+  \item le transfert de données du domaine temps-réel tout en assurant une
     latence de traversée maximum garantie
   \item le transfert de données de supervision du domaine à fortes contraintes de
-    fiabilité sans pour autant impacter ses éléments
+    fiabilité sans pour autant impacter ces éléments
 \end{itemize}
 
 Dans le cadre de ma thèse, je propose une nouvelle architecture logicielle
 modulaire ciblant une telle passerelle. Cette architecture doit
 permettre de répondre à différents besoins véhiculaires, tout en prenant en
-compte à la fois des contraintes de temps réel et de sécurité.
+compte à la fois des contraintes de temps-réel et de sécurité.
 La solution que je propose est de plus basée sur une
 évolution du principe de criticité mixte (confer Chapitre \ref{sec:mixedcriticity}),
 permettant d'assurer au mieux l'ensemble des traitements requis sur un matériel
@@ -80,11 +80,11 @@ La faisabilité
 technique de la solution que je propose est validée au travers de plusieurs
 maquettages. Elle a de plus pour but d'être un
 framework ouvert, où il est possible d'ajouter ou de retirer des modules
-sécuritaires ou temps réel en fonction du besoin, tout en restant sur la même
+sécuritaires ou temps-réel en fonction du besoin, tout en restant sur la même
 architecture générale dont le but est de garantir un cloisonnement efficace, à
 la fois spatial et temporel. Ce principe permet ainsi de limiter le coût
-d'instanciation d'une telle passerelle dans divers type de véhicules
-militaires pour lesquelles les contraintes peuvent varier.
+d'instanciation d'une telle passerelle dans divers types de véhicules
+militaires pour lesquels les contraintes peuvent varier.
 
 \chapter*{Abstract}
 \addstarredchapter{Abstract}
