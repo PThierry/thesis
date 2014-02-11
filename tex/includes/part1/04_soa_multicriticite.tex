@@ -41,7 +41,7 @@ Ainsi, la
 capacité à ordonnancer en concurrence des jeux de tâches sur un même
 c{\oe}ur processeur permet de pouvoir prendre en considération une
 classification de ces derniers. La prise en compte d'une classification des
-jeux de tache permet de différencier leur ordonnancement
+jeux de tâche permet de différencier leur ordonnancement
 en fonction selon le besoin. Aujourd'hui, la plupart des travaux \cite{methodhierarchical}
 ont pour hypothèse une connaissance initiale de l'ensemble des tâches.
 
@@ -180,12 +180,12 @@ actif.
 
 %To insert: \cite{handlemulticrit}
 
-\subsection{A propos de l'ordonnancement d'un ensemble de taches à criticité mixte}
+\subsection{A propos de l'ordonnancement d'un ensemble de tâches à criticité mixte}
 
 \paragraph{}
 L'ordonnancement à criticité mixte est un domaine de recherche émergeant
 gagnant un intérêt croissant. Vestal \cite{Vestal2007} a initialement
-introduit le modèle de tache à criticité mixte. Dans son travail, il décrivit
+introduit le modèle de tâche à criticité mixte. Dans son travail, il décrivit
 la difficulté à calculer le coût d'exécution pire cas exact, et observa que
 dans la pratique, plus le niveau d'assurance requis est élevé, plus pessimiste
 était l'approximation de la valeur du coût d'exécution pire cas. Ce niveau
@@ -193,9 +193,9 @@ d'assurance est caractérisé par le niveau de criticité. Il suggéra également
 une stratégie basée sur l'ordonnancement à priorité fixe basée sur
 le principe d'assignement de priorité de Audsley \cite{Audsley_1991}. Dorin et
 al. \cite{Dorin2010} ont prouvé que dans le cas restreint des systèmes à
-taches indépendantes à deadline contraintes, l'approche modifié du principe
+tâches indépendantes à deadline contraintes, l'approche modifié du principe
 d'Audsley par Vestal était optimale pour les algorithmes de priorisation
-d'ensembles de taches à criticité mixte.
+d'ensembles de tâches à criticité mixte.
 
 \paragraph{}
 Aujourd'hui, la problématique de criticité mixe (MC-ordonnançabilité) est
@@ -212,13 +212,13 @@ condition de WCR-ordonnançabilité et condition d'OCBP-ordonnançabilité.
 Plus tard, Baruah et Li \cite{Li2010} ont étendu leur travaux initiaux et
 proposère une stratégie d'ordonnancement à priorité fixe basée sur la
 condition d'OCBP-ordonnançabilité. Barual et al. ont également adapté
-l'algorithme EDF (Earliest Deadline First) pour les ensemble de taches à
+l'algorithme EDF (Earliest Deadline First) pour les ensemble de tâches à
 criticité mixte. Cette approche est connue sous le nom EDF-VD. Plus récement,
 Quan et al. \cite{gpmw} ont présenté une nouvelle approche pour ordonnancer
 des systèmes à criticité mixte, qui s'appuie sur un calcul hors ligne de la
 priorité des jobs, qui est ensuite utilisée par un ordonnanceur en ligne. Au
 même moment, Baruah et al. \cite{RBaruah2011a} formalisèrent l'analyse de
-temps de réponse de taches à criticité mixte.\\
+temps de réponse de tâches à criticité mixte.\\
 Le second contexte dans lequel la criticité mixte est définie considère que
 parmis toutes les fonctionnalités déployées sur une unique plateforme de
 calcul, certaines peuvent être plus critiques que d'autre en terme
@@ -229,11 +229,11 @@ du système d'arme que d'autres, comme les caméras extérieures. Dans ce
 contexte, Lakshmanan et al. \cite{Niz2009,Lakshmanan2011} ont observé que
 l'approche basée sur la réservation afin d'isoler les fonctionnalités et
 prévenir les interférences, peuvent avoir pour conséquence un problème
-d'inversion de criticité, où une tache moins critique est favorisée par
-rapport à une tache de plus haute criticité lorsque cette dernière dépasse
+d'inversion de criticité, où une tâche moins critique est favorisée par
+rapport à une tâche de plus haute criticité lorsque cette dernière dépasse
 le slot temporel lui ayant été alloué. Ils suggérèrent une nouvelle approche,
 dénommée {\it zero-slack scheduling}, pour éviter ce problème. Dans le cas de
-la passerelle Systronique, la découpe entre tache est maintenue en TDM pour
+la passerelle Systronique, la découpe entre tâche est maintenue en TDM pour
 des raisons de sécurité, afin d'empêcher l'usage d'un canal caché basé sur la
 variation de durée du slot afin de transmettre de l'information aux autres
 slot au travers l'impact de cette variation.

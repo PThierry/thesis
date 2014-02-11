@@ -8,10 +8,10 @@
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
 %% Last update Mon Aug 30 17:00:21 2010 Philippe THIERRY
 
-\chapter{Compatibilité d'une architecture sécuritée avec des contraintes temps-réel}
+\chapter{Compatibilité d'une architecture sécurisée avec des contraintes de temps-réel}
 \doMinitoc
 
-\section{Architectures compartimentées et temps réel}
+\section{Architectures compartimentées et temps-réel}
 \label{sec:solution_rt}
 
 \paragraph{}
@@ -25,11 +25,11 @@ réel sur les flux traité par la passerelle, il devient nécessaire de
 considérer la bonne adéquation de la solution de compartimentation avec les
 contraintes d'exécution (WCET, période, deadline) des services de traitement de flux.
 
-\subsection{A propos des exigences temps réelles}
+\subsection{A propos des exigences temps-réel}
 
 \paragraph{}
 En plus des différentes exigences de sécurité décrite dans le chapitre
-précédant, plusieurs exigences temps réel doivent être respectée dans le
+précédant, plusieurs exigences temps-réel doivent être respectée dans le
 cadre d'une passerelle d'interconnexion entre deux domaines dont les niveaux
 de criticités sont à la fois multiples dans chacun d'entre eux et
 potentiellement différents de chaque coté de la passerelle.
@@ -54,7 +54,7 @@ En fonction du besoin, il doit être possible de garantir un débit minimum de tra
 
 \paragraph{}
 Les architectures logicielles compartimentées sont ordonnancées à la manière
-des systèmes temps réels à ordonnancement hiérarchique \cite{regehr_evolving_2003}. On
+des systèmes temps-réels à ordonnancement hiérarchique \cite{regehr_evolving_2003}. On
 définit alors un ordonnancement dit {\it global}, correspondant à l'ordonnancement des compartiments, et un ordonnancement dit {\it local}
 correspondant à l'ordonnancement des tâches dans un compartiment donné.\\
 A chaque compartiment est associé un {\it slot}. Ce slot est une fraction
@@ -75,10 +75,10 @@ TDM/EDF.
 \paragraph{}
 Dans le cadre de cette architecture, il est cependant nécessaire de
 déterminer, pour l'ensemble des compartiments ayant des tâches devant
-respecter des exigences de temps réel, la période et la durée nécessaire
+respecter des exigences de temps-réel, la période et la durée nécessaire
 du slot permettant d'assurer le respect. La particularité de la solution de
 compartimentation pour la sécurité sur base TDM est que l'ordonnanceur global,
-géré au niveau de l'hyperviseur, n'est pas informé des propriétés temps réel
+géré au niveau de l'hyperviseur, n'est pas informé des propriétés temps-réel
 des tâches hébergées dans les compartiments. De plus, le respect du
 partitionnement TDM strict interdit toute variation du motif d'ordonnancement
 des compartiments. En conséquence, bien que l'ordonnancement local des tâches d'un
@@ -237,9 +237,9 @@ Pour tout entier $k$ avec $k \geq 1$, pour tout $t$ dans l'intervalle $[k ST_i
   inférieure ou égale à $t - k(ST_i - SC_i)$ (condition de l'équation
   \ref{eqn:edf_sched})
 
-\section{Moniteurs de sécurité, fonctions temps réel et environnements non sécurisables}
+\section{Moniteurs de sécurité, fonctions temps-réel et environnements non sécurisables}
 
-\subsection{De la compatibilité des moniteurs de sécurité avec le temps réel}
+\subsection{De la compatibilité des moniteurs de sécurité avec le temps-réel}
 
 \paragraph{}
 Les moniteurs de sécurité sont considérés, dans le cadre de ma thèse, comme
@@ -248,26 +248,26 @@ la solution PikeOS \cite{pike_kaiser2007evolution} comme hyperviseur. Ce
 dernier est en effet apte à virtualiser des environnements complexes tout en
 positionnant à leur coté des threads ordonnancés directement par le
 micro-noyau. Ces derniers sont ordonnancés avec les contraintes du TDM, mais
-peuvent donc être considérés comme des taches temps réel. Leur simplicité et
+peuvent donc être considérés comme des taches temps-réel. Leur simplicité et
 leur faible volumétrie de code permet de déterminer leur coût d'exécution pire
 cas. Chaque thread étant autonome dans son propre slot TDM, la période
 correspond alors à la période de récurrence de ce slot et la deadline
 correspond à la durée de ce dernier. Cette durée est déterminée directement
 par le coût d'exécution de la fonction.
 
-\subsection{De la compatibilité des environnements non certifiables avec le temps réel}
+\subsection{De la compatibilité des environnements non certifiables avec le temps-réel}
 
 \paragraph{}
 Dans le cadre de mes travaux, j'utilise dans les compartiments non
 certifiables
 le système d'exploitation Linux. Ce dernier fournit une grande richesse
 applicative et une pile réseau très complète. Cependant, Linux n'est pas un
-système d'exploitation compatible avec des exigences temps réel dur. En effet,
+système d'exploitation compatible avec des exigences temps-réel dur. En effet,
 ce dernier possède plusieurs points problématiques. En effet, le noyau Linux
 étant très riche il s'appuie:
 \begin{itemize}
   \item sur des thread noyau ordonnancés avec les politiques d'ordonnancement
-    temps réel de POSIX (SCHED\_FIFO et SCHED\_RR) qui intègre un mécanisme
+    temps-réel de POSIX (SCHED\_FIFO et SCHED\_RR) qui intègre un mécanisme
     complexe de vieillissement. La charge associés à ces threads est
     difficilement bornable car elle correspond pour la plupart à la
     conséquences de traitements d'entrées/sorties comme la gestion du disque.
@@ -289,12 +289,12 @@ ce dernier possède plusieurs points problématiques. En effet, le noyau Linux
 \end{itemize}
 
 \paragraph{}
-Malgré tous ces éléments problématiques pour le temps réel, il existe
-plusieurs patchs permettant de rétablir un peu de comportement temps réel dans
+Malgré tous ces éléments problématiques pour le temps-réel, il existe
+plusieurs patchs permettant de rétablir un peu de comportement temps-réel dans
 le système d'exploitation. Dans le cadre de ma thèse, je ne parle cependant
 pas des solutions RTAI ou Xenomai, qui impliquent des exigences particulières
-sur les tâches temps réel, leur interdisant l'usage des API standard Linux
-sous peines de perdre leur propriétés temps réel. Dans le cadre de la
+sur les tâches temps-réel, leur interdisant l'usage des API standard Linux
+sous peines de perdre leur propriétés temps-réel. Dans le cadre de la
 définition d'une passerelle pour du traitement réseau, il est nécessaire que
 ces tâches soient aptes à traiter des flux télécom, et donc à s'interfacer
 avec l'API POSIX de traitement réseau. Afin de répondre à cette problématique,
@@ -304,7 +304,7 @@ de modifier le comportement du noyau Linux en divers points:
 \begin{itemize}
   \item Les threads noyaux ne s'exécutent plus avec une haute priorité temps
     réel, supprimant la collision de ses derniers avec l'ensemble de tâches
-    temps réel
+    temps-réel
   \item Les {\it softirqs} ne s'exécutent plus via du vol de cycle, mais
     exclusivement dans un thread kernel spécifique
 \end{itemize}
@@ -358,8 +358,8 @@ Cette mesure a permis de démontrer que pour une mesure portant sur $10^8$
 échantillons pendant une durée de 5 heures, la latence pire cas à
 l'ordonnancement est de $350 \mu s$, comme le montre la Figure
 \ref{fig:rttest}.\\
-Il est donc possible, selon le besoin, de positionner des tâches temps réel
-souple dans ces compartiments. Les taches à contraintes temps réel fortes ne
+Il est donc possible, selon le besoin, de positionner des tâches temps-réel
+souple dans ces compartiments. Les taches à contraintes temps-réel fortes ne
 sont cependant pas intégrables dans les compartiments non certifiables.
 
 \section{Intégration du support des flux à criticité mixte}
@@ -373,7 +373,7 @@ exigences impliquant de considérer des niveaux de criticités hétérogènes dans
 un même ensemble de tâches. La première cause en est les exigences physique
 associées à la Systronique, qui limite la puissance processeur utilisable dans
 le cadre de la passerelle. A défaut de pouvoir utiliser un environnement
-matériel suffisamment puissant pour traiter l'ensemble des taches temps réel
+matériel suffisamment puissant pour traiter l'ensemble des taches temps-réel
 avec des mesures de coût d'exécution pessimiste, je me replie sur les
 mécanismes de criticité mixte afin d'ordonnancer au mieux l'ensemble des
 taches nécessaire aux divers traitements.
@@ -649,7 +649,7 @@ revenant à un ensemble de taches traditionnel, les résultats démontrés par
 Liu \cite{Liu2000} sont réutilisable, ce qui prouve notre théorème.
 \end{proof}
 
-\subsection{Determinaison de la MC-ordonnançabilité}\label{sufficientCondition}
+\subsection{Déterminaison de la MC-ordonnançabilité}\label{sufficientCondition}
 
 \paragraph{}
 Baruah et al. \cite{bbalmms} ont démontré que le problème de
