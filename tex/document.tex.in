@@ -412,6 +412,9 @@
 \nocite{thierry2011toward}
 \nocite{thierry2011real}
 \nocite{thierry2013etfa}
+\nocite{thierry2013part}
+\nocite{thierry2013daudit}
+\nocite{thierry2013dctrl}
 \printbibliography[title=Liste des publications,filter=own]
 
 %\addstarredchapter{Liste des publications}

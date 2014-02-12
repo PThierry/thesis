@@ -183,7 +183,8 @@ A partir de ces éléments, je vais définir l'architecture logicielle complète
 permettant de répondre au besoin d'une passerelle multi-domaines de sécurité,
 en définissant les besoins sécuritaires associés à la fonction passerelles, et
 en définissant l'architecture logicielle complète permettant de répondre à ce
-besoin.
+besoin. Une validation de la compatibilité de ces chois structuraux a été
+faite via un maquettage chez Thales donnant lieu à un premier brevet \cite{thierry2013part}.
 
 \section{Définition de la réponse technique au besoin}
 
@@ -544,7 +545,7 @@ de plus haut niveau
 un domaine de plus faible niveau
 \end{enumerate}
 
-\subsubsection{A propos d'une architecture de diode logicielle pour le transfert agnostique de donnée}
+\subsubsection{A propos d'une architecture de diode logicielle pour le transfert de données}
 
 \paragraph{}
 Il existe dans l'état de l'art des solutions permettant d'assurer le transfert
@@ -562,6 +563,17 @@ Pour répondre à cette exigence, il est nécessaire d'implémenter une fonction
 logicielle dont le comportement est prévu pour assurer une opacité forte lors
 du transit des données entre son entrée et sa sortie, quel que soit le
 comportement des éléments source et destination du flux.
+
+\paragraph{}
+Ce moniteur de sécurité a été évalué avec succès dans le cadre d'une Cible de
+Sécurité de Premier Niveau (CSPN), suivi d'une pré-évaluation au sens des
+Critères Communs, de niveau EAL5+. De plus, ce moniteur de sécurité est
+capable de garantir une latence de traversée maximum ainsi qu'un débit garanti par construction.\\
+Ces travaux ont donné lieu à deux brevets \cite{thierry2013daudit}\cite{thierry2013dctrl},
+mais la majorité des éléments techniques sont aujourd'hui maintenu secrets par
+Thales. En conséquence, bien que ce moniteur de sécurité soit aujourd'hui une
+réalité, je ne peux pas donner dans le cadre de ce document plus
+d'informations sur son implémentation et son fonctionnement.
 
 \subsubsection{Problématique d'exploitation des canaux auxiliaires: à propos des profils de flux}
 
