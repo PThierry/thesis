@@ -16,27 +16,30 @@
 \label{sec:mls_gw_principle}
 
 \paragraph{}
-Afin de répondre à la problématique décrite en \ref{sec:problematique}, il est
-nécessaire de définir une solution répondant au besoin de sécurité
-multi-niveaux (MLS), impliquant un mécanisme assurant une étanchéité des
+Afin de répondre à la problématique de ma thèse, il est
+nécessaire de définir une solution répondant aux besoins de MultiLevel Security
+(MLS). Cela implique un mécanisme assurant une étanchéité des
 données à différents niveaux:
 \begin{itemize}
-  \item Les données transitant du niveau le plus élevé au niveau le plus
-    faible doivent être complètement contrôlées, afin de valider que ces
-    dernières peuvent être désensibilisées
-  \item Le flux transitant du niveau le plus faible au niveau le plus élevé ne
-    nécessite pas de filtrage en terme de contenu. Cependant, son comportement
-    ne doit pas fournir d'information aux éléments émetteurs ou tout autre
-    élément du niveau de sécurité le plus faible
+  \item Les données transitant du niveau de sécurité le plus élevé au niveau le plus
+    bas doivent être complètement contrôlées, afin de valider que ces
+    dernières peuvent être désensibilisées.
+  \item Le flux transitant du niveau de sécurité le plus bas au niveau de
+    sécurité le plus élevé n'exige pas de filtrage en terme de contenu.
+    Cependant, l'action de transmission du flux ne doit pas fournir d'information
+    sur le domaine de sécurité le plus haut aux éléments émetteurs ou tout autre
+    élément du niveau de sécurité le plus bas.
 \end{itemize}
 
 \paragraph{}
-Les mécanismes définis pour répondre au besoin de type MLS ou MILS définissent
-des exigences permettant de répondre à ce besoin \cite{alves2006mils}.
+Les mécanismes définis pour répondre aux besoins de type MLS impliquent le
+respect des exigences définies dans le Chapitre \label{sec:mils}, et
+formalisées initialement en 2006 \cite{alves2006mils}.
 Afin d'être compatible de ces exigences, je m'appuie sur le principe de
-micro-noyau de sécurité, permettant de garantir des propriétés d'isolation. A
-cela, il est nécessaire de définir une architecture logicielle complète pour
-répondre à la problématique. Cette architecture est décrite dans ce chapitre.
+Separation Kernel. De plus, il est nécessaire de définir une architecture
+logicielle complète au dessus du Separation Kernel afin de répondre aux
+exigences fonctionnelles et sécuritaires de la problématique de ma thèse.
+L'architecture logicielle que j'ai choisie est décrite dans ce chapitre.
 
 \section{Définition des hypothèses générales}
 \label{sec:mls_gw_hypothesis}
@@ -50,24 +53,30 @@ les propriétés que doit apporter le logiciel, et considère en conséquence des
 hypothèses strictes sur le matériel.\\
 Bien que ces hypothèses soient peu réalistes sur du matériel généraliste (i.e.
 du marché civil), elles doivent être supportées pour assurer les propriétés de
-sécurité, à défaut d'avoir intégrer un design matériel spécifique. Ces
+sécurité, à défaut d'avoir intégré un design matériel spécifique. Ces
 hypothèses sont les suivantes:
 
 \begin{hypothesis}
-  {\bf conformité}: l'ensemble des contrôleurs matériels sont conformes de leur
+  {\bf conformité} : L'ensemble des éléments matériels sont conformes de leur
   documentation. Ils assurent le respect des exigences documentaires et ne
-  fourissent aucune propriété non documentée
+  fournissent aucune propriété non documentée
 \end{hypothesis}
 
 \begin{hypothesis}
-  {\bf compatibilité au temps réel}: les éléments d'interconnexion (bus,
+  {\bf compatibilité au temps réel} : Les éléments d'interconnexion (bus,
   interconnect, etc) sont compatibles de la gestion de tâches temps réel. Ces
-  derniers ne sont pas considérés dans le cadre de ma thèse comme impactant.
+  éléments ne sont pas considérés dans le cadre de ma thèse comme impactant.
 \end{hypothesis}
 
 \begin{hypothesis}
-  {\bf sûreté de fonctionnement}: les éléments matériels sont réputés sûrs.
-  Ils ne génèrent pas de faille de sécurité de par une erreur d'architecture
+  {\bf sûreté de fonctionnement} : Les éléments matériels sont fiable.
+  Ils ne sont pas source d'erreur et n'impactent pas le logiciel par un
+  quelconque dysfonctionnement.
+\end{hypothesis}
+
+\begin{hypothesis}
+  {\bf sécurité} : Les éléments matériels sont réputés sécurisés.
+  Ils ne génèrent pas de faille de sécurité du fait d'une erreur d'architecture
   ou de comportement.
 \end{hypothesis}
 
@@ -75,7 +84,7 @@ hypothèses sont les suivantes:
 Bien que ces hypothèses soient considérés valide dans le cadre du matériel
 considéré dans la solution, l'usage invalide volontaire de ce matériel par
 le logiciel reste considéré pour les problématiques de sécurité. L'usage du
-matériel comme base pour des cannaux cachés ou auxiliaires est considéré dans
+matériel comme base pour des canaux cachés ou auxiliaires est considéré dans
 le cadre de ma thèse et des solutions sont proposées pour répondre à cette
 problématique.
 
@@ -85,26 +94,25 @@ problématique.
 \label{sec:noncert}
 
 \paragraph{}
-La présente passerelle interconnecte des domaines de sécurité disjoints. Elle
+La présente passerelle connecte des domaines de sécurité disjoints. Elle
 doit donc être compatible des propriétés \ref{pro:noncontournable},
 \ref{pro:evaluable}, \ref{pro:validation} et \ref{pro:inviolable}
 des architectures MLS.
 
 \paragraph{}
-Les solutions logicielles pour du traitement télécom, incluant entre autre
-une implémentation d'une pile TCP/IP, sont trop volumineuse pour être
-compatible d'une certification à haut niveau. De manière générale, seul
+Les solutions logicielles pour du traitement télécom, incluant entre autres
+une implémentation d'une pile TCP/IP, sont trop volumineuses pour être
+compatibles d'une certification à haut niveau. De manière générale, seul
 l'usage d'éléments logiciels à faible volumétrie de code permet de supporter
-une telle certification.\\
+une telle certification à coût raisonnable.\\
 Parce que l'implémentation logicielle d'un passerelle de type télécom ne peut être certifiée en
 terme de sécurité, les éléments d'implémentation de celle-ci
 sont donc considérés comme ne pouvant pas être de confiance. Il devient alors
-nécessaire:
+nécessaire de définir :
 \begin{itemize}
-  \item de définir dans l'architecture de sécurité deux famille logicielles
-$Sec$ et $Unsec$, l'une étant de confiance, l'autre non
-  \item de définir des mécanismes permettant de pouvoir intégrer des éléments
-    non certifiables tout en maintenant la sécurité du système
+  \item deux famille logicielles $Sec$ et $Unsec$, l'une étant de confiance, l'autre non
+  \item des mécanismes permettant de pouvoir intégrer des éléments non certifiables tout en
+    assurant la sécurité du système dans son ensemble
 \end{itemize}
 
 \paragraph{}
@@ -114,15 +122,14 @@ certifiable et ce qui ne l'est pas:
 
 \begin{property}
 $Sec$ définit l'ensemble des éléments logiciels certifiables. Ces derniers
-sont aptes à contrôler des éléments matériels, bien que leur comportement
-puisse être audité pas un élément tiers. Ces éléments font partie de la TCB
-(Trusted Computing Base), qui définit l'ensemble des éléments certifiables et
-inviolables du système.
+sont aptes à contrôler des éléments matériels ou auditer d'autres éléments
+logiciels de la famille $Sec$ et $Unsec$. Ces éléments font partie de la TCB
+(Trusted Computing Base).
 \end{property}
 
 \begin{property}
 $Unsec$ définit l'ensemble des éléments logiciels non-certifiables. Ces derniers
-ne peuvent accéder directement à tout élément de configuration du matériel.
+ne doivent pas accéder directement à un quelconque élément matériel.
 \end{property}
 
 \begin{property}
@@ -133,7 +140,7 @@ $$Sec \cap Unsec = \emptyset$$
 \begin{figure}
   \label{fig:iofilter}
   \input{figures/io_filtering.tex}
-  \caption{filtrage par un montieur de confiance des entrées sorties}
+  \caption{filtrage des entrées/sorties par un élément logiciel de confiance}
 \end{figure}
 
 \paragraph{}
@@ -146,44 +153,40 @@ des architectures MLS est respectée, comme le montre la Figure
 \subsection{A propos des moniteurs de sécurité}
 
 \paragraph{}
-Il est montré dans le chapire précédant que la présence d'éléments logiciels
+Il est montré dans la Section précédante que la présence d'éléments logiciels
 non certifiables est un mal nécessaire pour permettre un certain nombre de
-traitements à valeur ajoutés sur des flux télécoms. En effet, l'implémentation d'une pile
+traitements à valeur ajoutée sur des flux télécoms. En effet, l'implémentation d'une pile
 réseau certifiable étant trop couteuse, j'ai fait le choix d'intégrer de tels
 logiciels, en prenant en compte le problème de non-certification associée dans
 l'architecture.
 
 \paragraph{}
 Comme vu dans le Chapitre \ref{sec:noncert}, l'usage de tels logiciels peut
-être considérés si des éléments certifiables extérieurs sont présents afin de
-rester compatible des quatres exigences initiales des architecture MLS. On
-définit donc des éléments logiciels autonomes certifiable portant une
+être considérés si des éléments certifiables extérieurs sont présents, afin de
+rester compatible des quatre exigences initiales des architecture MLS. On
+définit donc des éléments logiciels autonomes et certifiable portant une
 fonction de sécurité. Par la suite, j'appelle ces éléments logiciels
 des moniteurs de sécurité.\\
-Dans le cadre de la solution que je propose, un grand nombre de moniteurs de
-sécurité est présent. L'ensemble de ses moniteurs définit l'ensemble $Sec$.
-Ces derniers permettent de répondre aux différentes exigences du MLS:
+Ces derniers permettent de répondre aux différentes exigences du MLS car :
 \begin{itemize}
-  \item Ils valident les entrées/sorties des éléments non certifiables
-  \item Ils détectent et remontent les évènements invalident auprès d'un tiers
-    de confiance
+  \item Ils valident les entrées/sorties des éléments non certifiables.
+  \item Ils détectent et remontent les évènements invalides auprès d'un tiers
+    de confiance.
   \item Ils assurent le cloisonnement entre les différents éléments logiciels
-    pour assurer l'inviolabilité de l'ensemble des moniteurs de sécurité (dont
-    eux-mêmes)
+    et le matériel, pour assurer l'inviolabilité de l'ensemble de la TCB.
 \end{itemize}
 
 \subsection{Synthèse des choix structuraux}
 
 \paragraph{}
-Dans ce chapitre, j'ai décrit les choix structuraux que j'ai fait en terme
+Dans ce chapitre, je décris les choix structuraux que j'ai fait en terme
 d'architecture générale du système. J'ai définit deux familles d'entités
 logicielles répondant à des exigences disjointes, et définissant les fonctions
-de sécurité de base permettant de respecter les architectures MLS.\\
+de sécurité de base permettant de respecter les exigences des architectures MLS.\\
 A partir de ces éléments, je vais définir l'architecture logicielle complète
-permettant de répondre au besoin d'une passerelle multi-domaines de sécurité,
-en définissant les besoins sécuritaires associés à la fonction passerelles, et
-en définissant l'architecture logicielle complète permettant de répondre à ce
-besoin. Une validation de la compatibilité de ces chois structuraux a été
+permettant de répondre aux besoins d'une passerelle multi-domaines de
+sécurité, telle que décrite dans la problématique.
+Une validation de la compatibilité de ces choix structuraux a été
 faite via un maquettage chez Thales donnant lieu à un premier brevet \cite{thierry2013part}.
 
 \section{Définition de la réponse technique au besoin}
@@ -191,41 +194,39 @@ faite via un maquettage chez Thales donnant lieu à un premier brevet \cite{thier
 \subsection{Définition des données à protéger}
 
 \paragraph{}
-J'ai définit dans les Chapitres \ref{sec:mls_gw_principles} et
+J'ai définit dans les Sections \ref{sec:mls_gw_principles} et
 \ref{sec:mls_gw_hypothesis} les principes généraux qui doivent être considérés
 dans le cadre de la définition d'une architecture logicielle pour le
 traitement de données entre domaines de sécurité disjoints (i.e. MultiLevel
-Security). À la définition de ces principes généraux, il faut maintenant
-décrire plus en détail les principes structuraux nécessaires pour répondre au
-besoin tel que définit dans la problématique générale. Pour cela, je m'appuie
-sur les principes qui ont été définit initialement par
+Security). Suite à la définition de ces principes généraux, permettant d'être
+compatible du besoin MLS, il faut décrire plus en détail ceux nécessaires pour
+répondre aux besoins décrits dans la problématique générale. Pour cela, je m'appuie
+sur la méthode qui ont été définit initialement par
 l'ANSSI\footnote{Agence Nationale pour la Securité des Systèmes d'Information} dans le cadre
-de la méthode EBIOS\cite{hemery2007utilisation}. Cette dernière implique de définir:
-\begin{itemize}
-  \item Quelles sont les données à protéger
-  \item Quels sont les attaques dont il faut se prémunir dans le cadre de
-    cette protection
-\end{itemize}
-La méthode EBIOS permet ensuite de pouvoir définir un niveau de sécurisation
-nécessaire et suffisant pour répondre à ce besoin.
+d'EBIOS\cite{hemery2007utilisation}.
+La méthode EBIOS permet de pouvoir définir un niveau de sécurisation
+nécessaire et suffisant pour répondre au besoin initial.
 
 \paragraph{}
 La définition de l'architecture logicielle pour le besoin d'une passerelle
-multi-domaines de sécurité nécessite donc de répondre aux interrogations suivantes:
+multi-domaines de sécurité implique de répondre aux interrogations suivantes:
 \begin{itemize}
   \item Quels sont les données à protéger ?
   \item Quel(s) type(s) de protection la passerelle souhaite fournir sur ces
     données (confidentialité, intégrité, disponibilité) ?
-  \item Quels sont les attaques impactant ses protection dans le cadre de
-    cette solution ?
+  \item Quels sont les attaques impactant ces protections dans le cadre de
+    la solution ?
   \item Quels sont les fonctions de sécurité nécessaires pour se prémunir
     contre ces attaques ?
 \end{itemize}
 
 \paragraph{}
-Les sections suivantes mettent en pratique les principes de la méthode EBIOS
+Les sections précédentes mettent en pratique les principes de la méthode EBIOS
 pour mettre en adéquation une solution technique avec les besoins sécuritaires
-liés à la fonction passerelle multi-domaines.
+liés à la fonction passerelle multi-domaines. Ainsi, l'usage d'une fonction de
+sécurité doit être mis en adéquation avec le risque sécuritaire auquel elle
+répond. Lorsque la présence d'une fonction de sécurité dépasse le coût
+(financier, managérial) associé au risque sécuritaire, sa présence n'est plus requise.
 
 \subsubsection{Définition des données à protéger}
 \label{sec:donneeaproteger}
