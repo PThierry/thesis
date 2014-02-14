@@ -8,8 +8,7 @@
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
 %% Last update Mon Aug 30 17:00:21 2010 Philippe THIERRY
 
-\chapter{L'ordonnancement hiérarchique de tâches}
-\label{sec:hierarchique}
+\chapter{Etat de l'art de l'ordonnancement temps-réel}
 \doMinitoc
 
 \paragraph{}
@@ -18,9 +17,17 @@ separation kernel est une des solutions logicielles proposées pour répondre aux
 besoins des architectures MILS et MLS. Cette
 architecture, impliquant potentiellement la virtualisation de plusieurs
 environnements autonomes, s'appuie sur un ordonnancement hiérarchique de
-tâches virtualisées. Ce chapitre décrit l'état de l'art de l'ordonnancement hiérarchique.}
+tâches virtualisées. Dans le cadre de ma thèse, il est également nécessaire de
+considérer la problématique de criticité mixte, du fait des contraintes fortes
+des systèmes Systroniques en terme de puissance processeur. Ce chapitre décrit
+l'état de l'art de ces deux thèmes.}
 
-\section{Principes généraux de l'ordonnancement hiérarchique}
+
+
+\section{A propos de l'ordonnancement hiérarchique de tâches}
+\label{sec:hierarchique}
+
+\subsection{Principes généraux de l'ordonnancement hiérarchique}
 
 \paragraph{}
 On parle d'ordonnancement hiérarchique lorsqu'une tâche est ordonnancée au
@@ -59,7 +66,7 @@ implémentée dans les noyau Linux jusqu'à la version 2.6.32.
 \caption{Répartition des tâches du noyau Linux par jeux autonomes, en fonctions des exigences de réactivité}
 \end{figure}
 
-\subsection{Ordonnancement hiérarchique et principe de virtualisation}
+\subsubsection{Ordonnancement hiérarchique et principe de virtualisation}
 
 \paragraph{}
 Lorsque la hiérarchisation de
@@ -109,7 +116,7 @@ moniteurs de sécurité comme des tâches du {\it separation kernel}, ces
 dernières ne pouvant être intégrés à un OS virtualisés sans perdre leur
 certifiabilité.
 
-\section{Synthèse}
+\subsection{Synthèse}
 
 \paragraph{}
 L'ordonnancement hiérarchique est un mécanisme nécessaire à l'exécution de
@@ -145,13 +152,12 @@ l'ordonnançabilité. Je propose dans le Chapitre \cite{sec:solution_rt} une solut
 %'ordonnançabilité.
 
 
-\chapter{A propos de l'état de l'art de l'ordonnancement de tâches à criticité mixte}
-\doMinitoc
+\section{État de l'art de l'ordonnancement de tâches à criticité mixte}
 \label{sec:mixedcriticity}
 
-\section{Principe de la criticité mixte}
+\subsection{Principe de la criticité mixte}
 
-\subsection{Propriétés des tâches d'un ensemble à criticité mixte}
+\subsubsection{Propriétés des tâches d'un ensemble à criticité mixte}
 
 \paragraph{}
 En 2007, S. Vestal\cite{vestal2007preemptive} a décrit le principe d'une tâche
@@ -180,7 +186,7 @@ actif.
 
 %To insert: \cite{handlemulticrit}
 
-\subsection{A propos de l'ordonnancement d'un ensemble de tâches à criticité mixte}
+\subsubsection{A propos de l'ordonnancement d'un ensemble de tâches à criticité mixte}
 
 \paragraph{}
 L'ordonnancement à criticité mixte est un domaine de recherche émergeant
@@ -238,7 +244,17 @@ des raisons de sécurité, afin d'empêcher l'usage d'un canal caché basé sur la
 variation de durée du slot afin de transmettre de l'information aux autres
 slot au travers l'impact de cette variation.
 
-\section{Synthèse}
+\subsection{Synthèse}
+Les principes de la criticité mixte permettent de réagir à une infaisabilité
+temporaire de l'ordonnancement de l'ensemble des tâches. On s'appuie alors sur
+le niveau de criticité prédéterminé pour chaque tâche afin de modifier le jeu
+de tâches afin d'assurer son ordonnançabilité dans cet état à criticté
+augmenté.\\
+Dans le cadre de ma thèse, je m'appuie sur les principes de criticité mixte
+afin de pouvoir répondre à l'impossibilité initiale de pouvoir ordonnancer
+l'ensemble des traitements sur l'ensemble des flux si ces derniers impliquent un
+coût d'exécution de chacun des traitements atteignant tous leur WCET. Cette
+impossibilité est la conséquence des contraintes liées au matériel et à la
+performance maximum de ce dernier. Dans la partie \ref{sec:mixedcrit}, je
+décrit la solution proposée, en m'appuyant sur les principes de criticité mixte.
 
-\paragraph{}
-\FIXME{compléter}
