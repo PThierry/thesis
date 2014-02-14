@@ -13,7 +13,7 @@
 %% Document style definition
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\documentclass[twoside,a4paper,11pt,titlepage]{book} 	% document type
+\documentclass[twoside,a4paper,11pt,titlepage,french]{book} 	% document type
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -28,7 +28,7 @@
 \usepackage[T1]{fontenc} 				% caracteres norme iso-8859.
 		 					% risque de ne pas marcher avec les fichiers crees
                          				% sous windows.
-\usepackage[english,francais]{babel}			% french support
+\usepackage[francais]{babel}			% french support
 \usepackage{amsfonts}					% special fonts support (math, etc)
 \usepackage{amsmath}
 \usepackage{amssymb}					% special symbols support
@@ -53,11 +53,28 @@
             colorlinks=true,
             linkcolor=blue
            ]{hyperref}					% allow interal links
+\usepackage[french]{translator}
+\usedictionary{PhDdictionnary}
+\usepackage[translate=true,xindy,toc,nonumberlist]{glossaries}
+%\glsglossarymark{Glossaire}
+
+
+\addto\captionsfrench{%  
+    \renewcommand*{\glossaryname}{Glossaire des termes techniques}%  
+    %\deftranslation[to=French]{Glossary}{Glossaire}
+}
+
+\renewcommand*{\glssettoctitle}[1]{%
+\ifthenelse{\equal{#1}{main}}{%
+  \def\glossarytoctitle{\glossaryname}}{%
+  \ifthenelse{\equal{#1}{acronym}}{%
+    \def\glossarytoctitle{\acronymname}}{%
+    \def\glossarytoctitle{\csname @glotype@#1@title\endcsname}}}}%
+
            						% and doc content list 
-%\usepackage[all]{hypcap}
 %\usepackage{multirow}
 %\usepackage{multicol}
-%\usepackage{times}
+\usepackage{times}
 \usepackage{ifpdf}
 \usepackage{appendix} 
 \usepackage{graphicx}
@@ -67,7 +84,6 @@
 %\usepackage{chapterbib}
 \usepackage{theorem}
 \usepackage{etex}
-%\usepackage[Glenn]{fncychap}				% 'Glenn' chapter titles
 
 % charts support
 \usepackage{pdftricks}
@@ -153,7 +169,7 @@
 \makeindex						% call for index generation
 
 
-\newcommand{\gls}[1]{#1}
+%\newcommand{\gls}[1]{#1}
 
 %\input{macros/myminitoc.sty}
 
@@ -292,8 +308,18 @@
 \theoremheaderfont{\scshape}
 \newtheorem{hypothesis}{Hypothèse}[section]}
 
-%\input{includes/titlepage.tex}
+% and now the cmd to add definitions to glossary automaticaly
+\newcommand{\PhDdefinition}[3]{
+\newglossaryentry{#1}{
+ name=#2,
+ description={#3}
+}
+\begin{definition}
+#3
+\end{definition}
+}
 
+\makeglossaries
 
 %%% Fancy
 

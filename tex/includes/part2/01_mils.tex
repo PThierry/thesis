@@ -16,10 +16,16 @@
 \label{sec:mls_gw_principle}
 
 \paragraph{}
-Afin de répondre à la problématique de ma thèse, il est
-nécessaire de définir une solution répondant aux besoins de MultiLevel Security
-(MLS). Cela implique un mécanisme assurant une étanchéité des
-données à différents niveaux:
+Dans le cadre de la problématique des systèmes Systronique, il est nécessaire
+de considérér la colocalisation de domaines de sûreté et de sécurité disjoints
+sur un même matériel. Pour répondre à cette problématique, je propose
+de définir une solution logicielle répondant aux besoins de MultiLevel Security
+(MLS). En plus des contraintes de cloisonnements assurant une étanchéité
+suffisante pour répondre aux exigences de sûreté et de sécurité, il est
+également nécessaire de considérer des mécanismes logiciels permettant de
+transférer de l'information entre les différents domaines de sécurité. Ce
+transfert ne doit pas impacter les contraintes de sécurité de chacun des
+domaines. Pour cela :
 \begin{itemize}
   \item Les données transitant du niveau de sécurité le plus élevé au niveau le plus
     bas doivent être complètement contrôlées, afin de valider que ces
@@ -32,13 +38,28 @@ données à différents niveaux:
 \end{itemize}
 
 \paragraph{}
+Afin d'être compatible de l'exigence de colocalisation, je m'appuie sur le
+principe de système MLS.
 Les mécanismes définis pour répondre aux besoins de type MLS impliquent le
 respect des exigences définies dans le Chapitre \label{sec:mils}, et
 formalisées initialement en 2006 \cite{alves2006mils}.
-Afin d'être compatible de ces exigences, je m'appuie sur le principe de
-Separation Kernel. De plus, il est nécessaire de définir une architecture
-logicielle complète au dessus du Separation Kernel afin de répondre aux
-exigences fonctionnelles et sécuritaires de la problématique de ma thèse.
+Je m'appuie, dans le cadre de ma thèse, sur le principe de Separation Kernel,
+compatible des systèmes MILS et MLS, auquel j'ajoute des modules de sécurité
+complémentaire. L'ensemble est alors appelé Extended Secure Separation Kernel
+(ESSK):\\
+
+\PhDdefinition{essk}{Extended Secure Separation Kernel}{
+  J'appelle Extended Secure Separation Kernel une architecture logicielle
+  associant un socle logiciel assurant une compartimentation forte et des
+  compartiments certifiables répondant à des exigences de sécurité. L'ensemble
+  est intégrable comme une TCB (Trusted Computing Base) et ses principes de
+  modularité lui permet de répondre à diverses exigences de sécurité.
+}
+
+Au dessus du Separation Kernel, je propose l'implémentation de modules logiciels
+en charge de répondre aux mêmes besoins que les éléments de sécurité matériels
+définis dans le cadre des systèmes d'information. Ces modules sont en charge de répondre aux
+exigences fonctionnelles et sécuritaires décrite dans la Problématique.
 L'architecture logicielle que j'ai choisie est décrite dans ce chapitre.
 
 \section{Définition des hypothèses générales}
@@ -153,7 +174,7 @@ des architectures MLS est respectée, comme le montre la Figure
 \subsection{A propos des moniteurs de sécurité}
 
 \paragraph{}
-Il est montré dans la Section précédante que la présence d'éléments logiciels
+Il est montré dans la Section précédente que la présence d'éléments logiciels
 non certifiables est un mal nécessaire pour permettre un certain nombre de
 traitements à valeur ajoutée sur des flux télécoms. En effet, l'implémentation d'une pile
 réseau certifiable étant trop couteuse, j'ai fait le choix d'intégrer de tels
@@ -162,7 +183,7 @@ l'architecture.
 
 \paragraph{}
 Comme vu dans le Chapitre \ref{sec:noncert}, l'usage de tels logiciels peut
-être considérés si des éléments certifiables extérieurs sont présents, afin de
+être envisagé si des éléments certifiables extérieurs sont présents, afin de
 rester compatible des quatre exigences initiales des architecture MLS. On
 définit donc des éléments logiciels autonomes et certifiable portant une
 fonction de sécurité. Par la suite, j'appelle ces éléments logiciels
@@ -176,6 +197,7 @@ Ces derniers permettent de répondre aux différentes exigences du MLS car :
     et le matériel, pour assurer l'inviolabilité de l'ensemble de la TCB.
 \end{itemize}
 
+%%%%%%%%%%%%%%%%%%
 \subsection{Synthèse des choix structuraux}
 
 \paragraph{}

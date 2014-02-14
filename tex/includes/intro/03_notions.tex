@@ -94,11 +94,11 @@ de réseaux militaires.
 
 \subsubsection{Niveaux de confidentialité et droit d'en connaître}
 
-\begin{definition}
+\PhDdefinition{droitden}{Droit d'en connaître}{
 On appelle droit d'en connaître l'ensemble de connaissances minimum suffisant
 pour un sujet (une personne ou encore un processus logiciel) pour mener à bien
 une tâche.
-\end{definition}
+}
 
 \paragraph{}
 Ainsi, une personne ayant une habilitation Confidentiel Défense sur
@@ -160,10 +160,10 @@ Lorsque un transfert de données non autorisé a lieu entre deux domaines de
 sécurité, il est important de pouvoir en imputer la responsabilité. On parle
 alors d'imputabilité.
 
-\begin{definition}
+\PhDdefinition{imput}{Imputabilité}{
 On appelle imputabilité la garantie de traçabilité entre une action effectuée
 sur le système et l'identité de l'utilisateur responsable de cette action.
-\end{definition}
+}
 
 Du fait des contraintes légales liées aux niveaux de confidentialité, le besoin
 d'imputabilité est omniprésent dans les systèmes militaires.
@@ -205,7 +205,7 @@ non seulement être certifiables au plus haut niveau souhaité dans le cadre de
 l'évaluation du système, mais doivent être également protégés contre toute
 corruption extérieure (comme par exemple à partir d'un élément
 non-certifiable). On leur impose alors une exigence d'{\it inviolabilité},
-comme décrite dans les exigences générales des systèmes MILS. Ces dernières
+comme décrite dans les exigences générales des systèmes MILS et MLS. Ces dernières
 sont rappelées dans le Chapitre \ref{sec:mils} 
 
 \paragraph{}
@@ -213,12 +213,24 @@ Lorsque l'on s'appuie sur une architecture de type compartimentation stricte
 de fonctions exécutées de manière autonome (comme par exemple via des
 technologies de virtualisation), la solution peut être compatible du principe
 de certification par composition.
-\begin{definition}
+
+\PhDdefinition{certcomp}{Certification par composition}{
 On appelle certification par composition un principe permettant, lorsque la
 TCB est non modifiée, de ne certifier que les nouveaux composants
 venant s'appuyer sur cette dernière. Il n'est alors pas nécessaire de
 certifier à nouveau l'ensemble de l'architecture logicielle, TCB comprise.
-\end{definition}
+}
+Les systèmes compartimentés peuvent intégrer des compartiments certifiables
+implémentant un algorithme simple répondant à un besoin précis. Lorsque ce
+besoin est sécuritaire, il s'agit d'une fonction de sécurité.
+
+\PhDdefinition{foncsec}{Fonction de sécurité}{
+On appelle fonction de sécurité un traitement logiciel spécialisé dans la
+réponse à un besoin sécuritaire donné. Une fonction de sécurité peut être
+non-certifiable (par exemple en tant que processus logiciel d'un système
+d'exploitation riche) ou certifiable (sous forme d'un élément logiciel
+de petite taille et autonome ou s'appuyant sur un socle lui-même certifiable.
+}
 
 \section{Principes généraux des systèmes temps réel}
 
@@ -277,7 +289,7 @@ logicielle et parfois matérielle qui entre en compte dans la solution.
 
 \subsection{Concepts liés à la virtualisation et la compartimentation}
 
-\begin{definition}
+\PhDdefinition{vm}{Machine virtuelle}{
 On appelle machine virtuelle (ou VM, Virtual Machine) une implémentation
 logicielle d'une machine (i.e d'un ordinateur) qui exécute des programmes
 comme une machine physique. Il existe deux familles de machines virtuelles:
@@ -288,21 +300,21 @@ complète et qui supporte l'exécution d'un système d'exploitation.
 programme et qui permet d'assurer la portabilité de ce dernier. C'est par
 exemple le cas de la machine virtuelle Java.
 \end{itemize}
-\end{definition}
+}
 
-\begin{definition}
+\PhDdefinition{vmm}{Moniteur de Machine Virtuelle}{
 On appelle Moniteur de Machine Virtuelle \cite{popek} (ou VMM, Virtual Machine Monitor) le
 composant logiciel en charge de permettre l'exécution d'une
 ou plusieurs machines virtuelles.
-\end{definition}
+}
 
-\begin{definition}
+\PhDdefinition{ev}{Environnement Virtuel}{
 On appelle Environnement Virtuel (ou VE, Virtual Environment) un compartiment
 logiciel en charge d'exécuter un environnement logiciel complet, à l'exception
 du noyau. C'est le cas par exemple des technologies OpenVZ ou LXC
 \cite{bhanage2011experimental}. Une telle architecture logicielle ne nécessite
 pas de moniteur de machine virtuelle (ou VMM).
-\end{definition}
+}
 
 \subsection{Les solutions de virtualisation type I}
 

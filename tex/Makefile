@@ -18,6 +18,8 @@ LATEXOPT=-shell-escape
 BIBTEX=bibtex
 BIBTEXOPT=-min-crossrefs=0
 PDFVIEWER?=acroread
+MAKEGLOSSARY=makeglossaries
+MAKEGLOSSARYOPT=-L french
 
 TEXINPUTS    = $(shell kpsewhich -var-value=TEXINPUTS)
 LATEXENV = TEXINPUTS='./styles:$(TEXINPUTS)'
@@ -36,7 +38,8 @@ OBJS	     = $(SOURCE:.tex=.aux) $(SOURCE:.tex=.log) $(SOURCE:.tex=.out) $(SOURCE
                $(SOURCE:.tex=.ist) $(SOURCE:.tex=.glo) $(SOURCE:.tex=.idx) $(SOURCE:.tex=.lof) \
                $(SOURCE:.tex=.brf) $(SOURCE:.tex=.bmt) $(SOURCE:.tex=.ind) $(SOURCE:.tex=.ilg) \
 	       $(SOURCE:.tex=.lot) $(SOURCE:.tex=.bbl) $(SOURCE:.tex=.blg) $(SOURCE:.tex=.maf) \
-               $(SOURCE:.tex=.run.xml) $(SOURCE:.tex=-blx.bib) *.ps *.mlf* *.mlt* *.mtc* document-fig*.tex *.log document-fig*.pdf tmp.inputs document.tex
+	       $(SOURCE:.tex=.glg) $(SOURCE:.tex=.gls) $(SOURCE:.tex=.xdy) $(SOURCE:.tex=.run.xml) \
+               $(SOURCE:.tex=-blx.bib) *.ps *.mlf* *.mlt* *.mtc* document-fig*.tex *.log document-fig*.pdf tmp.inputs document.tex
 TODEL	     = tags *~ .*.swp
 LANG	     = $(shell cat config/config.tex|grep "newcommand.*lang"|sed -re "s:.*\{([fe][rn])\}.*:\1:")
 
@@ -63,6 +66,7 @@ all : help
 pdf :
 	/bin/bash scripts/generate_toc.sh
 	$(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE)
+	$(MAKEGLOSSARY) $(MAKEGLOSSARYOPT) $(SOURCE_PREFIX)
 	$(BIBTEX) $(BIBTEXOPT) $(SOURCE_PREFIX)
 	makeindex $(SOURCE:.tex=.idx)
 	while [ `cat $(SOURCE:.tex=.log) | grep 'may have changed.' | wc -l` -ge 1 ]; do $(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE); done

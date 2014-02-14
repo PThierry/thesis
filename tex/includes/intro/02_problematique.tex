@@ -21,17 +21,17 @@
 \paragraph{}
 Dans le cadre des architectures véhiculaires, il existe un grand nombre de
 systèmes.
-\begin{definition}
+\PhDdefinition{sys}{Système}{
   On appelle système un ensemble d'éléments matériels et logiciels
   interagissant ensemble dans le but d'effectuer une fonction ou un ensemble
   de fonctions connexes donné(e).
-\end{definition}
+}
 
-\begin{definition}
+\PhDdefinition{sysdesys}{Système de systèmes}{
   On appelle système de systèmes un ensemble complexe faisant s'interconnecter
   plusieurs systèmes entre eux. Une telle interconnexion peut être par exemple la
   conséquence d'un besoin de supervision centralisé.
-\end{definition}
+}
 
 Dans un véhicule militaire, on retrouve un système de systèmes, en charge de
 gérer, entre autres:
@@ -43,20 +43,20 @@ grand nombre de liens d'interconnexion), en charge de gérer les composants moteu
 le véhicule et l'extérieur (autres véhicules, le quartier général, etc.)
 \end{itemize}
 
-\begin{definition}
+\PhDdefinition{syssystro}{Système Systronique}{
 Lorsqu'un système de systèmes est construit pour être intégré à un véhicule, et
 est en charge d'associer des systèmes véhiculaires (réseau de bord) à des
 systèmes de communications complexes, on parle alors de système systronique.
-\end{definition}
+}
 
 Pour être intégrable dans un véhicule, un élément matériel doit être
 compatible d'un facteur de forme spécifique.
 
-\begin{definition}
+\PhDdefinition{ffactor}{Facteur de forme}{
 On appelle facteur de forme les dimensions, le type d'alimentation, le nomre de
 ports ou encore le positionnement des connecteurs. Il existe un grand nombre
 de facteurs de formes industriels, comme le microTCA \cite{walrod2008open}. 
-\end{definition}
+}
 
 Dans le cadre de ma thèse, je cible les problématiques d'interconnexions
 internes aux systèmes Systroniques.
@@ -81,15 +81,15 @@ peuvent ne pas correspondre aux définitions liées à la sûreté de
 fonctionnement. Ces définitions sont présentes dans le National Information
 Assurance Glossary \cite{cnssi_4009}.
 
-\begin{definition}
-La disponibilité est la propriété d'un objet à être accessible et utilisable
+\PhDdefinition{dispo}{Disponibilité}{
+La disponibilité (au sens sécuritaire) est la propriété d'un objet à être accessible et utilisable
 sur demande d'une entité autorisée.
-\end{definition}
+}
 
-\begin{definition}
-L'intégrité est une propriété d'un objet à ne pas avoir été modifié par
+\PhDdefinition{integ}{Intégrité}{
+L'intégrité (au sens sécuritaire) est une propriété d'un objet à ne pas avoir été modifié par
 un quelconque sujet non autorisé.
-\end{definition}
+}
 
 \paragraph{}
 Dans la pratique, l'intégrité des données est le plus
@@ -98,22 +98,22 @@ souvent vérifiée par des algorithmes de hashage ou des sommes de contrôle
 la cryptographie asymétrique pour générer des signatures, afin de garantir
 l'intégrité de la somme de contrôle.
 
-\begin{definition}
+\PhDdefinition{confi}{Confidentialité}{
 La confidentialité est la propriété d'un objet à n'être accessible qu'à des
 sujets ayant les droits suffisants pour accéder à l'information qu'il porte.
-\end{definition}
+}
 
-\begin{definition}
+\PhDdefinition{secdom}{Domaine de sécurité}{
 On appelle domaine de sécurité un système dans lequel l'ensemble des éléments
 doivent respecter les mêmes contraintes d'intégrité, de confidentialité et de
 disponibilité.
-\end{definition}
+}
 
-\begin{definition}
+\PhDdefinition{secpol}{Politique de sécurité}{
 Pour garantir la sécurité d'un domaine de sécurité donné, on définit une
 politique de sécurité, en charge de définir l'ensemble des fonctions de
 sécurité nécessaire au respect des contraintes de sécurité du domaine.
-\end{definition}
+}
 
 \paragraph{}
 Le niveau de sécurité d'un système se détermine grâce à un standard
@@ -125,55 +125,14 @@ Critères Communs
 élevé).
 
 La fragilité d'un système en terme de sécurité dépend entre autres de sa surface d'attaque.
-\begin{definition}
+
+\PhDdefinition{attsurf}{Surface d'attaque}{
 On appelle surface d'attaque l'ensemble des portes d'entrées permettant d'impacter la
 sécurité du système. Il peut s'agir d'une interface réseau non protégée ou
 encore de processus logiciels possédant des failles exploitables. La mise en
 place de fonctions de sécurité (comme par exemple un pare-feu) permet de
 réduire la surface d'attaque.
-\end{definition}
-
-\subsubsection{A propos de la sécurité dans les systèmes systroniques}
-
-\paragraph{}
-Avec l'intégration de plus en plus forte des réseaux IP dans les systèmes
-embarqués (véhiculaires, avioniques non temps-réel, transport),
-l'interconnexion de réseaux locaux initialement disjoints avec un ou des
-réseau(x) d'infrastructure est de plus en plus courante. Les exigences
-sécuritaires qui sont alors associées à une telle interconnexion peuvent être
-fortes, selon le type de données transmises.\\
-L'interconnexion des réseaux locaux est poussée par différents besoins. Dans le
-cadre des systèmes embarqués véhiculaires, le besoin initial, toujours fort aujourd'hui
-et dont la résolution reste complexe, correspond à l'intégration sur un même
-matériel de plusieurs réseaux indépendants. Il s'agit d'un partage, sur un
-unique matériel pour des raisons d'exigences de volume, de poids ou de
-consommation, de plusieurs traitements logiques dont le cloisonnement doit être
-garanti. Ce cloisonnement est exigé pour des raisons de sureté afin que le
-partage du matériel ne vienne pas impacter le bon fonctionnement des
-environnements logiciels.
-
-\paragraph{}
-Dans les systèmes embarqués militaires, des réseaux dont la confidentialité,
-l'intégrité et la disponibilité des données peuvent être différentes, nécessitent
-déjà d'être interconnectés. On parle alors de réseaux de différents domaines de
-sécurité.\\
-De telles architectures ont des réponses dans les systèmes d'informations,
-au travers de l'usage de chiffreurs, de filtres et d'éléments matériels en
-coupure \cite{tsf101}. Ces solutions restent ajourd'hui difficiles à intégrer
-sur les systèmes embarqués. En effet, il s'agit la plupart du temps de
-solutions impliquant plusieurs éléments matériels disjoints, principalement
-sur des architectures de type x86 et sont en général intégrables
-sous forme d'une lame format 1U ou supérieur. De telles solutions ne
-sont alors pas intégrable dans un réseau embarqué véhiculaire pour des raison
-de poids, de volume, de consommation et de dégagement de chaleur.
-
-\paragraph{}
-Le niveau de sécurité d'un système dépend de l'impact de la non-garantie d'une
-ou plusieurs des propriétés associées à son domaine de sécurité.\\
-Afin de répondre au besoin de sécurité, des {\it fonctions de
-sécurité} sont implémentées. Ces dernières peuvent être logicielles ou matérielles, et
-permettent de répondre à tout ou partie des risques sécuritaires définis dans le
-cadre de l'étude du système.
+}
 
 \subsection{Concepts liés à la fiabilité et au temps-réel}
 
@@ -189,13 +148,13 @@ On dit qu'un système est temps-réel lorsqu'il doit garantir des délais
 maximums dans l'exécution de ses fonctions. Il est en charge d'exécuter un ensemble de
 tâches. Une tâche correspond à une fonction donnée du système.
 
-\begin{definition}
+\PhDdefinition{syscrit}{Système critique}{
 On appelle système critique un système pouvant mettre en danger des vies
 humaines ou du matériel en cas de défaillance. C'est le cas par exemple des
 systèmes avioniques ou véhiculaires.
-\end{definition}
+}
 
-\begin{definition}
+\PhDdefinition{nivass}{Niveau d'assurance}{
 On appelle niveau d'assurance le niveau de certification exigé sur les
 différents composants logiciels et matériels en terme de fiabilité ou de temps
 réel. Dans le cadre des systèmes véhiculaires, on s'appuie sur la norme SIL
@@ -204,16 +163,16 @@ réel. Dans le cadre des systèmes véhiculaires, on s'appuie sur la norme SIL
 logiciel embarqué véhiculaire, au travers des règles édictées par
 l'association MISRA (Motor Industry Software Reliability Association)
 \cite{misraweb}.
-\end{definition}
+}
 
-\begin{definition}
+\PhDdefinition{syssur}{Système sûr}{
   Un système est dit sûr si son niveau d'assurance est compatible de son niveau
   de criticité. Il possède donc des
   propriétés de fiabilité et des propriétés de temps-réel adequates pour assurer
   la protection des vies humaines ou du matériel correspondant à son niveau de
   criticité. Les problématiques de sécurité telles que définies dans la
   Section \ref{subsec:secu} ne font pas partie des propriétés d'un système sûr.
-\end{definition}
+}
 
 \paragraph{}
 Il existe trois modèles d'exécution temps-réel:
@@ -255,10 +214,10 @@ De nos jours, les véhicules embarquent de plus en plus de matériel et de
 logiciel. Ces derniers sont impliqués pour l'aide à la conduite (ABS, ESP,
 etc.) dans le cadre d'un réseau de bord. Ce réseau est en réalité une
 interconnexion d'un grand nombre de réseaux basés par exemple sur des bus série de type
-CAN \cite{iso11898}, aggrégeant l'ensemble des éléments d'aide à la conduite.
+CAN \cite{iso11898}, agrégeant l'ensemble des éléments d'aide à la conduite.
 Le réseau de bord est principalement basé sur des automates matériels avec une
 faible présence du logiciel. Ce réseau possède de fortes contraintes
-temps-réel, sans considération particulière en terme de sécurité. L'absence de
+temps-réel et de fiabilité, sans considération particulière en terme de sécurité. L'absence de
 sécurité vient du fait que l'ensemble des acteurs physiques et logiques
 composant ce réseau sont maîtrisés et certifiés.
 
@@ -293,17 +252,56 @@ Systronique.
 \subsection{A propos des systèmes systroniques}
 
 \paragraph{}
-Un véhicule militaire doit également garantir plusieurs exigences
-sécuritaires. De manière générale, ont définit la sécurité
+Avec l'intégration de plus en plus forte des réseaux IP dans les systèmes
+embarqués (véhiculaires, avioniques non temps-réel, transport),
+l'interconnexion de réseaux locaux initialement disjoints avec un ou des
+réseau(x) d'infrastructure est de plus en plus courante. Les exigences
+sécuritaires qui sont alors associées à une telle interconnexion peuvent être
+fortes, selon le type de données transmises.\\
+L'interconnexion des réseaux locaux est poussée par différents besoins. Dans le
+cadre des systèmes embarqués véhiculaires, le besoin initial, toujours fort aujourd'hui
+et dont la résolution reste complexe, correspond à l'intégration sur un même
+matériel de plusieurs réseaux indépendants. Il s'agit d'un partage, sur un
+unique matériel pour des raisons d'exigences de volume, de poids ou de
+consommation, de plusieurs traitements logiques dont le cloisonnement doit être
+garanti. Ce cloisonnement est exigé pour des raisons de sureté afin que le
+partage du matériel ne vienne pas impacter le bon fonctionnement des
+environnements logiciels.
+
+\paragraph{}
+De plus, dans les systèmes embarqués militaires, la colocalisation impacte des
+réseaux dont la confidentialité, l'intégrité et la disponibilité des données
+peuvent être différentes. Ces derniers nécessitent de plus d'être interconnectés. Chacun de
+ces réseaux ayant des contraintes de sécurité différentes, ils appartiennent à
+des domaines de sécurité disjoints. En conséquence, il doit exister des
+mécanismes permettant d'interconnecter ceux-ci de manière sécurisé, afin de
+valider l'ensemble des flux passant d'un domaine à l'autre.
+La colocalisation de ces domaines sur un même matériel implique que ces
+mécanismes soient logiques et non physique.\\
+Le besoin d'interconnexion de domaines de sécurité a des réponses dans les systèmes d'informations,
+au travers de l'usage de chiffreurs, de filtres et d'éléments matériels en
+coupure \cite{tsf101}. Ces solutions restent ajourd'hui difficiles à intégrer
+sur les systèmes embarqués, du fait de cette colocalisation. En effet, il s'agit la plupart du temps de
+solutions impliquant plusieurs éléments matériels disjoints, principalement
+sur des architectures de type x86 et sont en général intégrables
+sous forme d'une lame format 1U ou supérieur.
+%\paragraph{}
+%Le niveau de sécurité d'un système dépend de l'impact de la non-garantie d'une
+%ou plusieurs des propriétés associées à son domaine de sécurité.\\
+%Afin de répondre au besoin de sécurité, des {\it fonctions de
+%sécurité} sont implémentées. Ces dernières peuvent être logicielles ou matérielles, et
+%permettent de répondre à tout ou partie des risques sécuritaires définis dans le
+%cadre de l'étude du système.
+
+\paragraph{}
+De manière générale, ont définit les propriétés de sécurité d'un domaine de sécurité
 comme l'association de contraintes de confidentialité, d'intégrité et de
 disponibilité. Dans le cadre d'un système systronique, la confidentialité et
 l'intégrité des données émises ou reçues sont prépondérantes, mais la
 disponibilité n'est pas en reste, avec des exigences de maintien des
 communications potentiellement très fortes malgré l'hostilité du milieu
 de déploiement (désert, jungle, etc.).\\
-Dans un système systronique, on parle
-de domaines de sécurité disjoints lorsque les exigences de confidentialité,
-d'intégrité et/ou de disponibilité varient. Ainsi, le réseau de communication
+Par exemple, le réseau de communication
 avec la coalition et le réseau de communication avec le pays possèdent des
 exigences de confidentialité différentes. Certaines informations pouvant être
 des données exclusives au pays. Ainsi, un système systronique possède plusieurs
@@ -355,8 +353,7 @@ découlent de l'environnement véhiculaire.
 Comme il a été vu précédemment, les enjeux dans les systèmes systroniques sont
 importants, du fait de l'intégration continue de nouveaux systèmes de
 communication, tant en terme de liens de communication locaux (interne au
-véhicule), semi-locaux (i.e.
-entre des véhicules d'une même patrouille) et
+véhicule), semi-locaux (i.e. entre des véhicules d'une même patrouille) et
 longue distance (entre la patrouille et
 les quartiers généraux) qu'en terme de traitements graphiques et vidéos. Il en résulte
 un système complexe interconnectant des éléments:
@@ -428,7 +425,7 @@ De plus, du fait de l'incompatibilité des exigences de performance avec les
 exigences physiques, l'intégration de solutions aptes à permettre des
 traitements de criticité multiple est nécessaire au niveau de ces éléments
 d'interconnexion entre ces différents domaines. Ces solutions ne sont
-aujourd'hui pas sur le marché chez les industriels, et aucun produit existant
+aujourd'hui pas au catalogue des industriels, et aucun produit existant
 ne permet ce type de comportement.
 
 \paragraph{}
@@ -512,8 +509,7 @@ d'interconnexion de réseaux, et plusieurs contraintes de sécurité et de sûreté s
 \begin{itemize}
 \item Garantie de transfert de données à sens unique
 \item Filtrage des données selon une politique de sécurité
-\item Maîtrise du profil des flux transférés pour garantir la sûreté du domaine
-de sortie
+\item Maîtrise du profil des flux transférés
 \item Réduction des risques de transfert de données non homologués
 \item Prise en compte dans le transfert de flux des différences de criticité
 des flux à faire transiter et des traitements à effectuer sur ces derniers
@@ -559,7 +555,7 @@ Multiplexing). Afin de
 définir une méthode pour déterminer l'ordonnançabilité de tâches temps-réel
 sur une base d'ordonnancement TDM, nous avons formalisé les propriétés
 nécessaires au respect des latences \cite{thierry2011real} permettant de
-définitir la taille des slots temporels du TDM. Cette formalisation est
+définir la taille des slots temporels du TDM. Cette formalisation est
 décrite dans le Chapitre \ref{sec:hierarchicalrt}.
 
 \paragraph{}
@@ -595,8 +591,9 @@ effectuées \cite{etfa13}. Trois moniteurs de sécurité ont été réalisés:
   \item Un émetteur périodique, afin de décorréler le profil de flux reçu du
     profil de flux émis, pour éviter un canal caché sur l'étude de ce profil.
 \end{itemize}
-La fonction diode a également été implémentée dans le cadre d'une maquette répondant à
-l'ensemble des exigences sécuritaires (architecture MLS, compartimentation
+La fonction diode a également été implémentée dans le cadre d'un preuve de
+concept répondant à l'ensemble des exigences sécuritaires (architecture MLS, compartimentation
 forte, usage d'un ordonnancement TDM, nettoyage du cache lors du changement de
-domaine) et une pré-évaluation EAL5+ a été faite, associée à un dépôt de brevet en cours.
+domaine) et une pré-évaluation EAL5+ a été faite, associée à un dépôt de
+brevet \cite{thierry2013daudit}\cite{thierry2013dctrl}.
 
