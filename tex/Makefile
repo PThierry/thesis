@@ -22,7 +22,7 @@ MAKEGLOSSARY=makeglossaries
 MAKEGLOSSARYOPT=-L french
 
 TEXINPUTS    = $(shell kpsewhich -var-value=TEXINPUTS)
-LATEXENV = TEXINPUTS='./styles:$(TEXINPUTS)'
+LATEXENV = TEXINPUTS='./styles:./dict:$(TEXINPUTS)'
 
 RM=rm
 RMFLAGS=-rf
