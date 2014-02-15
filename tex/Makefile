@@ -68,7 +68,6 @@ pdf :
 	$(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE)
 	$(MAKEGLOSSARY) $(MAKEGLOSSARYOPT) $(SOURCE_PREFIX)
 	$(BIBTEX) $(BIBTEXOPT) $(SOURCE_PREFIX)
-	makeindex $(SOURCE:.tex=.idx)
 	while [ `cat $(SOURCE:.tex=.log) | grep 'may have changed.' | wc -l` -ge 1 ]; do $(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE); done
 	$(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE) # for bibliography backrefs
 	mv $(SOURCE:.tex=.pdf) $(TARGET).pdf

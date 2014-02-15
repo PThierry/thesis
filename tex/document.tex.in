@@ -53,24 +53,7 @@
             colorlinks=true,
             linkcolor=blue
            ]{hyperref}					% allow interal links
-\usepackage[french]{translator}
-\usedictionary{PhDdictionnary}
-\usepackage[translate=true,xindy,toc,nonumberlist]{glossaries}
-%\glsglossarymark{Glossaire}
-
-
-\addto\captionsfrench{%  
-    \renewcommand*{\glossaryname}{Glossaire des termes techniques}%  
-    %\deftranslation[to=French]{Glossary}{Glossaire}
-}
-
-\renewcommand*{\glssettoctitle}[1]{%
-\ifthenelse{\equal{#1}{main}}{%
-  \def\glossarytoctitle{\glossaryname}}{%
-  \ifthenelse{\equal{#1}{acronym}}{%
-    \def\glossarytoctitle{\acronymname}}{%
-    \def\glossarytoctitle{\csname @glotype@#1@title\endcsname}}}}%
-
+\usepackage{PhDglossaries}
            						% and doc content list 
 %\usepackage{multirow}
 %\usepackage{multicol}
@@ -82,7 +65,6 @@
 \usepackage{alltt}
 %\usepackage[sectionbib]{natbib}
 %\usepackage{chapterbib}
-\usepackage{theorem}
 \usepackage{etex}
 
 % charts support
@@ -166,12 +148,7 @@
 
 \newcommand{\termino}[2]{{\textbf{#1}}: #2}
 % index support
-\makeindex						% call for index generation
-
-
-%\newcommand{\gls}[1]{#1}
-
-%\input{macros/myminitoc.sty}
+%\makeindex						% call for index generation
 
 % interligne
 \onehalfspacing
@@ -212,112 +189,8 @@
      xleftmargin=0.5cm 					%
     } 							%
 
-{\theoremstyle{marginbreak}
-\theoremstyle{break}
-\theorembodyfont{\itshape}
-\theoremheaderfont{\scshape}
-\newtheorem{requirement}{Exigence}[section]}
-
-{\theoremstyle{marginbreak}
-\theoremstyle{break}
-\theorembodyfont{\itshape}
-\theoremheaderfont{\scshape}
-\newtheorem{restrictions}{Restriction}[section]}
-
-{\theoremstyle{marginbreak}
-\theoremstyle{break}
-\theorembodyfont{\itshape}
-\theoremheaderfont{\scshape}
-\newtheorem{proof}{Preuve}[section]}
-
-{\theoremstyle{marginbreak}
-\theoremstyle{break}
-\theorembodyfont{\itshape}
-\theoremheaderfont{\scshape}
-\newtheorem{guess}{Propriété}[section]}
-
-{\theoremstyle{marginbreak}
-\theoremstyle{break}
-\theorembodyfont{\itshape}
-\theoremheaderfont{\scshape}
-\newtheorem{assumption}{Hypothèse}[section]}
-
-{\theoremstyle{marginbreak}
-\theoremstyle{break}
-\theorembodyfont{\itshape}
-\theoremheaderfont{\scshape}
-\newtheorem{theorem}{Théorème}[section]}
-
-{\theoremstyle{marginbreak}
-\theoremstyle{break}
-\theorembodyfont{\itshape}
-\theoremheaderfont{\scshape}
-\newtheorem{definition}{Définition}[section]}
-
-{\theoremstyle{marginbreak}
-\theoremstyle{break}
-\theorembodyfont{\itshape}
-\theoremheaderfont{\scshape}
-\newtheorem{lemma}{Lemme}[section]}
-
-{\theoremstyle{marginbreak}
-\theoremstyle{break}
-\theorembodyfont{\itshape}
-\theoremheaderfont{\scshape}
-\newtheorem{remark}{Remarque}[section]}
-
-{\theoremstyle{marginbreak}
-\theoremstyle{break}
-\theorembodyfont{\itshape}
-\theoremheaderfont{\scshape}
-\newtheorem{exmpl}{Exemple}[section]}
-
-{\theoremstyle{marginbreak}
-\theoremstyle{break}
-\theorembodyfont{\itshape}
-\theoremheaderfont{\scshape}
-\newtheorem{constraint}{Contrainte}[section]}
-
-{\theoremstyle{marginbreak}
-\theoremstyle{break}
-\theorembodyfont{\itshape}
-\theoremheaderfont{\scshape}
-\newtheorem{corollary}{Corollaire}[section]}
-
-{\theoremstyle{marginbreak}
-\theoremstyle{break}
-\theorembodyfont{\itshape}
-\theoremheaderfont{\scshape}
-\newtheorem{condition}{Condition}[section]}
-
-{\theoremstyle{marginbreak}
-\theoremstyle{break}
-\theorembodyfont{\itshape}
-\theoremheaderfont{\scshape}
-\newtheorem{proposition}{Proposition}[section]}
-
-{\theoremstyle{marginbreak}
-\theoremstyle{break}
-\theorembodyfont{\itshape}
-\theoremheaderfont{\scshape}
-\newtheorem{property}{Propriété}[section]}
-
-{\theoremstyle{marginbreak}
-\theoremstyle{break}
-\theorembodyfont{\itshape}
-\theoremheaderfont{\scshape}
-\newtheorem{hypothesis}{Hypothèse}[section]}
-
-% and now the cmd to add definitions to glossary automaticaly
-\newcommand{\PhDdefinition}[3]{
-\newglossaryentry{#1}{
- name=#2,
- description={#3}
-}
-\begin{definition}
-#3
-\end{definition}
-}
+% add theorems
+\usepackage{PhDtheorem}
 
 \makeglossaries
 
@@ -338,17 +211,12 @@
         \renewcommand{\footrulewidth}{0pt}
 }
 
-% Set chaptername lowercase
-%\ChNameLowerCase
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Headers and footers configuration
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\pagestyle{fancy}					% specify page style
-
 \pagenumbering{roman}					% specify page numbering
 \fancyhf{}						% clear previous headers
-%\addtolength{\headheight}{48pt}				% update header height
 
 \patchcmd{\thebibliography}{\section*{\refname}}{Références}{}{}
 \patchcmd{\thebibliography}{\chapter*{\refname}}{Références}{}{}
@@ -356,19 +224,11 @@
 %opening
 \begin{document}
 
-\ifthenelse{\equal{\lang}{fr}} {
-  \selectlanguage{francais}
-}{
-  \selectlanguage{english}
-}
-
-
 \dominitoc
 \dominilot
 \dominilof
 
 \renewcommand{\headrulewidth}{0pt}			% disactive header bar
-
 
 \fancyhead{}
 \fancyfoot{}
@@ -384,11 +244,8 @@
 \fancyhead[RE]{\bfseries\nouppercase{\leftmark}}      % Chapter in the right on even pages
 \fancyhead[LO]{\bfseries\nouppercase{\rightmark}}     % Section in the left on odd pages
 
-
-
 %%%%%%%%%%%%%%%%%%%%%
 
-%\thesisTitle						% print title page
 \fancyfoot[RO]{\thepage/\pageref{LastPage}}		% Right Odd foot
 \fancyfoot[RE]{}					% Right Even foot
 \fancyfoot[LE]{\thepage/\pageref{LastPage}}		% Left Even foot
@@ -397,16 +254,15 @@
 \phdPrintDedication
 
 \cleardoublepage					% double blank page
-%\frontmatter						% out of TOC chapterss
 
 \input{includes/resume.tex}				% insert abstracts
 
-
 \cleardoublepage					% double blank page
-%\dominitoc
+
 \tableofcontents					% print table of contents
 \listoffigures
 \listoftables
+
 \pagenumbering{arabic}					% update page number to arabic
 
 \renewcommand{\headrulewidth}{1pt}			% allow header bar
@@ -414,11 +270,6 @@
 \fancyhead[RE]{}					% Right Even header
 \fancyhead[RO]{}					% Right Odd header
 \fancyhead[LE]{\rightmark}				% Left Even header
-
-
-
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Subfiles inclusion
@@ -431,8 +282,6 @@
 
 \newpage
 
-
-%\chapter*{Liste des publications}
 \nocite{tdmsched}
 \nocite{santy2012relaxing}
 \nocite{thierry2011toward}
@@ -442,41 +291,6 @@
 \nocite{thierry2013daudit}
 \nocite{thierry2013dctrl}
 \printbibliography[title=Liste des publications,filter=own]
-
-%\addstarredchapter{Liste des publications}
-% \begin{thebibliography}{1}
-% 
-% \bibitem{santy2012relaxing}
-% Fran{\c{c}}ois Santy, Laurent George, Philippe Thierry, and Jo{\"e}l Goossens.
-% \newblock Relaxing mixed-criticality scheduling strictness for task sets
-%   scheduled with fp.
-% \newblock In {\em 24th Euromicro Conference on Real-Time Systems (ECRTS)},
-%   pages 155--165, Pisa, Italy, July 2012. IEEE.
-% 
-% \bibitem{thierry2011toward}
-% Philippe Thierry, Laurent George, J~Hermant, Fabien Germain, Dominique Ragot,
-%   and J~Lacroix.
-% \newblock Toward a predictable and secure data cache algorithm: a cross-layer
-%   approach.
-% \newblock In {\em 10th International Symposium on Programming and Systems
-%   (ISPS)}, pages 148--155, Algiers, Algeria, April 2011. IEEE.
-% 
-% \bibitem{thierry2011real}
-% Philippe Thierry, Laurent George, and Jean-Fran\c{c}ois Hermant.
-% \newblock Real-time scheduling analysis for arinc-based virtualized systems.
-% \newblock In {\em 10th Workshop on Models and Algorithms for Planning and
-%   Scheduling Problems}, page 106, Nymburk, Czech Republic, June 2011.
-% 
-% \bibitem{etfa13}
-% Philippe Thierry, Laurent George, and Jean-Marc Lacroix.
-% \newblock A framework for a secure embedded filtering connector for
-%   multi-criticality systronic systems.
-% \newblock In {\em Proceedings of the 18th International Conference on Emerging
-%   Technologies \& Factory Automation}, Cagliari, Italy, September 2013. IEEE.
-% 
-% \end{thebibliography}
-% 
-%\mainmatter
 
 \input{includes/intro/01_introduction.tex}
 

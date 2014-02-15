@@ -1,0 +1,22 @@
+\NeedsTeXFormat{LaTeX2e}
+
+\ProvidesPackage{PhDglossaries}[2014/02/15 Extension personnelle, V1.0]
+
+\RequirePackage[french]{translator}
+\usedictionary{PhDdictionnary}
+
+\RequirePackage[translate=true,xindy,toc,nonumberlist]{glossaries}
+
+
+\addto\captionsfrench{%  
+    \renewcommand*{\glossaryname}{Glossaire des termes techniques}%  
+    %\deftranslation[to=French]{Glossary}{Glossaire}
+}
+
+\renewcommand*{\glssettoctitle}[1]{%
+\ifthenelse{\equal{#1}{main}}{%
+  \def\glossarytoctitle{\glossaryname}}{%
+  \ifthenelse{\equal{#1}{acronym}}{%
+    \def\glossarytoctitle{\acronymname}}{%
+    \def\glossarytoctitle{\csname @glotype@#1@title\endcsname}}}}%
+
