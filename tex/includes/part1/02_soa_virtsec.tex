@@ -16,17 +16,18 @@
 sécuritaire porté par le MILS (Multi-Independent Level of Security) et le MLS
 (MultiLevel Security). Ces solutions, pour certaines d'entre elles,
 fournissent une architecture logicielle compatible avec le principe de {\it
-Separation Kernel} comme décrit il y a plus de 20 ans par John Rushby
-\cite{rushby1989kernels}. Le but d'un Separation Kernel est d'assurer un
+Separation Kernel}. Le but d'un Separation Kernel est d'assurer un
 cloisonnement strict entre des environnements logiciels, tout en ayant les
-propriétés nécessaires pour être intégré dans la TCB. Dans ce chapitre, je décris les différentes
-solutions existantes candidates au principe de {\it Separation Kernel}.}
+propriétés nécessaires pour être intégré dans la Trusted Computing Base
+(confer Définition \ref{def:tcb}).
+Dans ce chapitre, je décris les différentes solutions de virtualisation existantes
+candidates au principe de {\it Separation Kernel}.}
 
 \section{Étude de la sécurité des solutions de virtualisation existantes}
 
 \subsection{Étude de la solution Xen}
 
-\subsubsection{Principe}
+\subsubsection{Principe généraux}
 \paragraph{}
 Xen \cite{barham2003xen} est un hyperviseur s'appuyant sur une architecture de type micro-noyau. Ce
 dernier fournit les éléments de base pour la gestion et le déploiement des
@@ -46,9 +47,8 @@ virtuelle possède sont propre noyau. Celui-ci peut être géré de plusieurs
 manières:
 \begin{enumerate}
   \item Via de la paravirtualisation. Dans ce cas, le noyau du domaine
-    utilisateur est modifié pour s'appuyer sur l'API de l'hyperviseur dès
-    qu'il est nécessaire de faire un traitement nécessitant des droits
-    d'administrateur sur la machine
+    utilisateur est modifié pour s'appuyer sur l'API de l'hyperviseur pour
+    tout traitement nécessitant des droits d'administrateur sur la machine.
   \item Via de la virtualisation matérielle. Dans ce cas, l'hyperviseur
     s'appuie sur les mécanismes de virtualisation matérielle tels que Intel-VT
     ou AMD-V pour gérer la ségrégation des accès aux périphériques et à la
@@ -56,27 +56,41 @@ manières:
     le noyau Windows.
 \end{enumerate}
 
-\subsubsection{Synthèse}
+\subsubsection{Éligibilité au principe de Separation Kernel}
 
 \paragraph{}
 Xen est une solution de virtualisation proposant plusieurs éléments
 intéressants en terme de cloisonnement. Il peut assurer un cloisonnement
 strict de la mémoire entre les machines virtuelles. Il est également apte à
 assurer une charge minimum garantie à chaque machine virtuelle pour un laps de
-temps donné. C'est le mécanisme de type SEDF décrit dans
-l'hyperviseur \cite{cherkasova2007comparison}\cite{govindan2007xen}.\\
-Il ne permet cependant pas de définir des politiques d'ordonnancement strictes
-type Time Division Multiplexing.
-
+temps donné. C'est le mécanisme présent depuis la version 3 de l'hyperviseur
+et que les développeurs ont dénoté S-EDF \ref{xenthreesched}. Cet ordonnanceur permet de
+déterminer, par configuration, une durée d'exécution minimum par fenêtre
+temporelle ainsi que la capacité à dépasser cette durée.
+La durée d'exécution est variable en fonction des
+entrées/sorties des différentes machine virtuelles, détectable par
+l'hyperviseur car ces dernières transitent par le dom0. C'est une spécificité
+de l'hyperviseur Xen, seul hyperviseur utilisant un domaine d'administration
+étant lui-même une machine virtuelle.
+L'implémentation de l'ordonnanceur S-EDF ne repose malheureusement pas sur des
+bases théoriques solides et les limites de sa compatibilité avec un
+ordonnancement temps réel ont été montrées plusieurs fois
+\cite{cucinotta_respecting_2009}\cite{cherkasova2007comparison}\cite{govindan2007xen}.\\
+De plus, Xen ne permet pas à ce jour de définir des politiques d'ordonnancement strictes
+de type Time Division Multiplexing, nécessaire pour garantir un cloisonnement
+strict en terme de sécurité. Ainsi, la variation de charge CPU liée à une machine
+virtuelle impliquera une diminution ou une augmentation de charge CPU allouée à
+une autre machine virtuelle, générant ainsi un canal auxiliaire (confer
+Définition \ref{def:canalaux}).
 
 \paragraph{}
-Les tâches des machines virtuelles sont exécutées et ordonnancées par le noyau
-invité de chacune d'entre elle. L'hyperviseur n'a donc pas la visibilité sur
+Les tâches des machines virtuelles sont exécutées et ordonnancées par leur noyau.
+L'hyperviseur n'a donc pas la visibilité sur
 la charge ou la manière dont sont ordonnancées les tâches hébergées dans les
 machines virtuelles. Cependant, il est apte à réagir aux événements matériels
 asynchrones, en adaptant l'ordonnancement des machines virtuelles pour
 limiter la latence de traitement. Cependant, un tel ordonnancement est
-difficilement compatible de contraintes temps réel.
+difficilement compatible avec des contraintes de temps réel.
 
 \paragraph{}
 Parmi les solutions open-source connues de virtualisation ou de partitionnement,
@@ -109,10 +123,10 @@ dynamicité des machines virtuelles, ainsi que l'interaction avec le matériel,
 mais au dépend de la sécurité générale du système \cite{han2011verifying}. Il est donc d'usage de
 sortir le domaine d'administration de l'architecture logique, le rendant
 accessible exclusivement via une console locale d'administration.\\
-Enfin, cette solution n'est à ce jour pas certifiable à coût raisonnable,
+Enfin, cette solution n'est à ce jour pas certifiable à un coût raisonnable,
 du fait de la volumétrie de l'hyperviseur en terme de lignes de code.
 
-\subsubsection{Conclusion}
+\subsubsection{Synthèse de la solution Xen}
 
 \paragraph{}
 La solution Xen est intéressante pour ses propriétés de partitionnement
@@ -121,7 +135,11 @@ partitionnement temporel strict de type TDM. La restriction principale à son
 usage est son manque de portabilité sur les architectures embarquées. A ce
 jour, seules les architectures ARM et x86/x86\_64 sont supportées, ce qui pose
 porblème dans les domaines de l'avionique et des télécoms, où l'architecture
-PowerPC est prédominante.
+PowerPC est prédominante. De plus, la taille du micro-noyau Xen ne lui permet
+pas d'initier une procédure de certification sécuritaire et le rend
+incompatible de l'Exigence \ref{pro:evaluable}. On peut donc
+conclure que la solution Xen, bien que attractive au premier abord, ne peut
+pas être utilisé comme Separation Kernel.
 
 \subsection{Étude de la solution QubesOS}
 
@@ -131,13 +149,13 @@ PowerPC est prédominante.
 QubesOS \cite{rutkowska2010qubes} est une solution logicielle ciblant les postes de travail. Les
 exigences initiales de la solution Qubes sont de pouvoir assurer la
 confidentialité des données personnelles et professionnelles. Afin de pouvoir
-répondre à ces exigences, QubesOS s'appuie sur une architecture comparimentée
+répondre à ces exigences, QubesOS s'appuie sur une architecture compartimentée
 exécutant de manière autonome des environnements
 d'exécution pour chaque type de donnée \cite{gadaleta2012effectiveness}.\\
 Les accès aux périphériques sont déportés dans un domaine de confiance afin de
-limiter l'accès au matériel pour les environnements compartimentés.\\
+limiter l'accès au matériel pour les environnements compartimentés.
 
-\subsubsection{Synthèse}
+\subsubsection{Synthèse de la solution QubesOS}
 
 \paragraph{}
 La solution Qubes s'appuie sur l'hyperviseur Xen et un mécanisme d'aggrégation
@@ -146,9 +164,13 @@ différents domaines de confidentialité. De plus, elle intègre un
 outillage complexe et des mécanismes de communicaton entre les compartiments
 chiffrant les données émises. Cependant, la solution
 complète QubesOS est lourde et cible exclusivement les postes de travail x86
-récents. La solution n'est pas compatible avec les besoins de l'embarqué, mais le
+récents. Elle n'est pas compatible avec les besoins de l'embarqué, mais le
 principe de compartimentation et les mécanisme internes de chiffrement sont
-intéressant pour le besoin de confidentialité des données.
+intéressant pour le besoin de confidentialité des données. L'utilisation de
+Xen comme base de cloisonnement rend également la solution non évaluable et
+donc incompatible de l'Exigence \ref{pro:evaluable}.
+Bien que ne pouvant être éligible au principe de Separation Kernel, elle utilise des
+mécanismes de communication inter-domaines intéressant en terme de sécurité.
 
 \subsection{Étude de la solution LXC}
 
@@ -186,14 +208,14 @@ de sécurité limités et des besoins de temps réel souple, mais la solution reste
 incompatible avec les besoins de temps réel dur et de haut niveau de sécurité, de par
 la présence d'un noyau Linux comme environnement d'exécution des compartiments.
 
-\subsubsection{Synthèse}
+\subsubsection{Synthèse de la solution LXC}
 
 \paragraph{}
 La solution LXC est intéressante pour les besoins de maquettage, mais ne
 permet pas de répondre à des exigences de type MILS, car cette solution est
 incompatible avec les Propriétés \ref{pro:noncontournable}, \ref{pro:evaluable},
 \ref{pro:validation} et \ref{pro:inviolable} exigées par les architectures
-MILS.\\
+MILS et MLS.\\
 Pour des besoins de temps réel souple, elle reste envisageable si les
 exigences de réactivités sont faibles (supérieur à la milliseconde, comme je
 le montre dans le Chapitre \ref{sec:passerelle_systronique}).
@@ -213,21 +235,21 @@ du micro-noyau L4, créé par Jochen Liedtke \cite{liedtke1995micro}\cite{liedtke1
 La famille L4 est composée de différents micro-noyaux écrits en C++, comme
 {\it Fiasco}, {\it Pistachio} ou encore {\it seL4} \cite{klein2009sel4}.
 Fiasco est une solution qui n'a été porté que
-sur architecture x86, limitant fortement son usage. Cependant, Pistachio a été
+sur une architecture x86, limitant fortement son usage. Cependant, Pistachio a été
 porté sur un grand nombre d'architectures, dont ARM, PowerPC ou MIPS. Seules
 les architectures Sparc ne sont pas supportées à ce jour. Le micro-noyau seL4 cible la
 sécurité, mais est limité à deux architectures matérielles: x86 et ARM.
 SeL4 a fait vérifier formellement son API et sa gestion mémoire en
 2009 \cite{klein2009sel4}.
 
-\subsubsection{Synthèse}
+\subsubsection{Synthèse de la famille L4}
 
 \paragraph{}
-Des différents micro-noyaux de la famille L4, seL4 est celui qui semble le
+Parmi les différents micro-noyaux de la famille L4, seL4 est celui qui semble le
 plus proche du besoin sécuritaire. Son faible volume de code (7500 lignes) et
 ses premiers travaux en terme de preuve formelle font de lui un bon candidat
 au besoin MILS. Malheureusement, ce dernier n'est porté que sur deux
-architectures et ne propose à ce jour aucune considération des exigences temps
+architectures matérielles et ne propose à ce jour aucune considération pour des exigences temps
 réel.
 
 \subsection{Étude de la solution PikeOS}
@@ -236,8 +258,7 @@ réel.
 \subsubsection{Principe}
 
 L'hyperviseur PikeOS \cite{pike_kaiser2007evolution} est un micro-noyau avec des propriétés temps réel
-(certifié DO-178B-DALB) dont l'architecture logicielle permet de gérer un
-système de type MLS.
+(certifié DO-178B-DALB).
 L'architecture de la solution PikeOS est séparable en trois couches
 distinctes.
 \begin{itemize}
@@ -247,7 +268,7 @@ dans les différents compartiments et bien sûr l'ordonnancement.
 \item Les compartiments: Ces derniers peuvent être des tâches certifiables
 ordonnançable directement par le micro-noyau ou un système d'exploitation
 complet, impliquant un ordonnancement de type hiérarchique, comme le décrit la
-Figure \ref{fig:pikeos}
+Figure \ref{fig:pikeos}.
 \item Le {\it System Software}: Il gère les canaux de communications entre les
 compartiments, mais également les droits d'accès sur l'état de la
 machine de la part des différents compartiments (capacité à être informé de
@@ -276,9 +297,11 @@ dans le compartiment temporel.
 \paragraph{}
 La solution PikeOS permet de gérer les politiques d'ordonnancement de type
 Rate Monotonic (RM) avec 255 niveaux de priorités. Il permet de plus de définir
-une séparation temporelle de type TDM venant s'ajouter à la politique d'ordonnancement RM
+une séparation temporelle de type TDM pour les différents compartiments
+temporels, venant s'ajouter à la politique d'ordonnancement RM
 initiale, afin de déterminer des fenêtres d'ordonnancement strictes et
 périodiques.
+
 \paragraph{}
 En terme de séparation spatiale, PikeOS permet d'assurer une séparation
 spatiale stricte en définissant une répartition des compartiments en mémoire
@@ -290,13 +313,18 @@ spatiale et temporelle à chaque entité devant être ordonnancée que la
 solution PikeOS permet à la fois de supporter des exigences en terme de temps réel
 et de sécurité.
 
-\subsubsection{Synthèse}
+\subsubsection{Synthèse de la solution PikeOS}
+\label{subsub:pikesynth}
 
 \paragraph{}
 La capacité à ordonnancer à la fois des OS complexes et des tâches
 certifiables fait de cette solution logicielle un bon candidat à l'intégration
 des moniteurs de sécurité tels que nécessités par une architecture de type MLS
-ou MILS \cite{pike_baumann2009verifying}.
+ou MILS \cite{pike_baumann2009verifying}. Il est en effet compatible de
+la Propriété \ref{pro:evaluable} d'un système MLS. Les trois autres propriétés
+(\ref{pro:noncontournable}, \ref{pro:validation} et \ref{pro:inviolable})
+peuvent être supportées via l'intégration d'éléments complémentaires exécutées
+au dessus du micro-noyau.
 
 \section{Synthèse}
 
@@ -309,12 +337,17 @@ compatibilité de la solution de virtualisation logicielle avec à la fois des
 exigences de temps réel et de sécurité. Il est de plus nécessaire, afin de
 permettre l'intégration de sécurité, d'avoir la possibilité de faire
 s'exécuter sur l'hyperviseurs d'autres éléments logiciels que des systèmes
-virtualisés. Ainsi, l'hyperviseur doit non seulement permettre l'exécution de
+virtualisés, comme je le propose pour PikeOS dans la Section
+\ref{subsub:pikesynth}. Ainsi, l'hyperviseur doit non seulement permettre l'exécution de
 systèmes d'exploitations virtualisés, mais également des threads directement
 ordonnancés par ce dernier, tout en assurant une compartimentation spatiale et
 temporelle forte.\\
 Parmi les différentes solutions de virtualisation étudiées, seule la solution
 PikeOS de Sysgo permet de répondre à l'ensemble de ces besoins. C'est cette
 solution que je considère dans ma thèse afin de répondre à la problématique
-d'architecture de sécurité pour répondre à la fois aux exigences temps réel et
-de sécurité.
+d'architecture de sécurité pour répondre à la fois aux exigences de temps réel et
+de sécurité. Dans le cadre de ma thèse, je définis toute une architecture de
+modules logiciels complémentaires permettant à la fois de répondre aux besoins
+des systronique et aux propriétés que doivent respecter les systèmes MLS et
+décrites dans le Chapitre \ref{subsec:mls}.
+

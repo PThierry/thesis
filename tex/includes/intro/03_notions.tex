@@ -63,18 +63,35 @@ terme) du domaine. Ces exigences sont mises en place sous forme:
 Plus le niveau de confidentialité est élevé, plus la PSSI est stricte et
 complexe.
 
-\subsubsection{Changement de niveau et problématique rouge/noir}
+\subsubsection{Changement de niveau et problématique rouge-noir}
 
 \paragraph{}
+La terminologie dite {\it rouge/noir} est une terminologie militaire, définie
+ci-après:
+
+\PhDdefinition{domr}{Domaine rouge}{
 On appelle domaine rouge un domaine de sécurité dans lequel les données
 transitant ne sont pas protégées. On parle alors de données rouges. Le réseau
 faisant transiter ces données dans un domaine rouge est alors appelé réseau
 rouge.
+}
 
-\paragraph{}
+\PhDdefinition{domn}{Domaine noir}{
 On appelle domaine noir un domaine de sécurité dans lequel les données
 transitant sont modifiées pour en assurer la confidentialité, l'intégrité et
-la disponibilité. On dit alors que les données sont noircies. En général, un
+la disponibilité. On dit alors que les données sont noircies.
+}
+
+\PhDdefinition{rn}{Système rouge-noir}{
+Un système est dit rouge-noir lorsqu'il interconnecte un domaine rouge à un
+domaine noir. Une telle interconnexion implique un élément de confiance en
+bordure des domaines, en charge d'intégrer un mécanisme de protection des
+données du domaine rouge avant de les transmettre au domaine noir. Cet élément
+de confiance est également en charge de valider toute transmission venant du
+domaine noir vers le domaine rouge.
+}
+
+En général, un
 domaine noir est en charge de faire transiter des données dont le niveau de sécurité
 est supérieur à celui du domaine lui-même. Ainsi, faire
 transiter des données de niveau Confidentiel Défense dans un domaine de niveau
@@ -94,11 +111,18 @@ de réseaux militaires.
 
 \subsubsection{Niveaux de confidentialité et droit d'en connaître}
 
-\PhDdefinition{droitden}{Droit d'en connaître}{
+\PhDdefinition{besoinden}{Besoin d'en connaître}{
 On appelle droit d'en connaître l'ensemble de connaissances minimum suffisant
 pour un sujet (une personne ou encore un processus logiciel) pour mener à bien
 une tâche.
 }
+
+\PhDdefinition{droitden}{Droit d'en connaître}{
+On appelle droit d'en connaître l'ensemble de connaissances formalisé
+dans une politique de gestion des droits afin de répondre au(x) besoin(s) d'en
+conaître d'un sujet.
+}
+
 
 \paragraph{}
 Ainsi, une personne ayant une habilitation Confidentiel Défense sur
@@ -120,10 +144,14 @@ caché, selon la méthode.
 \subsubsection{Canal auxiliaire et étude comportementale}
 
 \paragraph{}
-Le principe d'un canal auxiliaire consiste à s'appuyer sur une étude
-comportementale non-invasive sur des fonctions ou des traitements afin de
-récupérer des informations sur les données traitées. La plupart des études sur
-le sujet sont dans le domaine de la
+\PhDdefinition{canalaux}{Canal Auxiliaire}{
+On appelle canal auxiliaire un élément comportemental lié au fonctionnement de
+la solution permettant à un attaquant, de manière non-invasive (e.g. via une
+mesure de temps), de déterminer des informations sur un élément auquel
+il n'a pas les droits d'accès.
+}
+
+La plupart des études sur le sujet sont dans le domaine de la
 cryptanalyse \cite{sidechancube}\cite{sidechan}. Ces
 différentes études démontrent la capacité, au travers de l'étude de la consommation électrique
 des différents éléments d'un processeur \cite{sidechancube} ou via l'étude de
@@ -136,11 +164,16 @@ ce type d'attaque. C'est le cas par exemple d'AES \cite{aes} ou de
 Serpent \cite{serpent}.
 
 \subsubsection{Canal caché pour le transfert de données}
+\label{subsubsec:canaux_caches}
 
 \paragraph{}
-Le principe d'un canal caché consiste en la capacité à utiliser la bande
-passante d'un canal logiciel ou matériel pour faire transiter des données
-pour lesquelles il n'est pas initialement prévu. L'usage d'un canal caché
+\PhDdefinition{canalcac}{Canal caché}{
+On appelle canal caché tout élément logiciel ou matériel dont il est possible
+de détourner l'usage afin de pouvoir faire transiter volontairement de
+l'information vers un sujet n'ayant pas les droits d'accès à celle-ci.
+}
+
+L'usage d'un canal caché
 implique un usage volontaire de part et d'autre pour émettre les données et
 pour les recevoir. Il est donc invasif, contrairement aux canaux auxiliaires.\\
 Un exemple typique est de s'appuyer sur la période intertrame d'un flux
@@ -184,10 +217,15 @@ comme par exemple les systèmes DAC (Discretionary Access Control), MAC
 
 \paragraph{}
 La complexité du système dépend du besoin de certifiabilité. On définit
-initialement une cible d'évaluation (couramment appelée TOE, pour {\it Target
-Of Evaluation}) \cite{cnssi_4009}, intégrant ce qui, dans le
-système cible, doit être évalué, ainsi que le niveau de l'évaluation, au sens
-des Critères Communs. Le niveau de sécurité du TOE est donc dépendant du niveau
+initialement une cible d'évaluation (couramment appelée Target Of Evaluation.
+
+\PhDdefinition{toe}{Target Of Evaluation}{
+  On appelle Target Of Evaluation (TOE) l'ensemble des éléments logiciels et
+  matériels qui seront évalués dans le cadre d'une certification, ainsi que le
+  niveau d'évaluation attendu, au sens des Critères Communs.
+}
+
+Le niveau de sécurité du TOE est donc dépendant du niveau
 souhaité. Les systèmes Linux bien configurés en terme de sécurité peuvent
 atteindre un niveau de certification de l'ordre de l'EAL 4. Il faut cependant
 prendre soin d'étudier précisément quelle est la TOE. En effet, le niveau de
@@ -195,12 +233,17 @@ sécurité d'un système certifié dans le cadre d'un fonctionnement autonome n'est 
 si ce dernier est connecté à un réseau.
 
 \paragraph{}
-Associé à la TOE, on définit le socle de confiance (couramment appelé
-TCB, pour {\it Trusted Computing Base}) \cite{cnssi_4009}. Cette
-notion définit l'ensemble des éléments logiciels et matériels de
-la solution cible qui sont considérés comme de confiance. La corruption de
-tout élément de cet ensemble génère en conséquence une faille dans les
-propriétés de sécurité de la solution. Ainsi les éléments de la TCB doivent
+Associé à la TOE, on définit le socle de confiance couramment appelé Trusted
+Computing Base.
+
+\PhDdefinition{tcb}{Trusted Computing Base}{
+  On appelle Trusted Computing Base (TCB) l'ensemble des éléments logiciels
+  et matériels de la solution cible qui sont considérés comme de confiance.
+  La corruption de tout élément de cet ensemble génère en conséquence une
+  faille dans les propriétés de sécurité de la solution.
+}
+
+Ainsi les éléments de la TCB doivent
 non seulement être certifiables au plus haut niveau souhaité dans le cadre de
 l'évaluation du système, mais doivent être également protégés contre toute
 corruption extérieure (comme par exemple à partir d'un élément

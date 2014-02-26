@@ -8,23 +8,21 @@
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
 %% Last update Mon Aug 30 17:00:21 2010 Philippe THIERRY
 
-\chapter{Etat de l'art de l'ordonnancement temps-réel}
+\chapter{Focus sur l'ordonnancement hiérarchique et la criticité mixte}
 \doMinitoc
 
 \paragraph{}
 {\it L'usage d'un
-separation kernel est une des solutions logicielles proposées pour répondre aux
+{\it Separation Kernel} est une des solutions logicielles proposées pour répondre aux
 besoins des architectures MILS et MLS. Cette
 architecture, impliquant potentiellement la virtualisation de plusieurs
 environnements autonomes, s'appuie sur un ordonnancement hiérarchique de
 tâches virtualisées. Dans le cadre de ma thèse, il est également nécessaire de
 considérer la problématique de criticité mixte, du fait des contraintes fortes
 des systèmes Systroniques en terme de puissance processeur. Ce chapitre décrit
-l'état de l'art de ces deux thèmes.}
+un état de l'art sur ces deux thèmes.}
 
-
-
-\section{A propos de l'ordonnancement hiérarchique de tâches}
+\section{Solutions pour l'ordonnancement hiérarchique de tâches}
 \label{sec:hierarchique}
 
 \subsection{Principes généraux de l'ordonnancement hiérarchique}
@@ -46,10 +44,17 @@ ordonnancement local
 L'ordonnancement hiérarchique a été beaucoup étudié ces dernières années.
 Ainsi, la
 capacité à ordonnancer en concurrence des jeux de tâches sur un même
-c{\oe}ur processeur permet de pouvoir prendre en considération une
-classification de ces derniers. La prise en compte d'une classification des
+c{\oe}ur d'un processeur permet de pouvoir prendre en considération une
+classification de ces jeux. La prise en compte d'une classification des
 jeux de tâche permet de différencier leur ordonnancement
-en fonction selon le besoin. Aujourd'hui, la plupart des travaux \cite{methodhierarchical}
+en fonction des besoins. On peut ainsi différencier des traitements temps réel
+de traitement non temps réel. C'est typiquement le cas de Linux qui ordonnance
+des tâches temps réel et non temps réel en concurrence, en garantissant que
+les tâches temps réel sont prioritaires sur les autres. Il est également
+possible de pouvoir ordonnancer en concurrence deux jeu de tâches en utilisant
+deux politiques d'ordonnancement différentes, pouvant ainsi optimiser les
+performances selon les propriétés de chaque jeu de tâches.\\
+Aujourd'hui, la plupart des travaux \cite{methodhierarchical}
 ont pour hypothèse une connaissance initiale de l'ensemble des tâches.
 
 \paragraph{}
@@ -57,8 +62,19 @@ La classification des jeux de tâches peut par exemple être faite en fonction des
 réactivité associées à ceux-ci. Ainsi, dans \cite{methodhierarchical}, les
 auteurs différencient les tâches de traitements des interruptions matérielles,
 exigeant une forte réactivité, des autres tâches.
-La Figure \ref{fig:hierarchical_sample} décrit une répartition similaire,
-implémentée dans les noyau Linux jusqu'à la version 2.6.32.
+La Figure \ref{fig:hierarchical_sample} décrit une répartition
+implémentée dans les noyau Linux jusqu'à la version 2.6.32. Le but de cette
+classification de jeux de tâches et de pouvoir différencier l'ordonnancement:
+\begin{itemize}
+\item de certains traitements consécutifs à des évènements asynchrones, comme les
+traitements des IRQ
+\item des tâches temps réel ordonnancées par l'ordonnanceur FIFO
+\item des tâches temps réel ordonnancées par l'ordonnanceur RR
+\end{itemize}
+La figure \ref{fig:hierarchical_sample} décrit le cas de certaines tâches
+parmi l'ensemble des tâches que l'on peut trouver sous Linux, comme la gestion
+des interruptions timer, souris et clavier, ou encore les {\it bottom halves},
+c'est à dire les traitements déportés dans le temps de certaines fonctions.
 
 \begin{figure}
 \label{fig:hierarchical_sample}
@@ -70,48 +86,59 @@ implémentée dans les noyau Linux jusqu'à la version 2.6.32.
 
 \paragraph{}
 Lorsque la hiérarchisation de
-l'ordonnancement est la conséquence de l'emploi de la virtualisation, les deux politiques
-d'ordonnancement s'ignorent souvent l'une l'autre. En conséquence, les ordonnanceurs
-en-ligne ne sont plus éligibles pour l'ordonnancement global, faute
-d'information sur l'état de chaque ensemble de tâches de chaque machine
-virtuelle. Ce dernier est donc en général de type Fixed Priority (FP). Ce type de restriction est décrit dans
-\cite{cucinotta_respecting_2009} où les auteurs expliquent l'impact de
-l'ordonnanceur global sur la capacité des tâches virtualisées à rester
-ordonnançable. Différents travaux sur ce sujet ont été publiés, sur la base de solution open-source comme Xen \cite{barham2003xen} ou
-KVM \cite{kivity2007kvm} ou encore dans un cadre plus générique \cite{cucinotta_respecting_2009}\cite{rtvm}.
+l'ordonnancement est la conséquence de l'emploi de la virtualisation, les deux
+politiques d'ordonnancement (locale et globale) s'ignorent l'une l'autre. Ainsi,
+l'état de l'ordonnancement des tâches locales, et leur besoin en terme de
+charge n'est pas connu de l'ordonnanceur global. Le cas de l'hyperviseur Xen
+est particulier, car il est capable de déterminer une variation de charge
+d'une machine virtuelle lorsque cette variation est la conséquence de
+traitements de type entrées/sorties. Celles-ci transitant par le domaine de
+contrôle, ce dernier peut alors informer l'hypervieur afin de modifier
+l'ordonnancement des machines virtuelles en conséquence. Les solutions de
+virtualisation ne s'appuyant pas sur un domaine d'administration, comme la
+famille L4 ou PikeOS de Sysgo, ne peuvent pas détecter une variation de charge
+dans un jeu de tâche d'une machine virtuelle donnée. Dans ce dernier cas, on
+ne peut plus utiliser un ordonnanceur en-ligne pour impacter l'ordonnancement
+des machines virtuelles en fonction de la variation de besoin de chaque jeu de
+tâche.\\
+Dans ce cas, l'ordonnanceur global est souvent de type Fixed Priority (FP).
+Ce type de restriction est décrit dans \cite{cucinotta_respecting_2009}
+où les auteurs expliquent l'impact de l'ordonnanceur global sur la capacité
+des tâches virtualisées à rester ordonnançable.
+Différents travaux sur ce sujet ont été publiés, sur la base de solution
+open-source comme Xen \cite{barham2003xen} ou KVM \cite{kivity2007kvm}
+ou encore dans un cadre plus générique \cite{cucinotta_respecting_2009}\cite{rtvm}.
 
 \paragraph{}
 Du fait de la hiérarchisation de l'ordonnancement des tâches, on parle alors
-de d'un ordonnancement de type X/Y, ou X spécifie l'ordonnancement des
+d'un ordonnancement de type X/Y, ou X spécifie l'ordonnancement des
 machines virtuelles $\Gamma_i, i \in { a, b, c ... }$, Y définissant
 l'ordonnancement des tâches $\tau^i_j$ de la machines virtuelle $\Gamma_i$.\\
-Un exemple d'ordonnancement hiérarchique est l'EDF/RM, où les tâches sont
-ordonnancées suivant une politique de type EDF et les jeux de tâches des
-différentes machines virtuelles sont ordonnancés suivant une politique de type RM.
-Les calculs d'ordonnançabilité sont impactés par le principe de hiérarchie, et nécessitent donc
-d'être étudiés de manière spécifique.
+Un exemple d'ordonnancement hiérarchique est le RM/EDF, où les tâches sont
+ordonnancées suivant une politique de type EDF et les machines virtuelles
+sont ordonnancés suivant une politique de type RM.
 
 \paragraph{}
-Dans la solution Xen, une implémentation d'un ordonnanceur temps réel, que les
-développeur ont appelé S-EDF, a été faite afin d'assurer
+Ainsi, dans la solution Xen, une implémentation d'un ordonnanceur global
+qui se veut temps réel, que les développeur ont appelé S-EDF, a été faite afin d'assurer
 une réservation de ressource CPU minimum dans une fenêtre temporelle aux
 différentes machines virtuelles. Cependant, cette solution a ses limitations,
 principalement lorsque les tâches temps réel impliquent un grand nombre
 d'entrées/sorties, impactant le respect de l'ordonnancement des autres
-machines virtuelles\cite{cucinotta_respecting_2009}.\\
+machines virtuelles \cite{cucinotta_respecting_2009}.\\
 KVM utilise une architecture différente, puisqu'il implique un hôte pouvant
 ordonnancer des tâches potentiellement temps réel à côté de machines
 virtuelles. Dans ce cas, les tâches natives (non virtualisées) peuvent
 impacter l'ordonnancement des machines virtuelles et des jeux
 de tâches associés, comme le décrivent T. Cucinotta, g. Anastasi et L. Abeni
-dans \cite{rtvm}. Les auteurs propose un nouvel ordonnanceur global, qu'ils dénotent
+dans \cite{rtvm}. Les auteurs proposent un nouvel ordonnanceur global, qu'ils dénotent
 Constant Bandwidth Server \cite{abeni1998integrating} (CBS)
 afin d'assurer une réservation stricte de charge processeur pour les
 différentes machines virtuelles, limitant fortement l'impact des tâches
 natives. La gestion concurrentes de jeux de tâches temps réel virtualisés et
 de jeux de tâches natifs (ordonnancés directement par l'hôte) est donc un
-problème complexe à résoudre. Dans le cadre des architectures MILS, ce type
-d'architecture est malheureusement nécessaire afin de pouvoir traiter les
+problème complexe à résoudre. Dans le cadre des architectures MLS, ce type
+d'architecture est nécessaire afin de pouvoir traiter les
 moniteurs de sécurité comme des tâches du {\it separation kernel}, ces
 dernières ne pouvant être intégrés à un OS virtualisés sans perdre leur
 certifiabilité.
@@ -120,7 +147,7 @@ certifiabilité.
 
 \paragraph{}
 L'ordonnancement hiérarchique est un mécanisme nécessaire à l'exécution de
-compartiments autonomes tels que le nécessite les architectures MILS.
+compartiments autonomes tels que le nécessitent les architectures MLS.
 Lorsque l'on s'appuie sur un separation kernel sur lequel on doit positionner
 des fonctions de sécurité ordonnancées directement par l'ordonnanceur global,
 il est alors nécessaire de vérifier que l'exécution de ces dernières ne
@@ -128,28 +155,15 @@ vient pas impacter l'ordonnançabilité des tâches temps réel exécutées dans les
 machines virtuelles. De la même manière, si certaines des fonctions de
 sécurité, exécutées nativement à coté de machines virtuelles, ont des
 contraintes de temps réel, il est alors nécessaire d'en assurer également
-l'ordonnançabilité. Je propose dans le Chapitre \cite{sec:solution_rt} une solution pour répondre
-à cette problématique.
-
-%saewong2002analysis
-
-%\section{A propos de l'ordonnancement hiérarchique sur base TDM}
-%\paragraph{}
-%a considération d'un ordonnancement de jeu de tâche de type TDM est un cas
-%ntéressant d'ordonnancement hiérarchique. Les jeux de tâches sont ordonnancés
-%e manière stricte via la définition d'un motif répétitif d'ordonnancement. La
-%olitique d'ordonnancement des tâches doit donc considérer deux propriétés:
-%begin{itemize}
-%item La charge processeur allouée au compartiment, impactant la capacité à
-%rdonnancer les tâches en terme de charge
-%item La période d'élection du compartiment, impactant la capacité à respecter
-%es deadlines des tâches
-%end{itemize}
-
-%paragraph{}
-%'ai étudié cette problématique d'ordonnançabilité afin de valider le fait
-%ue plusieurs ensembles de tâches ordonnancés en TDM restaient certifiables en terme
-%'ordonnançabilité.
+l'ordonnançabilité. Je propose dans le Chapitre \ref{sec:solution_rt} une solution pour répondre
+à cette problématique, où je m'appuie sur les propriétés du micro-noyau PikeOS
+afin de compartimenter les tâches exécutées directement par l'ordonnanceur
+de l'hyperviseur dans des slots temporels disjoints. Une telle compartimentation
+implique cependant de considérer l'impact du slot temporel et de la période de
+l'ordonnancement TDM dans l'ordonnançabilité de ces tâches, ces dernières
+s'exécutant alors selon un ordonnancement hierarchique sur un ordonnancement
+global de type TDM, bien que ces dernières n'appartiennent pas à une machine
+virtuelle et soient gérées par l'hyperviseur directement.
 
 
 \section{État de l'art de l'ordonnancement de tâches à criticité mixte}
@@ -169,20 +183,18 @@ d'assurance exigé par chaque niveau de criticité. Plus ce dernier est élevé,
 plus l'assurance demandée par la certification est forte. En conséquence, la
 mesure d'exécution pire cas est de plus en plus pessimiste afin de garantir
 que la tâche respecte son WCET. Ainsi, une tâche de faible niveau de criticité
-peut s'appuyer sur une mesure probabiliste, dont le WCET est forcément plus
-faible qu'une mesure formelle du profil d'exécution d'une tâche.
+peut s'appuyer sur une mesure empirique, dont le WCET est forcément plus
+faible qu'un calcul formel du WCET.
 
 \paragraph{}
-On définit pour chaque tâche de l'ensemble de tâches un niveau de criticité en
-fonction de son importance. Un système s'exécute par défaut dans le domaine de
-criticité le plus faible. Si une tâche de criticité supérieure au domaine
-courant dépasse le WCET qui lui est donné pour ce domaine, on
-considère qu'il faut changer de domaine de criticité. On accroît alors le
-domaine de criticité du système et on désactive les tâches dont le niveau de
-criticité est inférieur au nouveau domaine de criticité actif. Ceci est fait afin de
-maintenir l'ordonançabilité des tâches critiques, ces dernières ayant alors un
-WCET plus élevé, correspondant à celui du domaine de criticité nouvellement
-actif.
+On définit pour chaque tâche un niveau de criticité en
+fonction de son importance. Un système s'exécute par défaut dans le niveau de
+criticité le plus faible. Si une tâche de criticité supérieure au niveau
+courant dépasse le WCET qui lui est alloué pour ce niveau, il faut augmenter
+la criticité. On accroît alors la
+criticité du système et on désactive les tâches dont le niveau de
+criticité est inférieur au nouveau niveau de criticité. Ceci est fait afin de
+maintenir l'ordonançabilité des tâches critiques.
 
 %To insert: \cite{handlemulticrit}
 
@@ -197,64 +209,88 @@ dans la pratique, plus le niveau d'assurance requis est élevé, plus pessimiste
 était l'approximation de la valeur du coût d'exécution pire cas. Ce niveau
 d'assurance est caractérisé par le niveau de criticité. Il suggéra également
 une stratégie basée sur l'ordonnancement à priorité fixe basée sur
-le principe d'assignement de priorité de Audsley \cite{Audsley_1991}. Dorin et
-al. \cite{Dorin2010} ont prouvé que dans le cas restreint des systèmes à
-tâches indépendantes à deadline contraintes, l'approche modifié du principe
-d'Audsley par Vestal était optimale pour les algorithmes de priorisation
-d'ensembles de tâches à criticité mixte.
+le principe d'attribution de priorité de Audsley \cite{Audsley_1991}.
+Dorin et al. \cite{Dorin2010} ont démontré que cet algorithme d'attribution de
+priorité était optimal pour les tâches à criticité mixte. Les auteurs ont
+également démontré que l'algorithme de Vestal visant à optimiser les
+exigences de ressources nécessaires à l'ordonnancement de tâches à criticité
+mixte, était optimal dans le cas restreint de tâches sporadiques ou périodiques
+indépendantes à deadline contraintes.
 
 \paragraph{}
-Aujourd'hui, la problématique de criticité mixe (MC-ordonnançabilité) est
+Aujourd'hui, la problématique d'ordonnancement à criticité mixe ({\it
+  MC-scheduling}) est
 communément connue pour arriver dans deux contextes différents.\\
-Le premier correspond à des exigences de certifications multiples. Dans ce
+\begin{itemize}
+  \item Le premier correspond à des exigences de certifications multiples. Dans ce
 contexte, différentes autorités de certification ont besoin de valider les
 fonctionnalités de l'application. Néanmoins, plus la fonctionnalité est
 critique, plus pessimiste sera l'approximation du WCET. Baruah et al. \cite{Baruah2010}
 ont étudié les systèmes à criticité mixte dans ce contexte, mais ont restreint
 leur travail à un ensemble de jobs à criticité mixte. En particulier, Baruah
-\cite{bbalmms} a montré l'intraitabilité du MC-ordonnançabilité. Ils ont alors
-suggéré deux conditions d'ordonnançabilité suffisantes, dénotés
-condition de WCR-ordonnançabilité et condition d'OCBP-ordonnançabilité.
+\cite{bbalmms} a montré l'insolubilité de l'ordonnancement à criticté mixte. Ils ont alors
+suggéré deux conditions d'ordonnançabilité suffisantes, dénotées
+condition de {\it WCR-scheduling} et condition d'{\it OCBP-scheduling}.
 Plus tard, Baruah et Li \cite{Li2010} ont étendu leur travaux initiaux et
-proposère une stratégie d'ordonnancement à priorité fixe basée sur la
-condition d'OCBP-ordonnançabilité. Barual et al. ont également adapté
+ont proposé une stratégie d'ordonnancement à priorité fixe basée sur la
+condition d'{\it OCBP-scheduling}. Barual et al. ont également adapté
 l'algorithme EDF (Earliest Deadline First) pour les ensemble de tâches à
-criticité mixte. Cette approche est connue sous le nom EDF-VD. Plus récement,
+criticité mixte. Cette approche est connue sous le nom EDF-VD. Plus récemment,
 Quan et al. \cite{gpmw} ont présenté une nouvelle approche pour ordonnancer
 des systèmes à criticité mixte, qui s'appuie sur un calcul hors ligne de la
 priorité des jobs, qui est ensuite utilisée par un ordonnanceur en ligne. Au
-même moment, Baruah et al. \cite{RBaruah2011a} formalisèrent l'analyse de
-temps de réponse de tâches à criticité mixte.\\
-Le second contexte dans lequel la criticité mixte est définie considère que
+même moment, Baruah et al. \cite{RBaruah2011a} ont formalisé l'analyse de
+temps de réponse de tâches à criticité mixte.
+
+\item Le second contexte dans lequel la criticité mixte est définie considère que
 parmis toutes les fonctionnalités déployées sur une unique plateforme de
-calcul, certaines peuvent être plus critiques que d'autre en terme
+calcul, certaines peuvent être plus critiques que d'autres en terme
 d'importance pour le bon fonctionnement général de la solution. C'est le cas
-dans le cadre de la définition d'une passerelle d'interconnexion Systronique.
-Ainsi, certains traitement de flux sont plus critiques, comme le traitement
+que je considère dans ma thèse, dans le cadre de la définition d'une passerelle d'interconnexion Systronique.
+Ainsi, certains traitements de flux sont plus critiques, comme le traitement
 du système d'arme que d'autres, comme les caméras extérieures. Dans ce
-contexte, Lakshmanan et al. \cite{Niz2009,Lakshmanan2011} ont observé que
-l'approche basée sur la réservation afin d'isoler les fonctionnalités et
+contexte, de Niz et al. \cite{Niz2009} ont observé que
+l'approche basée sur la réservation de charge, afin d'isoler les fonctionnalités et
 prévenir les interférences, peuvent avoir pour conséquence un problème
 d'inversion de criticité, où une tâche moins critique est favorisée par
 rapport à une tâche de plus haute criticité lorsque cette dernière dépasse
 le slot temporel lui ayant été alloué. Ils suggérèrent une nouvelle approche,
-dénommée {\it zero-slack scheduling}, pour éviter ce problème. Dans le cas de
-la passerelle Systronique, la découpe entre tâche est maintenue en TDM pour
-des raisons de sécurité, afin d'empêcher l'usage d'un canal caché basé sur la
-variation de durée du slot afin de transmettre de l'information aux autres
-slot au travers l'impact de cette variation.
+dénommée {\it zero-slack scheduling}, pour éviter ce problème.
+Néanmoins, Lakshmanan et al. \cite{Lakshmanan2011} ont démontré que l'approche
+du {\it zero-slack scheduling} pose problème lorsque des tâches de niveaux de
+criticité différents partagent des ressources. Les auteurs ont alors proposé
+une modification du protocole PCP (Priority Ceiling Protocol) afin de
+coordonner le changement de niveau de criticité de l'algorithme
+d'ordonnancement zero-slack afin d'éviter tout deadlock. Ils définissent ainsi
+un nouveau protocole de synchronisation dérivé de PCP, dénoté PCCP (Priority
+and Criticality Ceiling Protocol).
+\end{itemize}
 
 \subsection{Synthèse}
 Les principes de la criticité mixte permettent de réagir à une infaisabilité
 temporaire de l'ordonnancement de l'ensemble des tâches. On s'appuie alors sur
 le niveau de criticité prédéterminé pour chaque tâche afin de modifier le jeu
 de tâches afin d'assurer son ordonnançabilité dans cet état à criticté
-augmenté.\\
+augmenté. Néanmoins, les systèmes à criticité mixte ne permettent pas
+de diminuer le niveau de criticité d'un jeu de tâche tout en assurant
+le maintien de l'ordonnançabilité de l'ensemble de tâches. De plus, les
+systèmes à criticité mixte sont considérés dans le cadre d'une exécution d'un
+jeu de tâche sur un seul c{\oe}ur processeur.\\
 Dans le cadre de ma thèse, je m'appuie sur les principes de criticité mixte
 afin de pouvoir répondre à l'impossibilité initiale de pouvoir ordonnancer
 l'ensemble des traitements sur l'ensemble des flux si ces derniers impliquent un
 coût d'exécution de chacun des traitements atteignant tous leur WCET. Cette
 impossibilité est la conséquence des contraintes liées au matériel et à la
-performance maximum de ce dernier. Dans la partie \ref{sec:mixedcrit}, je
-décrit la solution proposée, en m'appuyant sur les principes de criticité mixte.
+performance maximum de ce dernier.\\
+Afin de respecter les contraintes liées à la criticité
+mixte décrites dans ce chapitre, je considère que l'ensemble des
+tâches à criticité mixte de la passerelle est ordonnancé sur un seul c{\oe}ur
+processeur et qu'il n'y a pas de partage de ressources entre des tâches de
+niveaux de criticité différents. L'ensemble de ces tâches font de plus partie
+d'un même jeu de tâches.
+Dans le Chapitre \ref{sec:mixedcrit}, je propose néanmoins une solution, dans
+laquelle nous avons cherché à déterminer un instant ou il est possible de
+réduire le niveau de criticité d'un jeu de tâches. Il devient alors possible
+de redescendre dans un état de criticité plus faible, et donc de relancer
+l'exécution de tâches qui avait été suspendues.
 

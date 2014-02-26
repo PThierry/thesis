@@ -216,16 +216,16 @@ faite via un maquettage chez Thales donnant lieu à un premier brevet \cite{thier
 \subsection{Définition des données à protéger}
 
 \paragraph{}
-J'ai définit dans les Sections \ref{sec:mls_gw_principles} et
+J'ai définit dans les Sections \ref{sec:mls_gw_principle} et
 \ref{sec:mls_gw_hypothesis} les principes généraux qui doivent être considérés
 dans le cadre de la définition d'une architecture logicielle pour le
 traitement de données entre domaines de sécurité disjoints (i.e. MultiLevel
-Security). Suite à la définition de ces principes généraux, permettant d'être
+Security). En complément de la définition de ces principes généraux, permettant d'être
 compatible du besoin MLS, il faut décrire plus en détail ceux nécessaires pour
 répondre aux besoins décrits dans la problématique générale. Pour cela, je m'appuie
 sur la méthode qui ont été définit initialement par
-l'ANSSI\footnote{Agence Nationale pour la Securité des Systèmes d'Information} dans le cadre
-d'EBIOS\cite{hemery2007utilisation}.
+l'ANSSI\footnote{Agence Nationale pour la Securité des Systèmes
+  d'Information}, dans le cadre d'EBIOS \cite{hemery2007utilisation}.
 La méthode EBIOS permet de pouvoir définir un niveau de sécurisation
 nécessaire et suffisant pour répondre au besoin initial.
 
@@ -248,29 +248,38 @@ pour mettre en adéquation une solution technique avec les besoins sécuritaires
 liés à la fonction passerelle multi-domaines. Ainsi, l'usage d'une fonction de
 sécurité doit être mis en adéquation avec le risque sécuritaire auquel elle
 répond. Lorsque la présence d'une fonction de sécurité dépasse le coût
-(financier, managérial) associé au risque sécuritaire, sa présence n'est plus requise.
+(financier ou managérial) associé au risque sécuritaire, sa présence n'est
+plus requise.\\
+Néanmoins, dans le cadre de ma thèse, je cherche à pouvoir répondre à divers
+niveaux de sécurité, et ainsi répondre à des besoins sécuritaires plus ou
+moins fort. Je considère alors l'ensemble des risques sécuritaires comme
+élevés et cherche à répondre à chacun d'entre eux. 
 
 \subsubsection{Définition des données à protéger}
 \label{sec:donneeaproteger}
 
 \paragraph{}
 Dans le cadre de ma thèse, je cherche à répondre au besoin d'une passerelle
-multi-domaines de sécurité et de criticité. Ainsi, le but est de permettre de
-transférer du flux de type réseau IP entre deux domaines de sécurité et de
-criticité. Il en découle plusieurs exigences générale de sécurité, afin
-d'assurer le maintient du cloisonnement entre les deux domaines de sécurité, à
-l'exception des données volontairement transmises:
-
-\begin{requirement}
-\label{req:integrity}
-Les flux transmis doivent être garantis en terme d'intégrité
-\end{requirement}
+multi-domaines de sécurité et multi-domaines de criticité. La fonction de
+cette passerelle est de permettre le transfert de flux de type IP entre deux
+domaines dont le niveau de sécurité et le niveau de criticité sont différents.
+Aux propriétés du MLS décrites dans le Chapitre \ref{subsec:mls}, que le logicel
+doit supporter, il faut également intégrer des exigences complémentaires liées
+au flux de données transmis entre deux domaines de sécurité. En effet, la
+capacité à transférer des données entre deux domaines de sécurité ne doit pas
+impacter le cloisonnement général de ceux-ci. Ces exigences sont les suivantes
+:
 
 \begin{requirement}
 \label{req:transit}
 L'action de transmission des flux ne doit pas révéler d'informations sur le domaine de
 sécurité le plus haut
 \end{requirement}
+La transmission de flux vers le domaine de sécurité le plus haut ne doit pas
+générer de
+\FIXME{terminer}
+%%%%%%%%%%%%
+
 
 \begin{requirement}
 \label{req:desensibilisation}
@@ -278,6 +287,13 @@ Si les flux sont transmis du domaine de sécurité le plus haut au domaine le
 plus bas, ces derniers doivent contenir exclusivement des données autorisées à
 être désensibilisées
 \end{requirement}
+
+\begin{requirement}
+\label{req:integrity}
+Les flux transmis doivent être garantis en terme d'intégrité
+\end{requirement}
+En effet, 
+
 
 \begin{requirement}
   \label{req:escape}

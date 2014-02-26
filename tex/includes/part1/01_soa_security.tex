@@ -8,14 +8,14 @@
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
 %% Last update Mon Aug 30 17:00:21 2010 Philippe THIERRY
 
-\chapter{Sécurisation d'une plateforme de traitement réseau multi-domaines de sécurité}
+\chapter{État de l'art de l'interconnexion sécurisée de domaines de sécurité hétérogènes}
 \doMinitoc
 
 \paragraph{}
 {\it Il existe un certain nombre de solutions dont le but est de permettre
 l'interconnexion de domaines de sécurité hétérogènes. Ces solutions répondent
-plutôt à des besoins de type SI, mais les principes que ces solutions
-utilisent restent un très bon point de départ dans le cadre de la définition
+plutôt à des besoins de type SI, mais ces solutions
+restent un très bon point de départ dans le cadre de la définition
 d'une architecture logicielle sécurisée.}
 
 \section{Sécurisation par séparation physique des traitements}
@@ -30,22 +30,34 @@ Dans les systèmes militaires, les domaines de sécurité devant être
 interconnectés le sont au travers de passerelles certifiées s'appuyant sur des
 éléments physiques disjoints. Celles-ci assurent un transfert en sens unique de données
 entre le domaine de plus basse sécurité (source des données) et le domaine de
-plus haute sécurité (destination des données). Le but de la passerelle de
-sécurité est double:
+plus haute sécurité (destination des données). La passerelle de
+sécurité a deux buts :
 \begin{itemize}
   \item Elle assure le transfert de données en sens unique. Aucune donnée du domaine de
     sécurité le plus élevé ne peut être transférée vers le domaine de sécurité le
     plus bas.
   \item Elle assure une opacité forte du domaine de sécurité le plus élevé d'un point de vue
-    comportemental. Elle évite ainsi les canaux cachés s'appuyant sur l'étude
+    comportemental. Elle évite ainsi les canaux cachés (confer Chapitre
+    \ref{subsubsec:canaux_caches}) s'appuyant sur l'étude
     du comportement du domaine de sécurité le plus élevé. Ces derniers
     permettraient en effet de remonter indirectement des données
     confidentielles vers le domaine de sécurité le plus bas.
 \end{itemize}
 
-Afin de décorréler les interfaces de la fonction diode, normalement très
-simples, de l'architecture réseau de chacun des deux domaines de sécurité, la
-diode s'appuie sur deux {\it guichets}, comme le décrit la Figure \ref{fig:diodephy} :
+Afin de décorréler les interfaces de la fonction diode (normalement très
+simples) de l'architecture réseau de chacun des deux domaines de sécurité, la
+diode s'appuie sur deux {\it guichets}.
+\PhDdefinition{guichet}{Guichet}{
+  On appelle guichet un équipement logiciel en charge de transcoder une
+  information d'un réseau à un autre. Il peut par exemple décapsuler une
+  données transmise sur un réseau IP vers un lien point à point. Un guichet
+  peut posséder des propriétés complémentaires, comme la validation de la
+  donnée à transmettre, ou encore le chiffrement de cette dernière.
+}
+
+Ainsi, la fonction diode ne prend plus en compte les propriétés télécom de
+chacun des deux domaines et conserve une certaine simplicité d'implémentation,
+comme le décrit la Figure \ref{fig:diodephy} :
 \begin{itemize}
   \item Un {\it guichet bas}, en charge de récupérer les
     données potentiellement via une communication en mode connecté avec le
@@ -64,12 +76,12 @@ diode s'appuie sur deux {\it guichets}, comme le décrit la Figure \ref{fig:diode
 \end{figure}
 
 \paragraph{}
-De plus, l'architecture d'une diode matérielle, telle que formalisée par Philippe
-Lagadec de la Direction Générale de l'Armement en 2006 \cite{sstic2006diode}
+Dans l'architecture de la diode matérielle formalisée par Philippe
+Lagadec de la Direction Générale de l'Armement en 2006 \cite{sstic2006diode},
 les guichets permettent d'intégrer une action humaine pour valider
 le transfert de données, ainsi que pour valider leur réception.
-Une telle architecture permet de garantir l'imputabilité du transfert de données
-en cas d'usage invalide de la passerelle.
+Une telle architecture permet de garantir l'imputabilité (c'est à dire associe
+un responsable, confer Définition \ref{def:imput}) du transfert de données en cas d'usage invalide de la passerelle.
 
 \subsubsection{Avantages et limitations}
 
@@ -77,7 +89,7 @@ en cas d'usage invalide de la passerelle.
 Les diodes matérielles s'appuient sur le principe de séparation protocolaire
 pour limiter l'exploitation de canaux cachés utilisant des
 en-têtes protocolaires comme conteneur d'information.\\
-En conséquence, elles ne permettent donc pas d'intégrer le support d'une
+En conséquence, elles ne permettent pas d'intégrer le support d'une
 criticité multiple en terme d'ordonnancement de flux. Cette gestion doit donc
 être déportée au niveau du guichet haut (émetteur de la donnée). L'intervention
 humaine, conséquence du besoin d'imputabilité associé au transfert de données,
@@ -92,7 +104,7 @@ Comme le décrit l'auteur, la diode matérielle permet cependant d'assurer à la fo
 
 \paragraph{}
 Il existe peu de solutions permettant une interconnexion de domaines de
-sécurité disjoints. C'est le cas de la solution TSF 101\cite{tsf101} de Thales
+sécurité disjoints. C'est le cas de la solution TSF 101 \cite{tsf101} de Thales
 Security, permettant de faire transiter des données entre domaines de sécurité
 disjoints en fonction d'une politique de sécurité chargée dans l'équipement.
 
@@ -109,7 +121,8 @@ Communs au niveau EAL 5.
 
 \paragraph{}
 La solution permet d'interconnecter des réseaux de niveaux de sensibilité
-différents. Il s'agit d'un équipement impliquant un facteur de forme et des
+différents. Il s'agit d'un équipement impliquant un facteur de forme (confer
+Définition \ref{def:ffactor}) et des
 propriétés d'architecture ne lui permettant pas d'être intégré dans des
 environnements embarqués contraints. La solution ne cible pas non plus de
 propriétés temps-réel, et n'est pas modulaire en terme de services
@@ -121,14 +134,15 @@ propriétés.
 \label{sec:mils}
 
 \subsection{Systèmes MLS, MILS et la haute sécurité}
+\label{subsec:mls}
 
 \paragraph{}
 Un système MILS (Multiple Independent Level of Security) ou MLS (MultiLevel
 Security) est une architecture
 de haute sécurité basée sur le principe de séparation des flux d'information
 dont l'implémentation est faite dans un composant certifié. Ce dernier assure
-le cloisonnement de ces flux via un mécanisme évaluable au sens des Critères
-Communs pour un coût raisonnable.
+le cloisonnement de ces flux via un mécanisme évaluable au sens du standard
+international des Critères Communs \cite{cc_docs} pour un coût raisonnable.
 
 \paragraph{}
 Le mécanisme assurant le cloisonnement des différents niveaux de sécurité n'est
@@ -150,28 +164,30 @@ démontrée mathématiquement. Il s'agit du RBAC \cite{ferraiolo1995role}.
 En parallèle des travaux de Bell et LaPadula \cite{lapadula1,lapadula3},
 une étude fut effectuée sur la capacité à vérifier formellement les architectures
 logicielles de sécurité basées sur un noyau \cite{securedesign} ({\it "kernelized secure
-systems"}), où l'auteur démontre la difficulté de certifier un système où
-le noyau est lui-même trop complexe. L'auteur décrit alors le principe de
+systems"}). L'auteur démontre la difficulté de certifier un système où
+le noyau est lui-même trop complexe. Il décrit alors le principe de
 noyau de sécurité, devant être de petite taille, et pouvant être accompagné de
 processus logiciels de confiance, également certifiables. Une telle
 architecture permet alors d'héberger des processus non certifiables
 dont le cloisonnement est assuré par le noyau. L'auteur montre que le
 noyau n'est alors plus sujet d'une politique de sécurité, cette dernière
 ciblant les processus logiciel qu'il porte. Plus globalement, l'auteur décrit
-les premiers principes d'un système dit {\it rouge-noir}, dans lequel une
-architecture distribuée de sous-systèmes communiquant de manière sécurisée en
+les premiers principes d'un système rouge-noir (confer Définition
+\ref{def:rn}). Ce système est basé sur une architecture distribuée de
+sous-systèmes communiquant de manière sécurisée, en
 assurant que l'unique moyen de passage est maîtrisé par un élément de
-confiance, permettant la transmission de données noircies. Ce principe est
-encore utilisé aujourd'hui dans la définition de systèmes dont l'architecture
-est distribuée comme la radio logicielle \cite{sdr}, où il s'associe à une
+confiance permettant la transmission de données noircies (confer Définition
+\ref{def:domn}). Ce principe est encore utilisé aujourd'hui dans la définition
+de systèmes dont l'architecture est distribuée comme la radio logicielle \cite{sdr}, où il s'associe à une
 architecture de type MILS pour séparer les informations.
 
 \paragraph{}
-La définition des architectures MILS reprend ces travaux afin de définir une
+La définition des architectures MILS et MLS reprend ces travaux afin de définir une
 nouvelle approche contrastant fortement avec les principes décrits par Bell et
 LaPadula.\\
-Les systèmes MILS sont compatibles avec quatre propriétés éditées par le
-département de la défense américain:
+Les systèmes MILS et MLS s'appuient sur des composants ayant de fortes
+propriétés de sécurité édictées par le département de la défense américain.
+Ensemble, ces composant forment un système :
 
 \begin{property}
 \label{pro:noncontournable}
@@ -206,27 +222,27 @@ ce traitement.
 {\bf Inviolable}:
 Le système assure le contrôle des accès en écriture aux moniteurs de
 sécurité, à leurs données ou à leur configuration, assurant ainsi leur
-intégrité et celle du système.
+intégrité.
 \end{property}
-
-\paragraph{}
-Les architectures MILS ne se limitent pas à la problématique de contrôle des
-communications dans un environnement multi-niveaux de sécurité sur du matériel
-partagé. Elles permettent également la communication au travers d'une
-infrastructure compatible MILS. Dans \cite{milssecgrid}, les auteurs
-décrivent les mécanismes répartis dans le réseau d'interconnexion permettant
-de faire communiquer des domaines de sécurité hétérogènes de manière sûre. Les
-quatre propriétés des systèmes MILS sont alors respectées.
-
-\subsection{Principes généraux du MLS}
 
 \paragraph{}
 Un système MultiLevel Security correspond à l'usage d'un système informatique
 permettant de traiter en parallèle des données de niveaux de sécurité hétérogènes. Il
 permet l'accès simultané à des utilisateurs ayant des niveaux d'accréditation
-et de besoin d'en connaître différents, tout en garantissant un cloisonnement
+et de droits d'en connaître (confer Définition \ref{def:droitden}) différents, tout en garantissant un cloisonnement
 strict entre ces différents utilisateurs. La définition a été formalisée dans
 le glossaire du Comité National des systèmes de sécurité (CNSSI) \cite{cnssi_4009}.
+
+\paragraph{}
+Les architectures MLS ne se limitent pas à la problématique de contrôle des
+communications dans un environnement multi-niveaux de sécurité sur du matériel
+partagé. Elles permettent également la communication au travers d'une
+infrastructure compatible MLS. Dans \cite{milssecgrid}, les auteurs
+décrivent les mécanismes répartis dans le réseau d'interconnexion permettant
+de faire communiquer des domaines de sécurité hétérogènes de manière sûre. Les
+quatre propriétés des systèmes MLS sont alors respectées.
+
+
 
 \subsection{MLS et principe de virtualisation}
 
@@ -256,8 +272,10 @@ fonctions logicielles plus ou moins complexes. Ces fonctions logicielles
 peuvent correspondre à des systèmes d'exploitation complets, lorsqu'il est
 nécessaire de déployer des services complexes comme les services réseaux IP.
 Le Separation Kernel se comporte alors comme un hyperviseur avec des
-propriétés de sécurité particulières. Il devient donc nécessaire d'étudier
-les solutions existantes de virtualisation et les fonctions de sécurité
+propriétés de sécurité particulières. C'est sur cette base que je m'appuie
+dans le cadre de ma thèse comme base de l'architecture logicielle.
+Afin de pouvoir sélectionner le bon candidat pour un Separation Kernel, j'ai
+étudié les solutions existantes de virtualisation et les fonctions de sécurité
 qu'elles supportent.
 
 \paragraph{}
@@ -299,7 +317,13 @@ les solutions d'interconnexion de domaines de sécurité ne sont pas conçus pour
 la modularité, le temps réel ou encore l'embarqué contraint. En effet, ces
 besoins sont plus récents, conséquence des exigences avioniques et
 vétroniques, pour lesquelles les produits de sécurité ne sont pas encore
-définis. Dans le cadre de ma thèse, je cherche à déterminer une solution
-logicielle afin de répondre à ces besoins, en m'inspirant dans le même temps
+définis.\\
+Dans le cadre de ma thèse, je cherche à déterminer une solution
+logicielle afin de répondre aux besoins systroniques, en m'inspirant
 des solutions existantes qui ont su démontrer leur capacité à répondre aux
-exigences sécuritaires.
+exigences sécuritaires. Je cherche donc à définir une solution complète
+compatible avec les exigences des architectures MLS et dans le même temps
+fournissant suffisament de compléments logiciels pour répondre aux contraintes
+de la problématiques générale. Je dois donc tout d'abord sélectionner le bon Separation
+Kernel. Ce choix s'appuit sur un état de l'art des différentes solutions de
+compartimentation et de virtualisation, décrites dans le Chapitre suivant.
