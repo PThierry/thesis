@@ -1,0 +1,246 @@
+%%
+%%
+%% 00_conformity_matrix.tex for  in /home/phil/Travail/Doctorat/these/tex
+%%
+%% Made by Philippe THIERRY
+%% Login   <Philippe THIERRYreseau-libre.net>
+%%
+%% Started on  lun. 10 mars 2014 11:07:34 CET Philippe THIERRY
+%% Last update lun. 10 mars 2014 11:07:34 CET Philippe THIERRY
+%%
+
+\tablefirsthead{
+  \multicolumn{4}{c}{\large{Matrice de tracabilité}}\\
+  \hline
+  Exigence & Besoin & Famille & Conformité \\
+  \hline
+}
+\tablehead{
+  \hline \multicolumn{4}{|l|}{\small\sl continuation de la page suivante}\\
+  \hline Exigence & Besoin & Famille & Conformité \\
+  \hline
+}
+\tabletail{
+  \hline\multicolumn{4}{|r|}{\small\sl Page suivante~\ldots}\\\hline
+}
+\tablelasttail{\hline}
+\bottomcaption{Fin.}
+
+
+\chapter{Matrice de conformité de la solution proposée}
+\label{sec:matrix}
+
+\paragraph{}
+Dans les chapitres suivants, je décris la solution que je propose pour
+répondre aux contraintes de la problématique générale. Ces contraintes se
+classes en plusieurs familles:
+\begin{itemize}
+\item embarquabilité: la solution doit pouvoir être intégrable dans un
+environnement contraint (poids volume, consommation) et doit pouvoir évoluer
+en terme de matériel supporté
+\item maintenabilité: la solution doit pouvoir évoluer et permettre une
+  parametrisation (e.g. mise à niveau d'une politique de sécurité)
+\item sécurité: la solution doit pouvoir répondre aux contraintes sécuritaires
+des systèmes systronique
+\item sûreté: la solution doit pouvoir répondre aux contraintes d'interaction
+de systèmes dont le niveau de sûreté est hétérogène. C'est par exemple le cas
+de l'interconnexion du système de bord et du système multimédia.
+\item temps-réel: la solution doit pouvoir assurer un traitement des flux
+borné et garanti, malgré les contraintes d'embarquabilité
+\end{itemize}
+
+\paragraph{}
+La matrice suivante synthétise les différentes exigences conséquentes des
+différentes contraîntes décrites dans la problématique générale. Pour chaque
+exigence, je précise si la solution que je propose est conforme ou non. Je
+dénote chaque exigence de la manière suivante : REQ\_<préfixe
+famille>\_<numéro>:
+\begin{itemize}
+\item REQ\_EMBAR\_xxx correspond à une exigence d'embarcabilité
+\item REQ\_MAINT\_xxx correspond à une exigence de maintenabilité
+\item REQ\_SECUR\_xxx correspond à une exigence de sécurité
+\item REQ\_SURET\_xxx correspond à une exigence de sûreté de fonctionnement
+\item REQ\_TEMPS\_xxx correspond à une exigence de temps réel
+\end{itemize}
+Pour chaque exigence présente dans cette matrice, je propose une réponse dans
+le cadre de la solution décrite dans les chapitres suivants. Si la solution
+est non conforme d'une des exigences présentée ici, cette non-conformité est
+précisée dans la matrice ci-dessous.
+
+\begin{supertabular}{|c|p{7.5cm}|c|c|}
+REQ\_EMBAR\_001
+&
+  \begin{minipage}{7.5cm}
+\vspace{4mm}
+La solution doit pouvoir s'exécuter sur un matériel de faible puissance
+\vspace{4mm}
+  \end{minipage}
+&
+Embarquabilité 
+&
+X
+\\
+\hline
+REQ\_EMBAR\_002
+&
+\begin{minipage}{7.5cm}
+\vspace{4mm}
+La solution doit être portable à faible coût
+\vspace{4mm}
+\end{minipage}
+&
+Embarquabilité 
+&
+X
+\\
+\hline
+REQ\_MAINT\_001
+&
+\begin{minipage}{7.5cm}
+\vspace{4mm}
+Les éléments de sécurisation de la solution doivent pouvoir supporter un
+mécanisme de configuration et de mise à jour de la configuration
+\vspace{4mm}
+\end{minipage}
+&
+Maintenabilité 
+&
+X
+\\
+\hline
+REQ\_MAINT\_002
+&
+\begin{minipage}{7.5cm}
+\vspace{4mm}
+Les éléments de sécurisation de la solution doivent pouvoir supporter un
+mécanisme d'audit et de remontée d'informations statistiques
+\vspace{4mm}
+\end{minipage}
+&
+Maintenabilité 
+&
+X
+\\
+\hline
+REQ\_SECUR\_001
+&
+\begin{minipage}{7.5cm}
+\vspace{4mm}
+La passerelle doit permettre le transfert d'information entre deux domaines de
+sécurité (conformité avec les quatre exigences des systèmes MLS)
+\vspace{4mm}
+\end{minipage}
+&
+Sécurité 
+&
+X
+\\
+\hline
+REQ\_SECUR\_002
+&
+\begin{minipage}{7.5cm}
+\vspace{4mm}
+La passerelle doit assurer la confidentialité des données qu'elle transmet
+\vspace{4mm}
+\end{minipage}
+&
+Sécurité 
+&
+X
+\\
+\hline
+REQ\_SECUR\_003
+&
+\begin{minipage}{7.5cm}
+\vspace{4mm}
+La passerelle doit assurer l'intégrité des données qu'elle transmet
+\vspace{4mm}
+\end{minipage}
+&
+Sécurité 
+&
+X
+\\
+\hline
+REQ\_SECUR\_004
+&
+\begin{minipage}{7.5cm}
+\vspace{4mm}
+La passerelle doit assurer la disponibilité des données qu'elle transmet
+\vspace{4mm}
+\end{minipage}
+&
+Sécurité 
+&
+\\
+REQ\_SECUR\_005
+&
+\begin{minipage}{7.5cm}
+\vspace{4mm}
+La passerelle doit permettre l'hébergement de fonctions indépendantes de
+plusieurs niveaux domaines de sécurité disjoints (conformité avec les quatre
+exigences des systèmes MILS)
+\vspace{4mm}
+\end{minipage}
+&
+Sécurité 
+&
+X
+\\
+REQ\_SECUR\_006
+&
+\begin{minipage}{7.5cm}
+\vspace{4mm}
+La passerelle doit permettre le transfert d'informations désensibilisée entre
+un premier domaine de sécurité et un autre domaine de sécurité de plus faible niveau
+de sécurité.
+\vspace{4mm}
+\end{minipage}
+&
+Sécurité 
+&
+X
+\\
+\hline
+REQ\_SURET\_001
+&
+\begin{minipage}{7.5cm}
+\vspace{4mm}
+La passerelle doit assurer un cloisonnement suffisamment fort pour
+interconnecter des systèmes dont le niveau de sûreté (et la certification
+associée) est différent 
+\vspace{4mm}
+\end{minipage}
+&
+Sûreté 
+&
+X
+\\
+\hline
+REQ\_TEMPS\_001
+&
+\begin{minipage}{7.5cm}
+\vspace{4mm}
+La passerelle possède une borne maximum pour la latence de traversée d'un flux
+\vspace{4mm}
+\end{minipage}
+&
+Temps-réel 
+&
+X
+\\
+\hline
+REQ\_TEMPS\_002
+&
+\begin{minipage}{7.5cm}
+\vspace{4mm}
+La passerelle doit être capable de réagir au mieux à un dépassement du WCET
+d'une ou de plusieurs de ses tâches de traitement des flux réseaux en transit
+\vspace{4mm}
+\end{minipage}
+&
+Temps-réel 
+&
+X
+\\
+\end{supertabular}

@@ -18,17 +18,21 @@
 \paragraph{}
 Dans le cadre de la problématique des systèmes Systronique, il est nécessaire
 de considérér la colocalisation de domaines de sûreté et de sécurité disjoints
-sur un même matériel. Pour répondre à cette problématique, je propose
-de définir une solution logicielle répondant aux besoins de MultiLevel Security
-(MLS). En plus des contraintes de cloisonnements assurant une étanchéité
+sur un même matériel. Cete exigence correspond à l'Exigence REQ\_SECUR\_005
+de la matrice de conformité du Chapitre \ref{sec:matrix}. Pour répondre à cette problématique, je propose
+de définir une solution logicielle répondant aux besoins de Multiple
+Independent Levels of Security
+(MILS). En plus des contraintes de cloisonnements assurant une étanchéité
 suffisante pour répondre aux exigences de sûreté et de sécurité, il est
 également nécessaire de considérer des mécanismes logiciels permettant de
-transférer de l'information entre les différents domaines de sécurité. Ce
-transfert ne doit pas impacter les contraintes de sécurité de chacun des
+transférer de l'information entre les différents domaines de sécurité. Cette
+contrainte correspond à l'Exigence REQ\_SECUR\_001 du Chapitre
+\ref{sec:matrix}.
+Ce transfert ne doit pas impacter les contraintes de sécurité de chacun des
 domaines. Pour cela :
 \begin{itemize}
-  \item Les données transitant du niveau de sécurité le plus élevé au niveau le plus
-    bas doivent être complètement contrôlées, afin de valider que ces
+  \item Les données transitant du niveau de sécurité le plus élevé au niveau
+    de sécurité le plus bas doivent être complètement contrôlées, afin de valider que ces
     dernières peuvent être désensibilisées.
   \item Le flux transitant du niveau de sécurité le plus bas au niveau de
     sécurité le plus élevé n'exige pas de filtrage en terme de contenu.
@@ -38,15 +42,15 @@ domaines. Pour cela :
 \end{itemize}
 
 \paragraph{}
-Afin d'être compatible de l'exigence de colocalisation, je m'appuie sur le
-principe de système MLS.
-Les mécanismes définis pour répondre aux besoins de type MLS impliquent le
+Afin d'être compatible avec l'exigence de colocalisation, je m'appuie sur le
+principe des systèmes MLS et MILS.
+Les mécanismes définis pour répondre aux besoins de type MLS et MILS impliquent le
 respect des exigences définies dans le Chapitre \label{sec:mils}, et
 formalisées initialement en 2006 \cite{alves2006mils}.
 Je m'appuie, dans le cadre de ma thèse, sur le principe de Separation Kernel,
-compatible des systèmes MILS et MLS, auquel j'ajoute des modules de sécurité
+compatible avec les systèmes MILS et MLS, auquel j'ajoute des modules de sécurité
 complémentaire. L'ensemble est alors appelé Extended Secure Separation Kernel
-(ESSK):\\
+(ESSK):
 
 \PhDdefinition{essk}{Extended Secure Separation Kernel}{
   J'appelle Extended Secure Separation Kernel une architecture logicielle
@@ -70,11 +74,11 @@ L'architecture logicielle que j'ai choisie est décrite dans ce chapitre.
 \paragraph{}
 La définition d'un système sécurisé implique de prendre en compte l'impact
 sécuritaire du matériel. Dans le cadre de ma thèse, j'ai ciblé principalement
-les propriétés que doit apporter le logiciel, et considère en conséquence des
+les propriétés du logiciel, et considère en conséquence des
 hypothèses strictes sur le matériel.\\
 Bien que ces hypothèses soient peu réalistes sur du matériel généraliste (i.e.
 du marché civil), elles doivent être supportées pour assurer les propriétés de
-sécurité, à défaut d'avoir intégré un design matériel spécifique. Ces
+sécurité, à défaut d'intégrer un design matériel spécifique. Ces
 hypothèses sont les suivantes:
 
 \begin{hypothesis}
@@ -85,7 +89,7 @@ hypothèses sont les suivantes:
 
 \begin{hypothesis}
   {\bf compatibilité au temps réel} : Les éléments d'interconnexion (bus,
-  interconnect, etc) sont compatibles de la gestion de tâches temps réel. Ces
+  interconnect, etc) sont supposés déterministes. Ces
   éléments ne sont pas considérés dans le cadre de ma thèse comme impactant.
 \end{hypothesis}
 
@@ -102,9 +106,9 @@ hypothèses sont les suivantes:
 \end{hypothesis}
 
 \paragraph{}
-Bien que ces hypothèses soient considérés valide dans le cadre du matériel
-considéré dans la solution, l'usage invalide volontaire de ce matériel par
-le logiciel reste considéré pour les problématiques de sécurité. L'usage du
+Bien que ces hypothèses soient considérées valides dans le cadre du matériel
+envisagé dans la solution que je propose, l'usage volontairement non conforme de ce matériel par
+le logiciel doit être considéré pour les problématiques de sécurité. L'usage du
 matériel comme base pour des canaux cachés ou auxiliaires est considéré dans
 le cadre de ma thèse et des solutions sont proposées pour répondre à cette
 problématique.
@@ -115,15 +119,16 @@ problématique.
 \label{sec:noncert}
 
 \paragraph{}
-La présente passerelle connecte des domaines de sécurité disjoints. Elle
-doit donc être compatible des propriétés \ref{pro:noncontournable},
+La solution de passerelle systronique que je propose connecte des domaines
+de sécurité disjoints. Elle
+doit donc être compatible avec les propriétés \ref{pro:noncontournable},
 \ref{pro:evaluable}, \ref{pro:validation} et \ref{pro:inviolable}
 des architectures MLS.
 
 \paragraph{}
 Les solutions logicielles pour du traitement télécom, incluant entre autres
 une implémentation d'une pile TCP/IP, sont trop volumineuses pour être
-compatibles d'une certification à haut niveau. De manière générale, seul
+compatibles avec une certification de sécurité à haut niveau. De manière générale, seul
 l'usage d'éléments logiciels à faible volumétrie de code permet de supporter
 une telle certification à coût raisonnable.\\
 Parce que l'implémentation logicielle d'un passerelle de type télécom ne peut être certifiée en
@@ -150,7 +155,8 @@ logiciels de la famille $Sec$ et $Unsec$. Ces éléments font partie de la TCB
 
 \begin{property}
 $Unsec$ définit l'ensemble des éléments logiciels non-certifiables. Ces derniers
-ne doivent pas accéder directement à un quelconque élément matériel.
+ne doivent pas accéder directement à un quelconque élément matériel, en dehors
+de ma mémoire principale, dont l'accès est vérifié par la MMU.
 \end{property}
 
 \begin{property}
@@ -182,29 +188,37 @@ logiciels, en prenant en compte le problème de non-certification associée dans
 l'architecture.
 
 \paragraph{}
-Comme vu dans le Chapitre \ref{sec:noncert}, l'usage de tels logiciels peut
+Dans le Chapitre \ref{sec:noncert}, je montre que l'usage de tels logiciels peut
 être envisagé si des éléments certifiables extérieurs sont présents, afin de
-rester compatible des quatre exigences initiales des architecture MLS. On
-définit donc des éléments logiciels autonomes et certifiable portant une
-fonction de sécurité. Par la suite, j'appelle ces éléments logiciels
-des moniteurs de sécurité.\\
-Ces derniers permettent de répondre aux différentes exigences du MLS car :
+rester compatible avec les quatre exigences initiales des architecture MLS.
+Dans le cadre de ma solution, je définit donc des éléments logiciels autonomes
+et certifiables portant une fonction de sécurité. Par la suite, j'appelle ces éléments logiciels
+des {\bf moniteurs de sécurité}:\\
+\PhDdefinition{secumonit}{Moniteur de sécurité}{
+  J'appelle moniteur de sécurité un élément logiciel autonome et certifiable
+  portant une fonction de sécurité. Il a pour charge de répondre à un besoin
+  sécuritaire particulier.
+}
+
+Les moniteurs de sécurité permettent de répondre aux différentes exigences du MLS car :
 \begin{itemize}
   \item Ils valident les entrées/sorties des éléments non certifiables.
   \item Ils détectent et remontent les évènements invalides auprès d'un tiers
     de confiance.
   \item Ils assurent le cloisonnement entre les différents éléments logiciels
-    et le matériel, pour assurer l'inviolabilité de l'ensemble de la TCB.
+    et le matériel, pour assurer l'inviolabilité de l'ensemble de la TCB
+    (confer Définition \ref{def:tcb}).
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%
 \subsection{Synthèse des choix structuraux}
 
 \paragraph{}
-Dans ce chapitre, je décris les choix structuraux que j'ai fait en terme
-d'architecture générale du système. J'ai définit deux familles d'entités
-logicielles répondant à des exigences disjointes, et définissant les fonctions
-de sécurité de base permettant de respecter les exigences des architectures MLS.\\
+Dans ce chapitre, je décris les choix structuraux que j'ai fait dans le cadre
+de la définition de la solution. J'ai caractérisé deux familles d'entités
+logicielles répondant à des exigences disjointes, et j'ai proposé le principe
+de moniteur de sécurité, autonome, permettant de respecter les exigences des
+architectures MLS.\\
 A partir de ces éléments, je vais définir l'architecture logicielle complète
 permettant de répondre aux besoins d'une passerelle multi-domaines de
 sécurité, telle que décrite dans la problématique.
@@ -216,34 +230,58 @@ faite via un maquettage chez Thales donnant lieu à un premier brevet \cite{thier
 \subsection{Définition des données à protéger}
 
 \paragraph{}
-J'ai définit dans les Sections \ref{sec:mls_gw_principle} et
+J'ai identifié dans les Sections \ref{sec:mls_gw_principle} et
 \ref{sec:mls_gw_hypothesis} les principes généraux qui doivent être considérés
 dans le cadre de la définition d'une architecture logicielle pour le
 traitement de données entre domaines de sécurité disjoints (i.e. MultiLevel
-Security). En complément de la définition de ces principes généraux, permettant d'être
-compatible du besoin MLS, il faut décrire plus en détail ceux nécessaires pour
-répondre aux besoins décrits dans la problématique générale. Pour cela, je m'appuie
-sur la méthode qui ont été définit initialement par
+Security). En complément de ces principes généraux, permettant d'être
+compatible avec le besoin MLS, il faut décrire plus en détail ceux nécessaires pour
+répondre aux besoins de la problématique générale. Pour cela, je m'appuie
+sur les principes de base d'une méthode qui a été proposée initialement par
 l'ANSSI\footnote{Agence Nationale pour la Securité des Systèmes
-  d'Information}, dans le cadre d'EBIOS \cite{hemery2007utilisation}.
+  d'Information}, nommée EBIOS \cite{hemery2007utilisation}.
 La méthode EBIOS permet de pouvoir définir un niveau de sécurisation
-nécessaire et suffisant pour répondre au besoin initial.
+nécessaire et suffisant pour répondre au besoin sécuritaire du système cible.
+Sans entrer dans
+la rédaction d'un document EBIOS, trop volumineux dans le cadre de ma thèse,
+je m'appuie néanmoins sur les principes présents derrière le formalisme de ce
+type de document.
 
 \paragraph{}
 La définition de l'architecture logicielle pour le besoin d'une passerelle
-multi-domaines de sécurité implique de répondre aux interrogations suivantes:
-\begin{itemize}
-  \item Quels sont les données à protéger ?
-  \item Quel(s) type(s) de protection la passerelle souhaite fournir sur ces
+multi-domaines de sécurité implique de répondre aux questions suivantes:
+
+\begin{question}
+  \label{que:donnees}
+  Quelles sont les données à protéger ?
+\end{question}
+
+\begin{question}
+\label{que:protec}
+Quel(s) type(s) de protection la passerelle souhaite fournir sur ces
     données (confidentialité, intégrité, disponibilité) ?
-  \item Quels sont les attaques impactant ces protections dans le cadre de
+\end{question}
+
+\begin{question}
+\label{que:threats}
+Quels sont les attaques impactant ces protections dans le cadre de
     la solution ?
-  \item Quels sont les fonctions de sécurité nécessaires pour se prémunir
-    contre ces attaques ?
-\end{itemize}
+\end{question}
+
+\begin{question}
+\label{que:risque}
+Pour chaque attaque, quel est le niveau de risque associé (probabilité
+    de l'attaque, complexité technique, etc.)
+\end{question}
+
+\begin{question}
+\label{que:foncsecu}
+Quels sont les fonctions de sécurité nécessaires pour se prémunir
+    contre chacune de ces attaques ?
+\end{question}
 
 \paragraph{}
-Les sections précédentes mettent en pratique les principes de la méthode EBIOS
+Les sections suivantes mettent en pratique les principes de la méthode EBIOS
 pour mettre en adéquation une solution technique avec les besoins sécuritaires
 liés à la fonction passerelle multi-domaines. Ainsi, l'usage d'une fonction de
 sécurité doit être mis en adéquation avec le risque sécuritaire auquel elle
@@ -251,9 +289,11 @@ répond. Lorsque la présence d'une fonction de sécurité dépasse le coût
 (financier ou managérial) associé au risque sécuritaire, sa présence n'est
 plus requise.\\
 Néanmoins, dans le cadre de ma thèse, je cherche à pouvoir répondre à divers
-niveaux de sécurité, et ainsi répondre à des besoins sécuritaires plus ou
-moins fort. Je considère alors l'ensemble des risques sécuritaires comme
-élevés et cherche à répondre à chacun d'entre eux. 
+niveaux de sécurité en fonction du positionnement de la passerelle et du type
+de véhicule. Je dois donc répondre à des besoins sécuritaires plus ou moins
+élevés. Je considère donc l'ensemble des attaques identifiées en
+réponse à la Question \ref{que:risque} comme probables et je cherche à répondre
+à chacune d'entre elles. 
 
 \subsubsection{Définition des données à protéger}
 \label{sec:donneeaproteger}
@@ -261,7 +301,7 @@ moins fort. Je considère alors l'ensemble des risques sécuritaires comme
 \paragraph{}
 Dans le cadre de ma thèse, je cherche à répondre au besoin d'une passerelle
 multi-domaines de sécurité et multi-domaines de criticité. La fonction de
-cette passerelle est de permettre le transfert de flux de type IP entre deux
+cette passerelle est de permettre le transfert de flux réseau entre deux
 domaines dont le niveau de sécurité et le niveau de criticité sont différents.
 Aux propriétés du MLS décrites dans le Chapitre \ref{subsec:mls}, que le logicel
 doit supporter, il faut également intégrer des exigences complémentaires liées
@@ -271,28 +311,38 @@ impacter le cloisonnement général de ceux-ci. Ces exigences sont les suivantes
 :
 
 \begin{requirement}
-\label{req:transit}
-L'action de transmission des flux ne doit pas révéler d'informations sur le domaine de
-sécurité le plus haut
+\label{req:transit_up}
+L'action de transmission des flux ne doit pas révéler d'information sur le domaine de
+plus haute sécurité
 \end{requirement}
-La transmission de flux vers le domaine de sécurité le plus haut ne doit pas
-générer de
-\FIXME{terminer}
-%%%%%%%%%%%%
-
+La transmission de flux vers le domaine de plus haute sécurité ne doit pas
+être dépendant de l'état d'exécution de ce dernier. Dans
+le cas contraire, le domaine de sécurité le plus bas peut déterminer l'état
+d'exécution du domaine de sécurité le plus haut, et peut récupérer de
+l'information comme une clef de chiffrement, si le domaine de plus haute sécurité
+fait varier son état d'exécution à son escient. Cette exigence est nécessaire
+pour assurer la compatibilité de la solution avec les contraintes des systèmes
+MLS.
 
 \begin{requirement}
 \label{req:desensibilisation}
-Si les flux sont transmis du domaine de sécurité le plus haut au domaine le
-plus bas, ces derniers doivent contenir exclusivement des données autorisées à
-être désensibilisées
+Si les flux sont transmis du domaine de plus haute sécurité au domaine de
+plus basse sécurité, ces derniers doivent contenir exclusivement des données autorisées à
+être désensibilisées.
 \end{requirement}
+La désensibilisation d'information, qui correspond à autoriser le passage de
+données d'un domaine de sécurité à un autre domaine de niveau inférieur,
+implique la gestion d'une politique de filtrage permettant d'autoriser ou non
+une telle désensibilisation. 
 
 \begin{requirement}
 \label{req:integrity}
 Les flux transmis doivent être garantis en terme d'intégrité
 \end{requirement}
-En effet, 
+En effet, si les données transmises sont modifiées, elles ne permettent plus
+d'assurer une action valide de la part du domaine de plus haut niveau de
+sécurité. Cette exigence correspond à l'Exigence REQ\_SECUR\_003 de la matrice
+d'exigence de la solution, décrite dans le Chapitre \ref{sec:matrix}.
 
 
 \begin{requirement}
@@ -300,28 +350,39 @@ En effet,
   Les flux doivent transiter exclusivement dans la direction initialement choisie, au
   travers des canaux logiques et physiques initialement choisis
 \end{requirement}
+La présence de canaux logiques ou physiques non prévus entraine une faille
+dans la mécanique de validation des flux transmis. Il devient possible de
+transmettre de l'information sans contrôle par un moniteur de sécurité
+certifiable, et rend la solution incompatible avec la propriété
+\ref{pro:noncontournable} des systèmes MLS, et donc avec l'exigence
+REQ\_SECUR\_001.
 
 \paragraph{}
-Au travers de ces exigences, je détermine la répartition des responsabilités
+À partir de ces exigences, je détermine la répartition des responsabilités
 sécuritaires en terme de confidentialité, intégrité et disponibilité.
 \begin{itemize}
-  \item La confidentialité des données est partagée entre:
+  \item La confidentialité des données, correspondant à l'exigence
+  REQ\_SECUR\_002, est partagée entre:
     \begin{itemize}
       \item La configuration de la passerelle, qui est une donnée d'entrée de
         celle-ci donc en dehors du cadre de ma thèse. C'est cette
         configuration qui détermine entre autre quel type de flux est autorisé
-        à transité, et vers quelle destination. La configuration de la
-        passerelle peut potentiellement intégrer des éléments nécessaire au
+        à transiter, et vers quelle destination. La configuration de la
+        passerelle peut potentiellement intégrer des éléments nécessaires au
         bon fonctionnement de l'interconnexion réseau
-      \item Les propriétés de cloisonnement de la passerelle, qui répondent à
-        l'exigence \ref{req:escape}
+      \item Les propriétés de cloisonnement de la passerelle, qui répondent
+      également à l'exigence \ref{req:escape}
     \end{itemize}
   \item L'intégrité des données est assurée par la passerelle durant le temps
-    de leur transit
-  \item La disponibilité n'est pas considéré dans le cadre de ma thèse
+    de leur transit (en réponse à l'Exigence REQ\_SECUR\_003).
+  \item Comme précisé dans le cadre de la matrice de conformité aux
+    contraintes de la problématiques générale, la disponibilité n'est pas
+    considéré dans le cadre de ma thèse. A ce jour, la solution que je propose
+    est donc incompatible de l'Exigence REQ\_SECUR\_004 du Chapitre
+    \ref{sec:matrix} 
 \end{itemize}
 
-\subsection{De l'intégration des problématiques réseaux}
+\subsection{Intégration des problématiques réseaux}
 
 \subsubsection{Problématique générale}
 
@@ -329,58 +390,58 @@ sécuritaires en terme de confidentialité, intégrité et disponibilité.
 La solution consiste à permettre l'interconnexion sécurisée de deux domaines
 indépendants, avec des exigences temps réel et sécuritaires.
 Dans le cadre de la définition d'une telle architecture, la gestion des plans
-d'adressage IP est problématique dans le respect de l'Éxigence
-\ref{req:transit}. Il est en effet nécessaire de permettre l'interconnexion
+d'adressage IP est problématique pour le respect de l'Éxigence
+\ref{req:transit_up}. Il est en effet nécessaire de permettre l'interconnexion
 de deux services sur deux réseaux disjoints tout en assurant que ces derniers
 ne soient pas capables de déterminer tout ou partie des informations réseaux
 associées à l'autre service. Une telle problématique impacte fortement le
 comportement de la passerelle.
 
-\subsubsection{De l'intégration des proxys}
+\subsubsection{Intégration des proxys}
 
 \paragraph{}
 Il devient alors nécessaire de prévoir un mécanisme de séparation
 protocolaire. Ce mécanisme doit répondre à plusieurs besoins:
 \begin{itemize}
-  \item En entrée, les en-têtes de niveau réseau et transport doivent être
+  \item En entrée, les en-têtes de niveau réseau et transport (couches OSI) doivent être
     retirées, afin d'empêcher toute information dérivant de ces en-têtes, comme le plan
     d'adressage IP
   \item En sortie, de nouvelles en-têtes appartenant au plan d'adressage de
-    sortie doivent être construite pour se substituer aux précédante
+    sortie doivent être construite pour se substituer aux précédantes.
 \end{itemize}
-On parle alors d'un mécanisme de séparation protocolaire\cite{baum2002protocol}. Ces
+On parle alors d'un mécanisme de séparation protocolaire \cite{baum2002protocol}. Ces
 mécanismes impliquent l'usage d'applications de type proxy, se substituant d'une
 part à la destination et d'autre part à la source afin de permettre une
 interconnexion entre deux services de part et d'autre de la passerelle.
 
 \paragraph{}
 Une telle architecture est décrite dans la Figure \ref{fig:sep_proto}. Ainsi
-l'ensemble des communications interne à la passerelle se font indépendement
+l'ensemble des communications internes à la passerelle se font indépendamment
 des protocoles couches 1 à 4, s'appuyant directement sur des buffers. L'usage
 de proxys n'est pas forcément un mécanisme aisé. Les applications proxys
-doivent être aptent à gérer des contextes de communications de manière
+doivent être aptes à gérer des contextes de communications de manière
 synchrone. Une telle synchronisation peut ainsi impliquer un mécanisme de
 communication plus ou moins complexe entre les deux proxy corolaires.
 
 \paragraph{}
 Dans le cadre de ma thèse, les proxys sont considérés pour des protocoles
 simples. Ainsi, on considère comme service un proxy spécialisé dans un
-protocole de niveau application. Ce proxy est en écoute sur un port donné, et
+protocole de niveau application. Ce proxy est à l'écoute sur un port donné, et
 interagit avec son corolaire dans l'autre domaine de sécurité, utilisant comme
-source le même numéro de port. Il est considéré:
+source le même numéro de port. Il est considéré les restrictions suivantes :
 \begin{restrictions}
- pour un service donné, une et une seule destination (couple IP et port
- destination) est considéré par configuration
+ Pour un service donné, une et une seule destination (couple IP et port
+ destination) est considéré par configuration.
 \end{restrictions}
 \begin{restrictions}
- pour un service donné, un seul contexte est considéré à la fois, ne
- nécessitant ainsi pas de mécanisme de synchronisation
+ Pour un service donné, un seul contexte est considéré à la fois, ne
+ nécessitant ainsi pas de mécanisme de synchronisation.
 \end{restrictions}
 
 \paragraph{}
 Un véritable mécanisme de passerelle doit être apte à traiter un ensemble de
-flux reçus de manière concurrentes par un même service. Cela implique alors
-une capacité de syncrhonisation des contextes de flux entre le service entrant
+flux reçus de manière concurrente par un même service. Cela implique alors
+une capacité de synchronisation des contextes de flux entre le service entrant
 et le service sortant afin de permettre la différentiation des flux en sortie,
 tout en respectant l'exigence \ref{req:transit}.
 
@@ -396,14 +457,16 @@ tout en respectant l'exigence \ref{req:transit}.
 
 \paragraph{}
 De la définition des Exigences \ref{req:integrity}, \ref{req:transit},
-\ref{req:desensibilisation} et \ref{req:escape}, il faut dériver des exigences techniques. Pour
+\ref{req:desensibilisation} et \ref{req:escape}, conséquentes à la conformité
+à l'exigence REQ\_SECUR\_001 du Chapitre \ref{sec:matrix}, 
+il faut dériver des exigences techniques. Pour
 cela, je détermine d'abord la surface d'attaque. On appelle surface d'attaque
 les éléments d'interfaces à partir desquels on considère une attaque possible.
 La surface d'attaque est décomposée en trois environnements disjoints:
 \begin{enumerate}
   \item Les attaques externes initiées du coté du domaine de plus haute
     sécurité. Je considère alors qu'un éléments de ce domaine cherche à faire
-    sortie de l'information non autorisée vers le domaine de plus faible
+    sortir de l'information non autorisée vers le domaine de plus faible
     sécurité, avec ou sans l'aide d'un élément de ce dernier
   \item Les attaques externes initiées du coté du domaine de plus faible
     criticité. Je considère qu'un élément du domaine de plus faible sécurité
@@ -431,13 +494,13 @@ l'attaque, qui permet de déterminer le niveau de risque, et donc l'exigence de
 protection associée. Dans le cadre de ma thèse, je cherche à définir une
 solution modulaire associant des éléments non certifiables à des éléments
 certifiables. Les domaines extérieurs à la solution ne sont de plus
-par connus initialement. Il n'est alors pas possible d'en déterminer le risque
-sécuritaire associer. Pour répondre à un maximum de besoin, je considère alors le
+pas connus initialement. Il n'est alors pas possible d'en déterminer le risque
+sécuritaire associé. Pour répondre à un maximum de besoin, je considère alors le
 risque élevé sur ces trois surfaces et je répond donc en terme de
-contre-mesures de sécurité à l'ensemble de ses environnements.
+contre-mesures de sécurité à l'ensemble de ces environnements.
 
 \subsubsection{Définition des attaques et impact sur les exigences
-  sécuritaires de la solution}
+ sécuritaires de la solution}
 
 \paragraph{}
 Cette Section décrit un certain nombre d'attaques connues impactant les
@@ -481,12 +544,11 @@ nombre d'éléments de protection, pour les rendre inefficaces. Ces différents
 éléments de sécurité sont construits sous forme de {\it moniteurs de
 sécurité}, portant chacun une fonction de sécurité particulière. C'est au
 travers de l'association de tous ces moniteurs qu'il est possible de
-construire une solution répondant à l'ensemble des exigences de sécurités de
-la problématique générale de la thèse.
+construire une solution répondant à l'ensemble des exigences de sécurité de
+la problématique générale de la thèse (REQ\_SECUR\_001 à REQ\_SECUR\_006).
 
 % les moniteurs
 \section{Définition des moniteurs de sécurité}
-
 
 % exigence 1 : intégrité des données
 \subsection{Protection de l'intégrité des données}
@@ -494,18 +556,18 @@ la problématique générale de la thèse.
 \subsubsection{Problématique générale}
 
 \paragraph{}
-Les moniteurs de sécurité décrit ici ont pour but d'assurer le respect de
-l'exigence \label{req:integrity}. L'intégrité des données transmises est une
+Les moniteurs de sécurité décrits ici ont pour but d'assurer le respect de
+l'exigence REQ\_SECUR\_003. L'intégrité des données transmises est une
 exigence dont le but est d'assurer que le flux de données qui transite au
 travers de la passerelle multi-domaines de sécurité n'est jamais modifié sans
 autorisation préalable. Cela se fait usuellement en définissant une liste de
-droits d'accès associé au flux, définissant quel éléments logiciel (sujet) est
+droits d'accès associé au flux, définissant quel élément logiciel (sujet) est
 autorisé à accéder au contenu du flux (objet). Seuls les sujets explicitement
 autorisés sont aptes à accéder à ces données et potentiellement les modifier.
 Dans le cadre de l'architecture choisie, il est nécessaire de faire transiter
 le flux télécom par des compartiments ne pouvant être considérés comme de
 confiance. Il s'agit de compartiment appartenant à la famille $Unsec$, qu'il
-est difficile de réimplémenter sans accroître fortement le coût de la
+est difficile de réimplémenter sans accroître fortement le coût financier de la
 passerelle. Il devient alors nécessaire de prévoir des éléments de
 contre-mesure, permettant de détecter toute modification non autorisée et de
 réagir à celle-ci.
@@ -517,22 +579,22 @@ Dans le cadre de ma thèse, je propose l'implémentation d'un moniteur de
 sécurité particulier, afin d'assurer l'intégrité des données transitant par la
 passerelle. En effet, comme le montre la Figure \ref{fig:threats_surface},
 certains composants de la passerelle ne peuvent être certifiés et sont donc
-potentiellement attaquable ou corruptible. Il devient donc nécessaire de
+potentiellement attaquables ou corruptibles. Il devient donc nécessaire de
 vérifier par un moyen certifiable que les données transitant par la passerelle
 ne sont pas modifiées.
 
 \paragraph{}
 J'appelle moniteur d'intégrité un couple de deux compartiments logiciels, l'un
 en entrée et l'autre en sortie, interagissant pour valider la signature des
-données transitants dans la passerelle. Du fait du mécanisme de séparation
-protocolaire, seule les données de la couches applicative sont vérifiée. Ces
-deux compartiments s'intègre en amont et en aval des compartiments télécoms et
+données transitant dans la passerelle. Du fait du mécanisme de séparation
+protocolaire, seule les données de la couches applicative sont vérifiées. Ces
+deux compartiments s'intègrent en amont et en aval des compartiments télécoms et
 plus généralement des compartiments de l'ensemble $Unsec$.\\
 Le principe général est de calculer en amont et en aval la somme de contrôle
 de l'ensemble des données de la couche applicative transitant par la passerelle.
 Les deux moniteurs se partagent alors une mémoire afin que le second moniteur
-vérifie l'existance du hash qu'il a calculé dans la liste fournie par le
-premier moniteur. Une telle architecture logicielle implique plusieurs
+vérifie l'existence de la somme de contrôle qu'il a calculé dans la liste fournie
+par le premier moniteur. Une telle architecture logicielle implique plusieurs
 exigences:
 \begin{requirement}
   L'intégration de la signature dans la mémoire partagée doit être garantie avant
@@ -553,35 +615,44 @@ exigences:
 \end{requirement}
 Dans ma thèse, je considère la problématique temps réel et cherche à
 déterminer la durée maximum de traversée d'un paquet. Ceci permet de déterminer
-la durée pire cas de présence de la somme de contrôle dans la mémoire
-partagée.
+la durée de présence pire cas de la somme de contrôle (e.g. md5, sha1, sha2)
+dans la mémoire partagée. En conséquence, si les flux valider en terme
+d'intégrité sont dimensionnés (taille de trame, débit, burst), on peut alors
+dimensionner la mémoire partagée nécessaire au bon fonctionnement du moniteur
+d'intégrité. On peut alors respecter l'exigence suivante:
 
 \begin{requirement}
 La mémoire partagée est suffisamment grande pour permettre au moniteur amont
 d'y ajouter les nouvelles sommes de contrôle au fur et à mesure de la
-réception de paquets.
+réception des paquets.
 \end{requirement}
 
-\paragraph{}
+Bien que ce moniteur de sécurité n'a pas été validé dans le cadre de ma thèse,
+les exigences nécessaire à son implémentation sont supportée au travers de
+l'usage d'un moniteur de sécurité décrit ci-après, dans la Section
+\ref{sec:emet_period}. Bien que ce moniteur de sécurité ne cible pas la
+maîtrise du flux entrant pour des raisons de temps réel, il répond néanmoins
+aux exigences ci-dessus.
 
 % exigence 2 : sens unique 
 \subsection{Garantie de transmission de flux sans canal auxiliaire inverse}
 
 \paragraph{}
-Le moniteur de sécurité décrit ici répond à l'exigence \label{req:transit}.
+Le moniteur de sécurité décrit ici répond à l'exigence REQ\_SECUR\_001.
 Sa présence doit assurer que tout flux transmis entre deux domaines de
-confidentialité puisse se faire sans que le domaine de confidentialité de plus faible
-niveau puisse récupérer d'information sur le domaine de confidentialité de
-plus haut niveau.
+sécurité puisse se faire sans que les propriétés de confidentialité du domaine
+de plus haute sécurité ne soit impacté. Le but est d'assurer que le domaine de
+plus faible niveau ne puisse pas récupérer d'information sur le domaine de
+plus haute sécurité.
 
 \paragraph{}
-Il existe plusieurs cas qui doivent être considéré dans le cadre du besoin
+Il existe plusieurs cas qui doivent être considérés dans le cadre du besoin
 associé à la Problématique générale:
 \begin{enumerate}
 \item Le transfert sens unique de données d'un domaine de plus faible niveau à un domaine
-de plus haut niveau
-\item Le transfert de flux désensibilisé d'un domaine de plus haut niveau vers
-un domaine de plus faible niveau
+de plus haut niveau (Exigence REQ\_SECUR\_001)
+\item Le transfert de flux désensibilisé d'un domaine de plus haut niveau de
+sécurité vers un domaine de plus faible niveau de sécurité (Exigence REQ\_SECUR\_006)
 \end{enumerate}
 
 \subsubsection{A propos d'une architecture de diode logicielle pour le transfert de données}
@@ -591,23 +662,31 @@ Il existe dans l'état de l'art des solutions permettant d'assurer le transfert
 de flux unidirectionnel entre deux domaines. C'est le cas des différentes
 diodes matérielles \cite{sstic2006diode}. Ces solutions impliquent cependant de déployer
 plusieurs équipements distincts dont la consommation et la volumétrie ne sont
-pas toujours compatibles des exigences de l'embarqué.
+pas toujours compatibles avec les exigences de l'embarqué.
 
 \paragraph{}
-Pour répondre à ce besoin, j'ai travaillé avec plusieurs collaborateurs à la
-définition et l'implémentation d'un moniteur de sécurité permettant de
-répondre à cette même exigence, sans nécessiter l'usage de plusieurs matériels
+Pour répondre à ce besoin, j'ai contribué à la rédaction de deux brevets
+\cite{thierry2013dctrl}\cite{thierry2013audit}
+et à l'implémentation d'un moniteur de sécurité permettant de
+répondre aux exigences REQ\_SECUR\_001 et REQ\_SECUR\_006, sans nécessiter l'usage de plusieurs matériels
 distinct.\\
-Pour répondre à cette exigence, il est nécessaire d'implémenter une fonction
+Pour répondre à ces exigences, il est nécessaire d'implémenter une fonction
 logicielle dont le comportement est prévu pour assurer une opacité forte lors
 du transit des données entre son entrée et sa sortie, quel que soit le
-comportement des éléments source et destination du flux.
+comportement des éléments source et destination du flux.\\
+Ce moniteur de sécurité est accompagné d'une fonction d'audit, permettant de
+remonter des informations statistiques sur son comportement, le rendant
+compatible avec l'exigence REQ\_MAINT\_002. Ce dernier ne nécessite par contre
+pas de mécanisme de configuration, son comportement ne nécessitant pas de
+traitement spécifique au flux qu'il fait transiter. Il est donc compatible
+avec l'exigence REQ\_MAINT\_001.
 
 \paragraph{}
 Ce moniteur de sécurité a été évalué avec succès dans le cadre d'une Cible de
 Sécurité de Premier Niveau (CSPN), suivi d'une pré-évaluation au sens des
 Critères Communs, de niveau EAL5+. De plus, ce moniteur de sécurité est
-capable de garantir une latence de traversée maximum ainsi qu'un débit garanti par construction.\\
+capable de garantir une latence de traversée maximum ainsi qu'un débit garanti
+par construction, le rendant compatible de l'exigence REQ\_TEMPS\_001.\\
 Ces travaux ont donné lieu à deux brevets \cite{thierry2013daudit}\cite{thierry2013dctrl},
 mais la majorité des éléments techniques sont aujourd'hui maintenu secrets par
 Thales. En conséquence, bien que ce moniteur de sécurité soit aujourd'hui une
@@ -615,58 +694,91 @@ réalité, je ne peux pas donner dans le cadre de ce document plus
 d'informations sur son implémentation et son fonctionnement.
 
 \subsubsection{Problématique d'exploitation des canaux auxiliaires: à propos des profils de flux}
+\label{sec:emet_period}
 
 \paragraph{}
 La transmission de données entre deux domaines de sécurité nécessite plusieurs
 vérifications. Il y a tout d'abord le filtrage des données selon une politique
 de sécurité donnée. Ce point est décrit dans la Section \ref{sec:dpi}.
 Néanmoins, la vérification des données à transmettre n'est pas suffisante pour
-garantir un cloisonnement efficaces des deux domaines. En effet, indépendamment
+garantir un cloisonnement efficace des deux domaines. En effet, indépendamment
 de la donnée à transmettre, il est possible de construire un mécanisme
 permettant de faire fuir de l'information au travers d'un canal caché: la
 période inter-trame. Le principe est le suivant:
 \begin{itemize}
-  \item L'émetteur est le récepteur connaissent le protocole de transmission
+  \item L'émetteur et le récepteur connaissent le protocole de transmission
     d'information cachées. Dans le cadre de ma thèse, je considère qu'il
     s'agit du suivant:
     \begin{itemize}
-      \item Une période inter-trame de 500 milisecondes correspond à la valeur
+      \item Une durée inter-trame de 500 milisecondes correspond à la valeur
         \emph{0}.
-      \item Une période inter-trame de 1000 milisecondes correspond à la valeur
+      \item Une durée inter-trame de 1000 milisecondes correspond à la valeur
         \emph{1}.
     \end{itemize}
-  \item L'émetteur émet des paquets dont le contenu est compatible de la
-    politique de sécurité avec une période variable, afin d'émettre de
-    l'information binaire
-  \item Le récepteur reçoit les paquets et calcule la période inter-trame. Il
+  \item L'émetteur émet des paquets dont le contenu est compatible avec la
+    politique de sécurité avec une inter-arrivée variable, afin d'émettre de
+    l'information binaire.
+  \item Le récepteur reçoit les paquets et calcule la durée inter-trame. Il
     détermine si la période est proche des 500 milisecondes (la donnée est
-    alors 0) ou proche de la seconde (la donnée est alors 1)
+    alors 0) ou proche de la seconde (la donnée est alors 1).
 \end{itemize}
 
 \paragraph{}
-La durée des période reste élevée dans les deux cas pour que la présence des
+La durée des inter-arrivées reste élevée dans les deux cas pour que la présence des
 filtres entre l'émetteur et le récepteur ne vienne pas impacter la mesure. En
 s'appuyant sur ce mécanisme, il est possible de transférer une clef symétrique
 de 128 bits dont la confidentialité est restreinte au domaine de plus haut niveau de sécurité
 en moins de deux minutes.
 
 \paragraph{}
-Afin d'empêcher l'usage de ce canal caché, je propose l'implémentation d'un
-moniteur de sécurité appelé émetteur périodique. Le principe est le suivant:
-L'émetteur périodique est placé en bout de chaîne, juste avant l'émission du
-paquet par la passerelle. Il est en charge de bufferiser les données à émettre
-pour les transmettre ensuite de manière périodique ou par burst (selon le
-débit nécessaire). Si aucun paquet ne doit être émis, le dernier est renvoyé.
-Ce type de mécanisme est efficace si le protocole de couche application est
-résistant à la duplication de paquets. C'est le cas si il s'agit d'un
-protocole de type remontée de valeur de sonde. Dans ce cas, chaque paquet est
-indépendant du précédant et du suivant, et la duplication reste efficace.
-C'est le cas d'usage que je considère dans le cadre de ma thèse, car
-correspondant au type de données qu'il est nécessaire de faire transiter entre
-domaines de sécurité dans un système Systronique. Néanmoins, dans un cas
-d'usage plus général, cette solution n'est pas suffisante pour les protocoles
-complexes, comme ceux basés sur des sessions.
+Afin d'empêcher l'usage de ce canal caché, je propose dans le Chapitre
+\ref{sec:passsystronique} l'implémentation d'un
+moniteur de sécurité appelé émetteur périodique. L'automate à état de ce
+moniteur est le suivant:
 
+\begin{figure}[h!]
+Soit $s$ le numéro courant de cellule du buffer interne\\
+Soit $S$ le nombre total de cellules du buffer interne\\
+Soit $t$ la durée depuis la dernière émission de trame\\
+Soit $T$ la période inter émission\\
+\begin{center}
+\input{figures/emet_periodique.tex}        
+\end{center}
+\caption{Automate du moniteur de sécurité émetteur périodique\label{fig:emet_period}}
+\end{figure}
+
+\paragraph{}
+Ce moniteur de sécurité est en charge de bufferiser les données à émettre
+pour les transmettre ensuite de manière périodique, à l'unité ou par burst.
+Si aucun paquet n'est reçu entre deux vidanges du buffer, le dernier paquet
+est réémis en lieu et place. Le but d'un tel comportement est d'empécher
+l'utilisation d'un canal caché basé sur l'émission ou la non-émission de
+paquet, comme décrit plus haut.\\
+Etant donné que la profondeur du buffer de réception du moniteur est fixe, et
+que l'inter-émission est un paramètre d'entrée, l'émetteur périodique ne peut
+dépasser un débit de paquet maximum. En conséquence, il peut être amené à
+dropper des paquets si le buffer de réception est plein, comme le montre la
+Figure \ref{fig:emet_period}. Ce moniteur de sécurité doit donc gérer des
+compteurs de drop, auditable par un élément d'audit externe. La mécanique
+d'audit utilisable peut être similaire à celle décrite dans un des brevets que
+j'ai co-écrit \cite{thierry2013daudit}, car les données audités sont
+identiques.
+
+\paragraph{}
+L'usage d'un tel moniteur implique des hypothèses sur le flux réordonnancé. Ce
+dernier doit en effet supporter la perte de certains paquets sans pour autant
+remettre en cause son usage. Il doit de plus supporter la possibilité de
+recevoir des données dupliquées, lors de la réémission de paquet en cas de
+buffer vide. Bien que ces hypothèses soient fortes, elles correspondent à un
+certain nombre de flux utilisés dans les systèmes systroniques entre plusieurs
+domaines de sécurité. C'est le cas des diverses remontées de sondes comme le
+positionnement GPS, les données de température ou encore les éléments de
+positionnement géographique de plusieurs véhicules dans le cadre d'un système
+de cartographie. Ainsi, ce moniteur peut limiter l'usage de canaux cachés
+entre deux domaines de sécurité pour un grand nombre de flux spécifiques à la
+systronique.
+
+%%%%%%%%%%%%%% END
 % conformité du flux à une politique de sécurité
 \subsection{Conformité des données transmise à la politique de sécurité}
 
@@ -730,7 +842,7 @@ cadre de ma thèse car soumis à des exigences de confidentialité fortes).
 \paragraph{}
 Il a été décrit plus haut l'usage dans la passerelle d'éléments non
 certifiables (éléments appartenant à l'ensemble $Unsec$). Pour être compatible
-des Exigences MILS et pour pouvoir répondre à l'Exigence \label{req:escape},
+avec les Exigences MILS et pour pouvoir répondre à l'Exigence \label{req:escape},
 il est nécessaire d'assurer que l'ensemble des canaux de communications
 utilisés sont explicitement ceux qui ont été validés dans le cadre de la
 définition de l'architecture. La compartimentation garantie est faite au
@@ -758,7 +870,7 @@ sur les performances du logiciel, au point de rentre ce dernier complètement
 inefficace. Dans ce cas, l'usage d'une architecture multi-CPU en lieu est
 place d'un SoC mono-CPU et multi-c{\oe}urs permet d'éviter un partage trop conséquent des
 contrôleurs de caches. Cependant, dans le cadre de ma thèse, l'usage d'une
-architecture multi-CPU est incompatible des exigences de consommation.\\
+architecture multi-CPU est incompatible avec les exigences de consommation.\\
 Un autre moyen est de positionner temporellement les domaines de sécurité de
 manière à ce qu'à un instant $t$, un et un seul domaine de sécurité s'exécute.
 Lors du changement de domaine, les caches sont alors flushés afin de ne pas
@@ -797,7 +909,7 @@ slot reste identique à l'état de l'art. Je considère dans le cadre de ma thèse
 un algorithme de type pseudo-LRU de type 4-ways avec des lignes de caches de
 64 ko. Chaque compartiment doit alors pouvoir fournir un nombre
 de lignes de caches multiple de 4. Je considère par hypothèse que la taille
-mémoire allouée à chaque compartiment est compatible de la politique de
+mémoire allouée à chaque compartiment est compatible avec la politique de
 substitution des lignes de caches qui y est faite.
 
 \subsection{Formalisme de l'interface de contrôle du contrôleur de cache}
@@ -1061,7 +1173,7 @@ la taille du slot associé pour des raison de performances, j'ai rendu la
 taille de chaque slot configurable. Néanmoins, il existe des restrictions:
 \begin{itemize}
   \item La taille d'un slot (en nombre de lignes de cache) doit être
-    compatible de l'algorithme pseudo-LRU 4-ways.
+    compatible avec l'algorithme pseudo-LRU 4-ways.
   \item La somme des tailles de slots actifs doit être inférieure ou égale à
     la taille totale de l'espace mémoire du contrôleur de cache.
 \end{itemize}

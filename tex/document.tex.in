@@ -47,6 +47,7 @@
 \usepackage{setspace}
 \usepackage[backref=true,backend=bibtex,backrefstyle=none,style=alphabetic,labelalpha=true,block=none,maxbibnames=5,maxcitenames=3,abbreviate=false,sorting=nty]{biblatex}
 %
+\usepackage{supertabular}
 \usepackage{makeidx}
 \usepackage[pdftex,
             pagebackref=false,
