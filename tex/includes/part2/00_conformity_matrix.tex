@@ -9,22 +9,28 @@
 %% Last update lun. 10 mars 2014 11:07:34 CET Philippe THIERRY
 %%
 
+\definecolor{LightCyan}{rgb}{0.88,1,1}
 \tablefirsthead{
   \multicolumn{4}{c}{\large{Matrice de tracabilité}}\\
   \hline
-  Exigence & Besoin & Famille & Conformité \\
+  \rowcolor{LightCyan}
+  {\it{\bf Exigence}} & {\it{\bf  Besoin}} & {\it{\bf  Famille}} & {\it{\bf Conformité}} \\
   \hline
+  \rowcolor{white}
 }
 \tablehead{
   \hline \multicolumn{4}{|l|}{\small\sl continuation de la page suivante}\\
-  \hline Exigence & Besoin & Famille & Conformité \\
   \hline
+  \rowcolor{LightCyan}
+  {\it{\bf Exigence}} & {\it{\bf  Besoin}} & {\it{\bf  Famille}} & {\it{\bf Conformité}} \\
+  \hline
+  \rowcolor{white}
 }
 \tabletail{
   \hline\multicolumn{4}{|r|}{\small\sl Page suivante~\ldots}\\\hline
 }
 \tablelasttail{\hline}
-\bottomcaption{Fin.}
+\bottomcaption{Liste des exigences générales induites par la problématique}
 
 
 \chapter{Matrice de conformité de la solution proposée}
@@ -36,22 +42,22 @@ répondre aux contraintes de la problématique générale. Ces contraintes se
 classes en plusieurs familles:
 \begin{itemize}
 \item embarquabilité: la solution doit pouvoir être intégrable dans un
-environnement contraint (poids volume, consommation) et doit pouvoir évoluer
-en terme de matériel supporté
+environnement contraint (poids, volume et consommation) et doit pouvoir évoluer
+en terme de matériel supporté.
 \item maintenabilité: la solution doit pouvoir évoluer et permettre une
-  parametrisation (e.g. mise à niveau d'une politique de sécurité)
+  parametrisation (e.g. mise à niveau d'une politique de sécurité).
 \item sécurité: la solution doit pouvoir répondre aux contraintes sécuritaires
-des systèmes systronique
+des systèmes systroniques.
 \item sûreté: la solution doit pouvoir répondre aux contraintes d'interaction
 de systèmes dont le niveau de sûreté est hétérogène. C'est par exemple le cas
-de l'interconnexion du système de bord et du système multimédia.
+lors de l'interconnexion du système de bord et du système multimédia.
 \item temps-réel: la solution doit pouvoir assurer un traitement des flux
 borné et garanti, malgré les contraintes d'embarquabilité
 \end{itemize}
 
 \paragraph{}
-La matrice suivante synthétise les différentes exigences conséquentes des
-différentes contraîntes décrites dans la problématique générale. Pour chaque
+La matrice suivante synthétise les différentes exigences déduites des
+différentes contraintes de la problématique générale. Pour chaque
 exigence, je précise si la solution que je propose est conforme ou non. Je
 dénote chaque exigence de la manière suivante : REQ\_<préfixe
 famille>\_<numéro>:
@@ -68,7 +74,7 @@ est non conforme d'une des exigences présentée ici, cette non-conformité est
 précisée dans la matrice ci-dessous.
 
 \begin{supertabular}{|c|p{7.5cm}|c|c|}
-REQ\_EMBAR\_001
+\hypertarget{REQEMBAR001}{REQ\_EMBAR\_001}
 &
   \begin{minipage}{7.5cm}
 \vspace{4mm}
@@ -78,10 +84,10 @@ La solution doit pouvoir s'exécuter sur un matériel de faible puissance
 &
 Embarquabilité 
 &
-X
+\checkmark
 \\
 \hline
-REQ\_EMBAR\_002
+\hypertarget{REQEMBAR002}{REQ\_EMBAR\_002}
 &
 \begin{minipage}{7.5cm}
 \vspace{4mm}
@@ -91,24 +97,24 @@ La solution doit être portable à faible coût
 &
 Embarquabilité 
 &
-X
+\checkmark
 \\
 \hline
-REQ\_MAINT\_001
+\hypertarget{REQMAINT001}{REQ\_MAINT\_001}
 &
 \begin{minipage}{7.5cm}
 \vspace{4mm}
 Les éléments de sécurisation de la solution doivent pouvoir supporter un
 mécanisme de configuration et de mise à jour de la configuration
-\vspace{4mm}
+\vspace{2mm}
 \end{minipage}
 &
 Maintenabilité 
 &
-X
+\checkmark
 \\
 \hline
-REQ\_MAINT\_002
+\hypertarget{REQMAINT002}{REQ\_MAINT\_002}
 &
 \begin{minipage}{7.5cm}
 \vspace{4mm}
@@ -119,10 +125,10 @@ mécanisme d'audit et de remontée d'informations statistiques
 &
 Maintenabilité 
 &
-X
+\checkmark
 \\
 \hline
-REQ\_SECUR\_001
+\hypertarget{REQSECUR001}{REQ\_SECUR\_001}
 &
 \begin{minipage}{7.5cm}
 \vspace{4mm}
@@ -133,10 +139,10 @@ sécurité (conformité avec les quatre exigences des systèmes MLS)
 &
 Sécurité 
 &
-X
+\checkmark
 \\
 \hline
-REQ\_SECUR\_002
+\hypertarget{REQSECUR002}{REQ\_SECUR\_002}
 &
 \begin{minipage}{7.5cm}
 \vspace{4mm}
@@ -146,10 +152,10 @@ La passerelle doit assurer la confidentialité des données qu'elle transmet
 &
 Sécurité 
 &
-X
+\checkmark
 \\
 \hline
-REQ\_SECUR\_003
+\hypertarget{REQSECUR003}{REQ\_SECUR\_003}
 &
 \begin{minipage}{7.5cm}
 \vspace{4mm}
@@ -159,10 +165,10 @@ La passerelle doit assurer l'intégrité des données qu'elle transmet
 &
 Sécurité 
 &
-X
+\checkmark
 \\
 \hline
-REQ\_SECUR\_004
+\hypertarget{REQSECUR004}{REQ\_SECUR\_004}
 &
 \begin{minipage}{7.5cm}
 \vspace{4mm}
@@ -173,7 +179,8 @@ La passerelle doit assurer la disponibilité des données qu'elle transmet
 Sécurité 
 &
 \\
-REQ\_SECUR\_005
+\hline
+\hypertarget{REQSECUR005}{REQ\_SECUR\_005}
 &
 \begin{minipage}{7.5cm}
 \vspace{4mm}
@@ -185,9 +192,9 @@ exigences des systèmes MILS)
 &
 Sécurité 
 &
-X
+\checkmark
 \\
-REQ\_SECUR\_006
+\hypertarget{REQSECUR006}{REQ\_SECUR\_006}
 &
 \begin{minipage}{7.5cm}
 \vspace{4mm}
@@ -199,10 +206,10 @@ de sécurité.
 &
 Sécurité 
 &
-X
+\checkmark
 \\
 \hline
-REQ\_SURET\_001
+\hypertarget{REQSURET001}{REQ\_SURET\_001}
 &
 \begin{minipage}{7.5cm}
 \vspace{4mm}
@@ -214,10 +221,10 @@ associée) est différent
 &
 Sûreté 
 &
-X
+\checkmark
 \\
 \hline
-REQ\_TEMPS\_001
+\hypertarget{REQTEMPS001}{REQ\_TEMPS\_001}
 &
 \begin{minipage}{7.5cm}
 \vspace{4mm}
@@ -227,10 +234,10 @@ La passerelle possède une borne maximum pour la latence de traversée d'un flux
 &
 Temps-réel 
 &
-X
+\checkmark
 \\
 \hline
-REQ\_TEMPS\_002
+\hypertarget{REQTEMPS002}{REQ\_TEMPS\_002}
 &
 \begin{minipage}{7.5cm}
 \vspace{4mm}
@@ -241,6 +248,7 @@ d'une ou de plusieurs de ses tâches de traitement des flux réseaux en transit
 &
 Temps-réel 
 &
-X
+\checkmark
 \\
 \end{supertabular}
+

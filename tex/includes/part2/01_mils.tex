@@ -8,7 +8,7 @@
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
 %% Last update Mon Aug 30 17:00:21 2010 Philippe THIERRY
 
-\chapter{Définition d'une architecture logicielle sécurisée pour le MLS orientée traitement de flux}
+\chapter{Proposition d'une architecture logicielle sécurisée pour le MLS orientée traitement de flux}
 \doMinitoc
 \label{chap:solution_secu}
 
@@ -18,7 +18,7 @@
 \paragraph{}
 Dans le cadre de la problématique des systèmes Systronique, il est nécessaire
 de considérér la colocalisation de domaines de sûreté et de sécurité disjoints
-sur un même matériel. Cete exigence correspond à l'Exigence REQ\_SECUR\_005
+sur un même matériel. Cette exigence correspond à l'Exigence \hyperlink{REQSECUR005}{REQ\_SECUR\_005}
 de la matrice de conformité du Chapitre \ref{sec:matrix}. Pour répondre à cette problématique, je propose
 de définir une solution logicielle répondant aux besoins de Multiple
 Independent Levels of Security
@@ -26,7 +26,7 @@ Independent Levels of Security
 suffisante pour répondre aux exigences de sûreté et de sécurité, il est
 également nécessaire de considérer des mécanismes logiciels permettant de
 transférer de l'information entre les différents domaines de sécurité. Cette
-contrainte correspond à l'Exigence REQ\_SECUR\_001 du Chapitre
+contrainte correspond à l'Exigence \hyperlink{REQSECUR001}{REQ\_SECUR\_001} du Chapitre
 \ref{sec:matrix}.
 Ce transfert ne doit pas impacter les contraintes de sécurité de chacun des
 domaines. Pour cela :
@@ -341,7 +341,7 @@ Les flux transmis doivent être garantis en terme d'intégrité
 \end{requirement}
 En effet, si les données transmises sont modifiées, elles ne permettent plus
 d'assurer une action valide de la part du domaine de plus haut niveau de
-sécurité. Cette exigence correspond à l'Exigence REQ\_SECUR\_003 de la matrice
+sécurité. Cette exigence correspond à l'Exigence \hyperlink{REQSECUR003}{REQ\_SECUR\_003} de la matrice
 d'exigence de la solution, décrite dans le Chapitre \ref{sec:matrix}.
 
 
@@ -354,15 +354,15 @@ La présence de canaux logiques ou physiques non prévus entraine une faille
 dans la mécanique de validation des flux transmis. Il devient possible de
 transmettre de l'information sans contrôle par un moniteur de sécurité
 certifiable, et rend la solution incompatible avec la propriété
-\ref{pro:noncontournable} des systèmes MLS, et donc avec l'exigence
-REQ\_SECUR\_001.
+\ref{pro:noncontournable} des systèmes MLS, et donc avec l'Exigence
+\hyperlink{REQSECUR001}{REQ\_SECUR\_001}.
 
 \paragraph{}
 À partir de ces exigences, je détermine la répartition des responsabilités
 sécuritaires en terme de confidentialité, intégrité et disponibilité.
 \begin{itemize}
-  \item La confidentialité des données, correspondant à l'exigence
-  REQ\_SECUR\_002, est partagée entre:
+  \item La confidentialité des données, correspondant à l'Exigence
+  \hyperlink{REQSECUR002}{REQ\_SECUR\_002}, est partagée entre:
     \begin{itemize}
       \item La configuration de la passerelle, qui est une donnée d'entrée de
         celle-ci donc en dehors du cadre de ma thèse. C'est cette
@@ -374,11 +374,11 @@ sécuritaires en terme de confidentialité, intégrité et disponibilité.
       également à l'exigence \ref{req:escape}
     \end{itemize}
   \item L'intégrité des données est assurée par la passerelle durant le temps
-    de leur transit (en réponse à l'Exigence REQ\_SECUR\_003).
+    de leur transit (en réponse à l'Exigence \hyperlink{REQSECUR003}{REQ\_SECUR\_003}).
   \item Comme précisé dans le cadre de la matrice de conformité aux
     contraintes de la problématiques générale, la disponibilité n'est pas
     considéré dans le cadre de ma thèse. A ce jour, la solution que je propose
-    est donc incompatible de l'Exigence REQ\_SECUR\_004 du Chapitre
+    est donc incompatible avec l'Exigence \hyperlink{REQSECUR004}{REQ\_SECUR\_004} du Chapitre
     \ref{sec:matrix} 
 \end{itemize}
 
@@ -390,7 +390,7 @@ sécuritaires en terme de confidentialité, intégrité et disponibilité.
 La solution consiste à permettre l'interconnexion sécurisée de deux domaines
 indépendants, avec des exigences temps réel et sécuritaires.
 Dans le cadre de la définition d'une telle architecture, la gestion des plans
-d'adressage IP est problématique pour le respect de l'Éxigence
+d'adressage IP est problématique pour le respect de l'Exigence
 \ref{req:transit_up}. Il est en effet nécessaire de permettre l'interconnexion
 de deux services sur deux réseaux disjoints tout en assurant que ces derniers
 ne soient pas capables de déterminer tout ou partie des informations réseaux
@@ -458,7 +458,7 @@ tout en respectant l'exigence \ref{req:transit}.
 \paragraph{}
 De la définition des Exigences \ref{req:integrity}, \ref{req:transit},
 \ref{req:desensibilisation} et \ref{req:escape}, conséquentes à la conformité
-à l'exigence REQ\_SECUR\_001 du Chapitre \ref{sec:matrix}, 
+à l'Exigence \hyperlink{REQSECUR001}{REQ\_SECUR\_001} du Chapitre \ref{sec:matrix}, 
 il faut dériver des exigences techniques. Pour
 cela, je détermine d'abord la surface d'attaque. On appelle surface d'attaque
 les éléments d'interfaces à partir desquels on considère une attaque possible.
@@ -545,7 +545,7 @@ nombre d'éléments de protection, pour les rendre inefficaces. Ces différents
 sécurité}, portant chacun une fonction de sécurité particulière. C'est au
 travers de l'association de tous ces moniteurs qu'il est possible de
 construire une solution répondant à l'ensemble des exigences de sécurité de
-la problématique générale de la thèse (REQ\_SECUR\_001 à REQ\_SECUR\_006).
+la problématique générale de la thèse (\hyperlink{REQSECUR001}{REQ\_SECUR\_001} à \hyperlink{REQSECUR006}{REQ\_SECUR\_006}).
 
 % les moniteurs
 \section{Définition des moniteurs de sécurité}
@@ -557,7 +557,7 @@ la problématique générale de la thèse (REQ\_SECUR\_001 à REQ\_SECUR\_006).
 
 \paragraph{}
 Les moniteurs de sécurité décrits ici ont pour but d'assurer le respect de
-l'exigence REQ\_SECUR\_003. L'intégrité des données transmises est une
+l'Exigence \hyperlink{REQSECUR003}{REQ\_SECUR\_003}. L'intégrité des données transmises est une
 exigence dont le but est d'assurer que le flux de données qui transite au
 travers de la passerelle multi-domaines de sécurité n'est jamais modifié sans
 autorisation préalable. Cela se fait usuellement en définissant une liste de
@@ -638,7 +638,7 @@ aux exigences ci-dessus.
 \subsection{Garantie de transmission de flux sans canal auxiliaire inverse}
 
 \paragraph{}
-Le moniteur de sécurité décrit ici répond à l'exigence REQ\_SECUR\_001.
+Le moniteur de sécurité décrit ici répond à l'Exigence \hyperlink{REQSECUR001}{REQ\_SECUR\_001}.
 Sa présence doit assurer que tout flux transmis entre deux domaines de
 sécurité puisse se faire sans que les propriétés de confidentialité du domaine
 de plus haute sécurité ne soit impacté. Le but est d'assurer que le domaine de
@@ -650,9 +650,9 @@ Il existe plusieurs cas qui doivent être considérés dans le cadre du besoin
 associé à la Problématique générale:
 \begin{enumerate}
 \item Le transfert sens unique de données d'un domaine de plus faible niveau à un domaine
-de plus haut niveau (Exigence REQ\_SECUR\_001)
+de plus haut niveau (Exigence \hyperlink{REQSECUR001}{REQ\_SECUR\_001})
 \item Le transfert de flux désensibilisé d'un domaine de plus haut niveau de
-sécurité vers un domaine de plus faible niveau de sécurité (Exigence REQ\_SECUR\_006)
+sécurité vers un domaine de plus faible niveau de sécurité (Exigence \hyperlink{REQSECUR006}{REQ\_SECUR\_006})
 \end{enumerate}
 
 \subsubsection{A propos d'une architecture de diode logicielle pour le transfert de données}
@@ -668,7 +668,7 @@ pas toujours compatibles avec les exigences de l'embarqué.
 Pour répondre à ce besoin, j'ai contribué à la rédaction de deux brevets
 \cite{thierry2013dctrl}\cite{thierry2013audit}
 et à l'implémentation d'un moniteur de sécurité permettant de
-répondre aux exigences REQ\_SECUR\_001 et REQ\_SECUR\_006, sans nécessiter l'usage de plusieurs matériels
+répondre aux Exigences \hyperlink{REQSECUR001}{REQ\_SECUR\_006} et \hyperlink{REQSECUR001}{REQ\_SECUR\_006}, sans nécessiter l'usage de plusieurs matériels
 distinct.\\
 Pour répondre à ces exigences, il est nécessaire d'implémenter une fonction
 logicielle dont le comportement est prévu pour assurer une opacité forte lors
@@ -676,17 +676,18 @@ du transit des données entre son entrée et sa sortie, quel que soit le
 comportement des éléments source et destination du flux.\\
 Ce moniteur de sécurité est accompagné d'une fonction d'audit, permettant de
 remonter des informations statistiques sur son comportement, le rendant
-compatible avec l'exigence REQ\_MAINT\_002. Ce dernier ne nécessite par contre
+compatible avec l'exigence \hyperlink{REQMAINT002}{REQ\_MAINT\_002}. Ce dernier ne nécessite par contre
 pas de mécanisme de configuration, son comportement ne nécessitant pas de
 traitement spécifique au flux qu'il fait transiter. Il est donc compatible
-avec l'exigence REQ\_MAINT\_001.
+avec l'exigence \hyperlink{REQMAINT001}{REQ\_MAINT\_001}.
 
 \paragraph{}
 Ce moniteur de sécurité a été évalué avec succès dans le cadre d'une Cible de
 Sécurité de Premier Niveau (CSPN), suivi d'une pré-évaluation au sens des
 Critères Communs, de niveau EAL5+. De plus, ce moniteur de sécurité est
 capable de garantir une latence de traversée maximum ainsi qu'un débit garanti
-par construction, le rendant compatible de l'exigence REQ\_TEMPS\_001.\\
+par construction, le rendant compatible avec l'exigence
+\hyperlink{REQTEMPS001}{REQ\_TEMPS\_001}.\\
 Ces travaux ont donné lieu à deux brevets \cite{thierry2013daudit}\cite{thierry2013dctrl},
 mais la majorité des éléments techniques sont aujourd'hui maintenu secrets par
 Thales. En conséquence, bien que ce moniteur de sécurité soit aujourd'hui une

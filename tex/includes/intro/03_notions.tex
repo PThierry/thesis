@@ -99,7 +99,7 @@ Diffusion Restreinte ne peut être fait que si ces données sont préalablement
 noircies.\\
 Noircir des données implique en général un chiffrement de ces dernières, mais
 pas seulement. Le profil de flux peut être modifié afin de rendre difficile
-la détection du type de communication sur la base de son profil. Du bruit peut
+la détection du type de communication sur la base de son profil \cite{berk2005detection}. Du bruit peut
 ainsi être généré et du {\it padding} incorporé afin d'empêcher toute déduction sur
 simple écoute du flux noir.
 
@@ -304,25 +304,6 @@ Dans le cadre de ma thèse, je cible deux ordonnanceurs:
 \item L'ordonnancement TDM (hors ligne, préemptif de type time-driven)
 \item L'ordonnancement EDF (en ligne, préemptif de type event-driven)
 \end{itemize}
-
-\section{Les domaines de sécurité}
-
-\paragraph{}
-Un domaine de sécurité est un environnement ou un contexte incluant un
-ensemble de ressources systèmes et d'entités respectant une même politique de
-sécurité.\\
-Les interactions à l'intérieur d'un domaine ne sont pas soumises à des exigences fortes de
-sécurité. Cependant, il arrive qu'un même domaine de sécurité soit
-physiquement séparé en plusieurs sous-systèmes qui, pour communiquer, doivent
-traverser des domaines de sécurité différents. Les passerelles
-d'interconnexion doivent alors assurer le {\it noircissement} des données à
-faire transiter. L'action de noircir consiste à assurer la
-confidentialité des données de diverses manières afin d'assurer que les
-domaines par lesquels transitent ces données ne soient pas aptes à en tirer
-une information dont le niveau de sécurité est supérieur au leur.\\
-De manière générale, le noircissement implique un chiffrement des données et
-potentiellement une modification du profil de flux, ceci afin de limiter la
-problématique de canal auxiliaire dérivant du profil de flux initial \cite{berk2005detection}.
 
 \section{La virtualisation}
 
