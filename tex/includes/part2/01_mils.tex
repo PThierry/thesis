@@ -397,7 +397,7 @@ Un véritable mécanisme de passerelle doit être apte à traiter un ensemble de
 flux reçus de manière concurrente par un même service. Cela implique alors
 une capacité de synchronisation des contextes de flux entre le service entrant
 et le service sortant afin de permettre la différentiation des flux en sortie,
-tout en respectant l'exigence \ref{req:transit}.
+tout en respectant l'exigence \ref{req:transit_up}.
 
 \begin{figure}
   \label{fig:sep_proto}
@@ -410,7 +410,7 @@ tout en respectant l'exigence \ref{req:transit}.
 \subsubsection{Généralités sur les profils d'attaques}
 
 \paragraph{}
-De la définition des Exigences \ref{req:integrity}, \ref{req:transit},
+De la définition des Exigences \ref{req:integrity}, \ref{req:transit_up},
 \ref{req:desensibilisation} et \ref{req:escape}, conséquentes à la conformité
 à l'Exigence \hyperlink{REQSECUR001}{REQ\_SECUR\_001} du Chapitre \ref{sec:matrix}, 
 il faut dériver des exigences techniques. Pour
@@ -468,7 +468,7 @@ impact sur les exigences de sécurité.
   \hline
 \cellcolor{blue!25}Source & \cellcolor{blue!25}Attaque & \multicolumn{4}{|c|}{\cellcolor{blue!25}Exigence} \\
   \hline
-  \multicolumn{2}{|c|}{ } & \ref{req:integrity} & \ref{req:transit} & \ref{req:desensibilisation} & \ref{req:escape} \\ 
+  \multicolumn{2}{|c|}{ } & \ref{req:integrity} & \ref{req:transit_up} & \ref{req:desensibilisation} & \ref{req:escape} \\ 
   \hline
   {\it Domaine inférieur} & Étude temporelle de la vitesse de transit du flux vers le domaine supérieur & & X & & \\
   \hline
@@ -492,9 +492,17 @@ impact sur les exigences de sécurité.
 Ces différents comportements permettent de mettre à mal le principe de
 cloisonnement associé à la passerelle inter-domaines, et doivent donc être
 bloqués ou à défaut tracés.\\
+
+\subsection{Synthèse du risque sécuritaire}
+
+\paragraph{}
+On peut constater que la surface d'attaque de la solution est grande et
+nécessite un ensemble d'élements logiciels en charge de se prémunir contre les
+différents types d'attaque recensés dans cette section.\\
 Dans le cadre de ma thèse, je propose un certain nombre de solutions
 (contre-mesures) permettant de réagir à ces attaques, ainsi qu'un certain
-nombre d'éléments de protection, pour les rendre inefficaces. Ces différents
+nombre d'éléments de protection, pour les rendre inefficaces ou à défaut
+réduire leur portée et accroître leur complexité. Ces différents
 éléments de sécurité sont construits sous forme de {\it moniteurs de
 sécurité}, portant chacun une fonction de sécurité particulière. C'est au
 travers de l'association de tous ces moniteurs qu'il est possible de
@@ -620,7 +628,7 @@ pas toujours compatibles avec les exigences de l'embarqué.
 
 \paragraph{}
 Pour répondre à ce besoin, j'ai contribué à la rédaction de deux brevets
-\cite{thierry2013dctrl}\cite{thierry2013audit}
+\cite{thierry2013dctrl}\cite{thierry2013daudit}
 et à l'implémentation d'un moniteur de sécurité permettant de
 répondre aux Exigences \hyperlink{REQSECUR001}{REQ\_SECUR\_006} et \hyperlink{REQSECUR001}{REQ\_SECUR\_006}, sans nécessiter l'usage de plusieurs matériels
 distinct.\\
@@ -858,8 +866,8 @@ Lors du changement de domaine, les caches sont alors flushés afin de ne pas
 transmettre d'information. Il est alors nécessaire de prendre en compte
 l'impact du flush de cache sur l'exécution de la solution.
 J'ai donc proposé un mécanisme permettant de
-supporter le partage de c{\oe}urs processeurs entre domaines de sécurité tout
-en contrecarrant les attaques de type analyse de temps de réponse au travers du
+supporter l'intégration, sur un même c{\oe}ur du processeur, de plusieurs domaines de sécurité tout
+en contrecarrant les attaques de type analyse de temps d'accès à la mémoire au travers du
 contrôleur de cache. La proposition cible exclusivement le sans
 permettre cache L1 data. Le cache L1 code et le TLB (Translation Lookaside
 Buffer) ne sont cependant pas pris en compte. 
@@ -872,24 +880,23 @@ du contrôleur de cache L1 data. Je m'appuie sur les principes généraux des
 caches partitionnés considérés dans le temps réel \cite{coopcachepart}, mais pour des besoins
 sécuritaire.\\
 Ainsi, la solution que je propose a pour but de partitionner le contrôleur de
-cache en fonction des domaines de sécurité s'exécutant. On considère alors que
-le nombre de partition est égal au nombre de domaines de sécurité, auquel on
+cache en fonction des domaines de sécurité s'exécutant. Le nombre de partition
+est alors égal au nombre de domaines de sécurité, auquel on
 ajoute une partition pour le {\it Secure Separation Kernel}.\\
 Je considère que le domaine de plus faible sécurité est limité à
-un et un seul compartiment, ordonnancé dans un c{\oe}ur processeur où deux
+un et un seul compartiment, ordonnancé dans un c{\oe}ur du processeur où deux
 domaines de sécurité sont ordonnancés.
-Le contrôleur de cache n'ayant pas une mémoire extensible, je considère qu'il
-ne peut être compartimenté qu'en huit slots de cache maximum. Chaque
+Le contrôleur de cache n'ayant pas une mémoire extensible, je définit un
+nombre maximum de slots limité (égal à huit dans mon étude). Chaque
 slot se comporte de manière autonome avec un nombre de ligne de cache
 configurable, ceci afin d'avoir une plus grande liberté dans la découpe du
 contrôleur de cache. Le principe de partitionnement est décrit plus loin.
-Je considère que la politique de substitution des lignes de caches de chaque
+Je prend comme hypothèse que la politique de substitution des lignes de caches de chaque
 slot reste identique à l'état de l'art. Le nombre de ligne de cache de
 chacun d'entre eux doit donc être compatible de l'algorithme de substitution
-considéré. Je considère dans le cadre de ma thèse
-un algorithme de type pseudo-LRU de type 4-ways avec des lignes de caches de
-64 ko. Chaque compartiment doit alors pouvoir fournir un nombre
-de lignes de caches multiple de 4.
+considéré. Par exemple, dans le cas d'un algorithme pseudo-LRU de type 4-ways,
+chaque compartiment doit alors pouvoir fournir un nombre
+de lignes de caches multiple de quatre.
 
 \subsection{Formalisme de l'interface de contrôle du contrôleur de cache}
 
@@ -904,8 +911,8 @@ choisie, au {\it Secure Separation Kernel}. Cela implique de la part de la routi
 configuration du contrôleur certaines propriétés:
 \begin{itemize}
   \item La routine est positionnée dans un espace mémoire non-cachable ou
-    durant un laps de temps où le cache est débrayé
-  \item La routine doit être la plus petite possible (pour des raison de
+    durant un laps de temps où le cache n'est pas actif
+  \item La routine doit être la plus petite possible (pour des raisons de
     performances)
   \item La routine doit être exécutée en mode superviseur exclusivement
 \end{itemize}
@@ -917,13 +924,13 @@ suivantes doivent alors être respectées par le contrôleur de cache:
 
 \begin{requirement}
 \label{sec_hyp_1}
-L'usage du contrôleur de cache par une partition logicielle donnée ne dois pas avoir
-d'impact sur l'état du cache d'une autre partition
+L'usage du contrôleur de cache par une partition logicielle donnée ne doit pas avoir
+d'impact sur l'état du cache d'une autre partition.
 \end{requirement}
 \begin{requirement}
 \label{sec_hyp_2}
 Une partition logicielle donnée ne doit pas pouvoir accéder à l'état du cache d'une autre
-partition logicielle
+partition logicielle.
 \end{requirement}
 
 \begin{requirement}
@@ -959,9 +966,16 @@ logiciel.
 
 \subsection{Description de l'interface de contrôle du partitionnement du contrôleur de cache}
 
+\paragraph{}
+Dans cette Section, je décrit une proposition d'interface matérielle
+permettant au logiciel de gérer une décomposition du contrôleur de cache en
+plusieurs slots indépendants. Cette interface cherche à être simple d'usage
+pour l'implémentation logicielle tout en supportant un comportement générique
+non partitionné par défaut.
+
 \subsection{Principe et automate}
 
-Afin de limiter au maximum le volume de code traitant de la configuration du
+Afin de limiter au maximum la taille du code traitant de la configuration du
 contrôleur de cache, cette dernière a été définie sur une base de quelques
 registres spécifiques. 
 
@@ -1069,8 +1083,8 @@ bit A/B &
 \begin{minipage}{12cm}
 \vspace{2mm}
 Bit d'activation. Positionné à 0 au boot. Doit être positionné à 1 afin
-d'activer le mécansime de partitionnement du contrôleur de cache. L'ensemble
-de la configuration du contrôleur doit être faite au moment où ce bit est mis
+d'activer le mécanisme de partitionnement du contrôleur de cache. L'ensemble
+de la configuration du contrôleur doit être fait au moment où ce bit est mis
 à 1. La mise à 1 de ce bit implique un changement d'état du contrôleur de
 cache de l'état générique à l'état partitionné. L'ensemble des données en
 cache à cet instant sont flushées.
@@ -1092,13 +1106,13 @@ lignes de cache.
 RW
 \\
 \hline
-slot count & 
+Slot count & 
 \begin{minipage}{12cm}
 \vspace{2mm}
-Spécifie le nombre de slots qui seront utilisés. Une fois que l'hyperviseur a
-terminé la configuration, il spécifie le nombre de slots configurés dans ce
+Spécifie le nombre de slots qui seront utilisés. L'hyperviseur doit spécifier
+le nombre de slots configurés dans ce
 champ, avant de rendre la configuration active. Le nombre de slot doit être
-inférieur au nombre de slots maximum (définit à 8).
+inférieur au nombre de slots maximum (définit à huit dans l'étude).
 \vspace{2mm}
 \end{minipage} &
 RW
@@ -1155,7 +1169,8 @@ la taille du slot associé pour des raisons de performances, j'ai rendu la
 taille de chaque slot configurable. Néanmoins, il existe des restrictions:
 \begin{itemize}
   \item La taille d'un slot (en nombre de lignes de cache) doit être
-    compatible avec l'algorithme pseudo-LRU 4-ways.
+    compatible avec l'algorithme de substitution choisi (e.g. pseudo-LRU
+    4-ways).
   \item La somme des tailles de slots actifs doit être inférieure ou égale à
     la taille totale de l'espace mémoire du contrôleur de cache.
 \end{itemize}
@@ -1179,9 +1194,9 @@ Configuration Register). Il en existe 8, pour un nombre de slots maximum de 8.
 \end{figure}
 \end{center}
 
-Chaque registre SCR défini la configuration d'un slot. Sa structure est
+Chaque registre SCR définit la configuration d'un slot. Sa structure est
 définie dans le Tableau \ref{tab:cssr}. Par défaut, l'ensemble de ces
-registre ont une valeur mise à 0x0.
+registres ont une valeur mise à 0x0.
 
 
 %%%%%%%%%%%%%%%%%%%%% SCR register table %%%%%%%%%%%%%%%%%%%%%
@@ -1211,17 +1226,6 @@ de 4.
 \vspace{2mm}
 \end{minipage} &
 RW
-\\
-\hline
-{\it Offset} &
-\begin{minipage}{12cm}
-\vspace{2mm}
-Ce champs est rempli par le contrôleur de cache pour y positionner l'offset en
-mémoire interne du début du slot. Cela lui permet d'accéder directement au
-début du slot lors de son utilisation.
-\vspace{2mm}
-\end{minipage} &
-RO
 \\
 \hline
 \end{tabular}
@@ -1302,7 +1306,7 @@ suivante:
 \end{enumerate}
 Une fois cette configuration effectuée, le contrôleur de cache utilise donc le
 slot courant défini dans le registre CSSR. Je considère dans ma thèse trois
-slots utilisé dans un cas classique de sécurisation:
+slots utilisés dans un cas classique de sécurisation:
 \begin{enumerate}
   \item Un slot {\it hyperviseur}, utilisé par l'hyperviseur et la gestion des
     pieds d'interruption. Si les interruptions sont ensuite remontées au
@@ -1318,20 +1322,21 @@ slots utilisé dans un cas classique de sécurisation:
 \end{enumerate}
 Le changement de slot se fait donc facilement via l'écriture dans un seul
 registre. Dans le cadre de l'architecture PowerPC, l'écriture pourrait se
-faire via l'usage de l'instruction {\tt mtspr}, dédiée à l'écriture dans les
+faire via l'usage de l'instruction {\tt mtspr} \cite{semiconductor2005powerpc}, dédiée à l'écriture dans les
 registres de type {\it Special Purpose Registers}.\\
 Le segment de code en charge de cette écriture ne doit pas être mis en cache, ce dernier impactant le slot
 courant. Il doit donc être positionnable dans un segment mémoire non-cachable
-ou placé dans un espace mémoire dédié type scratchpad.\\
+ou placé dans un espace mémoire dédié type scratchpad, dont l'accès est plus
+rapide est local au c{\oe}ur processeur.\\
 
-Dans le cas d'usage que je propose, je n'utilise que 3 slots sur les huit
-présents. Il reste néanmoins possible d'utiliser jusqu'à 8 slots dans le contrôleur de
+Dans le cas d'usage que je propose, je n'utilise que trois slots sur les huit
+présents. Il reste néanmoins possible d'utiliser jusqu'à huit slots dans le contrôleur de
 cache, afin de supporter une plus grande séparation, en cas d'usage de plus de
 deux domaines de sécurité ou pour des contraintes temps réel.
 
 \paragraph{}
 Cette proposition a pour but d'éviter le flush de caches en réponse à la
-problématique d'utilisation de canaux auxiliaires basés sur les contrôleurs de
+problématique d'utilisation de canaux auxiliaires basées sur les contrôleurs de
 cache. Néanmoins, pour qu'une telle solution soit efficace, il faudrait
 prévoir un partitionnement pour les caches L1 data, L1 code, mais également
 le TLB. De plus, la problématique des caches L2 et plus globalement des caches
