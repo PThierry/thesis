@@ -12,12 +12,14 @@
 \doMinitoc
 \label{chap:solution_secu}
 
-\section{A propos du principe de passerelle de traitement de flux MultiLevel Security}
+\section{Proposition d'architecture et choix structuraux}
+
+\subsection{A propos du principe de passerelle de traitement de flux MultiLevel Security}
 \label{sec:mls_gw_principle}
 
 \paragraph{}
 Dans le cadre de la problématique des systèmes Systronique, il est nécessaire
-de considérér la colocalisation de domaines de sûreté et de sécurité disjoints
+de considérer la colocalisation de domaines de sûreté et de sécurité disjoints
 sur un même matériel. Cette exigence correspond à l'Exigence \hyperlink{REQSECUR005}{REQ\_SECUR\_005}
 de la matrice de conformité du Chapitre \ref{sec:matrix}. Pour répondre à cette problématique, je propose
 de définir une solution logicielle répondant aux besoins de Multiple
@@ -49,7 +51,7 @@ respect des exigences définies dans le Chapitre \label{sec:mils}, et
 formalisées initialement en 2006 \cite{alves2006mils}.
 Je m'appuie, dans le cadre de ma thèse, sur le principe de Separation Kernel,
 compatible avec les systèmes MILS et MLS, auquel j'ajoute des modules de sécurité
-complémentaire. L'ensemble est alors appelé Extended Secure Separation Kernel
+complémentaires. L'ensemble est alors appelé Extended Secure Separation Kernel
 (ESSK):
 
 \PhDdefinition{essk}{Extended Secure Separation Kernel}{
@@ -65,55 +67,6 @@ en charge de répondre aux mêmes besoins que les éléments de sécurité matériels
 définis dans le cadre des systèmes d'information. Ces modules sont en charge de répondre aux
 exigences fonctionnelles et sécuritaires décrite dans la Problématique.
 L'architecture logicielle que j'ai choisie est décrite dans ce chapitre.
-
-\section{Définition des hypothèses générales}
-\label{sec:mls_gw_hypothesis}
-
-\subsection{A propos des propriétés du matériel}
-
-\paragraph{}
-La définition d'un système sécurisé implique de prendre en compte l'impact
-sécuritaire du matériel. Dans le cadre de ma thèse, j'ai ciblé principalement
-les propriétés du logiciel, et considère en conséquence des
-hypothèses strictes sur le matériel.\\
-Bien que ces hypothèses soient peu réalistes sur du matériel généraliste (i.e.
-du marché civil), elles doivent être supportées pour assurer les propriétés de
-sécurité, à défaut d'intégrer un design matériel spécifique. Ces
-hypothèses sont les suivantes:
-
-\begin{hypothesis}
-  {\bf conformité} : L'ensemble des éléments matériels sont conformes de leur
-  documentation. Ils assurent le respect des exigences documentaires et ne
-  fournissent aucune propriété non documentée
-\end{hypothesis}
-
-\begin{hypothesis}
-  {\bf compatibilité au temps réel} : Les éléments d'interconnexion (bus,
-  interconnect, etc) sont supposés déterministes. Ces
-  éléments ne sont pas considérés dans le cadre de ma thèse comme impactant.
-\end{hypothesis}
-
-\begin{hypothesis}
-  {\bf sûreté de fonctionnement} : Les éléments matériels sont fiable.
-  Ils ne sont pas source d'erreur et n'impactent pas le logiciel par un
-  quelconque dysfonctionnement.
-\end{hypothesis}
-
-\begin{hypothesis}
-  {\bf sécurité} : Les éléments matériels sont réputés sécurisés.
-  Ils ne génèrent pas de faille de sécurité du fait d'une erreur d'architecture
-  ou de comportement.
-\end{hypothesis}
-
-\paragraph{}
-Bien que ces hypothèses soient considérées valides dans le cadre du matériel
-envisagé dans la solution que je propose, l'usage volontairement non conforme de ce matériel par
-le logiciel doit être considéré pour les problématiques de sécurité. L'usage du
-matériel comme base pour des canaux cachés ou auxiliaires est considéré dans
-le cadre de ma thèse et des solutions sont proposées pour répondre à cette
-problématique.
-
-\section{Problématiques d'architectures et choix structuraux}
 
 \subsection{À propos de la présence d'éléments non certifiables}
 \label{sec:noncert}
@@ -225,7 +178,7 @@ sécurité, telle que décrite dans la problématique.
 Une validation de la compatibilité de ces choix structuraux a été
 faite via un maquettage chez Thales donnant lieu à un premier brevet \cite{thierry2013part}.
 
-\section{Définition de la réponse technique au besoin}
+\section{Caractérisation du risque sécuritaire}
 
 \subsection{Définition des données à protéger}
 
@@ -398,6 +351,7 @@ associées à l'autre service. Une telle problématique impacte fortement le
 comportement de la passerelle.
 
 \subsubsection{Intégration des proxys}
+\label{subsec:sep_proto}
 
 \paragraph{}
 Il devient alors nécessaire de prévoir un mécanisme de séparation
@@ -694,7 +648,7 @@ Thales. En conséquence, bien que ce moniteur de sécurité soit aujourd'hui une
 réalité, je ne peux pas donner dans le cadre de ce document plus
 d'informations sur son implémentation et son fonctionnement.
 
-\subsubsection{Problématique d'exploitation des canaux auxiliaires: à propos des profils de flux}
+\subsubsection{Réponse à la problématique des canaux cachés et auxiliaires}
 \label{sec:emet_period}
 
 \paragraph{}
@@ -781,11 +735,11 @@ systronique.
 
 %%%%%%%%%%%%%% END
 % conformité du flux à une politique de sécurité
-\subsection{Conformité des données transmise à la politique de sécurité}
+\subsection{Conformité des données transmises à la politique de sécurité}
 
 \paragraph{}
-Les moniteurs de sécurité de cette sections répondent à l'exigence
-\label{req:desensibilisation}. Ils en existe plusieurs car cette exigence
+Les moniteurs de sécurité de cette section répondent à l'exigence
+\ref{req:desensibilisation}. Il en existe plusieurs car cette exigence
 implique plusieurs fonctions, à la fois sur le contenu transmis et sur le
 comportement du flux, afin d'empêcher l'usage d'un canal auxiliaire de type
 temporel.
@@ -794,14 +748,37 @@ temporel.
 \label{sec:dpi}
 
 \paragraph{}
-Il est souvent demandé, dans le cadre d'un transfert de données entre deux
+Il est habituellement demandé, dans le cadre d'un transfert de données entre deux
 domaines de sécurité, de prévoir un mécanisme garantissant la validité des
-contenus à transmettre auprès d'une politique de sécurité prédéfinie. Il
-s'agit donc d'un filtre dit DPI (Deep Packet Inspection). Un tel moniteur de
-sécurité est plus ou moins complexe selon le besoin.\\
-Étant donné que la passerelle intègre un mécanisme de rupture protocolaire, il
+contenus à transmettre auprès d'une politique de sécurité prédéfinie. On
+parle alors d'un filtre dit DPI (Deep Packet Inspection) \cite{smith2008deflating}\cite{kumar2006algorithms}.
+
+\PhDdefinition{dpi}{Deep Packet Inspection}{
+  On appelle DPI l'ensemble des fonctions en charge de valider un ou plusieurs
+  flux réseau afin de garantir que son contenu, mais également son
+  comportement (profil, débit, émetteur, destination, etc.) sont conformes
+  d'une politique de sécurité.
+}
+
+\paragraph{Problématique générale du DPI}
+Un tel moniteur de
+sécurité est plus ou moins complexe selon le besoin.
+La problématique de cette fonction est la grande difficulté à pouvoir
+déterminer une borne supérieure au traitement DPI. Une fonction DPI
+correspondant à un ensemble de traitements unitaires successifs sur un ou
+plusieurs flux, c'est typiquement une fonction candidate au principe de
+criticité mixte, afin de pouvoir garantir une borne supérieure à l'exécution
+de la fonction DPI sur un paquet réseau donné. A ce jour, les travaux de
+l'état de l'art sur le DPI ne prennent pas en considération la contrainte
+d'exécution bornée. Dans le cadre de ma thèse je n'ai néanmoins pas étudié
+de manière détaillée la fonction DPI, cette dernière étant particulièrement
+complexe est sujet de nombreux travaux qui lui sont dédié encore aujourd'hui.
+
+\paragraph{Fonction DPI et passerelle multi-niveaux de sécurité}
+Étant donné que la passerelle intègre un mécanisme de séparation protocolaire
+(décrit dans la Section \ref{subsec:sep_proto}), il
 n'est pas nécessaire, dans le cadre de ce moniteur, de prendre en
-considération les couches transport et inférieures. Seules la couche
+considération les couches transport et inférieures de la pile TCP/IP. Seule la couche
 applicative est considérée. Selon le type de protocole de niveau application
 utilisé dans le cadre du transfert de données, il peut être nécessaire
 d'attendre la fin de transmission avant de pouvoir valider les données. C'est
@@ -826,11 +803,11 @@ d'ordonnancement qu'il est nécessaire de considérer afin de garantir le bon
 fonctionnement de l'ensemble des filtres.
 
 \paragraph{}
-Il est également nécessaire de considérer un mécanisme permettant de flasher dans le cadre
-d'une préparation de mission la politique de sécurité. Ce mécanisme doit être
-actif que durant le cycle de préparation est débrayé une fois la passerelle en
+Il est également nécessaire de considérer un mécanisme permettant de flasher, dans le cadre
+d'une préparation de mission, la politique de sécurité du filtre. Ce mécanisme
+ne doit être actif que durant le cycle de préparation, et débrayé une fois la passerelle en
 mode de fonctionnement nominal. En général, on s'appuie sur une connexion
-locale (type série pour des raisons de simplicité du protocole) au travers
+locale (e.g. via une interface UART) au travers
 d'un port physique sécurisé une fois placé dans l'enceinte du véhicule.
 Je n'ai pas pris en compte la problématique de gestion du flashage de
 politiques de sécurité, cette dernière ayant déjà des réponses dans le cadre
@@ -841,17 +818,20 @@ cadre de ma thèse car soumis à des exigences de confidentialité fortes).
 \subsection{Compartimentation garantie}
 
 \paragraph{}
-Il a été décrit plus haut l'usage dans la passerelle d'éléments non
+Il a été décrit dans la Section \ref{sec:noncert} l'usage, dans la passerelle, d'éléments non
 certifiables (éléments appartenant à l'ensemble $Unsec$). Pour être compatible
-avec les Exigences MILS et pour pouvoir répondre à l'Exigence \label{req:escape},
+avec les Exigences \hyperlink{REQSECUR001}{REQ\_SECUR\_001} et 
+\hyperlink{REQSECUR005}{REQ\_SECUR\_005},
 il est nécessaire d'assurer que l'ensemble des canaux de communications
 utilisés sont explicitement ceux qui ont été validés dans le cadre de la
 définition de l'architecture. La compartimentation garantie est faite au
 niveau du micro-noyau de sécurité (SSK, Secure Separation Kernel), au travers
 d'un ordonnancement TDM strict avec une séparation spatiale entre chaque
-compartiment logiciel. Le SSK choisi est le micro-noyau PikeOS de la société
+compartiment logiciel. Le SSK que j'ai choisi est le micro-noyau PikeOS de la société
 Sysgo, pour sa compatibilité avec les différentes exigences du MILS, comme
-décrit dans la Section \ref{sec:pikeos}.
+décrit dans la Section \ref{sec:pikeos}. De plus, sa récente certification \cite{pikesil4}
+SIL (Safety Integrity Level - ISO 26262 \cite{iso26262web}) niveau 4 fait de lui un bon candidat pour les
+contraintes véhiculaires.
 
 \section{Problématique d'exploitation des canaux auxiliaires}
 \label{sec:caches}
@@ -859,7 +839,7 @@ décrit dans la Section \ref{sec:pikeos}.
 \subsection{Caches processeurs et canaux cachés}
 
 \paragraph{}
-L'usage de canaux auxiliaires basés sur le temps de réponses des accès mémoire
+L'usage de canaux auxiliaires basés sur le temps de réponse des accès mémoire
 au travers des contrôleurs de caches est aujourd'hui connu et efficace pour la
 transmission de données entre deux compartiments
 \cite{percival2005cache}\cite{bernstein2005cache}. Il existe différentes
@@ -867,7 +847,7 @@ manières de répondre à ce problème. La plus simple consiste à s'appuyer sur
 des c{\oe}urs processeurs différents pour chaque domaine de sécurité, tout en
 débrayant les caches partagés entre les c{\oe}urs. Selon l'architecture
 matérielle, la désactivation des caches partagés est plus ou moins impactante
-sur les performances du logiciel, au point de rentre ce dernier complètement
+sur les performances du logiciel, au point de rendre ce dernier complètement
 inefficace. Dans ce cas, l'usage d'une architecture multi-CPU en lieu est
 place d'un SoC mono-CPU et multi-c{\oe}urs permet d'éviter un partage trop conséquent des
 contrôleurs de caches. Cependant, dans le cadre de ma thèse, l'usage d'une
@@ -876,20 +856,13 @@ Un autre moyen est de positionner temporellement les domaines de sécurité de
 manière à ce qu'à un instant $t$, un et un seul domaine de sécurité s'exécute.
 Lors du changement de domaine, les caches sont alors flushés afin de ne pas
 transmettre d'information. Il est alors nécessaire de prendre en compte
-l'impact du flush de cache sur l'exécution de la solution, du fait du
-ralentissement à chaque redémarrage du compartiment logiciel, comme le montre
-la Figure \ref{fig:cache_reload}.
-
-\begin{figure}
-\label{fig:cache_reload}
-\input{figures/cache_reload_problematic.tex}
-\caption{Impact d'un flush et rechargement de cache sur l'exécution des partitions}
-\end{figure}
-
+l'impact du flush de cache sur l'exécution de la solution.
 J'ai donc proposé un mécanisme permettant de
-supporter le partage de c{\oe}urs processeurs entre domaines de sécurité sans
-permettre les attaques de type analyse de temps de réponse au travers du
-contrôleur de cache.
+supporter le partage de c{\oe}urs processeurs entre domaines de sécurité tout
+en contrecarrant les attaques de type analyse de temps de réponse au travers du
+contrôleur de cache. La proposition cible exclusivement le sans
+permettre cache L1 data. Le cache L1 code et le TLB (Translation Lookaside
+Buffer) ne sont cependant pas pris en compte. 
 
 \subsection{Hypothèses sur le comportement du contrôleur de cache proposé}
 
@@ -897,21 +870,26 @@ contrôleur de cache.
 Dans le cadre de ma thèse, j'ai travaillé sur un mécanisme de partitionnement
 du contrôleur de cache L1 data. Je m'appuie sur les principes généraux des
 caches partitionnés considérés dans le temps réel \cite{coopcachepart}, mais pour des besoins
-sécuritaire. Je considère que le domaine de moindre sécurité est limité à
-un et un seul compartiment, ordonnancé dans un c{\oe}ur processeur où deux domaines sont
-ordonnancés.
+sécuritaire.\\
+Ainsi, la solution que je propose a pour but de partitionner le contrôleur de
+cache en fonction des domaines de sécurité s'exécutant. On considère alors que
+le nombre de partition est égal au nombre de domaines de sécurité, auquel on
+ajoute une partition pour le {\it Secure Separation Kernel}.\\
+Je considère que le domaine de plus faible sécurité est limité à
+un et un seul compartiment, ordonnancé dans un c{\oe}ur processeur où deux
+domaines de sécurité sont ordonnancés.
 Le contrôleur de cache n'ayant pas une mémoire extensible, je considère qu'il
 ne peut être compartimenté qu'en huit slots de cache maximum. Chaque
 slot se comporte de manière autonome avec un nombre de ligne de cache
 configurable, ceci afin d'avoir une plus grande liberté dans la découpe du
 contrôleur de cache. Le principe de partitionnement est décrit plus loin.
 Je considère que la politique de substitution des lignes de caches de chaque
-slot reste identique à l'état de l'art. Je considère dans le cadre de ma thèse
+slot reste identique à l'état de l'art. Le nombre de ligne de cache de
+chacun d'entre eux doit donc être compatible de l'algorithme de substitution
+considéré. Je considère dans le cadre de ma thèse
 un algorithme de type pseudo-LRU de type 4-ways avec des lignes de caches de
 64 ko. Chaque compartiment doit alors pouvoir fournir un nombre
-de lignes de caches multiple de 4. Je considère par hypothèse que la taille
-mémoire allouée à chaque compartiment est compatible avec la politique de
-substitution des lignes de caches qui y est faite.
+de lignes de caches multiple de 4.
 
 \subsection{Formalisme de l'interface de contrôle du contrôleur de cache}
 
@@ -922,7 +900,7 @@ nécessaire de pouvoir configurer le contrôleur de cache afin de
 pouvoir passer d'un domaine de cache à un autre. Cette configuration doit être
 faite par un élément de confiance en charge du changement de domaine de
 sécurité, qui correspond, dans le cadre de l'architecture logicielle que j'ai
-choisie, au micro-noyau. Cela implique de la part de la routine de
+choisie, au {\it Secure Separation Kernel}. Cela implique de la part de la routine de
 configuration du contrôleur certaines propriétés:
 \begin{itemize}
   \item La routine est positionnée dans un espace mémoire non-cachable ou
@@ -950,8 +928,8 @@ partition logicielle
 
 \begin{requirement}
 \label{global_hyp_2}
-L'hyperviseur doit être capable de configurer le contrôleur de cache. La
-configuration du contrôleur de cache. L'activation de cette configuration doit
+L'hyperviseur doit être capable de configurer les slots du contrôleur de cache.
+Cette configuration, qui initie le mode partitionné du cache, doit
 avoir pour conséquence un flush du cache afin de retirer toute ligne de cache
 préexistante.
 \end{requirement}
@@ -959,8 +937,8 @@ préexistante.
 \begin{requirement}
 \label{global_hyp_2}
 L'hyperviseur doit être capable de changer le slot de cache actif. Ce
-changement doit être immédiat et ne doit pas impacter le contenu du slot de
-cache précédemment actif, ni celui venant d'être activé.
+changement doit être rapide et ne doit pas impacter le contenu du slot de
+cache précédemment actif, ni celui sur le point d'être activé.
 \end{requirement}
 
 
@@ -968,7 +946,8 @@ cache précédemment actif, ni celui venant d'être activé.
 \label{global_hyp_3}
 Les évènements externes asynchrones (type interruption matérielle) doivent
 être supportés. La routine de gestion de l'interruption ne doit pas impacter
-la partition de cache en cours d'exécution lors de l'interruption.
+la partition de cache en cours d'exécution lors de l'interruption, mais
+s'exécuter dans la partition de cache dédiée à l'hyperviseur.
 \end{requirement}
 
 \begin{requirement}
@@ -978,14 +957,13 @@ par défaut à l'initialisation du contrôleur sans aucune configuration par le
 logiciel.
 \end{requirement}
 
-\subsection{Description de l'interface de contrôle du partitionnement du
-  contrôleur de cache}
+\subsection{Description de l'interface de contrôle du partitionnement du contrôleur de cache}
 
 \subsection{Principe et automate}
 
-Afin de limiter au maximum la surface de code traitant de la configuration du
+Afin de limiter au maximum le volume de code traitant de la configuration du
 contrôleur de cache, cette dernière a été définie sur une base de quelques
-registres mappés en mémoire. 
+registres spécifiques. 
 
 \begin{figure}[h!]
 \label{fig:arch_design}
@@ -1078,7 +1056,7 @@ J'ai défini un premier registre, que je dénote PCR (\emph{Partition Control
   \end{figure}
 \end{center}
 
-La description des différents champs du registre PCR est décrite dans le
+La description des différents champs du registre PCR est faite dans le
 Tableau \ref{tab:pcr}.
 %%%%%%%%%%%%%%%%%%%%% PCR register table %%%%%%%%%%%%%%%%%%%%%
 \begin{center}
@@ -1107,7 +1085,8 @@ bit H &
 Fige la configuration du contrôleur de cache. Si positionné à 1, plus aucune
 configuration des slots du contrôleur de cache ne peut être effectuée, y
 compris par l'hyperviseur. Seul le retour en mode générique peut être
-effectuée, via la mise à 0 du bit A/B.
+effectuée, via la mise à 0 du bit A/B. Ce retour implique un flush complet des
+lignes de cache.
 \vspace{2mm}
 \end{minipage} &
 RW
@@ -1131,7 +1110,7 @@ HVM &
 Active le support HVM (Hardware Virtual Machine). Le but est de permettre une
 gestion par le mécanisme de gestion de la virtualisation plutôt que par
 l'hyperviseur. Il s'agit d'une prise en compte pour un usage futur, et n'est
-pas considéré particulièrement dans le cadre de ma thèse.
+pas considéré dans le cadre de ma thèse.
 \vspace{2mm}
 \end{minipage} &
 RW
@@ -1140,10 +1119,12 @@ RW
 SBF &
 \begin{minipage}{12cm}
 \vspace{2mm}
-Ce bit (Status Bit Field) est renseigné par le contrôleur de cache une fois le bit A/B. Une
+Ce bit (Status Bit Field) est renseigné par le contrôleur de cache lors du
+passage en mode partitionné. Une
 relecture du registre permet de récupérer la valeur de ce champ. Si SBF vaut
 00, la configuration est valide et le contrôleur est passé en mode partitionné.
-Dans le cas contraire, la configuration est invalide, avec le tableau de
+Dans le cas contraire, le cache est resté en mode générique. Le status de la
+configuration est alors accessible dans ce même registre, avec le tableau de
 correspondance ci-dessous:
 \begin{itemize}
 \item {\texttt{00}}: configuration active
@@ -1152,7 +1133,7 @@ correspondance ci-dessous:
 \item {\texttt{10}}: conflit sur la taille d'un ou plusieurs slots. Le nombre
   de lignes de caches ne permet pas l'usage de l'algorithme Pseudo-LRU 4-ways
   (le nombre de lignes de cache doit être un multiple de 4).
-\item {\texttt{11}}: {\it future use}
+\item {\texttt{11}}: {\it usage futur}
 \end{itemize}
 \vspace{2mm}
 \end{minipage} &
@@ -1167,10 +1148,10 @@ RO
 Le registre PCR permet d'activer et de valider la configuration globale du
 mode partitionné du cache. Néanmoins, il ne spécifie pas la taille des
 différents slots.
-Dans le cadre de ma thèse, je souhaitait pouvoir supporter des tailles de
+Dans le cadre de ma thèse, je souhaite pouvoir supporter des tailles de
 slots configurables. En effet, afin de ne pas sous consommer le cache,
 ou de pouvoir, dans le cadre d'un compartiment logiciel particulier, accroître
-la taille du slot associé pour des raison de performances, j'ai rendu la
+la taille du slot associé pour des raisons de performances, j'ai rendu la
 taille de chaque slot configurable. Néanmoins, il existe des restrictions:
 \begin{itemize}
   \item La taille d'un slot (en nombre de lignes de cache) doit être
@@ -1325,24 +1306,23 @@ slots utilisé dans un cas classique de sécurisation:
 \begin{enumerate}
   \item Un slot {\it hyperviseur}, utilisé par l'hyperviseur et la gestion des
     pieds d'interruption. Si les interruptions sont ensuite remontées au
-    niveau des machines virtuelle, l'hyperviseur change de slot avant de
+    niveau des machines virtuelles, l'hyperviseur change de slot avant de
     donner la main à la machine virtuelle. Cela implique de démarrer le pied
     d'interruption par un changement de slot vers le slot hyperviseur et un
     changement de slot juste avant l'ordonnancement de la machine virtuelle
     pour le traitement de la routine d'interruption associée
   \item Un slot {\it domaine de sécurité bas}, pour la ou les machines
-    virtuelles de niveau de sécurité bas
+    virtuelles de plus bas niveau de sécurité
   \item Un slot {\it domaine de sécurité haut}, pour la ou les machines
-    virtuelles de niveau de sécurité haut
+    virtuelles de plus haut niveau de sécurité
 \end{enumerate}
-Les registres de contrôle du contrôleur de cache sont mappé en mémoire,
-permettant un accès aisé par l'hyperviseur.
-Le changement de slot se fait donc facilement, en utilisant une requête de
-type:\\
-{\tt stw <{\it CSSR adress}> 0x10001}
-Ce segment de code ne doit pas être mis en cache, ce dernier impactant le slot
+Le changement de slot se fait donc facilement via l'écriture dans un seul
+registre. Dans le cadre de l'architecture PowerPC, l'écriture pourrait se
+faire via l'usage de l'instruction {\tt mtspr}, dédiée à l'écriture dans les
+registres de type {\it Special Purpose Registers}.\\
+Le segment de code en charge de cette écriture ne doit pas être mis en cache, ce dernier impactant le slot
 courant. Il doit donc être positionnable dans un segment mémoire non-cachable
-ou placé dans un espace mémoire dédié type scratchpad.
+ou placé dans un espace mémoire dédié type scratchpad.\\
 
 Dans le cas d'usage que je propose, je n'utilise que 3 slots sur les huit
 présents. Il reste néanmoins possible d'utiliser jusqu'à 8 slots dans le contrôleur de
@@ -1350,10 +1330,9 @@ cache, afin de supporter une plus grande séparation, en cas d'usage de plus de
 deux domaines de sécurité ou pour des contraintes temps réel.
 
 \paragraph{}
-Dans le cadre de ma thèse, j'ai proposé une solution de cache partitionné pour
-la sécurité dans le cadre de la gestion du contrôleur de cache L1 data. Dans
-le cadre d'une protection contre les canaux cachés basés sur la mesure de
-temps des accès mémoire, une telle solution devrait être prise en compte pour
-la gestion du cache L1 code et pour la gestion du TLB (Translation Lookaside
-Buffer) de la MMU. A défaut, dans le cadre de ma thèse, je considère que ces
-derniers sont flushés lors du changement de domaine de sécurité.
+Cette proposition a pour but d'éviter le flush de caches en réponse à la
+problématique d'utilisation de canaux auxiliaires basés sur les contrôleurs de
+cache. Néanmoins, pour qu'une telle solution soit efficace, il faudrait
+prévoir un partitionnement pour les caches L1 data, L1 code, mais également
+le TLB. De plus, la problématique des caches L2 et plus globalement des caches
+partagés reste entière.

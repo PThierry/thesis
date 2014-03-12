@@ -11,7 +11,7 @@
 
 \definecolor{LightCyan}{rgb}{0.88,1,1}
 \tablefirsthead{
-  \multicolumn{4}{c}{\large{Matrice de tracabilité}}\\
+  \multicolumn{4}{c}{\large{Matrice de tra{\c{c}}abilité}}\\
   \hline
   \rowcolor{LightCyan}
   {\it{\bf Exigence}} & {\it{\bf  Besoin}} & {\it{\bf  Famille}} & {\it{\bf Conformité}} \\
@@ -33,8 +33,18 @@
 \bottomcaption{Liste des exigences générales induites par la problématique}
 
 
-\chapter{Matrice de conformité de la solution proposée}
+\chapter{Rappel des contraintes et hypothèses générales}
 \label{sec:matrix}
+{\it
+Avant de présenter la solution technique en réponse au besoin initial, je
+formalise tout d'abord l'ensemble des contraintes décrites dans la
+problématique générale sous forme d'exigences numérotées. Pour chacune d'entre elle, je
+précise si la solution que je propose permet d'y répondre. Je définit ensuite
+les hypothèses générales sur le matériel, nécessaires au bon fonctionnement de
+la solution.
+}
+
+\section{Matrice de conformité de la solution proposée}
 
 \paragraph{}
 Dans les chapitres suivants, je décris la solution que je propose pour
@@ -251,4 +261,52 @@ Temps-réel
 \checkmark
 \\
 \end{supertabular}
+
+\section{Définition des hypothèses générales}
+\label{sec:mls_gw_hypothesis}
+
+\subsection{A propos des propriétés du matériel}
+
+\paragraph{}
+La définition d'un système sécurisé implique de prendre en compte l'impact
+sécuritaire du matériel. Dans le cadre de ma thèse, j'ai ciblé principalement
+les propriétés du logiciel, et considère en conséquence des
+hypothèses strictes sur le matériel.\\
+Bien que ces hypothèses soient peu réalistes sur du matériel généraliste (i.e.
+du marché civil), elles doivent être supportées pour assurer les propriétés de
+sécurité, à défaut d'intégrer un design matériel spécifique. Ces
+hypothèses sont les suivantes:
+
+\begin{hypothesis}
+  {\bf conformité} : L'ensemble des éléments matériels sont conformes de leur
+  documentation. Ils assurent le respect des exigences documentaires et ne
+  fournissent aucune propriété non documentée
+\end{hypothesis}
+
+\begin{hypothesis}
+  {\bf compatibilité au temps réel} : Les éléments d'interconnexion (bus,
+  interconnect, etc) sont supposés déterministes. Ces
+  éléments ne sont pas considérés dans le cadre de ma thèse comme impactant.
+\end{hypothesis}
+
+\begin{hypothesis}
+  {\bf sûreté de fonctionnement} : Les éléments matériels sont fiable.
+  Ils ne sont pas source d'erreur et n'impactent pas le logiciel par un
+  quelconque dysfonctionnement.
+\end{hypothesis}
+
+\begin{hypothesis}
+  {\bf sécurité} : Les éléments matériels sont réputés sécurisés.
+  Ils ne génèrent pas de faille de sécurité du fait d'une erreur d'architecture
+  ou de comportement.
+\end{hypothesis}
+
+\paragraph{}
+Bien que ces hypothèses soient considérées valides dans le cadre du matériel
+envisagé dans la solution que je propose, l'usage volontairement non conforme de ce matériel par
+le logiciel doit être considéré pour les problématiques de sécurité. L'usage du
+matériel comme base pour des canaux cachés ou auxiliaires est considéré dans
+le cadre de ma thèse et des solutions sont proposées pour répondre à cette
+problématique.
+
 
