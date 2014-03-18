@@ -82,6 +82,7 @@
 \usepackage{bookmark}
 \usepackage{etoolbox}
 \usepackage{bytefield}
+\usepackage[titles]{tocloft}
 \usepackage{myPhDTitlePage}
 
 % own bib
@@ -291,7 +292,7 @@
 \nocite{thierry2013part}
 \nocite{thierry2013daudit}
 \nocite{thierry2013dctrl}
-\printbibliography[title=Liste des publications,filter=own]
+\printbibliography[title=Liste de mes publications,filter=own]
 
 \input{includes/intro/01_introduction.tex}
 

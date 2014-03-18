@@ -37,11 +37,19 @@
 % add part number for each chapter/section/subsection, etc
 %\renewcommand\cftpartnumwidth{2cm}
 
-\renewcommand{\thepart}{\hspace{-3.5mm}\Roman{part}}
+\renewcommand{\thepart}{\Roman{part}}
 \renewcommand{\thechapter}{\thepart .\arabic{chapter}}
 \renewcommand{\thesection}{\thepart .\arabic{chapter}.\arabic{section}}%
 \renewcommand{\thesubsection}{\thepart .\arabic{chapter}.\arabic{section}.\arabic{subsection}}%
-%\renewcommand{\thesubsubsection}{\thepart .\arabic{chapter}.\arabic{section}.\arabic{subsection}.\arabic{subsubsection}\ }%
+
+% because of this spacing, tables and figures need to be updated
+\setlength{\cftchapnumwidth}{2.5em}
+\setlength{\cftsecnumwidth}{3.3em}
+\setlength{\cftsubsecnumwidth}{4em}
+
+% and for figs & tabs
+\setlength{\cftfignumwidth}{4em}
+\setlength{\cfttabnumwidth}{4em}
 
 % reset chapter count at each part
 \makeatletter

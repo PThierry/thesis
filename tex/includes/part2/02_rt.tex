@@ -25,7 +25,7 @@ réel sur les flux traité par la passerelle, il devient nécessaire de
 considérer la bonne adéquation de la solution de compartimentation avec les
 contraintes d'exécution (WCET, période, deadline) des services de traitement de flux.
 
-\subsection{A propos des exigences temps-réel}
+\subsection{Rappel des exigences temps-réel}
 
 \paragraph{}
 En plus des différentes exigences de sécurité décrite dans le chapitre
@@ -507,8 +507,8 @@ sont abandonnés, et les requêtes futures des taches de criticité inférieure à
 $\ell$ ne sont plus considérées.
 
 \begin{definition}
-Un ensemble de tâche de criticité mixte $\tau$ est MC-ordonnançable si il
-admet au moins une politique d'ordonnancement en ligne correcte.
+Un ensemble de tâche de criticité mixte $\tau$ est dit ordonnançable
+si il admet au moins une politique d'ordonnancement en ligne correcte.
 \end{definition}
 
 La Figure \ref{extendedModel} étend le model traditionnel des états des taches
@@ -649,12 +649,12 @@ revenant à un ensemble de taches traditionnel, les résultats démontrés par
 Liu \cite{Liu2000} sont réutilisable, ce qui prouve notre théorème.
 \end{proof}
 
-\subsection{Déterminaison de la MC-ordonnançabilité}\label{sufficientCondition}
+\subsection{Ordonnançabilité d'un jeu de tâches à criticité mixte\label{sufficientCondition}}
 
 \paragraph{}
 Baruah et al. \cite{bbalmms} ont démontré que le problème de
-MC-ordonnançabilité, appliqué à un ensemble fini de jobs, est ${NP}$-complet.
-Plutôt que de s'appuyer sur les conditions exactes de la MC-ordonnançabilité,
+{MC-scheduling}, appliqué à un ensemble fini de jobs, est ${NP}$-complet.
+Plutôt que de s'appuyer sur les conditions exactes du {\it MC-scheduling},
 on cible une condition \emph{suffisante} qui peut être vérifiée dans un temps
 polynomial.\\
 L'algorithme utilisé pour vérifier cette condition, introduit par Vestal \cite{Vestal2007},
@@ -719,14 +719,14 @@ utilisant l'algorithme \ref{alg:priorityAssignment}.
 
 \begin{theorem}\label{theo:mcschedulability}
 Si un ensemble de taches à criticité mixte $\tau$ est OCBP-ordonnançable sur
-un processeur donné, alors $\tau$ est MC-ordonnançable sur ce même processeur.
+un processeur donné, alors $\tau$ est ordonnançable sur ce même processeur.
 \end{theorem}
 \begin{proof}
 Cette preuve est principalement inspirée par celle présenté par Baruah et al. \cite{baruah_li_stougie}.
 Soit $\tau$ OCBP-ordonnançable, et soit, après renommage des taches, $\tau_1 \vartriangleright
 \tau_2 \vartriangleright ... \vartriangleright \tau_n$ représentant un ordre
 complet des taches de l'ensemble. Soit $\tau_i$ une tache dans cet ordre de
-priorité. Afin de démontrer la MC-ordonnançabilité, on doit pouver que chaque
+priorité. Afin de démontrer l'ordonnançabilité au sens de la criticité mixte, on doit pouver que chaque
 job instancié par la tache $\tau_i$ peut avoir $C_i(\chi_i)$ unités de temps
 d'exécution entre son instanciation et sa deadline dans tout scénarion de
 niveau de criticité $\chi_i$ ou inférieur. Mais dans n'importe lequel de ces
@@ -759,7 +759,8 @@ pas son coût d'exécution pire cas de niveau de criticité 2. Pour finir, à la
 tache $\tau_3$ peut être assignée la plus haute priorité car son temps de
 rémonse ne dépasse pas $7 < D_3$ unités de temps. $\tau$ étant
 OCBP-ordonnançable, on peut alors dire, selon le théorème
-\ref{theo:mcschedulability}, que $\tau$ est également MC-ordonnançable.
+\ref{theo:mcschedulability}, que $\tau$ est également ordonnançable au sens de
+la criticité mixte.
 \end{exmpl}
 
 \paragraph{}
@@ -910,7 +911,7 @@ i.e. chaque tache de criticité au moins égale à $\ell+1$ possède une marge de
 tolérance de niveau $\ell$ identique.
 
 \begin{proposition}
-Soit $\tau$ un ensemble de taches à criticité mixte MC-ordonnançable. Il en
+Soit $\tau$ un ensemble de taches à criticité mixte ordonnançable. Il en
 découle que pour chaque niveau de criticité $\ell$, la condition suivante est
 satisfaite:
 	\begin{equation}
@@ -987,14 +988,14 @@ stratégie EDF (Earliest Deadline First) n'est pas optimale pour les ensembles
 de taches à criticité mixte.
 
 \begin{proposition}
-Tout ensemble de taches à criticité mixte $\tau$ qui est MC-ordonnançable
+Tout ensemble de taches à criticité mixte $\tau$ qui est ordonnançable
 n'admet pas nécessairement EDF comme une politique d'ordonnancement en ligne
 correcte. En d'autres termes, EDF n'est pas optimal pour les ensembles de
 taches à criticité mixte.
 \end{proposition}
 \begin{proof}
 Soit $\tau$ un ensemble de taches à criticité mixte qui a été prouvé comme
-MC-ordonnançable dans l'exemple \ref{ex:mcTaskSet2}. La Figure
+ordonnançable dans l'exemple \ref{ex:mcTaskSet2}. La Figure
 \ref{fig:edfNotOptimal} montre que la criticité du scénario n'est pas accrue
 suffisamment pour garantir les contraintes temporelles de la tache $\tau_3$
 quand toutes les taches s'exécute avec leur coût d'exécution pire cas de leur
@@ -1339,7 +1340,7 @@ en attente d'ordonnancement à l'instant $t$.
 
 \begin{theorem}\label{theo:decreaseCriticality}
 Soit $\tau$ un ensemble de tache périodique à criticité mixte
-MC-ordonnançable. Dès que un instant d'inactivité de niveau $\ell$ se produit
+ordonnançable. Dès que un instant d'inactivité de niveau $\ell$ se produit
 dans l'ordonnancement de $\tau$, le niveau de criticité du scénario peut être
 réinitialisé à sa valeur la plus basse.
 \end{theorem}
@@ -1360,7 +1361,7 @@ t_{\text{idle}}$). On distingue deux cas:
  \begin{enumerate}
 	\item $t_i$ est l'instant critique pour $\tau_i$: il en suit que le
           temps de rmonse de $J_i$ sera le plus grand parmis tous les jobs
-          instancié par $\tau_i$. Mais comme $\tau$ est MC-ordonnançable, nous
+          instancié par $\tau_i$. Mais comme $\tau$ est ordonnançable, nous
           savons que $J_i$ respecte malgré tout sa deadline si il s'exécute
           jusqu'à $C_i(\chi_i)$ unité de temps et que aucune des autres taches $\tau_j$
           n'instancie de job qui s'exécute pour plus de $C_j(\chi_i)$ unités
