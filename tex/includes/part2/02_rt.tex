@@ -23,7 +23,7 @@ compartiment.\\
 Lorsqu'il est nécessaire d'intégrer dans le même temps des exigences temps
 réel sur les flux traité par la passerelle, il devient nécessaire de
 considérer la bonne adéquation de la solution de compartimentation avec les
-contraintes d'exécution (WCET, période, deadline) des services de traitement de flux.
+contraintes d'exécution (WCET, période, échance) des services de traitement de flux.
 
 \subsection{Rappel des exigences temps réel}
 
@@ -113,7 +113,7 @@ Multiplexing) stricte.
         Considering $n$ tâches, on définit:\\
         $\tau_{i}$ l'ensemble de tâches du compartiment $C_{i}$, $\tau_{i} = \{ \tau_i^{1},
             \ldots, \tau_i^{n} \}$\\
-            $d_{j}$ la deadline de la tâche $\tau_{i}^{j}$ de $C_{i}$\\
+            $d_{j}$ l'échéance de la tâche $\tau_{i}^{j}$ de $C_{i}$\\
             $c_{j}$ le WCET de la tâche $\tau_{i}^{j}$ de $C_{i}$\\
             $t_j$ la période de la tâche $\tau_{i}^{j}$ de $C_{i}$\\
             \vspace{10.5mm}
@@ -204,7 +204,7 @@ temporelle entre différents slots.\\
 Il est également nécessaire de considérer une contrainte locale. L'Equation
 \ref{eqn:deadline_vs_ST} est une condition nécessaire pour garantir que les
 tâches des compartiments exécutés dans le cadre de slots temporels ont
-toujours une deadline supérieure à la période d'inactivité associées à ce
+toujours une échéance supérieure à la période d'inactivité associées à ce
 compartiment. On s'appuie, dans le cadre d'une hiérarchie d'ordonnancement de
 type TDM/EDF, sur l'Equation \ref{eqn:edf_sched}, qui est une condition
 nécessaire et suffisante de faisabilité dans le cadre de l'ordonnancement EDF.
@@ -229,8 +229,8 @@ Le scénario pire cas étant déterminé, il reste ensuite à définir la condition
 de faisabilié d'un ensemble de tâche ordonnancé par une politique de type EDF
 dans le slot $i$ dans le cadre de ce scénario.\\
 Toutes les tâches relâchées dans l'intervalle de temps $[0, t]$ avec une
-deadline absolue inférieure ou égale à $t$ sont ordonnançables et respectent
-leur deadlines si et seulement si elles sont exécutées durant au pire $t -
+échéance absolue inférieure ou égale à $t$ sont ordonnançables et respectent
+leur échéances si et seulement si elles sont exécutées durant au pire $t -
 k(ST_i - SC_i)$ unités de temps. Cela se traduit en:\\
 Pour tout entier $k$ avec $k \geq 1$, pour tout $t$ dans l'intervalle $[k ST_i
 - SC_i, k ST_i]$, la fonction de demande processeur au temps $t$t, $h(t)$ est
@@ -251,7 +251,7 @@ micro-noyau. Ces derniers sont ordonnancés avec les contraintes du TDM, mais
 peuvent donc être considérés comme des taches temps réel. Leur simplicité et
 leur faible volumétrie de code permet de déterminer leur coût d'exécution pire
 cas. Chaque thread étant autonome dans son propre slot TDM, la période
-correspond alors à la période de récurrence de ce slot et la deadline
+correspond alors à la période de récurrence de ce slot et l'échéance
 correspond à la durée de ce dernier. Cette durée est déterminée directement
 par le coût d'exécution de la fonction.
 
@@ -422,7 +422,7 @@ $\tau_i = \{R_i, T_i, D_i, \chi_i, C_i\}$ où:
 	\item[$\bullet$] $R_i \in \mathbb{N}$ est la charge associée au
           premier job de la tâche $\tau_i$;
 	\item[$\bullet$] $T_i \in \mathbb{N}^*$ est la période de la tâche $\tau_i$;
-	\item[$\bullet$] $D_i \in \mathbb{N}^*$ est la deadline de la tâche $\tau_i$, $D_i \leq T_i$;
+	\item[$\bullet$] $D_i \in \mathbb{N}^*$ est l'échéance de la tâche $\tau_i$, $D_i \leq T_i$;
 	\item[$\bullet$] $\chi_i \in \mathbb{N}$ est le niveau de criticité
           maximum de la tâche $\tau_i$,
           $\chi_i \leq \mathnormal{L}$;
@@ -446,7 +446,7 @@ est caractérisé par un 5-uplet $\{r_k^i, d_k^i, \mathcal{X}_k^i, C_k^i,
           instancié.
           Étant donné que l'on considère un ensemble de tâches sporadique, on
           a $r_k^i \geq r_{k-1}^i + T_i$, et $r_1^i = R_i$;
-	\item[$\bullet$] $d_k^i \in \mathbb{N}^*$ est la deadline absolue de
+	\item[$\bullet$] $d_k^i \in \mathbb{N}^*$ est l'échéance absolue de
           $J_k^i$. Plus précisément: $d_k^i = r_k^i + D_i$;
 	\item[$\bullet$] $\mathcal{X}_k^i \in \mathbb{N}$ est la criticité de
           $J_k^i$, héritée de la tâche $\tau_i$: $\mathcal{X}_k^i = \mathcal{X}_i$;
@@ -486,7 +486,8 @@ niveau de criticité propre ($c_j^i > C_i(\chi_i)$).
 \begin{definition}
 Un ordonnancement pour un scénario $s^t$ de niveau de criticité $\ell$ est
 faisable si tous les jobs $J_j^i \in s_i^t$, $\forall i$, avec $\chi_i \geq \ell$,
-termine sont temps d'exécution $c_j^i$ entre son instanciation et sa deadline.
+termine sont temps d'exécution $c_j^i$ entre son instanciation et son
+échéance.
 \end{definition}
 Cette définition implique que l'ordonnancement à criticité mixte n'a pour but
 que de garantir les contraintes temporelles des tâches dont le niveau de
@@ -673,7 +674,7 @@ priorité 1 la plus élevée).
 		\item à toutes les autres taches de $\tau$ peut être assignée
                   n'importe quelle priorité, du moment que cette priorité est
                   supérieure à celle assignée à $\tau_i$;
-		\item tout job instancié par $\tau_i$ respecte sa deadline
+		\item tout job instancié par $\tau_i$ respecte son échéance
                   lorsqu'il est exécuté pour au plus $C_i(\chi_i)$ unité de
                   temps et toutes les autres taches $\tau_j \in \tau$
                   instancient des jobs qui s'exécutent pour au plus
@@ -706,7 +707,7 @@ l'algorithme \ref{alg:priorityAssignment}.
 Si un tel ordre de priorité existe, i.e. si une tache viable à la priorité la
 plus basse est trouvé à chaque étape (de l'ensemble restant de taches de
 priorité non assignée), alors chaque tache $\tau_i$ est garantie de respecter
-sa deadline si elle s'exécute pour au plus $C_i(\chi_i)$ unités de temps et
+son échéance si elle s'exécute pour au plus $C_i(\chi_i)$ unités de temps et
 qu'aucune tache $\tau_j$ de priorité supérieure à $\tau_i$ s'exécute pendant
 plus de $C_j(\chi_i)$ unité de temps.
 
@@ -728,7 +729,7 @@ Soit $\tau$ OCBP-ordonnançable, et soit, après renommage des taches, $\tau_1 \va
 complet des taches de l'ensemble. Soit $\tau_i$ une tache dans cet ordre de
 priorité. Afin de démontrer l'ordonnançabilité au sens de la criticité mixte, on doit pouver que chaque
 job instancié par la tache $\tau_i$ peut avoir $C_i(\chi_i)$ unités de temps
-d'exécution entre son instanciation et sa deadline dans tout scénarion de
+d'exécution entre son instanciation et son échéance dans tout scénarion de
 niveau de criticité $\chi_i$ ou inférieur. Mais dans n'importe lequel de ces
 scénarios, chaque job instancié par la tache $\tau_j$ s'exécute pendant pas
 plus de $C_j(\chi_i)$ unités de temps. L'OCBP-ordonnançabilité de $\tau$ avec
@@ -737,7 +738,7 @@ un ordre de priorité $\tau_1 \vartriangleright \tau_2 \vartriangleright ...
 $\tau_i$ aura $C_i(\chi_i)$ unités de temps d'exécution si aucun job instancié par une tache 
  $\tau_j \in \{\tau_1, \tau_2, ..., \tau_{i-1}\}$ s'exécute plus de
  $C_j(\chi_i)$ unités de temps. En conséquence, $\tau_i$ respecte
- effectivement sa deadline dans tout scénario de criticité $chi_i$ ou
+ effectivement son échéance dans tout scénario de criticité $chi_i$ ou
  inférieure.
 \end{proof}
 
@@ -801,7 +802,7 @@ $\tau_j$ avec $\chi_j < \ell$ qui ont une priorité supérieure à $\tau_i$.
 Soit $\tau_i \in \tau$ une tache qui atteint sont coût d'exécution pire cas de
 niveau de criticité $\ell$. $\tau$ étant OCBP-ordonnançable, chaque job
 instancié par $\tau_i$ peut s'exécuter jusqu'à $C_i(\chi_i)$ unités de temps
-et respecter sa deadline si aucune tache de priorité supérieure
+et respecter son échéance si aucune tache de priorité supérieure
 $\tau_j$ s'exécute plus que $C_j(\chi_i)$. Soit $\tau_p$ une tache de priorité
 supérieure, dont le niveau de criticité $chi_p$ est inférieur à $\chi_i$.
 Etant donné que $\chi_i > \chi_p$,  $C_p(\chi_i) = C_p(\chi_p)$, et
@@ -816,7 +817,7 @@ Le Lemme \ref{lem1} évite la désactivation des taches de plus basse criticité
 pour lesquelles les conditions sont encore suffisantes pour permettre la
 terminaison de leur exécution. Nous pourrions néanmoins aller encore plus
 loin et et autoriser des taches de criticité inférieure tant que les jobs que
-ces dernières instancient sont aptes à respecter leur deadline. Cela revient à
+ces dernières instancient sont aptes à respecter leur échéance. Cela revient à
 déterminer combien de temps les taches $\tau_i$ de criticité d'au moins
 $\ell+1$ peuvent reporter la suspension de taches de niveau de criticité
 inférieur en cas de dépassement d'exécution de niveau $\ell$. On appelle cette
@@ -824,7 +825,7 @@ durée la \emph{marge de tolérance de niveau $\ell$} de la tache $\tau_i$,
 dénotée $A_i(\ell)$ En se basant sur cette marge de tolérance, on peut
 déterminer le dernier instant au delà duquel la criticité doit être augmentée
 et les taches de criticité inférieure ne peuvent plus être assurées d'être
-exécutées à temps pour respecter leur deadline.
+exécutées à temps pour respecter leur échéance.
 
 %%%%%%%%%% Allowance %%%%%%%%%%
 \subsection{Marge de tolérance}\label{sec:allowance}
@@ -961,7 +962,7 @@ temps de réponse pire cas des taches avec la marge de tolérance intégrée.
   niveau de criticité $\ell$ modifié pour prendre en compte la consommation de
   la marge de tolérance de niveau $\ell$ d'au plus $k$ taches. On veut
   s'assurer que les taches de criticité inférieure puissent continuer à
-  respecter leur deadline en cas de dépassement d'exécution d'au plus $k$
+  respecter leur échéance en cas de dépassement d'exécution d'au plus $k$
   taches de criticité supérieure pour une durée limitée par la marge de
   tolérance, ce qui nous mène à l'équation \ref{equ:cond2}. Cette équation
   représente le temps de réponse pire cas d'une tache $\tau_j \in lp(i,l)$ lorsqu'elle
@@ -1362,16 +1363,16 @@ t_{\text{idle}}$). On distingue deux cas:
 	\item $t_i$ est l'instant critique pour $\tau_i$: il en suit que le
           temps de rmonse de $J_i$ sera le plus grand parmis tous les jobs
           instancié par $\tau_i$. Mais comme $\tau$ est ordonnançable, nous
-          savons que $J_i$ respecte malgré tout sa deadline si il s'exécute
+          savons que $J_i$ respecte malgré tout son échéance si il s'exécute
           jusqu'à $C_i(\chi_i)$ unité de temps et que aucune des autres taches $\tau_j$
           n'instancie de job qui s'exécute pour plus de $C_j(\chi_i)$ unités
           de temps.
 	\item $t_i$ n'est pas un instant critique pour $\tau_i$: dans ce cas,
           nous savons que le temps de réponse de $J_i$ sera inférieur ou égal
           au cooût d'exécution pire cas de la tache $\tau_i$. Mais nous avons
-          prouvé que $J_i$ peut respecter sa deadline si il avait été
+          prouvé que $J_i$ peut respecter son échéance si il avait été
           instancié à un instant critique pour la tache. Il en suit que $J_i$
-          reespectera également sa deadline dans un instant non-critique.
+          reespectera également son échéance dans un instant non-critique.
 \end{enumerate}
 \end{proof}
 
@@ -1389,10 +1390,10 @@ d'inactivité de niveau 3 se présente, donc le niveau de criticité peut alors
 l'instant $t = 7$, mais il est préempté par la tache $\tau_3$ à l'instant $t =
 8$. Etant donné que $\tau_3$ a complété son exécution, après 3 unités de temps, le
 niveau de criticité du scénario atteint la valeur 2, et la tache $\tau_1$ doit
-être désactivée. Cependant, $\tau_2$ est encore apte à respecter sa deadline.
+être désactivée. Cependant, $\tau_2$ est encore apte à respecter son échéance.
 A l'instant $t = 13$, un instant d'inactivité de niveau 2 se présente, et le
 niveau de criticité est réinitialisé à nouveau. Cela permet à toutes les
-taches d'instancier un job de nouveau apte à respecter sa deadline.
+taches d'instancier un job de nouveau apte à respecter son échéance.
 \begin{figure}[h!]
 	\begin{center}
 		\includegraphics[scale=0.5]{./figures/decreaseCriticality.png}
