@@ -31,6 +31,23 @@
 \minitoc
 }{}}
 
+%
+% about part, chapter and counters
+%
+% add part number for each chapter/section/subsection, etc
+%\renewcommand\cftpartnumwidth{2cm}
+
+\renewcommand{\thepart}{\hspace{-3.5mm}\Roman{part}}
+\renewcommand{\thechapter}{\thepart .\arabic{chapter}}
+\renewcommand{\thesection}{\thepart .\arabic{chapter}.\arabic{section}}%
+\renewcommand{\thesubsection}{\thepart .\arabic{chapter}.\arabic{section}.\arabic{subsection}}%
+%\renewcommand{\thesubsubsection}{\thepart .\arabic{chapter}.\arabic{section}.\arabic{subsection}.\arabic{subsubsection}\ }%
+
+% reset chapter count at each part
+\makeatletter
+\@addtoreset{chapter}{part}
+\makeatother
+
 % Defining a visible FIXME mark in doc
 \definecolor{darkRed}{rgb}{0.8,0,0}
 \newcommand{\FIXME}{\colorbox{GreenYellow}{\color{darkRed}{FIXME}}}

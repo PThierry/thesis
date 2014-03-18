@@ -10,13 +10,68 @@
 %%
 
 
-\chapter{Problématique générale}
+\part{Problématique générale et concepts clefs}
+
+
+\chapter{Contexte et Problématique générale}
 \doMinitoc
 \label{sec:problematique}
+%%%%%
 
-\section{Concepts généraux}
+\section{Problématique des systèmes véhiculaires militaires}
 
-\subsection{Concepts d'architecture}
+\paragraph{}
+Le client demande aujourd'hui de permettre d'interconnecter les divers réseaux
+embarqués dans un véhicules. Dans le cadre des véhicules militaires, ces
+réseaux peuvent porter des contraintes de temps réel, de fiabilité mais
+également de sécurité.\\
+La contrainte sécuritaire est présente dans les véhicules militaires, mais également dans
+d'autres domaines comme le médical (accès aux données médicales du patient dans le
+véhicule) ou la police (accès au différentes bases de données). Dans le même
+temps, les exigences de temps-réel et de fiabilité restent fortement présentes
+dans le cadre des véhicules militaires. Ainsi la fiabilité de la gestion du système
+d'arme, en charge de débrayer les mécanismes d'attaque lors de l'ouverture d'une
+des portes du véhicule, est critique, afin d'éviter tout accident. De la même
+manière, les contraintes de temps-réel sont fortement présentes dans le cas du
+système de gestion du blindage transparent, en charge de remonter l'ensemble des
+flux des caméras extérieures au conducteur, dans un véhicule sans fenêtre.\\
+
+Jusqu'à présent, les domaines à fortes contraintes de temps-réel, de
+fiabilité et de sécurité restaient physiquement séparés. De nos jours, avec l'accroissement de la complexité des
+éléments déployés dans les véhicules, il est fortement demandé par les différents clients étatiques de fusionner
+ces domaines sur un même matériel, à la seule exception des éléments à forte
+contrainte de fiabilité, afin de limiter le poids, le volume et la
+consommation des différents éléments technologiques présents.\\
+
+De plus, il est également demandé de permettre une
+meilleure centralisation de la supervision des différents composants, que ces
+derniers fassent partie d'un domaine à forte contrainte de temps-réel, de
+fiabilité ou d'un domaine à forte contrainte sécuritaire.
+
+Ainsi, il devient nécessaire de définir une passerelle permettant d'interagir à la fois avec des
+domaines à fortes contraintes temps-réel, des domaines à fortes contraintes de
+fiabilité et plusieurs domaines de sécurité. Cette passerelle doit alors
+assurer à la fois :
+\begin{itemize}
+  \item un cloisonnement strict des domaines de sécurité disjoints
+  \item le transfert de données du domaine temps-réel tout en assurant une
+    latence de traversée maximum garantie
+  \item le transfert de données de supervision du domaine à fortes contraintes de
+    fiabilité sans pour autant impacter ces éléments
+\end{itemize}
+
+Afin de présenter plus précisément les enjeux et limitations associés à
+l'intégration d'une passerelle pour interconnecter les différents réseaux
+embarqués dans le véhicule, il est nécessaire de définir tout d'abord un
+certain nombre de concepts. Ceux-ci sont décrits dans les Sections
+\ref{sec:concepts_gen} et \ref{sec:concepts_veh}. La description précise
+des enjeux, ainsi que les premiers éléments de solutions, sont décrit dans
+la Section \ref{sec:fin_problematique}.
+
+\section{Notions et définitions générales}
+\label{sec:concepts_gen}
+
+\subsection*{Notions d'architecture}
 
 \paragraph{}
 Dans le cadre des architectures véhiculaires, il existe un grand nombre de
@@ -37,7 +92,7 @@ Dans un véhicule militaire, on retrouve un système de systèmes, en charge de
 gérer, entre autres:
 \begin{itemize}
 \item Le système d'armes, en charge de gérer l'armement et le blindage
-\item Le système de bord (appellé aussi réseau de bord du fait de son très
+\item Le système de bord (appelé aussi réseau de bord du fait de son très
 grand nombre de liens d'interconnexion), en charge de gérer les composants moteur
 \item Le système de communication, en charge de gérer les communications entre
 le véhicule et l'extérieur (autres véhicules, le quartier général, etc.)
@@ -61,10 +116,10 @@ de facteurs de formes industriels, comme le microTCA \cite{walrod2008open}.
 Dans le cadre de ma thèse, je cible les problématiques d'interconnexions
 internes aux systèmes Systroniques.
 
-\subsection{Concepts de sécurité}
+\subsection*{Notions et terminologies de sécurité}
 \label{subsec:secu}
 
-\subsubsection{Principes généraux de la sécurité}
+\subsubsection*{Principes généraux de la sécurité}
 
 \paragraph{}
 Un système d'information est dit sécurisé lorsqu'il respecte, pour les données
@@ -134,7 +189,7 @@ place de fonctions de sécurité (comme par exemple un pare-feu) permet de
 réduire la surface d'attaque.
 }
 
-\subsection{Concepts liés à la fiabilité et au temps-réel}
+\subsection*{Notions liées à la fiabilité et au temps-réel}
 
 \paragraph{}
 Les systèmes véhiculaires militaires intègrent des fonctions impactant la vie
@@ -205,7 +260,8 @@ sur des algorithmes d'ordonnancement. Ceux-ci sont en charge d'assurer un
 ordonnancement de l'exécution des travaux respectueux de l'ensemble de leurs
 échéances.
 
-\section{Concepts véhiculaires}
+\section{Notions et terminologies véhiculaires}
+\label{sec:concepts_veh}
 
 \subsection{Généralités sur les réseaux véhiculaires}
 
@@ -249,7 +305,7 @@ mission, de communications phoniques ou visiophoniques, de la réception ou
 de l'émission de positions GPS. Le véhicule possède donc un véritable système
 Systronique.
 
-\subsection{A propos des systèmes systroniques}
+\subsection{Les systèmes systroniques}
 
 \paragraph{}
 Avec l'intégration de plus en plus forte des réseaux IP dans les systèmes
@@ -346,6 +402,7 @@ sécurité et de sûreté de fonctionnement, mais aussi les exigences physiques qui
 découlent de l'environnement véhiculaire.
 
 \section{Enjeux et limitations de l'existant}
+\label{sec:fin_problematique}
 
 \subsection{Les enjeux des systèmes systroniques}
 
@@ -399,7 +456,7 @@ alors au logiciel d'assurer cette séparation. Il lui revient également de fourni
 des mécanismes d'interconnexion respectueux de l'ensemble des exigences de
 sécurité et de sûreté.
 
-\subsection{A propos des limitations de l'existant}
+\subsection{Limitations de l'existant}
 
 \paragraph{}
 Aujourd'hui, les systèmes systroniques maintiennent trois réseaux complètement
@@ -471,7 +528,7 @@ Les solutions de cryptographie ne s'intègrent pas toujours aisément:
     besoin, tant dans le véhiculaire que dans l'avionique.
 \end{itemize}
 
-\section{Synthèse}
+\section{Synthèse et éléments de solution}
 
 \paragraph{}
 On constate qu'il devient aujourd'hui difficile d'échapper au besoin d'un
@@ -502,16 +559,15 @@ financières, le coût des véhicules devant être maîtrisé.
 L'ensemble des exigences décrites dans ce chapitre sont synthétisées sous
 forme d'une matrice d'exigences dans le Chapitre \ref{sec:matrix}. C'est au
 travers le la conformité à chacune des exigences de cette matrice qu'est
-décrite la solution que je propose.
-
-\section{Éléments de solution}
+décrite ma solution.
 
 \paragraph{}
 Dans le cadre de ma thèse, je propose une solution logicielle pour répondre à
 la problématique d'interconnexion des réseaux véhiculaires dans le cadre d'un
 système Systronique. Le besoin de modularité est pris en compte afin de
 rendre la solution configurable pour répondre aux différents besoins
-d'interconnexion de réseaux, et plusieurs contraintes de sécurité et de sûreté sont considérées afin de répondre à plusieurs exigences précises:
+d'interconnexion de réseaux, et plusieurs contraintes de sécurité et de sûreté
+sont considérées afin de répondre à plusieurs exigences précises:
 \begin{itemize}
 \item Garantie de transfert de données à sens unique
 \item Filtrage des données selon une politique de sécurité
