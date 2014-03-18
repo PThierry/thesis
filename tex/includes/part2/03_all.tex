@@ -181,7 +181,8 @@ L'interconnexion doit être garantie en terme de bande passante afin de pouvoir
 répondre aux besoins du domaine de sureté le plus faible. C'est un besoin
 important dans le traitement de flux vidéo ou voix émis à partir d'un domaine
 de sureté élevé. Dans ces deux cas, un débit et une latence garantis sont
-nécessaires, comme définit dans l'exigence \ref{req:debit}. C'est également le
+nécessaires, comme définit dans l'exigence
+\hyperlink{REQTEMPS001}{REQ\_TEMPS\_001}. C'est également le
 cas de certains flux d'alerte, comme la remonté d'alarme des différentes
 sondes moteur.\\
 Néanmoins, les données transmises peuvent avoir à être filtrées afin d'éviter
@@ -420,7 +421,7 @@ d'assurer un débit (en nombre de trame) fixe, avec une période inter-trames
   \item En cas d'émission vers un domaine de sûreté élevé, ce conteneur
     empêche tout flooding d'interface, en limitant le débit à une valeur
     maîtrisée. Ce comportement permet à la passerelle d'être compatible de
-    l'Exigence \ref{req:multi_crit}.
+    l'Exigence \hyperlink{REQTEMPS002}{REQ\_TEMPS\_002}.
   \item Afin d'éviter tout canal caché basé sur la période inter-trame, cette
     dernière est remaniée à une valeur fixe. Ainsi, l'utilisation d'une
     variation de période inter-trame par l'émetteur afin d'envoyer de la
