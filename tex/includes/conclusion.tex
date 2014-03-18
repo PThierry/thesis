@@ -50,15 +50,15 @@ d'architecture doit être suffisamment modulaire pour être déclinable en
 fonctions des domaines à interconnecter, afin de réduire le coût induit par le
 déploiement de plusieurs profils de passerelle dans un même véhicule.
 Une telle solution d'architecture doit alors être compatible de l'ensemble des
-exigences de sécurité et de temps-réel, même si ces dernières ne sont pas
+exigences de sécurité et de temps réel, même si ces dernières ne sont pas
 forcément présentes dans leur intégralité dans chacun des profils demandés.
 
 \paragraph{}
 Dans le cadre de ma thèse, j'ai décrit comment prendre en compte des
 contraintes de sécurité et de performances dans le cadre d'un traitement de
-flux à contraintes temps-réel. Pour cela, je me suis appuyer sur une
+flux à contraintes temps réel. Pour cela, je me suis appuyer sur une
 architecture de type MultiLevel Security, basée sur un micro-noyau considéré
-de confiance, compatibles des exigences temps-réel.
+de confiance, compatibles des exigences temps réel.
 
 \paragraph{}
 Les contraintes de sécurité que j'ai pris en compte dans le cadre de ma thèse
@@ -68,7 +68,7 @@ de compléter la solution pour intégrer le support des exigences associées.
 Aux différentes contraintes de sécurité sont associés des
 {\it modules} logiciels certifiables, visant à implémenter une fonction de
 sécuritée donnée. Je dénote ces modules {\it moniteurs de sécurité}. Ces moniteurs
-sont autonomes et compatibles de l'ensemble des contraintes de temps-réel. La
+sont autonomes et compatibles de l'ensemble des contraintes de temps réel. La
 sécurité de l'ensemble de la solution se construit au travers du chaînage de
 ces différents modules, en fonction des exigences de sécurité requises. 
 Je les associe, selon le besoin, à des machines virtuelles hébergeant un
@@ -81,7 +81,7 @@ La solution complète correspond donc à un chaînage plus ou moins riche de
 compartiments strictement séparés temporellement et spatialement. Une telle
 architecture s'apparente, dans sa construction, à un système à ordonnancement
 hierarchique.
-La validation des contraintes de temps-réel se fait alors sur la validation de
+La validation des contraintes de temps réel se fait alors sur la validation de
 l'ordonnançabilité de la solution complète. Afin de formaliser une telle
 validation, j'ai définit dans un premier temps un ensemble d'équation
 permettant de valider l'ordonnançabilité de la solution sur une architecture

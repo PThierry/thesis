@@ -28,15 +28,15 @@ réseaux peuvent porter des contraintes de temps réel, de fiabilité mais
 La contrainte sécuritaire est présente dans les véhicules militaires, mais également dans
 d'autres domaines comme le médical (accès aux données médicales du patient dans le
 véhicule) ou la police (accès au différentes bases de données). Dans le même
-temps, les exigences de temps-réel et de fiabilité restent fortement présentes
+temps, les exigences de temps réel et de fiabilité restent fortement présentes
 dans le cadre des véhicules militaires. Ainsi la fiabilité de la gestion du système
 d'arme, en charge de débrayer les mécanismes d'attaque lors de l'ouverture d'une
 des portes du véhicule, est critique, afin d'éviter tout accident. De la même
-manière, les contraintes de temps-réel sont fortement présentes dans le cas du
+manière, les contraintes de temps réel sont fortement présentes dans le cas du
 système de gestion du blindage transparent, en charge de remonter l'ensemble des
 flux des caméras extérieures au conducteur, dans un véhicule sans fenêtre.\\
 
-Jusqu'à présent, les domaines à fortes contraintes de temps-réel, de
+Jusqu'à présent, les domaines à fortes contraintes de temps réel, de
 fiabilité et de sécurité restaient physiquement séparés. De nos jours, avec l'accroissement de la complexité des
 éléments déployés dans les véhicules, il est fortement demandé par les différents clients étatiques de fusionner
 ces domaines sur un même matériel, à la seule exception des éléments à forte
@@ -45,16 +45,16 @@ consommation des différents éléments technologiques présents.\\
 
 De plus, il est également demandé de permettre une
 meilleure centralisation de la supervision des différents composants, que ces
-derniers fassent partie d'un domaine à forte contrainte de temps-réel, de
+derniers fassent partie d'un domaine à forte contrainte de temps réel, de
 fiabilité ou d'un domaine à forte contrainte sécuritaire.
 
 Ainsi, il devient nécessaire de définir une passerelle permettant d'interagir à la fois avec des
-domaines à fortes contraintes temps-réel, des domaines à fortes contraintes de
+domaines à fortes contraintes temps réel, des domaines à fortes contraintes de
 fiabilité et plusieurs domaines de sécurité. Cette passerelle doit alors
 assurer à la fois :
 \begin{itemize}
   \item un cloisonnement strict des domaines de sécurité disjoints
-  \item le transfert de données du domaine temps-réel tout en assurant une
+  \item le transfert de données du domaine temps réel tout en assurant une
     latence de traversée maximum garantie
   \item le transfert de données de supervision du domaine à fortes contraintes de
     fiabilité sans pour autant impacter ces éléments
@@ -98,7 +98,7 @@ grand nombre de liens d'interconnexion), en charge de gérer les composants moteu
 le véhicule et l'extérieur (autres véhicules, le quartier général, etc.)
 \end{itemize}
 
-\PhDdefinition{syssystro}{Système Systronique}{
+\PhDdefinition{syssystro}{Système systronique}{
 Lorsqu'un système de systèmes est construit pour être intégré à un véhicule, et
 est en charge d'associer des systèmes véhiculaires (réseau de bord) à des
 systèmes de communications complexes, on parle alors de système systronique.
@@ -114,7 +114,7 @@ de facteurs de formes industriels, comme le microTCA \cite{walrod2008open}.
 }
 
 Dans le cadre de ma thèse, je cible les problématiques d'interconnexions
-internes aux systèmes Systroniques.
+internes aux systèmes systroniques.
 
 \subsection*{Notions et terminologies de sécurité}
 \label{subsec:secu}
@@ -189,17 +189,17 @@ place de fonctions de sécurité (comme par exemple un pare-feu) permet de
 réduire la surface d'attaque.
 }
 
-\subsection*{Notions liées à la fiabilité et au temps-réel}
+\subsection*{Notions liées à la fiabilité et au temps réel}
 
 \paragraph{}
 Les systèmes véhiculaires militaires intègrent des fonctions impactant la vie
 des passagers. En conséquence, ils possèdent des contraintes de fiabilité
-et des contraintes de temps-réel.\\
+et des contraintes de temps réel.\\
 La fiabilité définit la capacité d'un système à exécuter ses traitements sans erreur. Ainsi, un
 système fiable à 99,9\% assure un traitement sans erreur dans 99,9\% de sa
 durée d'exécution. Plus le système assure une fiabilité proche de 100\%, plus
 son niveau de fiabilité est élevé.\\
-On dit qu'un système est temps-réel lorsqu'il doit garantir des délais
+On dit qu'un système est temps réel lorsqu'il doit garantir des délais
 maximums dans l'exécution de ses fonctions. Il est en charge d'exécuter un ensemble de
 tâches. Une tâche correspond à une fonction donnée du système.
 
@@ -223,14 +223,14 @@ l'association MISRA (Motor Industry Software Reliability Association)
 \PhDdefinition{syssur}{Système sûr}{
   Un système est dit sûr si son niveau d'assurance est compatible de son niveau
   de criticité. Il possède donc des
-  propriétés de fiabilité et des propriétés de temps-réel adequates pour assurer
+  propriétés de fiabilité et des propriétés de temps réel adequates pour assurer
   la protection des vies humaines ou du matériel correspondant à son niveau de
   criticité. Les problématiques de sécurité telles que définies dans la
   Section \ref{subsec:secu} ne font pas partie des propriétés d'un système sûr.
 }
 
 \paragraph{}
-Il existe trois modèles d'exécution temps-réel:
+Il existe trois modèles d'exécution temps réel:
 \begin{itemize}
   \item Le modèle périodique: Les instanciations successives d'une tâche
     (appelées travail) s'effectuent avec une inter-arrivée constante
@@ -246,7 +246,7 @@ conséquence, je m'appuie sur un modèle sporadique. C'est ce dernier qui est
 donc considéré par la suite.
 
 \paragraph{}
-Chaque tâche temps-réel se définit par les propriétés suivantes:
+Chaque tâche temps réel se définit par les propriétés suivantes:
 \begin{itemize}
 \item Un coût d'exécution pire cas, dénoté WCET (Worst Case Execution Time).
 \item Une période, déterminant l'inter-arrivée minimum entre deux travaux de la
@@ -254,7 +254,7 @@ Chaque tâche temps-réel se définit par les propriétés suivantes:
 \item Une échéance, correspondant à la durée maximum entre l'instanciation du
   travail et la terminaison de son exécution.
 \end{itemize}
-Un système logiciel temps-réel est en charge d'assurer que l'ensemble des
+Un système logiciel temps réel est en charge d'assurer que l'ensemble des
 travaux terminent leur exécution avant leur échéance. Pour cela il s'appuie
 sur des algorithmes d'ordonnancement. Ceux-ci sont en charge d'assurer un
 ordonnancement de l'exécution des travaux respectueux de l'ensemble de leurs
@@ -273,7 +273,7 @@ interconnexion d'un grand nombre de réseaux basés par exemple sur des bus série 
 CAN \cite{iso11898}, agrégeant l'ensemble des éléments d'aide à la conduite.
 Le réseau de bord est principalement basé sur des automates matériels avec une
 faible présence du logiciel. Ce réseau possède de fortes contraintes
-temps-réel et de fiabilité, sans considération particulière en terme de sécurité. L'absence de
+temps réel et de fiabilité, sans considération particulière en terme de sécurité. L'absence de
 sécurité vient du fait que l'ensemble des acteurs physiques et logiques
 composant ce réseau sont maîtrisés et certifiés.
 
@@ -281,7 +281,7 @@ composant ce réseau sont maîtrisés et certifiés.
 Le réseau de bord n'est aujourd'hui plus le seul réseau présent dans les
 véhicules. Un deuxième réseau a fait son apparition au fur et à mesure des
 années. Il s'agit du réseau multimédia. A l'inverse du réseau de bord, ce
-dernier possède de plus faibles exigences de temps-réel, et de plus fortes
+dernier possède de plus faibles exigences de temps réel, et de plus fortes
 exigences de sécurité. Les différentes fonctions qu'il porte n'impactent pas
 la sûreté de fonctionnement du véhicule tant que le réseau de bord et le
 réseau multimédia ne sont pas interconnectés. Cette sûreté découle entre
@@ -303,13 +303,13 @@ portée, satellitaire, etc.). Ces différents réseaux sont utilisés pour un
 grand nombre de transmissions. Il peut s'agir de la réception des ordres de
 mission, de communications phoniques ou visiophoniques, de la réception ou
 de l'émission de positions GPS. Le véhicule possède donc un véritable système
-Systronique.
+systronique.
 
 \subsection{Les systèmes systroniques}
 
 \paragraph{}
 Avec l'intégration de plus en plus forte des réseaux IP dans les systèmes
-embarqués (véhiculaires, avioniques non temps-réel, transport),
+embarqués (véhiculaires, avioniques non temps réel, transport),
 l'interconnexion de réseaux locaux initialement disjoints avec un ou des
 réseau(x) d'infrastructure est de plus en plus courante. Les exigences
 sécuritaires qui sont alors associées à une telle interconnexion peuvent être
@@ -364,12 +364,12 @@ des données exclusives au pays. Ainsi, un système systronique possède plusieurs
 domaines de sécurité, dont le nombre est variant selon le véhicule et la
 mission.
 \paragraph{}
-Un véhicule militaire possède également des exigences de temps-réel. C'est le
+Un véhicule militaire possède également des exigences de temps réel. C'est le
 cas pour la gestion des caméras, du blindage réactif ou encore de la
 désactivation du système d'arme lors de l'ouverture d'une porte extérieure.\\
-Ces différents éléments ont des exigences de temps-réel plus ou moins
+Ces différents éléments ont des exigences de temps réel plus ou moins
 nombreuses. Afin de limiter le coût de certification et les contraintes
-physiques des éléments de la chaîne de traitement temps-réel, le calcul du
+physiques des éléments de la chaîne de traitement temps réel, le calcul du
 coût d'exécution pire cas de celle-ci est plus ou moins pessimiste.\\
 Si le calcul du coût d'exécution pire cas est faiblement 
 pessimiste, il peut arriver, avec une faible occurrence, que le coût
@@ -377,7 +377,7 @@ d'exécution dépasse le coût d'exécution pire cas considéré dans le design du
 système. Si le calcul est fortement pessimiste, le dépassement n'est en
 principe pas possible. Dans ce dernier cas cependant, le coût de certification
 mais aussi la puissance des éléments matériels embarqués sont impactées. Dans
-ce cas, la puissance nécessaire au respect strict des exigences temps-réel
+ce cas, la puissance nécessaire au respect strict des exigences temps réel
 peut être incompatible avec des contraintes physiques liées au véhicule (volume,
 température et consommation).\\
 Afin de pouvoir répondre aux différentes exigences liées au besoin
@@ -415,20 +415,20 @@ longue distance (entre la patrouille et
 les quartiers généraux) qu'en terme de traitements graphiques et vidéos. Il en résulte
 un système complexe interconnectant des éléments:
 \begin{itemize}
-  \item Fortement temps-réel
-  \item Temps-réel souple
-  \item Non temps-réel
+  \item Fortement temps réel
+  \item Temps réel souple
+  \item Non temps réel
 \end{itemize}
-Aux contraintes temporelles auxquelles répondent les modèles temps-réel
+Aux contraintes temporelles auxquelles répondent les modèles temps réel
 s'ajoutent des contraintes de fiabilité. Elles sont présentes sur la grande
-majorité des éléments d'un système Systronique, du fait de l'impact de ce
+majorité des éléments d'un système systronique, du fait de l'impact de ce
 système sur les vies humaines. Ainsi, il est impératif que le système d'arme
 soit fiable.
 
 \paragraph{}
 De manière orthogonale, ces mêmes éléments impliquent des contraintes de
 sécurité variables, se déclinant en plusieurs domaines de sécurité.\\
-L'interconnexion de tous ces domaines (tant de sécurité que temps-réel) est
+L'interconnexion de tous ces domaines (tant de sécurité que temps réel) est
 néanmoins demandée. En effet, il est nécessaire dans un véhicule muni d'un
 système systronique de:
 \begin{itemize}
@@ -436,7 +436,7 @@ système systronique de:
     de sécurité à un domaine de moindre niveau de sécurité
   \item Remonter de l'information d'un domaine de plus bas niveau de sécurité à un domaine
     de plus haut niveau de sécurité
-  \item Remonter des données d'un domaine temps-réel dur avec de fortes
+  \item Remonter des données d'un domaine temps réel dur avec de fortes
     contraintes de sûreté vers un domaine de plus faible niveau de sûreté,
     avec des contraintes de sécurité plus fortes
 \end{itemize}
@@ -445,7 +445,7 @@ système systronique de:
 Ces interconnexions sont principalement la conséquence de l'apparition de
 terminaux de contrôles locaux et portatifs agrégeant un grand nombre de
 données. Ces terminaux doivent être compatibles de contraintes physiques fortes (poids, volume, consommation
-électrique) et de contraintes de certification fortes (principalement liées au temps-réel
+électrique) et de contraintes de certification fortes (principalement liées au temps réel
 mais aussi, par exemple, à la résistance aux vibrations dans les véhicules). Le
 coût associé à la production de tels produits est donc élevé. Ces derniers ne
 doivent alors pas être multipliés pour des raisons de maîtrise des coûts. 
@@ -463,7 +463,7 @@ Aujourd'hui, les systèmes systroniques maintiennent trois réseaux complètement
 indépendants :
 \begin{itemize}
   \item Le système de bord, en charge des éléments d'aide à la conduite et
-  devant respecter des contraintes temps-réel et de fiabilité.
+  devant respecter des contraintes temps réel et de fiabilité.
   \item Le système d'arme, ayant ces mêmes propriétés.
   \item Le système de communication, sans propriété de sûreté mais avec un
   grand nombre de contraintes de sécurité.
@@ -489,7 +489,7 @@ ne permet ce type de comportement.
 Pour la sûreté de fonctionnement, l'existant correspond souvent aux avancées
 technologiques qui ont été faites dans l'avionique, telles que l'IMA
 (Integrated Modular Architecture), permettant une répartition optimisée des
-fonctions pour assurer le respect des contraintes temps-réel. Les niveaux
+fonctions pour assurer le respect des contraintes temps réel. Les niveaux
 élevés d'assurance (DO-178B pour le logiciel et DO-254 pour le matériel) assurent
 également une grande fiabilité. Ces solutions répondent donc
 parfaitement aux besoins de sûreté de fonctionnement. Elles sont alors tout à
@@ -551,7 +551,7 @@ exigences que doivent respecter ces solutions sont de trois types:
 
 \paragraph{}
 Une telle solution doit pouvoir se plier à ces trois familles d'exigences afin
-de ne pas multiplier les produits devant être intégrés au système Systronique.
+de ne pas multiplier les produits devant être intégrés au système systronique.
 C'est un besoin qui dérive à la fois des exigences physiques et des exigences
 financières, le coût des véhicules devant être maîtrisé.
 
@@ -564,7 +564,7 @@ décrite ma solution.
 \paragraph{}
 Dans le cadre de ma thèse, je propose une solution logicielle pour répondre à
 la problématique d'interconnexion des réseaux véhiculaires dans le cadre d'un
-système Systronique. Le besoin de modularité est pris en compte afin de
+système systronique. Le besoin de modularité est pris en compte afin de
 rendre la solution configurable pour répondre aux différents besoins
 d'interconnexion de réseaux, et plusieurs contraintes de sécurité et de sûreté
 sont considérées afin de répondre à plusieurs exigences précises:
@@ -614,14 +614,14 @@ La passerelle doit également pouvoir répondre à des exigences de garantie de tem
 latence maximum. L'usage d'une architecture de type MLS a pour conséquence
 l'usage d'un ordonnancement de type hiérarchique, sur base TDM (Time Division
 Multiplexing). Afin de
-définir une méthode pour déterminer l'ordonnançabilité de tâches temps-réel
+définir une méthode pour déterminer l'ordonnançabilité de tâches temps réel
 sur une base d'ordonnancement TDM, nous avons formalisé les propriétés
 nécessaires au respect des latences \cite{thierry2011real} permettant de
 définir la taille des slots temporels du TDM. Cette formalisation est
 décrite dans le Chapitre \ref{sec:hierarchicalrt}.
 
 \paragraph{}
-Les principales exigences des systèmes Systroniques sont des exigences de
+Les principales exigences des systèmes systroniques sont des exigences de
 poids, de volume et de consommation. Leur impact principal est la limitation
 de la puissance processeur embarquée, impactant potentiellement
 l'ordonnançabilité de l'ensemble des tâches lorsque les calculs de coûts
