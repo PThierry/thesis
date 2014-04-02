@@ -83,6 +83,7 @@
 \usepackage{etoolbox}
 \usepackage{bytefield}
 \usepackage[titles]{tocloft}
+\usepackage{caption}
 \usepackage{myPhDTitlePage}
 
 % own bib
