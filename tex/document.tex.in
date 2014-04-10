@@ -15,7 +15,7 @@
 
 \documentclass[twoside,a4paper,12pt,titlepage,french]{book} 	% document type
 
-% no compression for CINES conformity
+% no compression for CNES conformity
 \pdfobjcompresslevel 0    
 \pdfcompresslevel 0
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

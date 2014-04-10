@@ -54,4 +54,12 @@ echo '
 % bibliography
 \printbibliography[title=Bibliographie,filter=notown]
 
+\cleardoublepage
+\hbox{}
+\newpage
+%\ifodd\value{page}\hbox{}\newpage\fi
+%\ifodd\value{page}\hbox{}\newpage\fi
+
+\input{includes/endpage.tex}
+
 \end{document}' >> document.tex
