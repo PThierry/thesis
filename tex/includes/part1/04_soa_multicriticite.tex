@@ -6,16 +6,16 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
-%% Last update jeu. 10 avril 2014 10:20:11 CEST phil
+%% Last update jeu. 10 avril 2014 11:26:28 CEST phil
 
 \chapter{Focus sur l'ordonnancement hiérarchique et la criticité mixte}
 \doMinitoc
 
 \paragraph{}
 {\it L'usage d'un
-{\it Separation Kernel} est une des solutions logicielles proposées pour répondre aux
+{\it Separation Kernel} est un des moyens proposées pour répondre aux
 besoins des architectures MILS et MLS. Cette
-architecture, impliquant potentiellement la virtualisation de plusieurs
+architecture, impliquant potentiellement de la virtualisation de plusieurs
 environnements autonomes, s'appuie sur un ordonnancement hiérarchique de
 tâches virtualisées. Dans le cadre de ma thèse, il est également nécessaire de
 considérer la problématique de criticité mixte, du fait des contraintes fortes
@@ -73,12 +73,12 @@ traitements des IRQ
 \end{itemize}
 La figure \ref{fig:hierarchical_sample} décrit le cas de certaines tâches
 parmi l'ensemble des tâches que l'on peut trouver sous Linux, comme la gestion
-des interruptions timer, souris et clavier, ou encore les {\it bottom halves},
-c'est à dire les traitements déportés dans le temps de certaines fonctions.
+des interruptions timer, souris et clavier, ou encore les {\it bottom halves}
+\cite{wilcox2003ll}, c'est à dire les traitements déportés dans le temps de certaines fonctions.
 
 \begin{figure}
 \input{figures/hierarchical_sample.tex}
-\caption{Répartition des tâches du noyau Linux par jeux autonomes, en fonctions des exigences de réactivité\label{fig:hierarchical_sample}}
+\caption{Répartition des tâches du noyau Linux par jeux autonomes, en fonction des exigences de réactivité\label{fig:hierarchical_sample}}
 \end{figure}
 
 \subsubsection{Ordonnancement hiérarchique et principe de virtualisation}
@@ -147,7 +147,7 @@ certifiabilité.
 \paragraph{}
 L'ordonnancement hiérarchique est un mécanisme nécessaire à l'exécution de
 compartiments autonomes tels que le nécessitent les architectures MLS.
-Lorsque l'on s'appuie sur un separation kernel sur lequel on doit positionner
+Lorsque l'on s'appuie sur un Separation Kernel sur lequel on doit positionner
 des fonctions de sécurité ordonnancées directement par l'ordonnanceur global,
 il est alors nécessaire de vérifier que l'exécution de ces dernières ne
 vient pas impacter l'ordonnançabilité des tâches temps réel exécutées dans les

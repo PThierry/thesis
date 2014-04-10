@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  mar. 24 nov. 2009 22:14:05 CET Philippe THIERRY
-%% Last update Mon Jul 19 16:10:11 2010 Philippe THIERRY
+%% Last update jeu. 10 avril 2014 10:48:33 CEST phil
 %%
 \thispagestyle{empty}
 \begin{minipage}{\linewidth}
@@ -14,13 +14,13 @@
 \raggedleft{\large{\textbf{Remerciements}}}
 \vspace{1cm}
 \paragraph{}
-Je souhaite en premier lieu remercier Fabien Germain pour tous ses précieux conseils, tant dans
-le cadre de la rédaction d'article que durant l'avancement de ma thèse. J'ai
-pu grâce à lui enrichir toute la partie sécurité en m'appuyant sur des
-outils méthodologique reconnus comme la méthode EBIOS.\\
-Merci également à Laurent pour toute la formation qu'il m'a donné sur les
-aspects temps réel et ordonnancement, ainsi qu'à Jean-Marc pour sa vision
-industrielle du temps réel qu'il a su me faire partager.
+%Je souhaite en premier lieu remercier Fabien Germain pour tous ses précieux conseils, tant dans
+%le cadre de la rédaction d'article que durant l'avancement de ma thèse. J'ai
+%pu grâce à lui enrichir toute la partie sécurité en m'appuyant sur des
+%outils méthodologique reconnus comme la méthode EBIOS.\\
+%Merci également à Laurent pour toute la formation qu'il m'a donné sur les
+%aspects temps réel et ordonnancement, ainsi qu'à Jean-Marc pour sa vision
+%industrielle du temps réel qu'il a su me faire partager.
 \end{minipage}
 
 \chapter*{Résumé}
@@ -34,16 +34,16 @@ systèmes véhiculaires, de passerelles permettant d'interconnecter les
 différents réseaux embarqués. Ces différents réseaux sont en charge de
 fonctions très hétérogènes, comme par exemple:
 \begin{itemize}
-  \item L'ensemble des fonctions d'aide à la conduite (ABS, limitateur et
+  \item L'ensemble des fonctions d'aide à la conduite (ABS, limiteur et
     régulateur de vitesse, etc.)
   \item Les différentes fonctions multimédia (lecteur multimédia, système en
     charge des connexions Bluetooth, etc.)
 \end{itemize}
 Dans le cadre des véhicules militaires, plusieurs réseaux viennent encore
 s'ajouter à ceux-ci. Le besoin d'une passerelle d'interconnexion vient du fait
-qu'il est nécessaire de permettre le transfert de données entre ses réseaux.
+qu'il est nécessaire de permettre le transfert de données entre ces réseaux.
 Ce besoin a été expliqué par la Direction Générale de l'Armement (DGA), et
-commence également a apparaître sur les marchés à l'export.
+commence également à apparaître sur les marchés à l'export.
 Le transfert de données doit pouvoir se faire tout en évitant une contagion
 des contraintes de certification portées par chacun de ces réseaux, pour des
 raisons de coût financier de la solution. Cela implique donc que la passerelle
@@ -66,19 +66,19 @@ logicielle, j'ai travaillé en trois étapes:
     et trop riche par rapport au besoin initial.\\
   La définition des exigences formelles et des hypothèses sur le
     matériel sous-jacent est proposée dans le Chapitre \ref{sec:matrix}. 
-  \item Une fois l'ensemble de ces exigences formalisées, J'ai déterminé une
+  \item Une fois l'ensemble de ces exigences formalisées, j'ai déterminé une
     solution logicielle, ainsi que les contraintes sur le matériel, permettant
     de répondre à celles-ci. Les exigences sont globalement séparées en deux
     grandes familles:
     \begin{itemize}
-      \item Les exigences liées à la sécurité, auxquelles je répond dans le
+      \item Les exigences liées à la sécurité, auxquelles je réponds dans le
         cadre du Chapitre \ref{chap:solution_secu}, en m'appuyant sur les
         mécanismes de compartimentation logicielle de type MultiLevel Security
         et en proposant des mécanismes complémentaires pour répondre aux
         différentes exigences de sécurité 
       \item Les exigences liées à la sureté de fonctionnement, auxquelles je
-        répond, pour la partie temps réel, dans le Chapitre
-        \ref{sec:solution_rt}. Je prend alors en compte, dans la réponse
+        réponds, pour la partie temps réel, dans le Chapitre
+        \ref{sec:solution_rt}. Je prends alors en compte, dans la réponse
         aux exigences de temps réel, les
         contraintes apportées par le besoin sécuritaire. J'ai alors étudié
         les propriétés d'ordonnancement hiérarchique et de criticité mixte,
@@ -97,7 +97,7 @@ logicielle, j'ai travaillé en trois étapes:
 \end{enumerate}
 
 
-Ma thèse a ainsi permit de valider une première solution technique permettant
+Ma thèse a ainsi permis de valider une première solution technique permettant
 de répondre à la plupart des contraintes apportées par le client.
 Cette solution a de plus pour but d'être un
 framework ouvert, où il est possible d'ajouter ou de retirer des modules

@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
-%% Last update jeu. 10 avril 2014 10:19:18 CEST phil
+%% Last update jeu. 10 avril 2014 11:20:24 CEST phil
 
 \chapter{État de l'art des solutions de virtualisation}
 \doMinitoc
@@ -21,7 +21,11 @@ cloisonnement strict entre des environnements logiciels, tout en ayant les
 propriétés nécessaires pour être intégré dans la Trusted Computing Base
 (confer Définition \ref{def:tcb}).
 Dans ce chapitre, je décris les différentes solutions de virtualisation existantes
-candidates au principe de {\it Separation Kernel}.}
+candidates au principe de {\it Separation Kernel}. Ne sont considérées que les
+solutions Open-Source ou Européennes, pour des raisons contractuelles
+(problématique ITAR\footnote{International Traffic in Arms Regulation,
+règlement américain limitant l'usage de produits logiciels ou matériels de
+haute sécurité (i.e. certifiés EAL4+ ou supérieur)})}
 
 \section{Étude de la sécurité des solutions de virtualisation existantes}
 
@@ -103,7 +107,7 @@ Section \ref{subsec:l4} de ce chapitre.
 \paragraph{}
 La gestion du réseau dans la solution Xen s'appuie exclusivement sur la pile
 réseau du domaine d'administration. Ainsi, la définition du réseau virtuel se
-fait via l'usage de bridges dans ce domaine, générant un overhead non nul dans
+fait via l'usage de bridges dans ce domaine, générant un surcout non négligeable dans
 le chemin de données réseau d'une machine virtuelle utilisateur.\\
 Ainsi, lorsque deux machines virtuelles communiquent, l'ordonnancement du
 domaine d'administration est nécessaire pour permettre au flux d'être reçu
@@ -111,7 +115,7 @@ de l'émetteur puis renvoyé vers le destinataire \cite{apparao2006characterizatio
 
 \paragraph{}
 D'un point de vue sécurité, le domaine d'administration est d'ailleurs un
-élement dangereux car ayant des droits très étendus. La solution CubesOS, qui
+élément dangereux car ayant des droits très étendus. La solution CubesOS, qui
 a été maquettée sur l'hyperviseur Xen, s'appuie sur un mécanisme de
 chiffrement/déchiffrement des données entre les machines virtuelles
 utilisateur afin de limiter l'impact d'une corruption du domaine
@@ -134,7 +138,7 @@ spacial strict. Cependant, elle net permet pas de manière aisé un
 partitionnement temporel strict de type TDM. La restriction principale à son
 usage est son manque de portabilité sur les architectures embarquées. A ce
 jour, seules les architectures ARM et x86/x86\_64 sont supportées, ce qui pose
-porblème dans les domaines de l'avionique et des télécoms, où l'architecture
+problème dans les domaines de l'avionique et des télécoms, où l'architecture
 PowerPC est prédominante. De plus, la taille du micro-noyau Xen ne lui permet
 pas d'initier une procédure de certification sécuritaire et le rend
 incompatible de l'Exigence \ref{pro:evaluable}. On peut donc
@@ -158,10 +162,10 @@ limiter l'accès au matériel pour les environnements compartimentés.
 \subsubsection{Synthèse de la solution QubesOS}
 
 \paragraph{}
-La solution Qubes s'appuie sur l'hyperviseur Xen et un mécanisme d'aggrégation
+La solution Qubes s'appuie sur l'hyperviseur Xen et un mécanisme d'agrégation
 de la sortie graphique afin de permettre un accès unifié aux applications des
 différents domaines de confidentialité. De plus, elle intègre un
-outillage complexe et des mécanismes de communicaton entre les compartiments
+outillage complexe et des mécanismes de communication entre les compartiments
 chiffrant les données émises. Cependant, la solution
 complète QubesOS est lourde et cible exclusivement les postes de travail x86
 récents. Elle n'est pas compatible avec les besoins de l'embarqué, mais le
@@ -194,7 +198,7 @@ cloisonnement des différentes tâches. Dans les noyaux Linux récents, il est
 également possible de définir un certain nombre de propriétés intéressantes en
 terme de temps réel et de sécurité:
 \begin{itemize}
-  \item L'affinité, spécifiant sur quel(s) coeur(s) processeur(s) le
+  \item L'affinité, spécifiant sur quel(s) c{\oe}ur(s) de(s) processeur(s) le
     compartiment doit s'exécuter
   \item La charge associée aux tâches temps réel du compartiment, définissant
     la charge maximum que peuvent consommer ces dernières
@@ -249,8 +253,8 @@ Parmi les différents micro-noyaux de la famille L4, seL4 est celui qui semble le
 plus proche du besoin sécuritaire. Son faible volume de code (7500 lignes) et
 ses premiers travaux en terme de preuve formelle font de lui un bon candidat
 au besoin MILS. Malheureusement, ce dernier n'est porté que sur deux
-architectures matérielles et ne propose à ce jour aucune considération pour des exigences temps
-réel.
+architectures matérielles et ne propose à ce jour aucune considération pour des exigences
+de temps réel.
 
 \subsection{Étude de la solution PikeOS}
 \label{sec:pikeos}

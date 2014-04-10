@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
-%% Last update jeu. 10 avril 2014 10:14:25 CEST phil
+%% Last update jeu. 10 avril 2014 11:05:47 CEST phil
 
 
 \chapter{Concepts}
@@ -55,7 +55,7 @@ terme) du domaine. Ces exigences sont mises en place sous forme:
 \begin{itemize}
   \item d'un choix d'architecture réseau, logicielle et matérielle
   \item de la définition d'algorithmes de chiffrements spécifiques et de
-    solutions implémentant ses algorithmes
+    solutions implémentant ces algorithmes
   \item d'une définition d'un processus de gestion du domaine (protection physique et logique)
   \item d'une définition des responsabilités et des rôles de chaque
     intervenant dans le domaine
@@ -120,7 +120,7 @@ une tâche.
 \PhDdefinition{droitden}{Droit d'en connaître}{
 On appelle droit d'en connaître l'ensemble de connaissances formalisé
 dans une politique de gestion des droits afin de répondre au(x) besoin(s) d'en
-conaître d'un sujet.
+connaître d'un sujet.
 }
 
 
@@ -189,7 +189,7 @@ virtuelles. C'est en général le comportement des contrôleurs de caches qui
 sont alors exploités \cite{xu2011exploration}\cite{zhang2012cross}.
 
 \paragraph{}
-Lorsque un transfert de données non autorisé a lieu entre deux domaines de
+Lorsqu'un transfert de données non autorisé a lieu entre deux domaines de
 sécurité, il est important de pouvoir en imputer la responsabilité. On parle
 alors d'imputabilité.
 
@@ -217,7 +217,7 @@ comme par exemple les systèmes DAC (Discretionary Access Control), MAC
 
 \paragraph{}
 La complexité du système dépend du besoin de certifiabilité. On définit
-initialement une cible d'évaluation (couramment appelée Target Of Evaluation.
+initialement une cible d'évaluation (couramment appelée Target Of Evaluation).
 
 \PhDdefinition{toe}{Target Of Evaluation}{
   On appelle Target Of Evaluation (TOE) l'ensemble des éléments logiciels et
@@ -271,7 +271,7 @@ On appelle fonction de sécurité un traitement logiciel spécialisé dans la
 réponse à un besoin sécuritaire donné. Une fonction de sécurité peut être
 non-certifiable (par exemple en tant que processus logiciel d'un système
 d'exploitation riche) ou certifiable (sous forme d'un élément logiciel
-de petite taille et autonome ou s'appuyant sur un socle lui-même certifiable.
+de petite taille et autonome ou s'appuyant sur un socle lui-même certifiable).
 }
 
 \section{Principes généraux des systèmes temps réel}
@@ -284,13 +284,13 @@ d'ordonnanceurs, les ordonnanceurs en ligne et hors ligne.
 
 \paragraph{L'ordonnancement en ligne}
 Les choix d'ordonnancement se font durant l'exécution, en fonction de la liste
-des travaux présents et de leurs paramètres (par exemple en fonction de leur échéances
+des travaux présents et de leurs paramètres (par exemple en fonction de leurs échéances
 relatives).
 
 \paragraph{L'ordonnancement hors ligne}
 La politique d'ordonnancement est définie par avance. Elle est donc optimisée pour un cas particulier de jeu
 de tâches, mais n'est pas réactive en cas d'impact non prévu sur la dynamique d'exécution (effets de caches, de surcharge
-de bus, WCET trop grand ou trop faible, etc.).
+de bus, WCET trop grand ou trop petit, etc.).
 
 \paragraph{}
 Parmi tous ces ordonnanceurs, certains peuvent préempter un travail en cours
@@ -314,7 +314,7 @@ logicielle et parfois matérielle qui entre en compte dans la solution.
 
 \PhDdefinition{vm}{Machine virtuelle}{
 On appelle machine virtuelle (ou VM, Virtual Machine) une implémentation
-logicielle d'une machine (i.e d'un ordinateur) qui exécute des programmes
+logicielle d'une machine (i.e. d'un ordinateur) qui exécute des programmes
 comme une machine physique. Il existe deux familles de machines virtuelles:
 \begin{itemize}
 \item Une machine virtuelle système, représentant une plateforme matérielle
@@ -396,8 +396,7 @@ coût d'exécution de ces traitements, du fait de la simulation. La mesure de
 ces variations par le logiciel fait partie des mécanismes lui permettant de détecter que
 son environnement d'exécution est virtualisé.
 
-\subsubsection{Principe de la paravirtualisation}/usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></u
-sr/share/texlive/texmf-dist/f
+\subsubsection{Principe de la paravirtualisation}
 
 \paragraph{}
 Afin de limiter la problématique de simulation des traitements consécutifs à
@@ -740,12 +739,12 @@ Le principe est le suivant :
 \item Le processeur démarre un cycle de lecture.
 \item Si  le  cache  possède  la  donnée  en  local  (cache  hit),   il   répond   au   processeur.
 \item Si le cache ne possède pas la donnée, il transfère la requête de lecture sur le bus. La mémoire
-centrale renvoie la donnée, qui est mise en cache en même temps qu'elle est renvoyé  au  processeur.
+centrale renvoie la donnée, qui est mise en cache en même temps qu'elle est renvoyée au processeur.
 \end{itemize}
 
-Cette architecture provoque des cache-miss plus long (vérification par le cache avant  de  faire  la
+Cette architecture provoque des cache-miss plus longs (vérification par le cache avant  de  faire  la
 requête au contrôleur de bus), mais permet d'utiliser le cache indépendamment
-des autres c{\oe}urs du processeurs (pour un cache local).
+des autres c{\oe}urs du processeur (pour un cache local).
 
 \subsubsection{\index{Cache!Consistance}Consistance du cache}
 
@@ -899,7 +898,7 @@ les cellules.
 L'impact des caches processeurs est non nul sur la sécurisation d'un système lorsque deux domaines de
 sécurité sont ordonnancés sur un même matériel. Cela est encore plus vrai si
 ces deux domaines sont ordonnancés sur un même c{\oe}ur du processeur.\\
-En effet, la modification de l'état des caches du processeur est induit par le
+En effet, la modification de l'état des caches du processeur est induite par le
 comportement des différentes applications en cours d'exécution, générant un
 canal auxiliaire entre ces dernières, comme décrit plus loin.
 
@@ -964,7 +963,7 @@ familles:
 \begin{itemize}
   \item Prise en compte des besoins temps réel dans le design du contrôleur de caches
     et optimisation des cache-miss (cache locks et cache partitioning)
-  \item Caclul du nombre pire cas de cache-miss au travers de l'étude du chemin
+  \item Calcul du nombre pire cas de cache-miss au travers de l'étude du chemin
     d'exécution des différentes tâches en exécution concurrente, avec ou sans
     l'aide du contrôleur de cache
 \end{itemize}
@@ -982,7 +981,7 @@ l'exécution des autres tâches.
 Lorsque les contrôleurs de caches ne permettent pas un tel contrôle par le
 logiciel, il faut alors étudier leur comportement en terme d'algorithme de
 remplacement de ligne de cache, afin de déterminer, en fonction du chemin
-d'exécution de la tâche courante, le taux de cache-miss associés. Le but est
+d'exécution de la tâche courante, le taux de cache-miss associé. Le but est
 dans ce cas d'intégrer au mieux l'impact positif de la présence du cache du
 processeur sur l'exécution de la tâche.\\
 Ainsi, dans \cite{guan2012wcet}, les auteurs ont montré qu'il était possible de
@@ -1037,7 +1036,7 @@ propriété d'allier une consommation raisonnable à de bonnes performances.
 Aujourd'hui, les contrôleurs de caches utilisés par les c{\oe}urs PowerQuicc
 sont de type Pseudo-LRU, comme vu plus haut. Les c{\oe}urs e500mc, succédant
 aux c{\oe}urs e300 des PowerQuicc 2, fournissent de plus plusieurs propriétés
-intéressantes, dans le cadre des archtiectures QorIQ de Freescale
+intéressantes, dans le cadre des architectures QorIQ de Freescale
 \cite{QorIQP4080} :
 \begin{itemize}
   \item La capacité de dériver une partie du contrôleur de cache L2 en mémoire

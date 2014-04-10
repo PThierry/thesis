@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
-%% Last update jeu. 10 avril 2014 10:15:00 CEST phil
+%% Last update jeu. 10 avril 2014 11:10:08 CEST phil
 
 \chapter{État de l'art de l'interconnexion sécurisée de domaines de sécurité hétérogènes}
 \doMinitoc
@@ -76,7 +76,7 @@ comme le décrit la Figure \ref{fig:diodephy} :
 
 \paragraph{}
 Dans l'architecture de la diode matérielle formalisée par Philippe
-Lagadec de la Direction Générale de l'Armement en 2006 \cite{sstic2006diode},
+Lagadec de la Direction Générale de l'Armement (DGA) en 2006 \cite{sstic2006diode},
 les guichets permettent d'intégrer une action humaine pour valider
 le transfert de données, ainsi que pour valider leur réception.
 Une telle architecture permet de garantir l'imputabilité (c'est à dire associe
@@ -197,7 +197,7 @@ qui lui est fourni par le moniteur de sécurité.
 
 \begin{property}
 \label{pro:evaluable}
-{\bf Evaluable}:
+{\bf Évaluable}:
 L'ensemble des composants considérés comme de confiance doivent être évaluable
 au niveau de sécurité demandé.
 \end{property}
@@ -242,13 +242,12 @@ de faire communiquer des domaines de sécurité hétérogènes de manière sûre. Les
 quatre propriétés des systèmes MLS sont alors respectées.
 
 
-
 \subsection{MLS et principe de virtualisation}
 
 \paragraph{}
 Le principe de MultiLevel Security s'appuie sur un environnement d'exécution
 de confiance assurant le cloisonnement des compartiments de domaines de
-sécurité différents. Cet environnement d'exécution est appellé un {\it
+sécurité différents. Cet environnement d'exécution est appelé un {\it
 Separation Kernel}. Le principe de Separation Kernel a été initialement
 défini en 1981 \cite{sk_def} et reste aujourd'hui d'actualité, au travers d'un
 grand nombre de travaux tant universitaires qu'industriels \cite{alves2006mils,boettcher2008mils}
@@ -324,5 +323,5 @@ exigences sécuritaires. Je cherche donc à définir une solution complète
 compatible avec les exigences des architectures MLS et dans le même temps
 fournissant suffisament de compléments logiciels pour répondre aux contraintes
 de la problématiques générale. Je dois donc tout d'abord sélectionner le bon Separation
-Kernel. Ce choix s'appuit sur un état de l'art des différentes solutions de
+Kernel. Ce choix s'appuie sur un état de l'art des différentes solutions de
 compartimentation et de virtualisation, décrites dans le Chapitre suivant.
