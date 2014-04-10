@@ -84,6 +84,7 @@
 \usepackage{bookmark}
 \usepackage{etoolbox}
 \usepackage{bytefield}
+\usepackage{setspace}
 \usepackage[titles]{tocloft}
 \usepackage{caption}
 \usepackage{myPhDTitlePage}
