@@ -17,7 +17,7 @@ LATEX=pdflatex
 LATEXOPT=-shell-escape
 BIBTEX=bibtex
 BIBTEXOPT=-min-crossrefs=0
-PDFVIEWER?=acroread
+PDFVIEWER?=okular
 MAKEGLOSSARY=makeglossaries
 MAKEGLOSSARYOPT=-L french
 

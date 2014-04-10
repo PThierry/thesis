@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
-%% Last update Mon Aug 30 17:00:21 2010 Philippe THIERRY
+%% Last update jeu. 10 avril 2014 10:24:20 CEST phil
 
 \chapter{Proposition d'une architecture logicielle sécurisée pour le MLS orientée traitement de flux}
 \doMinitoc
@@ -118,9 +118,8 @@ $$Sec \cap Unsec = \emptyset$$
 \end{property}
 
 \begin{figure}
-  \label{fig:iofilter}
   \input{figures/io_filtering.tex}
-  \caption{filtrage des entrées/sorties par un élément logiciel de confiance}
+  \caption{filtrage des entrées/sorties par un élément logiciel de confiance\label{fig:iofilter}}
 \end{figure}
 
 \paragraph{}
@@ -400,9 +399,8 @@ et le service sortant afin de permettre la différentiation des flux en sortie,
 tout en respectant l'exigence \ref{req:transit_up}.
 
 \begin{figure}
-  \label{fig:sep_proto}
   \input{figures/sep_proto.tex}
-  \caption{Exemple de séparation protocolaire couche transport}
+  \caption{Exemple de séparation protocolaire couche transport\label{fig:sep_proto}}
 \end{figure}
 
 \subsection{Définition des profils d'attaque}
@@ -437,9 +435,8 @@ La Figure \ref{fig:threats_surface} schématise la répartition de la surface
 d'attaque sur le système englobant la passerelle multi-domaines de sécurité.
 
 \begin{figure}
-  \label{fig:threats_surface}
   \input{figures/threats_surces.tex}
-  \caption{Répartition des surfaces d'attaque sur la passerelle de sécurité}
+  \caption{Répartition des surfaces d'attaque sur la passerelle de sécurité\label{fig:threats_surface}}
 \end{figure}
 
 \paragraph{}
@@ -463,7 +460,6 @@ Le Tableau \ref{tab:threats} liste les différents types d'attaques et leur
 impact sur les exigences de sécurité.
 
 \begin{table}[h!]
-\label{tab:threats}
 \begin{tabular}{|l|p{8.5cm}|c|c|c|c|}
   \hline
 \cellcolor{blue!25}Source & \cellcolor{blue!25}Attaque & \multicolumn{4}{|c|}{\cellcolor{blue!25}Exigence} \\
@@ -485,7 +481,7 @@ impact sur les exigences de sécurité.
   {\it Interne} & Communication entre deux compartiments au travers d'un canal caché & & & & X \\
   \hline
 \end{tabular}
-\caption{Profils d'attaques et impact sur les exigences sécuritaires}
+\caption{Profils d'attaques et impact sur les exigences sécuritaires\label{tab:threats}}
 \end{table}
 
 \paragraph{}

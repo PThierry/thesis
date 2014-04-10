@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
-%% Last update Mon Aug 30 17:00:21 2010 Philippe THIERRY
+%% Last update jeu. 10 avril 2014 10:14:25 CEST phil
 
 
 \chapter{Concepts}
@@ -238,9 +238,8 @@ Computing Base.
 
 \PhDdefinition{tcb}{Trusted Computing Base}{
   On appelle Trusted Computing Base (TCB) l'ensemble des éléments logiciels
-  et matériels de la solution cible qui sont considérés comme de confiance.
-  La corruption de tout élément de cet ensemble génère en conséquence une
-  faille dans les propriétés de sécurité de la solution.
+  et matériels de la solution cible qui sont considérés comme de confiance et
+  dont la corruption génère une faille dans les propriétés de sécurité de la solution.
 }
 
 Ainsi les éléments de la TCB doivent
@@ -360,9 +359,8 @@ Pour répondre à ce besoin, il existe trois solutions:
 \end{itemize}
 
 \begin{figure}
-  \label{fig:vmtype1}
   \input{figures/vmtype1_2.tex}
-  \caption{Architecture logicielle générique des solutions de virtualisation de type I}
+  \caption{Architecture logicielle générique des solutions de virtualisation de type I\label{fig:vmtype1}}
 \end{figure}
 
 \subsubsection{Principe de la virtualisation complète}
@@ -452,9 +450,8 @@ correspond à des produits tels que VMWare Workstation ou encore VirtualBox.
 La Figure \ref{fig:vmtype2} décrit l'architecture logicielle d'une telle
 solution.
 \begin{figure}
-  \label{fig:vmtype2}
   \input{figures/vmtype2_2.tex}
-  \caption{Architecture logicielle d'une solution de virtualisation type II}
+  \caption{Architecture logicielle d'une solution de virtualisation type II\label{fig:vmtype2}}
 \end{figure}
 
 \paragraph{}
@@ -493,9 +490,8 @@ dont le système de fichiers, le jeu de tâches, les interfaces réseau et la
 vision du stockage de masse sont séparés. 
 
 \begin{figure}
-  \label{fig:vmlxc}
   \input{figures/vmlxc_2.tex}
-  \caption{Architecture logicielle d'une solution de virtualisation applicative}
+  \caption{Architecture logicielle d'une solution de virtualisation applicative\label{fig:vmlxc}}
 \end{figure}
 
 \section{Les interactions entre le matériel, la sécurité et le temps réel}
@@ -597,10 +593,8 @@ La Figure \ref{fig:mmu} décrit le principe général de pagination entre mémoire
 physique et mémoire virtuelle.
 
 \begin{figure}
-\label{fig:mmu}
 \input{figures/mmu_as.tex}
-\caption{Principe général du mapping de page mémoire dans les espaces
-d'adressage des processus}
+\caption{Principe général du mapping de page mémoire dans les espaces d'adressage des processus\label{fig:mmu}}
 \end{figure}
 
 \paragraph{}
@@ -667,12 +661,11 @@ Mémoire centrale & 10-60 nano secondes \\
 \hline
 \end{tabular}
 \end{center}
-\label{tab:cache_access_time}
-\caption{Temps d'accès mémoire sur un Intel Core 2 duo}
+\caption{Temps d'accès mémoire sur un Intel Core 2 duo\label{tab:cache_access_time}}
 \end{table}
 
 \paragraph{}
-Le tableau \ref{tab:cache_access_time}\footnote{confer \url{http://expertester.wordpress.com/2008/05/30/core-2-duo-vs-pentium-dual-core/}} fournit
+Le tableau \ref{tab:cache_access_time}\footnote{Confer \url{http://expertester.wordpress.com/2008/05/30/core-2-duo-vs-pentium-dual-core/}} fournit
 un exemple de comparaison  du temps  d'accès  à   une   donnée   selon   son   positionnement   en   mémoire.
 
 \paragraph{}

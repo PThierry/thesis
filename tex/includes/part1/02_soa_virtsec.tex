@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
-%% Last update Mon Aug 30 17:00:21 2010 Philippe THIERRY
+%% Last update jeu. 10 avril 2014 10:19:18 CEST phil
 
 \chapter{État de l'art des solutions de virtualisation}
 \doMinitoc
@@ -64,7 +64,7 @@ intéressants en terme de cloisonnement. Il peut assurer un cloisonnement
 strict de la mémoire entre les machines virtuelles. Il est également apte à
 assurer une charge minimum garantie à chaque machine virtuelle pour un laps de
 temps donné. C'est le mécanisme présent depuis la version 3 de l'hyperviseur
-et que les développeurs ont dénoté S-EDF \ref{xenthreesched}. Cet ordonnanceur permet de
+et que les développeurs ont appelé S-EDF \cite{xenthreesched}. Cet ordonnanceur permet de
 déterminer, par configuration, une durée d'exécution minimum par fenêtre
 temporelle ainsi que la capacité à dépasser cette durée.
 La durée d'exécution est variable en fonction des
@@ -277,9 +277,8 @@ etc).
 \end{itemize}
 
 \begin{figure}
-\label{fig:pikeos}
 \input{figures/pikeos.tex}
-\caption{Architecture logicielle de la solution PikeOS}
+\caption{Architecture logicielle de la solution PikeOS\label{fig:pikeos}}
 \end{figure}
 
 \paragraph{}

@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  ven. 14 juin 2013 12:52:20 CEST Philippe THIERRY
-%% Last update ven. 14 juin 2013 12:52:20 CEST Philippe THIERRY
+%% Last update jeu. 10 avril 2014 10:39:07 CEST phil
 %%
 
 \chapter{Vers une passerelle sécurisée et temps réel pour le traitement de
@@ -73,6 +73,7 @@ traitements non sûrs, comme le multimédia. Les réseaux sont également
 strictement séparés afin d'assurer un cloisonnement spatial strict.
 
 \subsection{Problématiques techniques des architectures vétroniques civiles et militaires}
+\label{subsec:systronic_problematique}
 
 \paragraph{}
 Lorsque systèmes critiques et non-sûrs ne sont plus indépendants et que la
@@ -241,7 +242,7 @@ dans différents secteurs, comme le médical ou la police.
 \subsection{Définition d'une architecture de filtrage multi-fonctions pour les systèmes systroniques}
 
 \paragraph{}
-La conséquence de la problématique montré en \ref{subsec:problematics} et que
+La conséquence de la problématique décrite en \ref{subsec:systronic_problematique} et que
 plusieurs type de connecteurs sont nécessaires, à divers endroits du systèmes
 systronique, avec des contraintes différentes, tant en terme de service rendu
 qu'en terme de sécurité et de temps réel.\\
@@ -409,7 +410,7 @@ de sécurité apte à traiter cette information.
 Le conteneur de supervision est visible dans la Figure \ref{fig:block}, et a
 entre autre pour but de récupérer les alertes du conteneur Diode.
 
-\subsubsection{A propos du conteneur {\it Sender}}
+\subsubsection{A propos du conteneur émetteur périodique}
 \label{sec:emet_periodinque}
 
 \paragraph{}
@@ -427,7 +428,8 @@ d'assurer un débit (en nombre de trame) fixe, avec une période inter-trames
     variation de période inter-trame par l'émetteur afin d'envoyer de la
     donnée en morse est bloquée. En cas de non émission de trame, l'émetteur
     renvoie alors la dernière trame, jusqu'à arrivée d'une nouvelle trame à
-    émettre. Ce comportement permet d'être compatible avec l'Exigence \ref{req:sec_covert}
+    émettre. Ce comportement permet d'être compatible avec l'Exigence 
+    \hyperlink{REQSECUR005}{REQ\_SECUR\_005}.
 \end{enumerate}
 La période d'émission de l'émetteur périodique définit le débit maximum
 supporté par la passerelle.
@@ -770,7 +772,7 @@ montre la Figure \ref{fig:sender_p_2}.
 \label{sec:future}
 
 \paragraph{}
-Il est montré dans la Section \ref{sec:secu} que le connecteur ne permet pas
+Nous avons vu que le connecteur ne permet pas
 le transfert d'un grand nombre de paquets par seconde, la limitation venant de
 la période d'exécution de la tâche émetteur périodique. Il est cependant
 possible d'accroître fortement le débit supporté via l'envoi de burst par
