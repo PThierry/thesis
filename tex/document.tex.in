@@ -13,9 +13,11 @@
 %% Document style definition
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\documentclass[twoside,a4paper,11pt,titlepage,french]{book} 	% document type
+\documentclass[twoside,a4paper,12pt,titlepage,french]{book} 	% document type
 
-
+% no compression for CINES conformity
+\pdfobjcompresslevel 0    
+\pdfcompresslevel 0
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Packages integration
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

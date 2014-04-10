@@ -70,14 +70,16 @@ pdf :
 	$(BIBTEX) $(BIBTEXOPT) $(SOURCE_PREFIX)
 	while [ `cat $(SOURCE:.tex=.log) | grep 'may have changed.' | wc -l` -ge 1 ]; do $(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE); done
 	$(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE) # for bibliography backrefs
-	mv $(SOURCE:.tex=.pdf) $(TARGET).pdf
-
+	mv $(SOURCE:.tex=.pdf) $(TARGET).uncompressed.pdf
+	pdftk $(TARGET).uncompressed.pdf output $(TARGET).compressed.pdf compress
+	sed -re 's:\(TeX Live 2012/Debian\):TeX Live 2012/Debian:g' -i $(TARGET).uncompressed.pdf
 
 clean : 
 	$(RM) $(RMFLAGS) $(OBJS) $(TODEL)
 
 distclean : clean
-	$(RM) $(RMFLAGS) $(TARGET)
+	$(RM) $(RMFLAGS) $(TARGET).compressed.pdf
+	$(RM) $(RMFLAGS) $(TARGET).uncompressed.pdf
 
 dist : distclean
 	$(TAR) $(TARFLAGS) $(DISTTARGET) .
@@ -87,5 +89,5 @@ install : $(TARGET)
 
 view:
 	if [ ! -f $(TARGET) ]; then make all; fi
-	$(PDFVIEWER) $(TARGET).pdf
+	$(PDFVIEWER) $(TARGET).compressed.pdf
 

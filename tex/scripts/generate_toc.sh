@@ -47,11 +47,11 @@ echo '
 %\end{appendices}
 
 
-% bibliography
-\printbibliography[title=Bibliographie,filter=notown]
-
 \glossarystyle{altlisthypergroup}
 \glsaddall
 \printglossaries
+
+% bibliography
+\printbibliography[title=Bibliographie,filter=notown]
 
 \end{document}' >> document.tex
