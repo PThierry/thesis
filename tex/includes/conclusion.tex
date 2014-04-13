@@ -6,8 +6,13 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  lun. 09 sept. 2013 15:56:13 CEST Philippe THIERRY
-%% Last update jeu. 10 avril 2014 17:04:02 CEST phil
+%% Last update dim. 13 avril 2014 11:06:20 CEST phil
 %%
+
+% go to odd page
+\newpage
+\hbox{}
+\cleardoublepage
 
 \chapter*{Conclusion générale}
 \label{sec:conclusion}
@@ -19,27 +24,26 @@ problématique d'interconnexions des différents réseaux véhiculaires qui
 ont été déployés dans les systèmes des véhicules militaires et qui commencent
 à apparaître pour certains d'entre eux dans les véhicules civils. Il s'agit
 à la fois de réseaux de bord, en général basés sur des bus de type CAN ou
-équivalant et exigeant de fortes contraintes de sûreté, mais également de
+équivalents et exigeants de fortes contraintes de sûreté, mais également de
 réseaux multimédias, dont les niveaux de sécurité varient en fonction des
 données qu'ils font transiter, et dont la criticité est plus ou moins
 élevé. Ces réseaux, initialement complètement indépendants,
-nécessitent aujourd'hui d'être interconnectés afin de permettre le transfert de données
+sont aujourd'hui interconnectés afin de permettre le transfert de données
 vers des interfaces de gestion unifiées locales ou parfois distantes.
-Néanmoins, les domaines de sécurité et de sûreté associés à ces différents réseaux doivent être respectés.
-
-
-En terme de sûreté de fonctionnement, la problématique temps réel est au
+Néanmoins, les domaines de sécurité et de sûreté associés à ces différents
+réseaux doivent être respectés :
+\begin{itemize}
+\item En terme de sûreté de fonctionnement, la problématique temps réel est au
 c{\oe}ur des contraintes de transmissions de l'information. Les informations
 doivent être transmises avec une échéance maîtrisée et sans perte dans le
-cadre d'un traitement nominal.
-
-
-En terme de sécurité, les données transitant
-d'un domaine à l'autre soient validées au moment du changement de
-domaine, et autorisées selon la politique de sécurité associée au changement
-de domaine. En terme de sûreté de fonctionnement, les domaines de moindre
+cadre d'un traitement nominal. Les domaines de moindre
 sûreté ne doivent pas impacter le niveau de sûreté des domaines les plus
 contraints, comme par exemple celui associé au réseau de bord.
+\item En terme de sécurité, les données transitant
+d'un domaine à l'autre sont validées au moment du changement de
+domaine, et autorisées selon la politique de sécurité associée au changement
+de domaine.
+\end{itemize}
 
 
 Le respect des domaines de sécurité et de sûreté implique la présence de passerelles
@@ -51,20 +55,20 @@ pouvoir garantir un comportement à la fois temps réel et sûr.
 Ces passerelles étant
 déployées dans des véhicules, elles sont également contraintes par des
 exigences de poids, de consommation, de volume et de certification en terme
-d'embarcabilité (comme par exemple le support des vibrations, de la poussière, de
-la température ambiante).
+d'embarcabilité (prise en compte des contraintes de vibrations, de poussière, de
+température ambiante).
 
 
 Au regard de la problématique initiale des systèmes Systroniques,
 le but de ma thèse a été de proposer une architecture logicielle pour
-une telle passerelle. J'ai donc cherché à proposer une solution:
+une telle passerelle:
 \begin{itemize}
-\item Compatible avec les contraintes de sécurité présentes dans les véhicules
-militaires (confidentialité des données, intégrité, disponibilité)
-\item Compatible avec les contraintes de temps réel et de sûreté de
+\item compatible avec les contraintes de sécurité présentes dans les véhicules
+militaires (confidentialité des données, intégrité, disponibilité),
+\item compatible avec les contraintes de temps réel et de sûreté de
 fonctionnement, afin d'agir comme un élément cloisonnant entre un
 environnement certifié et un environnement non-certifié apte à transmettre de
-l'information à échéance maîtrisée
+l'information à échéance maîtrisée.
 \end{itemize}
 
 
@@ -76,7 +80,7 @@ logicielle que je propose. Le choix d'architecture a donc été un point crucial
 dans la recherche de la solution.
 
 
-Ainsi, au travers de mes travaux, j'ai plus cherché à déterminer 
+Ainsi, au travers de mes travaux, j'ai proposé 
 un framework logiciel générique et évolutif plutôt qu'une solution
 répondant à un besoin très spécifique. Ce framework a pour but de servir de
 structure de base pour construire des passerelles d'interconnexion tant pour
@@ -97,7 +101,7 @@ de confiance, compatible avec les exigences temps réel au travers d'une
 certification DO-178B DALB.
 
 
-Les contraintes de sécurité que j'ai pris en compte dans le cadre de ma thèse
+Les contraintes de sécurité que j'ai prises en compte dans le cadre de ma thèse
 ciblent la confidentialité et l'intégrité des données. La disponibilité
 n'est pas considérée et nécessiterait quant à elle une étude complémentaire afin
 de compléter la solution pour intégrer le support des exigences associées.
@@ -119,7 +123,7 @@ en charge de valider les traitements qu'ils effectuent.
 La validation des contraintes de temps réel se fait alors au travers de la validation de
 l'ordonnançabilité de la solution complète, et doit donc être validée pour
 chaque construction de solution. Cependant, afin de formaliser une telle
-validation, j'ai définit dans un premier temps un ensemble d'équations
+validation, j'ai défini dans un premier temps un ensemble d'équations
 permettant de valider l'ordonnançabilité d'une solution générique sur une
 architecture MLS, telle qu'utilisée dans ma thèse.
 
@@ -134,7 +138,7 @@ hors-ligne quels traitements doivent être assurés et quels traitements peuvent
 être arrêtés en cas de dépassement de charge impactant l'ordonnançabilité de
 l'ensemble des tâches. Le choix des traitements n'étant pas soumis au choix d'un flux, l'usage de la criticité
 mixte peut être un bon complément à l'usage de la Qualité de Service au sens
-Télécom du terme. Ainsi, plutôt que de prioriser des flux entre eux, il est
+Télécom du terme. Ainsi, plutôt que de prioriser des flux, il est
 possible de maintenir l'ensemble des flux à faire transiter, tout en modifiant
 le chaînage des traitements à effectuer sur chacun d'entre eux en fonction du
 niveau de criticité de chaque traitement. Dans le cadre de ma thèse, la
@@ -182,7 +186,7 @@ sécurité). Cependant, la corruption de l'environnement GNU/Linux de la
 passerelle reste complexe pour un attaquant, si on ajoute des protections
 physiques aux différentes protections logiques apportées par le Separation
 Kernel et les moniteurs de sécurités. On peut pour cela s'appuyer sur les
-mécanismes classique de durcissement des équipements militaires, au prorata
+mécanismes classique de durcissement des équipements militaires, en fonction
 de leur impact en terme de poids et de volume.
 
 
@@ -196,8 +200,8 @@ véhicules connectés et autonomes, tant dans le cadre civil que dans le cadre
 militaire.
 
 
-Les différentes travaux que nous avons réalisé ont également permis, dans le
-cadre d'un ordonnancement à criticté mixte, d'intégrer la possibilité de
+Les différents travaux que nous avons réalisés ont également permis, dans le
+cadre d'un ordonnancement à criticité mixte, d'intégrer la possibilité de
 réinitialiser le niveau de criticité d'un jeu de tâches. Néanmoins, ces travaux
 ont été menés dans un cadre mono-c{\oe}ur. La problématique de retardement
 de l'accroissement de criticté, tout comme la capacité à réinitialiser la
@@ -205,15 +209,33 @@ criticité d'un jeu de tâche exécutée dans un contexte multi-c{\oe}urs reste
 donc entière.
 
 Dans le même temps, l'usage d'ordonnancement hiérarchique, permettant de
-pouvoir décoréler des familles de traitements (par exemple pour des raisons
-de sécurité ou encore de sûreté de fonctionnement), restent aujourd'hui
-complexes dans le cadre des architectures multi-c{\oe}urs. Les interactions et
+décorréler des familles de traitements (par exemple pour des raisons
+de sécurité ou encore de sûreté de fonctionnement), reste aujourd'hui
+complexe dans le cadre des architectures multi-c{\oe}urs. Les interactions et
 les problématiques de communications entre les différentes fonctions exécutées
 sur différents c{\oe}urs sont également potentiellement impactantes en
 terme de sécurité (via l'usage potentiel de canaux cachés en mesurant les
 temps d'accès au bus ou via l'usage des contrôleurs de cache partagés)
 
-Il reste donc aujourd'hui un grand nombre de sujets complexes à étudier afin
-de pouvoir intégrer dans le monde industriel les derniers travaux tant en
-terme de temps réel que de sécurité logicielle.
+Il reste ainsi aujourd'hui un grand nombre de sujets complexes à étudier
+afin de pouvoir intégrer dans des produits industriels les derniers travaux tant en
+terme de temps réel que de sécurité logicielle, comme par exemple:
+\begin{itemize}
+\item la capacité à intégrer un comportement temps réel basé sur la criticité
+mixte sur une architecture de type Multi-Processor System on Chip (MPSoC),
+\item la capacité de passage à l'échelle (accroissement du débit et du nombre
+d'interfaces réseau) d'une telle architecture, sur les processeurs spécialisés dans le
+réseau, comme les processeur Cavium Octeon ou Freescale CorIQ,
+\item la possibilité d'intégrer des traitements associés à des domaines de
+sécurité disjoints sur un même SoC tout en assurant un cloisonnement à la fois
+logiciel et matériel des chemins de données (par exemple via l'usage de Network
+on Chip (NoC),
+\item l'impact de la virtualisation matérielle des processeurs récents
+(Freescale QorIQ ou ARM Cortex A15, A53 ou A57), tant en terme de sécurité
+qu'en terme de latence d'ordonnancement des machines virtuelles,
+\item la mesure de l'impact de moniteurs de sécurité multiples et complexes
+dans le cadre de passerelles garantissant un temps de traversée borné, comme
+par exemple des moniteurs DPI complexes, en charge de détecter des motifs
+et comportements dynamiques sur des profils de flux divers.
+\end{itemize}
 %

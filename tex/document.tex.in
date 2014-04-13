@@ -45,7 +45,6 @@
 \usepackage{tabularx}					% tabular with more conf
 \usepackage{array}					% tabular replacement
 \usepackage{chngpage}					% change page layout localy
-\usepackage{minitoc}
 \usepackage{setspace}
 \usepackage[backref=true,backend=bibtex,backrefstyle=none,style=alphabetic,labelalpha=true,block=none,maxbibnames=5,maxcitenames=3,abbreviate=false,sorting=nty]{biblatex}
 %
@@ -85,6 +84,8 @@
 \usepackage{etoolbox}
 \usepackage{bytefield}
 \usepackage{setspace}
+\usepackage{minitoc}
+\usepackage[final]{pdfpages}
 \usepackage[titles]{tocloft}
 \usepackage{caption}
 \usepackage{myPhDTitlePage}
@@ -202,12 +203,12 @@
 
 %%% Fancy
 
-% Clear Header Style on the Last Empty Odd pages
-\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else%
-\hbox{}%
-\thispagestyle{empty}%              % Empty header styles
-\newpage%
-\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+% Clear Header Style on the Last Empty Odd pages 
+%\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else%
+%\hbox{}%
+%\thispagestyle{empty}%              % Empty header styles
+%\newpage%
+%\if@twocolumn\hbox{}\newpage\fi\fi\fi}
 
 
 
@@ -231,8 +232,9 @@
 \begin{document}
 
 \dominitoc
-\dominilot
-\dominilof
+%\mtcsetrules{*}{off}
+%\dominilot
+%\dominilof
 
 \renewcommand{\headrulewidth}{0pt}			% disactive header bar
 
@@ -242,7 +244,6 @@
 \phdPrintTitlePage
 
 %%%%%%%%%%%%%%%%%%%%%
-\renewcommand{\headrulewidth}{1.0pt}
 
 \pagestyle{fancy}
 \fancyhf{} % clear all header and footer fields
@@ -257,6 +258,8 @@
 \fancyfoot[LE]{\thepage/\pageref{LastPage}}		% Left Even foot
 \fancyfoot[LO]{}					% Left Odd foot
 
+\frontmatter
+
 \phdPrintDedication
 
 \cleardoublepage					% double blank page
@@ -265,6 +268,7 @@
 
 \cleardoublepage					% double blank page
 
+\cleardoublepage
 \tableofcontents					% print table of contents
 \listoffigures
 \listoftables
@@ -286,7 +290,7 @@
 % chapter. To be fixed in the future.
 %
 
-\newpage
+\cleardoublepage					% double blank page
 
 \nocite{tdmsched}
 \nocite{santy2012relaxing}
@@ -298,6 +302,9 @@
 \nocite{thierry2013dctrl}
 \printbibliography[title=Liste de mes publications,filter=own]
 
+\mainmatter
+
+\renewcommand{\headrulewidth}{1.0pt}
 \input{includes/intro/01_introduction.tex}
 
 \input{includes/intro/02_problematique.tex}

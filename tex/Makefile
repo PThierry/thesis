@@ -63,7 +63,7 @@ images:
 all : help
 
 #makeindex -s $(SOURCE:.tex=.ist) -o $(SOURCE:.tex=.gls) $(SOURCE:.tex=.glo)
-pdf :
+compile :
 	/bin/bash scripts/generate_toc.sh
 	$(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE)
 	$(MAKEGLOSSARY) $(MAKEGLOSSARYOPT) $(SOURCE_PREFIX)
@@ -71,8 +71,13 @@ pdf :
 	while [ `cat $(SOURCE:.tex=.log) | grep 'may have changed.' | wc -l` -ge 1 ]; do $(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE); done
 	$(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE) # for bibliography backrefs
 	mv $(SOURCE:.tex=.pdf) $(TARGET).uncompressed.pdf
-	pdftk $(TARGET).uncompressed.pdf output $(TARGET).compressed.pdf compress
+
+pdf: prepare_for_publication
+
+prepare_for_publication: compile
 	sed -re 's:\(TeX Live 2012/Debian\):TeX Live 2012/Debian:g' -i $(TARGET).uncompressed.pdf
+	INFILE=$(TARGET).uncompressed.pdf OUTFILE=$(TARGET).uncompressed.2.pdf ./scripts/del_lastpage.sh
+	pdftk $(TARGET).uncompressed.2.pdf output $(TARGET).compressed.pdf compress
 
 clean : 
 	$(RM) $(RMFLAGS) $(OBJS) $(TODEL)
@@ -80,6 +85,7 @@ clean :
 distclean : clean
 	$(RM) $(RMFLAGS) $(TARGET).compressed.pdf
 	$(RM) $(RMFLAGS) $(TARGET).uncompressed.pdf
+	$(RM) $(RMFLAGS) $(TARGET).uncompressed.2.pdf
 
 dist : distclean
 	$(TAR) $(TARFLAGS) $(DISTTARGET) .
