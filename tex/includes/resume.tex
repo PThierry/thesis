@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  mar. 24 nov. 2009 22:14:05 CET Philippe THIERRY
-%% Last update ven. 11 avril 2014 12:03:01 CEST phil
+%% Last update lun. 14 avril 2014 11:42:46 CEST phil
 %%
 \thispagestyle{empty}
 \begin{minipage}{\linewidth}
@@ -112,118 +112,68 @@ militaires pour lesquels les contraintes peuvent varier.
 
 \paragraph{}
 In this thesis, I have answered, in collaboration with Thales Communications
-\& Security, to the 
-%%%%%%%%%
-
-Dans le cadre de ma thèse, j'ai cherché à répondre, en accord avec Thales Communications \&
-Security, au besoin naissant, dans les
-systèmes véhiculaires, de passerelles permettant d'interconnecter les
-différents réseaux embarqués. Ces différents réseaux sont en charge de
-fonctions très hétérogènes, comme par exemple:
+\& Security, to the new need of network gateways in embedded vehicular
+systems. These networks manage complex heterogeneous networks, such as:
 \begin{itemize}
-  \item L'ensemble des fonctions d'aide à la conduite (ABS, limiteur et
-    régulateur de vitesse, etc.)
-  \item Les différentes fonctions multimédia (lecteur multimédia, système en
-    charge des connexions Bluetooth, etc.)
+\item the network managing the driving functions (ABS, ESP, speed regulator,
+etc.)
+\item the multimedia network (audio/video functions, local user network
+interfaces such as Bluetooth, etc.)
 \end{itemize}
-Dans le cadre des véhicules militaires, plusieurs réseaux viennent encore
-s'ajouter à ceux-ci. Le besoin d'une passerelle d'interconnexion vient du fait
-qu'il est nécessaire de permettre le transfert de données entre ces réseaux.
-Ce besoin a été expliqué par la Direction Générale de l'Armement (DGA), et
-commence également à apparaître sur les marchés à l'export.
-Le transfert de données doit pouvoir se faire tout en évitant une contagion
-des contraintes de certification portées par chacun de ces réseaux, pour des
-raisons de coût financier de la solution. Cela implique donc que la passerelle
-en charge de ce transfert possède les propriétés de cloisonnement
-nécessaires pour garantir que les réseaux les plus contraints ne sont pas
-impactés par cette interconnexion.
-%%%
-\paragraph{}
-Afin de pouvoir construire une telle passerelle, en me basant sur une implémentation
-logicielle, j'ai travaillé en trois étapes:
+
+In military vehicles, other networks are integrated to these initial ones, for
+various military needs. The need of a network gateway is the consequence of
+the new interconnections of these networks, in order to transmit various data
+from a network to another. This need, for military vehicles, has been
+described by the French Direction Générale de l'Armement (DGA) and begin to
+appear in in some foreign markets.
+The data transfer between networks must be done without impacting each network
+specific safety and/or security requirements, in order to avoid a
+certification requirement on less secure and/or safe networks. Such
+constraint imply that the gateway has to be compliant to specific partitioning
+requirements.
+
+In order to propose a software solution for such a gateway, I've separated my
+work in three steps:
 \begin{enumerate}
-  \item J'ai formalisé sous forme d'exigences les différentes contraintes liées
-    aux besoins et enjeux de l'usage d'une telle passerelle dans les véhicules
-    militaires. Ces contraintes et enjeux m'ont été fournis par les équipes
-    Thales en charge de l'intégration des différents réseaux dans les véhicules
-    militaires de type blindés légers, dans le cadre de plusieurs entretiens.
-    L'usage d'exigences formelles permet de valider la
-    pertinence de la solution technique par rapport aux contraintes. Cela
-    évite également de définir une solution technique trop complexe
-    et trop riche par rapport au besoin initial.\\
-  La définition des exigences formelles et des hypothèses sur le
-    matériel sous-jacent est proposée dans le Chapitre \ref{sec:matrix}. 
-  \item Une fois l'ensemble de ces exigences formalisées, j'ai déterminé une
-    solution logicielle, ainsi que les contraintes sur le matériel, permettant
-    de répondre à celles-ci. Les exigences sont globalement séparées en deux
-    grandes familles:
-    \begin{itemize}
-      \item Les exigences liées à la sécurité, auxquelles je réponds dans le
-        cadre du Chapitre \ref{chap:solution_secu}, en m'appuyant sur les
-        mécanismes de compartimentation logicielle de type MultiLevel Security
-        et en proposant des mécanismes complémentaires pour répondre aux
-        différentes exigences de sécurité 
-      \item Les exigences liées à la sureté de fonctionnement, auxquelles je
-        réponds, pour la partie temps réel, dans le Chapitre
-        \ref{sec:solution_rt}. Je prends alors en compte, dans la réponse
-        aux exigences de temps réel, les
-        contraintes apportées par le besoin sécuritaire. J'ai alors étudié
-        les propriétés d'ordonnancement hiérarchique et de criticité mixte,
-        nécessaires du fait des contraintes de puissance et de consommation
-        exprimées par le client.
-    \end{itemize}
-  \item Afin de valider la solution, j'ai choisi un certain nombre de
-    composants logiciels majeurs de la solution, afin de valider leurs propriétés
-    et leur comportement. La validation s'est effectuée sous formes de
-    plusieurs publications
-    \cite{santy2012relaxing,thierry2011toward,thierry2011real,thierry2013etfa},
-    d'un maquettage général décrit dans le chapitre
-    \ref{sec:passsystronique} et de deux implémentations
-    se rapprochant d'un produit industriel, ayant donné lieu à trois brevets
-    \cite{thierry2013part,thierry2013daudit,thierry2013dctrl}.
+\item I've formalized requirements in order to support the various constraints
+associated to the needs of such a gateway in military vehicles. These
+constraints have been listed by the Thales teams interacting with the French
+DGA for the lightweight military vehicles market. Using formalized
+requirements make the validation of the technical solution easier. There
+requirements also permit to avoid potentially costly over-specifications.
+\item Using the formalized requirements, I've proposed a software solution and
+a list of properties and constraints on the bellowing hardware to guarantee
+the compliance of the overall hardware/software solution. These requirements,
+properties and constraints are defined in the Chapter \ref{sec:matrix}.\\
+The requirements are globally separated in two families:
+  \begin{itemize}
+    \item The security requirements, to which I respond in the Chapter
+    \ref{chap:solution_secu}, through the usage of the software partitioning
+    based on the existing works around MultiLevel Security, with new specific
+    components and principles.
+    \item The safety requirements, to which I respond for the real time
+    aspects, in the Chapter \ref{sec:solution_rt}. I then consider, in my
+    response to real time requirements, the security specific constraints.
+    I've studied the hierarchical scheduling and the mixed criticality
+    properties, needed in order to be compliant to the power and consumption
+    requirements of such a gateway and for the partitioning principles due to
+    security specific requirements.
+  \end{itemize}
+\item In order to validate the solution, we have chosen some important new
+software components of the solution, and validated their specific properties
+and behavior. This validation has been done through various publications
+\cite{santy2012relaxing,thierry2011toward,thierry2011real,thierry2013etfa}, a
+proof of concept described in Chapter \ref{sec:passsystronique} and two
+pre-industrial implementations, protected by three patents 
+\cite{thierry2013part,thierry2013daudit,thierry2013dctrl}.
 \end{enumerate}
 
-
-Ma thèse a ainsi permis de valider une première solution technique permettant
-de répondre à la plupart des contraintes apportées par le client.
-Cette solution a de plus pour but d'être un
-framework ouvert, où il est possible d'ajouter ou de retirer des modules
-sécuritaires ou temps réel en fonction du besoin, tout en restant sur la même
-architecture générale dont le but est de garantir un cloisonnement efficace, à
-la fois spatial et temporel. Ce principe permet ainsi de limiter le coût
-d'instanciation d'une telle passerelle dans divers types de véhicules
-militaires pour lesquels les contraintes peuvent varier.
-
-%%%%%%%%%%%% 8<
-
-
-
-\paragraph{}
-Nowadays, information systems security considerations are more and more
-required in vehicular embedded systems. This is the case of military vehicles
-information systems, where both safety and security requirements need to be
-respected, but also in some other domains such as medical or local forces
-vehicles, where confidential data need to be collected. In the case of military
-vehicles, safety-critical data, such as external cameras flows or weaponry
-management, and security critical data, such as coalition informations and HQ
-orders, need to be aggregated in a same management terminal. Such aggregation
-requires safety-critical (including real-time) requirements and security
-requirements.\\
-The fusion of both safety and security requirements family implies the usage of new
-software architectures. Nevertheless, these requirements families may not be easily
-compatibles. As a consequence, the usage of a mixed software solution
-based on a same hardware requires an efficient separation between
-safety critical and security software elements.
-Hardware sharing is more and more required in such systems, most of the time
-for physical needs, such as weight, consumption or temperature. In the same
-time, these appliances must not be too costly, in order to reduce the overall vehicle
-cost for clients.\\
-In this document, I describe a modular and evolutive software solution able to
-respond to various military vehicular needs in term of safety and real-time
-needs, but also in term of security needs. I propose some real-time functions
-compliant to security requirements and validated such functions through
-various demonstrators. The solution I propose is an open software framework,
-targeting a complete modular architecture in order to respond to various needs
-with a efficient reuse of the various security or safety specific autonomous
-software modules, spatially and temporally separated.
+During my thesis, I have then validated a first technical solution responding
+to most of the French DGA constraints. This solution is designed as an open
+framework, where it is possible to add or to delete security-specific or
+real-time specific software modules depending on the need, without impacting
+the overall spatial and temporal partitioning properties.\\
+Such principle allows the instantiation of multiple gateways for multiple
+vehicular-specific needs, based on the same overall architecture.
 

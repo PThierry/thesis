@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  lun. 09 sept. 2013 15:56:13 CEST Philippe THIERRY
-%% Last update dim. 13 avril 2014 11:06:20 CEST phil
+%% Last update lun. 14 avril 2014 10:48:33 CEST phil
 %%
 
 % go to odd page
@@ -228,8 +228,11 @@ d'interfaces réseau) d'une telle architecture, sur les processeurs spécialisés d
 réseau, comme les processeur Cavium Octeon ou Freescale CorIQ,
 \item la possibilité d'intégrer des traitements associés à des domaines de
 sécurité disjoints sur un même SoC tout en assurant un cloisonnement à la fois
-logiciel et matériel des chemins de données (par exemple via l'usage de Network
-on Chip (NoC),
+logiciel et matériel des chemins de données (impact de l'usage des contrôleurs
+de caches locaux ou et partagés et de l'interconnect),
+\item l'impact et la compatibilité des travaux sur les contrôleurs de caches
+tant sur les propriétés temps réel que les propriétés sécuritaires d'un
+système multi-niveaux de sécurité (MLS),
 \item l'impact de la virtualisation matérielle des processeurs récents
 (Freescale QorIQ ou ARM Cortex A15, A53 ou A57), tant en terme de sécurité
 qu'en terme de latence d'ordonnancement des machines virtuelles,
