@@ -94,6 +94,6 @@ install : $(TARGET)
 	@echo you must be root to install
 
 view:
-	if [ ! -f $(TARGET) ]; then make all; fi
+	if [ ! -f $(TARGET).compressed.pdf ]; then make pdf; fi
 	$(PDFVIEWER) $(TARGET).compressed.pdf
 
