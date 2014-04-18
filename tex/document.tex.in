@@ -302,7 +302,10 @@
 \nocite{thierry2013part}
 \nocite{thierry2013daudit}
 \nocite{thierry2013dctrl}
-\printbibliography[title=Liste de mes publications,filter=own]
+\chapter*{Liste de mes publications}
+\printbibliography[heading=subbibliography,title=Publications,keyword=ownpub]
+\printbibliography[heading=subbibliography,title=Workshops,keyword=ownwshop]
+\printbibliography[heading=subbibliography,title=Brevets,keyword=ownpat]
 
 \mainmatter
 
