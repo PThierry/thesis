@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  mar. 24 nov. 2009 22:14:05 CET Philippe THIERRY
-%% Last update lun. 14 avril 2014 11:42:46 CEST phil
+%% Last update ven. 18 avril 2014 15:50:17 CEST phil
 %%
 \thispagestyle{empty}
 \begin{minipage}{\linewidth}
@@ -111,13 +111,13 @@ militaires pour lesquels les contraintes peuvent varier.
 \addstarredchapter{Abstract}
 
 \paragraph{}
-In this thesis, I have answered, in collaboration with Thales Communications
-\& Security, to the new need of network gateways in embedded vehicular
+In this thesis, I have worked in collaboration with Thales Communications
+\& Security, on the new need of network gateways in embedded vehicular
 systems. These networks manage complex heterogeneous networks, such as:
 \begin{itemize}
-\item the network managing the driving functions (ABS, ESP, speed regulator,
+\item network managing driving functions (ABS, ESP, speed regulator,
 etc.)
-\item the multimedia network (audio/video functions, local user network
+\item multimedia networks (audio/video functions, local user network
 interfaces such as Bluetooth, etc.)
 \end{itemize}
 
@@ -125,37 +125,38 @@ In military vehicles, other networks are integrated to these initial ones, for
 various military needs. The need of a network gateway is the consequence of
 the new interconnections of these networks, in order to transmit various data
 from a network to another. This need, for military vehicles, has been
-described by the French Direction Générale de l'Armement (DGA) and begin to
-appear in in some foreign markets.
+described by the French Direction Générale de l'Armement (DGA) and begins to
+appear in some foreign markets.
 The data transfer between networks must be done without impacting each network
 specific safety and/or security requirements, in order to avoid a
 certification requirement on less secure and/or safe networks. Such
 constraint imply that the gateway has to be compliant to specific partitioning
 requirements.
 
-In order to propose a software solution for such a gateway, I've separated my
-work in three steps:
+In order to propose a software solution for such a gateway, I've considered
+three steps:
 \begin{enumerate}
-\item I've formalized requirements in order to support the various constraints
-associated to the needs of such a gateway in military vehicles. These
-constraints have been listed by the Thales teams interacting with the French
+\item I've formalized safety, security and physical requirements in order
+to support the various constraints associated to the needs of such a gateway
+in military vehicles. These
+constraints have been listed by Thales teams interacting with the French
 DGA for the lightweight military vehicles market. Using formalized
-requirements make the validation of the technical solution easier. There
-requirements also permit to avoid potentially costly over-specifications.
-\item Using the formalized requirements, I've proposed a software solution and
-a list of properties and constraints on the bellowing hardware to guarantee
+requirements make the validation of the technical solution easier. These
+requirements also permit us to avoid potentially costly over-specifications.
+\item Using formalized requirements, I've proposed a software solution and
+a list of properties and constraints on the underlying hardware to guarantee
 the compliance of the overall hardware/software solution. These requirements,
 properties and constraints are defined in the Chapter \ref{sec:matrix}.\\
 The requirements are globally separated in two families:
   \begin{itemize}
-    \item The security requirements, to which I respond in the Chapter
-    \ref{chap:solution_secu}, through the usage of the software partitioning
-    based on the existing works around MultiLevel Security, with new specific
+    \item the security requirements, to which I respond in the Chapter
+    \ref{chap:solution_secu}, through the usage of software partitioning
+    based on existing works around MultiLevel Security, with new specific
     components and principles.
-    \item The safety requirements, to which I respond for the real time
-    aspects, in the Chapter \ref{sec:solution_rt}. I then consider, in my
+    \item the safety requirements, to which I respond for real time
+    aspects, in Chapter \ref{sec:solution_rt}. Then, I consider in my
     response to real time requirements, the security specific constraints.
-    I've studied the hierarchical scheduling and the mixed criticality
+    I've studied hierarchical scheduling and mixed criticality
     properties, needed in order to be compliant to the power and consumption
     requirements of such a gateway and for the partitioning principles due to
     security specific requirements.
@@ -170,7 +171,7 @@ pre-industrial implementations, protected by three patents
 \end{enumerate}
 
 During my thesis, I have then validated a first technical solution responding
-to most of the French DGA constraints. This solution is designed as an open
+to most of French DGA constraints. This solution is designed as an open
 framework, where it is possible to add or to delete security-specific or
 real-time specific software modules depending on the need, without impacting
 the overall spatial and temporal partitioning properties.\\

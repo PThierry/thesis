@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
-%% Last update jeu. 10 avril 2014 11:05:47 CEST phil
+%% Last update ven. 18 avril 2014 17:27:04 CEST phil
 
 
 \chapter{Concepts}
@@ -53,12 +53,13 @@ d'Information) définit des exigences de sécurité pour assurer la
 confidentialité, l'intégrité et la disponibilité (au sens sécuritaire du
 terme) du domaine. Ces exigences sont mises en place sous forme:
 \begin{itemize}
-  \item d'un choix d'architecture réseau, logicielle et matérielle
+  \item d'un choix d'architecture réseau, logicielle et matérielle ;
   \item de la définition d'algorithmes de chiffrements spécifiques et de
-    solutions implémentant ces algorithmes
-  \item d'une définition d'un processus de gestion du domaine (protection physique et logique)
+    solutions implémentant ces algorithmes ;
+  \item d'une définition d'un processus de gestion du domaine (protection
+  physique et logique) ;
   \item d'une définition des responsabilités et des rôles de chaque
-    intervenant dans le domaine
+    intervenant dans le domaine.
 \end{itemize}
 Plus le niveau de confidentialité est élevé, plus la PSSI est stricte et
 complexe.
@@ -104,9 +105,9 @@ ainsi être généré et du {\it padding} incorporé afin d'empêcher toute déduction 
 simple écoute du flux noir.
 
 \paragraph{}
-La problématique de passage d'un domaine rouge à un domaine noir est appelé
+La problématique de passage d'un domaine rouge à un domaine noir est appelée
 problématique rouge/noir. On la retrouve principalement dans les réseaux radio
-militaires, mais reste un principe général applicable à toute interconnexion
+militaires, mais elle reste un principe général applicable à toute interconnexion
 de réseaux militaires.
 
 \subsubsection{Niveaux de confidentialité et droit d'en connaître}
@@ -128,7 +129,7 @@ connaître d'un sujet.
 Ainsi, une personne ayant une habilitation Confidentiel Défense sur
 un projet donné n'a pas besoin pour autant de connaître l'ensemble des
 informations classifiées Confidentiel Défense de ce dernier. On lui fournit alors
-uniquement les informations nécessaires à son travail, appelé droit d'en
+uniquement les informations nécessaires à son travail, appelées droit d'en
 connaître. Le principe est le même pour les processus logiciels faisant du
 traitement sur des données d'un niveau de confidentialité donné.
 
@@ -176,8 +177,9 @@ l'information vers un sujet n'ayant pas les droits d'accès à celle-ci.
 L'usage d'un canal caché
 implique un usage volontaire de part et d'autre pour émettre les données et
 pour les recevoir. Il est donc invasif, contrairement aux canaux auxiliaires.\\
-Un exemple typique est de s'appuyer sur la période intertrame d'un flux
-réseau donné pour fournir une information \cite{berk2005detection}. En faisant varier la période, il
+Un exemple typique est de s'appuyer sur la durée intertrame minimale d'un flux
+réseau donné pour fournir une information \cite{berk2005detection}. En faisant
+varier la durée intertrame, il
 est possible d'émettre de l'information, qui peut être ainsi interprétée par un
 récepteur. De manière générale, les canaux cachés permettent l'émission de
 données de faible taille, car leur débit est en général très faible. Ils sont
@@ -253,7 +255,7 @@ sont rappelées dans le Chapitre \ref{sec:mils}
 \paragraph{}
 Lorsque l'on s'appuie sur une architecture de type compartimentation stricte
 de fonctions exécutées de manière autonome (comme par exemple via des
-technologies de virtualisation), la solution peut être compatible du principe
+technologies de virtualisation), la solution peut être compatible avec le principe
 de certification par composition.
 
 \PhDdefinition{certcomp}{Certification par composition}{
@@ -285,7 +287,7 @@ d'ordonnanceurs, les ordonnanceurs en ligne et hors ligne.
 \paragraph{L'ordonnancement en ligne}
 Les choix d'ordonnancement se font durant l'exécution, en fonction de la liste
 des travaux présents et de leurs paramètres (par exemple en fonction de leurs échéances
-relatives).
+absolues).
 
 \paragraph{L'ordonnancement hors ligne}
 La politique d'ordonnancement est définie par avance. Elle est donc optimisée pour un cas particulier de jeu
@@ -297,7 +299,8 @@ Parmi tous ces ordonnanceurs, certains peuvent préempter un travail en cours
 d'exécution avant sa terminaison. On parle alors d'ordonnancement préemptif. A
 l'inverse, si un travail en cours d'exécution ne peut être arrêté avant sa
 terminaison, on parle d'ordonnancement non-préemptif. La préemption peut être
-liée à un paramètre temporel (time-driven) ou événementiel (event-driven).\\
+liée à une gestion du temps gérée en interne par l'ordonnanceur (time-driven) ou
+événementiel (event-driven).\\
 Dans le cadre de ma thèse, je cible deux ordonnanceurs:
 \begin{itemize}
 \item L'ordonnancement TDM (hors ligne, préemptif de type time-driven)
@@ -317,9 +320,9 @@ On appelle machine virtuelle (ou VM, Virtual Machine) une implémentation
 logicielle d'une machine (i.e. d'un ordinateur) qui exécute des programmes
 comme une machine physique. Il existe deux familles de machines virtuelles:
 \begin{itemize}
-\item Une machine virtuelle système, représentant une plateforme matérielle
-complète et qui supporte l'exécution d'un système d'exploitation.
-\item Une machine virtuelle de processus, dont le but est d'exécuter un seul
+\item une machine virtuelle système, représentant une plateforme matérielle
+complète et qui supporte l'exécution d'un système d'exploitation ;
+\item une machine virtuelle de processus, dont le but est d'exécuter un seul
 programme et qui permet d'assurer la portabilité de ce dernier. C'est par
 exemple le cas de la machine virtuelle Java.
 \end{itemize}

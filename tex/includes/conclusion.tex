@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  lun. 09 sept. 2013 15:56:13 CEST Philippe THIERRY
-%% Last update lun. 14 avril 2014 10:48:33 CEST phil
+%% Last update ven. 18 avril 2014 17:34:59 CEST phil
 %%
 
 % go to odd page
@@ -20,26 +20,26 @@
 
 \paragraph{}
 Dans le cadre de ma thèse, j'ai proposé une solution afin de résoudre la
-problématique d'interconnexions des différents réseaux véhiculaires qui
+problématique d'interconnexion des différents réseaux véhiculaires qui
 ont été déployés dans les systèmes des véhicules militaires et qui commencent
 à apparaître pour certains d'entre eux dans les véhicules civils. Il s'agit
 à la fois de réseaux de bord, en général basés sur des bus de type CAN ou
 équivalents et exigeants de fortes contraintes de sûreté, mais également de
 réseaux multimédias, dont les niveaux de sécurité varient en fonction des
 données qu'ils font transiter, et dont la criticité est plus ou moins
-élevé. Ces réseaux, initialement complètement indépendants,
+élevée. Ces réseaux, initialement complètement indépendants,
 sont aujourd'hui interconnectés afin de permettre le transfert de données
 vers des interfaces de gestion unifiées locales ou parfois distantes.
 Néanmoins, les domaines de sécurité et de sûreté associés à ces différents
 réseaux doivent être respectés :
 \begin{itemize}
-\item En terme de sûreté de fonctionnement, la problématique temps réel est au
+\item en terme de sûreté de fonctionnement, la problématique temps réel est au
 c{\oe}ur des contraintes de transmissions de l'information. Les informations
 doivent être transmises avec une échéance maîtrisée et sans perte dans le
 cadre d'un traitement nominal. Les domaines de moindre
 sûreté ne doivent pas impacter le niveau de sûreté des domaines les plus
-contraints, comme par exemple celui associé au réseau de bord.
-\item En terme de sécurité, les données transitant
+contraints, comme par exemple celui associé au réseau de bord ;
+\item en terme de sécurité, les données transitant
 d'un domaine à l'autre sont validées au moment du changement de
 domaine, et autorisées selon la politique de sécurité associée au changement
 de domaine.
@@ -128,20 +128,19 @@ permettant de valider l'ordonnançabilité d'une solution générique sur une
 architecture MLS, telle qu'utilisée dans ma thèse.
 
 
-La cible industrielle de ma thèse est un produit embarqué véhiculaire à forte
-contrainte de taille, de poids et de consommation. Cela implique qu'il n'est
+La cible industrielle de ma thèse est un produit embarqué véhiculaire à fortes
+contraintes de taille, de poids et de consommation énergétique. Cela implique qu'il n'est
 pas possible de dimensionner l'architecture matérielle pour assurer
 l'ordonnançabilité de l'ensemble des traitements avec un calcul du WCET très
 pessimiste. Afin d'assurer malgré tout une garantie de traitement correct,
-j'ai proposé une solution basée sur de la criticité mixte, déterminant
+j'ai proposé une solution basée sur une approche à criticité mixte, déterminant
 hors-ligne quels traitements doivent être assurés et quels traitements peuvent
 être arrêtés en cas de dépassement de charge impactant l'ordonnançabilité de
 l'ensemble des tâches. Le choix des traitements n'étant pas soumis au choix d'un flux, l'usage de la criticité
 mixte peut être un bon complément à l'usage de la Qualité de Service au sens
-Télécom du terme. Ainsi, plutôt que de prioriser des flux, il est
-possible de maintenir l'ensemble des flux à faire transiter, tout en modifiant
-le chaînage des traitements à effectuer sur chacun d'entre eux en fonction du
-niveau de criticité de chaque traitement. Dans le cadre de ma thèse, la
+Télécom du terme. Ainsi, plutôt que de prioriser des flux réseau, il est
+possible de réduire les travaux successifs effectués sur ces flux en fonction du
+niveau de criticité de chaque travail. Dans le cadre de ma thèse, la
 solution cible le transfert de divers flux utilisant divers éléments
 d'entrée/sortie (bus CAN, Ethernet, etc). Elle ne s'appuie donc pas sur le
 principe de Qualité de Service Réseau, cette dernière étant spécifique au type
@@ -172,7 +171,7 @@ faut que l'ensemble des éléments du chemin de données soient temps réel. A
 défaut de pouvoir utiliser dans ma thèse une pile réseau certifiée ou
 certifiable, je me suis appuyé sur un noyau Linux utilisant le patch LinuxRT,
 limitant ainsi le comportement non temps réel du noyau Linux. Dans le cadre
-d'une véritable passerelle, et en fonction de niveau de certification demandé,
+d'une véritable passerelle, et en fonction du niveau de certification demandé,
 il peut être nécessaire de remplacer Linux par un environnement certifiable
 sachant répondre au même besoin.\\
 La présence d'un système d'exploitation GNU/Linux impacte également le niveau
@@ -191,7 +190,7 @@ de leur impact en terme de poids et de volume.
 
 
 Ainsi, le framework que j'ai proposé permet de répondre à un certain nombre de
-contraintes, qu'elles soient liées à la sécurité, la sûreté de fonctionnement,
+contraintes formalisées dans le Chapitre \ref{sec:matrix}, qu'elles soient liées à la sécurité, la sûreté de fonctionnement,
 ou l'embarquabilité de la solution. En enrichissant les différents modules que
 j'ai proposé et en implémentant les fonctions décrites comme le support de la
 criticité mixte, elle permettrait potentiellement de construire des solutions
@@ -225,11 +224,11 @@ terme de temps réel que de sécurité logicielle, comme par exemple:
 mixte sur une architecture de type Multi-Processor System on Chip (MPSoC),
 \item la capacité de passage à l'échelle (accroissement du débit et du nombre
 d'interfaces réseau) d'une telle architecture, sur les processeurs spécialisés dans le
-réseau, comme les processeur Cavium Octeon ou Freescale CorIQ,
+réseau, comme les processeurs Cavium Octeon ou Freescale CorIQ,
 \item la possibilité d'intégrer des traitements associés à des domaines de
 sécurité disjoints sur un même SoC tout en assurant un cloisonnement à la fois
 logiciel et matériel des chemins de données (impact de l'usage des contrôleurs
-de caches locaux ou et partagés et de l'interconnect),
+de caches locaux et/ou partagés et de l'interconnect),
 \item l'impact et la compatibilité des travaux sur les contrôleurs de caches
 tant sur les propriétés temps réel que les propriétés sécuritaires d'un
 système multi-niveaux de sécurité (MLS),

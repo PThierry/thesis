@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  mer. 25 nov. 2009 20:37:12 CET Philippe THIERRY
-%% Last update jeu. 10 avril 2014 10:55:38 CEST phil
+%% Last update ven. 18 avril 2014 18:01:17 CEST phil
 %%
 
 
@@ -21,9 +21,10 @@
 \section{Problématique des systèmes véhiculaires militaires}
 
 \paragraph{}
-Le client demande aujourd'hui de permettre d'interconnecter les divers réseaux
+Le client étatique français (Direction Générale de l'Armement)
+demande aujourd'hui d'interconnecter divers réseaux
 embarqués dans un véhicules. Dans le cadre des véhicules militaires, ces
-réseaux peuvent porter des contraintes de temps réel, de fiabilité mais
+réseaux peuvent transmettre des informations ayant des contraintes de temps réel, de fiabilité mais
 également de sécurité.\\
 La contrainte sécuritaire est présente dans les véhicules militaires, mais également dans
 d'autres domaines comme le médical (accès aux données médicales du patient dans le
@@ -46,18 +47,18 @@ consommation des différents éléments technologiques présents.\\
 De plus, il est également demandé de permettre une
 meilleure centralisation de la supervision des différents composants, que ces
 derniers fassent partie d'un domaine à forte contrainte de temps réel, de
-fiabilité ou d'un domaine à forte contrainte sécuritaire.
+fiabilité ou d'un domaine à forte contrainte de sécurité.
 
 Ainsi, il devient nécessaire de définir une passerelle permettant d'interagir à la fois avec des
 domaines à fortes contraintes temps réel, des domaines à fortes contraintes de
 fiabilité et plusieurs domaines de sécurité. Cette passerelle doit alors
 assurer à la fois :
 \begin{itemize}
-  \item un cloisonnement strict des domaines de sécurité disjoints
+  \item un cloisonnement strict des domaines de sécurité disjoints ;
   \item le transfert de données du domaine temps réel tout en assurant une
-    latence de traversée maximum garantie
+    latence de traversée maximum garantie ;
   \item le transfert de données de supervision du domaine à fortes contraintes de
-    fiabilité sans pour autant impacter ces éléments
+    fiabilité sans pour autant impacter ces éléments.
 \end{itemize}
 
 Afin de présenter plus précisément les enjeux et limitations associés à
@@ -65,7 +66,7 @@ l'intégration d'une passerelle pour interconnecter les différents réseaux
 embarqués dans le véhicule, il est nécessaire de définir tout d'abord un
 certain nombre de concepts. Ceux-ci sont décrits dans les Sections
 \ref{sec:concepts_gen} et \ref{sec:concepts_veh}. La description précise
-des enjeux, ainsi que les premiers éléments de solutions, sont décrit dans
+des enjeux, ainsi que les premiers éléments de solutions, sont détaillés dans
 la Section \ref{sec:fin_problematique}.
 
 \section{Notions et définitions générales}
@@ -91,11 +92,11 @@ systèmes.
 Dans un véhicule militaire, on retrouve un système de systèmes, en charge de
 gérer, entre autres:
 \begin{itemize}
-\item Le système d'armes, en charge de gérer l'armement et le blindage
-\item Le système de bord (appelé aussi réseau de bord du fait de son très
+\item le système d'armes, en charge de gérer l'armement et le blindage ;
+\item le système de bord (appelé aussi réseau de bord du fait de son très ;
 grand nombre de liens d'interconnexion), en charge de gérer les composants moteur
-\item Le système de communication, en charge de gérer les communications entre
-le véhicule et l'extérieur (autres véhicules, le quartier général, etc.)
+\item le système de communication, en charge de gérer les communications entre
+le véhicule et l'extérieur (autres véhicules, le quartier général, etc.).
 \end{itemize}
 
 \PhDdefinition{syssystro}{Système systronique}{
@@ -105,7 +106,7 @@ systèmes de communications complexes, on parle alors de système systronique.
 }
 
 Pour être intégrable dans un véhicule, un élément matériel doit être
-compatible d'un facteur de forme spécifique.
+compatible avec un facteur de forme spécifique.
 
 \PhDdefinition{ffactor}{Facteur de forme}{
 On appelle facteur de forme les dimensions, le type d'alimentation, le nombre de
@@ -125,9 +126,9 @@ internes aux systèmes systroniques.
 Un système d'information est dit sécurisé lorsqu'il respecte, pour les données
 qu'il traite, les 3 principes de sécurité suivants :
 \begin{itemize}
-\item Disponibilité
-\item Intégrité
-\item Confidentialité
+\item disponibilité ;
+\item intégrité ;
+\item confidentialité.
 \end{itemize}
 
 \paragraph{}
@@ -166,16 +167,14 @@ disponibilité.
 
 \PhDdefinition{secpol}{Politique de sécurité}{
 Pour garantir la sécurité d'un domaine de sécurité donné, on définit une
-politique de sécurité, en charge de définir l'ensemble des fonctions de
+politique de sécurité, en charge de préciser l'ensemble des fonctions de
 sécurité nécessaire au respect des contraintes de sécurité du domaine.
 }
 
 \paragraph{}
 Le niveau de sécurité d'un système se détermine grâce à un standard
-international : les Critères Communs pour l'évaluation sécuritaire des
-technologies de l'information \cite{cc_docs}. On parle plus régulièrement des
-Critères Communs
-(dénotés CC). Ceux-ci définissent 7 niveaux, appelés EAL
+international : les Critères Communs (CC) pour l'évaluation sécuritaire des
+technologies de l'information \cite{cc_docs}. Ceux-ci définissent 7 niveaux, appelés EAL
 (Evaluation Assurance Level), de EAL 1 (le plus faible) à EAL 7 (le plus
 élevé).
 
@@ -221,7 +220,7 @@ l'association MISRA (Motor Industry Software Reliability Association)
 }
 
 \PhDdefinition{syssur}{Système sûr}{
-  Un système est dit sûr si son niveau d'assurance est compatible de son niveau
+  Un système est dit sûr si son niveau d'assurance est compatible avec son niveau
   de criticité. Il possède donc des
   propriétés de fiabilité et des propriétés de temps réel adéquates pour assurer
   la protection des vies humaines ou du matériel correspondant à son niveau de
@@ -232,13 +231,13 @@ l'association MISRA (Motor Industry Software Reliability Association)
 \paragraph{}
 Il existe trois modèles d'exécution temps réel:
 \begin{itemize}
-  \item Le modèle périodique: Les instanciations successives d'une tâche
-    (appelées travail) s'effectuent avec une inter-arrivée constante
-  \item Le modèle sporadique: Les instanciations successives d'une tâche
+  \item le modèle périodique: les instanciations successives d'une tâche
+    (appelées travail) s'effectuent avec une inter-arrivée constante ;
+  \item le modèle sporadique: les instanciations successives d'une tâche
     s'effectuent avec une inter-arrivée variable, mais dont la plus petite
-    inter-arrivée est connue et non nulle
-  \item Le modèle apériodique: Il n'y a pas d'instanciation successive d'une
-    tâche, et donc pas de principe d'inter-arrivée
+    inter-arrivée est connue et non nulle ;
+  \item le modèle apériodique: il n'y a pas d'instanciation successive d'une
+    tâche.
 \end{itemize}
 Dans le cadre de ma thèse, les traitements sont induits par des événements
 extérieurs asynchrones (correspondant à des flux réseau). En
@@ -248,16 +247,22 @@ donc considéré par la suite.
 \paragraph{}
 Chaque tâche temps réel se définit par les propriétés suivantes:
 \begin{itemize}
-\item Un coût d'exécution pire cas, dénoté WCET (Worst Case Execution Time).
-\item Une période, déterminant l'inter-arrivée minimum entre deux travaux de la
-  tâche.
-\item Une échéance, correspondant à la durée maximum entre l'instanciation du
-  travail et la terminaison de son exécution.
+\item un coût d'exécution pire cas, dénoté WCET (Worst Case Execution Time) ;
+\item une période, déterminant l'inter-arrivée minimum entre deux travaux de la
+  tâche ;
+\item une échéance, qui peut être:
+  \begin{itemize}
+    \item relative : la durée maximum entre l'instanciation du
+  travail et la terminaison de son exécution
+    \item absolue : l'instant avant lequel la tâche doit s'être complètement
+    exécutée
+  \end{itemize}
 \end{itemize}
 Un système logiciel temps réel est en charge d'assurer que l'ensemble des
-travaux terminent leur exécution avant leur échéance. Pour cela il s'appuie
+travaux terminent leur exécution avant leur échéance de terminaison au plus
+tard. Pour cela il s'appuie
 sur des algorithmes d'ordonnancement. Ceux-ci sont en charge d'assurer un
-ordonnancement de l'exécution des travaux respectueux de l'ensemble de leurs
+ordonnancement des travaux respectueux de l'ensemble de leurs
 échéances.
 
 \section{Notions et terminologies véhiculaires}
@@ -361,7 +366,7 @@ Par exemple, le réseau de communication
 avec la coalition et le réseau de communication avec le pays possèdent des
 exigences de confidentialité différentes. Certaines informations pouvant être
 des données exclusives au pays. Ainsi, un système systronique possède plusieurs
-domaines de sécurité, dont le nombre est variant selon le véhicule et la
+domaines de sécurité, dont le nombre varie selon le véhicule et la
 mission.
 \paragraph{}
 Un véhicule militaire possède également des exigences de temps réel. C'est le
@@ -370,31 +375,31 @@ désactivation du système d'armes lors de l'ouverture d'une porte extérieure.\\
 Ces différents éléments ont des exigences de temps réel plus ou moins
 nombreuses. Afin de limiter le coût de certification et les contraintes
 physiques des éléments de la chaîne de traitement temps réel, le calcul du
-coût d'exécution pire cas de celle-ci est plus ou moins pessimiste.\\
+WCET de celle-ci est plus ou moins pessimiste.\\
 Si le calcul du coût d'exécution pire cas est faiblement 
 pessimiste, il peut arriver, avec une faible occurrence, que le coût
 d'exécution dépasse le coût d'exécution pire cas considéré dans le design du
 système. Si le calcul est fortement pessimiste, le dépassement n'est en
 principe pas possible. Dans ce dernier cas cependant, le coût de certification
-mais aussi la puissance des éléments matériels embarqués sont impactés. Dans
-ce cas, la puissance nécessaire au respect strict des exigences temps réel
-peut être incompatible avec des contraintes physiques liées au véhicule (volume,
+mais aussi la puissance des éléments matériels embarqués sont impactés.
+La puissance nécessaire au respect strict des exigences temps réel
+peut être alors incompatible avec des contraintes physiques liées au véhicule (volume,
 température et consommation).\\
 Afin de pouvoir répondre aux différentes exigences liées au besoin
 véhiculaire, nous considérons différentes familles de traitements:
 \begin{itemize}
 \item les traitements à très forte exigence de sûreté ou de sécurité, dont la
 latence d'exécution doit être à tout prix maintenue (système d'armes, blindage
-transparent)
+transparent) ;
 \item les traitements à forte exigence de sûreté ou de sécurité, dont la
 latence d'exécution doit être respectée au mieux (caméras extérieures,
-communications avec les autres véhicules)
+communications avec les autres véhicules).
 \end{itemize}
 Les deux familles sont donc exécutées de manière conjointe, sauf si la famille de plus
-forte priorité génère un coût d'exécution dépassant le coût pire cas
-initialement déterminé. Le système n'étant plus capable d'exécuter les deux
-familles sans dépassement de la latence, il devient nécessaire de modifier
-son comportement afin de garantir malgré tout l'exécution des fonctions les
+forte priorité génère une charge supérieure à celle qui lui est initialement
+allouée. Le système n'étant plus capable d'exécuter les deux
+familles conjointement, il devient nécessaire de modifier
+son comportement afin de garantir malgré tout l'échéance des travaux les
 plus critiques. On parle dans ce cas d'un système à criticité mixte, comme
 décrit dans le Chapitre \ref{sec:mixedcriticity}. Un
 tel système permet alors de respecter au mieux à la fois les exigences de
@@ -415,9 +420,11 @@ longue distance (entre la patrouille et
 les quartiers généraux) qu'en terme de traitements graphiques et vidéos. Il en résulte
 un système complexe interconnectant des éléments:
 \begin{itemize}
-  \item Fortement temps réel
-  \item Temps réel souple
-  \item Non temps réel
+  \item fortement temps réel (devant garantir l'échéance de l'ensemble des
+  tâches) ;
+  \item temps réel souple (pouvant autoriser des dépassements d'échéance si
+  ceux-ci sont ni trop combreux ni consécutifs) ;
+  \item non temps réel (sans principe d'échéance.
 \end{itemize}
 Aux contraintes temporelles auxquelles répondent les modèles temps réel
 s'ajoutent des contraintes de fiabilité. Elles sont présentes sur la grande
@@ -432,27 +439,27 @@ L'interconnexion de tous ces domaines (tant de sécurité que temps réel) est
 néanmoins demandée. En effet, il est nécessaire dans un véhicule muni d'un
 système systronique de:
 \begin{itemize}
-  \item Transférer de l'information désensibilisée d'un domaine de haut niveau
-    de sécurité à un domaine de moindre niveau de sécurité
-  \item Remonter de l'information d'un domaine de plus bas niveau de sécurité à un domaine
-    de plus haut niveau de sécurité
-  \item Remonter des données d'un domaine temps réel dur avec de fortes
+  \item transférer de l'information désensibilisée d'un domaine de haut niveau
+    de sécurité à un domaine de moindre niveau de sécurité ;
+  \item remonter de l'information d'un domaine de plus bas niveau de sécurité à un domaine
+    de plus haut niveau de sécurité ;
+  \item remonter des données d'un domaine temps réel dur avec de fortes
     contraintes de sûreté vers un domaine de plus faible niveau de sûreté,
-    avec des contraintes de sécurité plus fortes
+    avec des contraintes de sécurité plus fortes.
 \end{itemize}
 
 \paragraph{}
 Ces interconnexions sont principalement la conséquence de l'apparition de
 terminaux de contrôles locaux et portatifs agrégeant un grand nombre de
-données. Ces terminaux doivent être compatibles de contraintes physiques fortes (poids, volume, consommation
-électrique) et de contraintes de certification fortes (principalement liées au temps réel
+données. Ces terminaux doivent être compatibles avec des contraintes physiques fortes (poids, volume, consommation
+électrique) et avec des contraintes de certification fortes (principalement liées au temps réel
 mais aussi, par exemple, à la résistance aux vibrations dans les véhicules). Le
 coût associé à la production de tels produits est donc élevé. Ces derniers ne
 doivent alors pas être multipliés pour des raisons de maîtrise des coûts. 
 La séparation des domaines de sécurité et parfois de
 sûreté n'est donc pas toujours physique. On s'appuie alors sur une séparation
 logique de ces domaines. Il revient
-alors au logiciel d'assurer cette séparation. Il lui revient également de fournir
+alors au logiciel d'assurer cette séparation. Il lui incombe également de fournir
 des mécanismes d'interconnexion respectueux de l'ensemble des exigences de
 sécurité et de sûreté.
 
@@ -462,10 +469,10 @@ sécurité et de sûreté.
 Aujourd'hui, les systèmes systroniques maintiennent trois réseaux complètement
 indépendants :
 \begin{itemize}
-  \item Le système de bord, en charge des éléments d'aide à la conduite et
-  devant respecter des contraintes temps réel et de fiabilité.
-  \item Le système d'armes, ayant ces mêmes propriétés.
-  \item Le système de communication, sans propriété de sûreté mais avec un
+  \item le système de bord, en charge des éléments d'aide à la conduite et
+  devant respecter des contraintes temps réel et de fiabilité ;
+  \item le système d'armes, ayant ces mêmes propriétés ;
+  \item le système de communication, sans propriété de sûreté mais avec un
   grand nombre de contraintes de sécurité.
 \end{itemize}
 
@@ -507,25 +514,25 @@ Malheureusement, ces solutions s'appuient principalement sur des
 Les éléments en coupure sont malheureusement difficilement intégrables. En
 effet:
 \begin{itemize}
-  \item Ils sont souvent volumineux et consommateurs de courant
-  \item Il ne sont pas certifiables pour les systèmes contraints avec
-    des exigences physiques type résistance aux vibrations
-  \item Leur facteur de forme n'est pas prévu pour de l'embarqué
+  \item ils sont souvent volumineux et consommateurs de courant ;
+  \item il ne sont pas certifiables pour les systèmes contraints avec
+    des exigences physiques comme la résistance aux vibrations ;
+  \item leur facteur de forme n'est pas prévu pour de l'embarqué.
 \end{itemize}
 Les solutions de cryptographie ne s'intègrent pas toujours aisément:
 \begin{itemize}
-  \item Dans les systèmes de communication vehiculaires, la cryptographie
-    est faite au niveau de l'émetteur/récepteur radio plutôt que dans le réseau
-    local. De plus, elle est souvent associée à des mécanismes d'évasion de fréquence afin
-    de réduire encore plus le risque d'écoute
-  \item Pour la gestion des domaines de sécurité locaux, les chiffreurs utilisés
+  \item dans les systèmes de communication vehiculaires, la cryptographie
+    est faite au niveau de l'émetteur/récepteur radio plutôt que dans le réseau.
+    De plus, elle est souvent associée à des mécanismes d'évasion de fréquence afin
+    de réduire encore plus le risque d'écoute ;
+  \item pour la gestion des domaines de sécurité locaux, les chiffreurs utilisés
     pour les systèmes d'information sont volumineux, lourds et consommateurs
-    de courant, et doivent alors être substitués par un algorithme de
+    en énergie. Ils doivent alors être substitués par un algorithme de
     chiffrement étatique logiciel ou matériel de type carte cryptographique de petite
-    taille intégrable en début de mission
-  \item Les mécanismes d'interconnexion assurant à la fois des exigences de
+    taille intégrable en début de mission ;
+  \item les mécanismes d'interconnexion assurant à la fois des exigences de
     sûreté et de sécurité fortes sont inexistants, du fait de la jeunesse de ce
-    besoin, tant dans le véhiculaire que dans l'avionique.
+    besoin, tant dans le domaine véhiculaire que dans celui de l'avionique.
 \end{itemize}
 
 \section{Synthèse et éléments de solution}
@@ -539,14 +546,14 @@ initiales de chacun d'entre eux, de nouveaux mécanismes doivent être étudiés
 afin de pouvoir répondre à l'ensemble des exigences des systèmes systroniques. Les
 exigences que doivent respecter ces solutions sont de trois types:
 \begin{itemize}
-  \item Sûreté de fonctionnement, principalement en terme de garantie de
+  \item sûreté de fonctionnement, principalement en terme de garantie de
     latence, mais également en terme de protection du domaine de plus haut
-    niveau de sûreté
-  \item Sécurité, pour garantir la confidentialité, l'intégrité et la
+    niveau de sûreté ;
+  \item sécurité, pour garantir la confidentialité, l'intégrité et la
     disponibilité des données des différents domaines de sécurité lorsque ces
-    derniers nécessitent d'être interconnectés
-  \item Physique, afin de garantir que le logiciel est suffisamment peu coûteux
-    à l'exécution pour respecter les exigences de consommation
+    derniers nécessitent d'être interconnectés ;
+  \item physique, afin de garantir que le logiciel est suffisamment peu coûteux
+    à l'exécution pour respecter les exigences de consommation.
 \end{itemize}
 
 \paragraph{}
@@ -558,7 +565,7 @@ financières, le coût des véhicules devant être maîtrisé.
 \paragraph{}
 L'ensemble des exigences décrites dans ce chapitre sont synthétisées sous
 forme d'une matrice d'exigences dans le Chapitre \ref{sec:matrix}. C'est au
-travers le la conformité à chacune des exigences de cette matrice qu'est
+travers de la conformité à chacune des exigences de cette matrice qu'est
 décrite ma solution.
 
 \paragraph{}
@@ -569,12 +576,12 @@ rendre la solution configurable pour répondre aux différents besoins
 d'interconnexion de réseaux, et plusieurs contraintes de sécurité et de sûreté
 sont considérées afin de répondre à plusieurs exigences précises:
 \begin{itemize}
-\item Garantie de transfert de données à sens unique
-\item Filtrage des données selon une politique de sécurité
-\item Maîtrise du profil des flux transférés
-\item Réduction des risques de transfert de données non homologués
-\item Prise en compte dans le transfert de flux des différences de criticité
-des flux à faire transiter et des traitements à effectuer sur ces derniers
+\item garantie de transfert de données à sens unique ;
+\item filtrage des données selon une politique de sécurité ;
+\item maîtrise du profil des flux transférés ;
+\item réduction des risques de transfert de données non homologués ;
+\item prise en compte dans le transfert de flux des différences de criticité
+des flux à faire transiter et des traitements à effectuer sur ces derniers.
 \end{itemize}
 Dans le cadre de ma thèse, la
 solution logicielle est prévue pour être utilisée en tant que passerelle, tant
@@ -592,13 +599,13 @@ domaines de sécurité. Une telle architecture implique une étude plus poussée du
 cloisonnement entre les deux éléments logiciels. Ce cloisonnement s'effectue à
 plusieurs niveaux:
 \begin{itemize}
-  \item Via l'usage d'une architecture de type MLS (MultiLevel Security),
+  \item via l'usage d'une architecture de type MLS (MultiLevel Security),
     intégrant des éléments logiciels de confiance en coupure entre ces deux
     domaines. Ces éléments logiciels doivent être certifiables et performants,
     et sont donc définis comme des éléments simples devant répondre à une
     seule fonction. Dans ma thèse, j'appelle ces éléments des moniteurs de
-    sécurité.
-  \item Via la prise en compte de la problématique de canaux cachés et
+    sécurité ;
+  \item via la prise en compte de la problématique de canaux cachés et
     canaux auxiliaires, mécanismes permettant de faire transiter de
     l'information via un élément souvent matériel au travers d'une étude
     comportementale. Le matériel ciblé est souvent le contrôleur de cache, qui
@@ -632,12 +639,12 @@ débordements de la part des tâches très critiques. On s'appuie sur un ordonnance
 criticité mixte. Afin de pouvoir gérer au mieux cette problématique,
  une étude a été faite \cite{santy2012relaxing} afin de:
 \begin{itemize}
-  \item Réduire les contraintes du changement de niveau de criticité, afin de
-  limiter le nombre de tâches devant être désactivées
-  \item Déporter au maximum le changement de niveau de criticité, au travers de
+  \item réduire les contraintes du changement de niveau de criticité, afin de
+  limiter le nombre de tâches devant être désactivées ;
+  \item déporter au maximum le changement de niveau de criticité, au travers de
   l'intégration de la marge de tolérance \cite{bougueroua_george_midonnet}
-  sur les durées de dépassement des WCET
-  \item Formaliser l'instant où le niveau de criticité peut être réduit
+  sur les durées de dépassement des WCET ;
+  \item formaliser l'instant où le niveau de criticité peut être réduit.
 \end{itemize}
 La problématique de changement de niveau de criticité et de réduction de ce
 dernier est étudiée dans le Chapitre \ref{sec:mixedcrit}.

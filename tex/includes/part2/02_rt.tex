@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
-%% Last update dim. 13 avril 2014 11:17:26 CEST phil
+%% Last update ven. 18 avril 2014 18:06:41 CEST phil
 
 \chapter{Compatibilité d'une architecture sécurisée avec des contraintes de temps réel}
 
@@ -247,10 +247,10 @@ Pour tout entier $k$ avec $k \geq 1$, pour tout $t$ dans l'intervalle $[k ST_i
 
 \paragraph{}
 Les moniteurs de sécurité sont considérés, dans le cadre de ma thèse, comme
-ordonnancés directement dans l'hyperviseur. C'est le cas du fait du choix de
+ordonnancés directement dans l'hyperviseur. Cela découle du choix de
 la solution PikeOS \cite{pike_kaiser2007evolution} comme hyperviseur. Ce
 dernier est en effet apte à virtualiser des environnements complexes tout en
-positionnant à leur coté des threads ordonnancés directement par le
+positionnant à leurs côtés des threads ordonnancés directement par le
 micro-noyau. Ces derniers sont ordonnancés avec les contraintes du TDM, mais
 peuvent donc être considérés comme des tâches temps réel. Leur simplicité et
 leur faible volumétrie de code permet de déterminer leur coût d'exécution pire
@@ -272,22 +272,24 @@ le noyau Linux étant très riche il s'appuie:
     temps réel de POSIX (SCHED\_FIFO et SCHED\_RR) qui intègrent un mécanisme
     complexe de vieillissement. La charge associée à ces threads est
     difficilement bornable car elle correspond pour la plupart à la
-    conséquences de traitements d'entrées/sorties comme la gestion du disque.
+    conséquence de traitements d'entrées/sorties comme la gestion du disque.
     Ces threads possèdent néanmoins une affinité CPU, ce qui évite de les
     migrer en fonction de la charge. Malheureusement, l'assignation d'un
-    traitement à un coeur processeur plutôt qu'un autre n'est pas définissable
-    sous forme d'une configuration, mais s'établit en fonction de la charge
+    traitement à un coeur processeur plutôt qu'à un autre n'est pas définissable
+    sous la forme d'une configuration, mais s'établit en fonction de la charge
     courante de chacun des c{\oe}urs.
-  \item sur des fonctions logicielles qui cassent la mécanique
-    d'ordonnancement via du {\it vol de cycle} : ces fonctions
-    (nommées {\it softirq}) ont été intégrées sous formes de code
+  \item sur des fonctions logicielles qui génère une surcharge non maîtrisée
+    des traitements via du {\it vol de cycle} : ces fonctions
+    (nommées {\it softirq}) ont été intégrées sous formes de codes
     complémentaires exécutés à la suite de divers services comme les appels
-    systèmes ou les interruptions, afin d'avoir une réactivité moyenne très forte.
+    systèmes ou les interruptions, afin de permettre une bonne réactivité de
+    certaines fonctions (émission/réception de paquets, timers haute
+    résolution, etc.).
     Cependant, une telle solution ne permet pas de garantir un coût d'exécution
     pire cas pour les processus ordonnancés car leur propre exécution est impactée
     par ces fonctions. Ces dernières étant de plus en plus fréquentes avec les
     nouvelles versions du noyau, et sont difficiles à dimensionner. Néanmoins,
-    des travaux commencent à être fait sur la capacité à intégrer leur impact
+    des travaux commencent à être fait pour intégrer leur impact
     dans le cadre d'analyses d'ordonnançabilité \cite{lewandowski2007modeling}.
 \end{itemize}
 
@@ -297,16 +299,16 @@ plusieurs patchs permettant de rétablir un peu de comportement temps réel dans
 le noyau Linux. Dans le cadre de ma thèse, je ne parle cependant
 pas des solutions RTAI ou Xenomai, qui impliquent des exigences particulières
 sur les tâches temps réel, leur interdisant l'usage des API standard Linux
-sous peines de perdre leur propriétés temps réel. Dans le cadre de la
+sous peine de perdre leur propriétés temps réel. Dans le cadre de la
 définition d'une passerelle pour du traitement réseau, il est nécessaire que
 ces tâches soient aptes à traiter des flux télécom, et donc à s'interfacer
 avec l'API POSIX de traitement réseau. Afin de répondre à cette problématique,
-je me suis donc appuyer sur la solution Linux-RT, qui intègre les travaux du
+je me suis donc appuyé sur la solution Linux-RT, qui intègre les travaux du
 patch PREEMPT\_RT d'Ingo Molnar \cite{koolwal2009myths}. Cette solution permet
 de modifier le comportement du noyau Linux en divers points:
 \begin{itemize}
   \item Les threads noyaux ne s'exécutent plus avec une haute priorité temps
-    réel, supprimant la collision de ses derniers avec l'ensemble de tâches
+    réel, supprimant la collision de ses derniers avec l'ensemble des tâches
     temps réel.
   \item Les {\it softirqs} ne s'exécutent plus via du vol de cycle, mais
     exclusivement dans un thread kernel spécifique appelé {\it ksoftirqd}.
@@ -317,52 +319,18 @@ Dans le cadre de mes travaux, j'ai dimensionné l'impact de ce patch sur la
 variation de latence à l'initialisation d'un job de priorité maximum. Cette
 mesure permet de déterminer si il est effectivement possible de définir une
 borne supérieure à cette initialisation.\\
-
 Pour cela, je me suis appuyé sur de
 l'outillage de test \cite{abeni2002measurement} pour simuler une forte charge à
 la fois en terme d'entrées/sorties, d'accès mémoire et de charge processeur.
-La mesure a été faite sur le système décrit dans la Table \ref{tab:rttest}\\
-
-\begin{table}
-\begin{center}
-\begin{tabular}{|l|l|}
-  \hline
-  {\bf Élément} & {\bf Description} \\
-  \hline
-  \hline
-  {\it Architecture} & i686 core 2 duo 2Ghz \\
-  {\it NICs} & DLINK-RTL8139, VIA VT6105 \\
-  {\it OS} & Debian Squeeze \\
-  {\it Kernel} & linux 3.2.12-rt24 \\
-         & pas de support ACPI\\
-         & mode FULL\_PREEMPT\\
-  {\it Securité} & patch grsecurity plus compléments specifiques\\
-  & (memoire \& compartimentation) \\
-  {\it Load-average} & 40 \\
-  {\it outil de test} & cycletest \\
-  {\it nombre d'échantillons} & $10^8$ \\
-  {\it durée de la mesure} & ~5 heures \\
-  \hline
-\end{tabular}
-\end{center}
-\caption{Description de la cible pour la mesure de latence d'ordonnancement avec Linux-RT\label{tab:rttest}}
-\end{table}
-
-\begin{figure}[ht]
-  \begin{center}
-    \includegraphics[width=8.9cm]{figures/rttest.pdf}
-    \caption{Latence d'ordonnancement pour la tâche de plus haute priorité sous
-    Linux avec PREEMPT\_RT\label{fig:rttest_1}}
-  \end{center}
-\end{figure}
+Je décrit plus précisément ces différentes mesure dans le Chapitre \ref{sec:passsystronique},
+dans le cadre d'un maquettage de la solution sur une architecture logicielle
+basée sur GNU/Linux. Les mesures ont montré qu'il est possible de garantir une
+borne supérieure à l'instanciation d'une tâche temps réel y compris en cas de
+forte surcharge de la solution logicielle.
 
 \paragraph{}
-Cette mesure a permis de démontrer que pour une mesure portant sur $10^8$
-échantillons pendant une durée de 5 heures, la latence pire cas à
-l'ordonnancement est de $350 \mu s$, comme le montre la Figure
-\ref{fig:rttest_1}.\\
 Il est donc possible, selon le besoin, de positionner des tâches temps réel
-souple dans ces compartiments. Les tâches à contraintes temps réel fortes ne
+souple dans des compartiments GNU/Linux. Les tâches à contraintes temps réel fortes ne
 sont cependant pas intégrables dans les compartiments basés sur des systèmes
 d'exploitation sans propriétés temps réel fortes.
 
@@ -372,7 +340,7 @@ d'exploitation sans propriétés temps réel fortes.
 \subsection{Rappels et enjeux}
 
 \paragraph{}
-Comme vu dans la problématique, les systèmes systroniques possèdent des
+Les systèmes systroniques possèdent des
 exigences impliquant de considérer des niveaux de criticités hétérogènes dans
 un même ensemble de tâches. La première cause est la présence d'exigences physiques
 associées à la systronique, qui limite la puissance processeur utilisable dans
@@ -380,7 +348,8 @@ le cadre de la passerelle. A défaut de pouvoir utiliser un environnement
 matériel suffisamment puissant pour traiter l'ensemble des tâches temps réel
 avec des mesures de coût d'exécution pessimistes, je me replie sur les
 mécanismes de criticité mixte afin d'ordonnancer au mieux l'ensemble des
-tâches nécessaire aux divers traitements. L'Exigence \hyperlink{REQTEMPS002},
+tâches nécessaire aux divers traitements. L'Exigence
+\hyperlink{REQTEMPS002}{REQ\_TEMP\_002},
 définie dans le Chapitre \ref{sec:matrix} est alors respectée.
 
 Ainsi, dans le cadre d'une passerelle multi-niveaux en charge de traitements
@@ -424,7 +393,7 @@ pessimiste. Cela implique que lors de l'exécution du système, si une autre
 tâche atteint une estimation de son WCET à un niveau d'assurance qui est
 supérieur au niveau de criticité de la tâche initiale, cette dernière est
 alors suspendue, les conditions nécessaires à sa faisabilité n'étant plus
-respectées \cite{bbalmms}. Néanmoins, cette approche est clairement pessimiste, les tâches de
+respectées \cite{bbalmms}. Néanmoins, cette approche peut être pessimiste, les tâches de
 plus faible criticité pouvant potentiellement continuer à s'exécuter, ou du
 moins continuer leur traitement pour quelques temps sans pour autant
 compromettre les contraintes temporelles des tâches de plus forte criticité.\\
@@ -436,7 +405,7 @@ Nous proposons ensuite une implémentation simple de la marge de tolérance qui
 s'appuie exclusivement sur les timers, appelée {\it Latest Execution
   Time} (LET). Afin d'assurer une bonne continuité de l'exécution de l'ensemble
 de tâches à criticité mixte, nous montrons également qu'il existe un instant dans
-l'exécution de l'ensemble de tâche où il est possible d'exécuter à nouveau
+l'exécution de l'ensemble des tâches où il est possible d'exécuter à nouveau
 l'intégralité des tâches.
 
 %%%%%%%%%% Model and Definitions %%%%%%%%%%
@@ -447,7 +416,7 @@ Dans le cadre de ces travaux, la cible est l'ordonnancement préemptif sur
 architecture mono-c{\oe}ur. La cible de ma thèse associant des mécanismes de
 compartimentations et d'affinité, je considère alors que les environnements
 d'exécution nécessitant de la criticité mixte doivent être associés par
-affinité CPU à un et un seul c{\oe}ur, afin de rester compatibles des
+affinité CPU à un et un seul c{\oe}ur, afin de rester compatibles avec les
 hypothèses nécessaires dans le cadre de l'algorithme LET.\\
 Soit un ensemble de tâche 
 $\tau = \{\tau_1, \tau_2, ..., \tau_n\}$
@@ -503,18 +472,18 @@ d'exécution de niveau $\ell$}, si un job instancié par $\tau_i$ dépasse sont
 coût d'exécution pire cas de niveau $\ell$.
 \end{definition}
 
-A tout moment $t$, on appelle le $j^\text{ème}$ job $J_j^i$ instancié par la
+A tout instant $t$, on appelle le $j^\text{ème}$ job $J_j^i$ instancié par la
 tâche $\tau_i$ \emph{disponible} si $t \geq r_j^i$ et $J_j^i$ n'a pas encore
 terminé son exécution. Le coût d'exécution effectif du job $J_j^i$ n'est pas
 mesurable à partir des spécifications de $\tau_i$, mais ne sera connu qu'une
 fois que $J_j^i$ aura terminé sont exécution.
-A tout moment $t$ on appelle le \emph{scénario} $s_i^t$ de la tâche $\tau_i$
+A tout instant $t$ on appelle le \emph{scénario} $s_i^t$ de la tâche $\tau_i$
 comme l'ensemble des coûts d'exécution exacts $\{c_1^i, c_2^i, ..., c_k^i\}$
 pour chacun des $k$ jobs instanciés par $\tau_i$ qui ont déjà terminé leur
 exécution à l'instant $t$. Le scénario de l'ensemble de tâches à criticité
 mixte $\tau$ à l'instant $t$ est défini comme $s^t = \{s_1^t, s_2^t, ...,
   s_n^t\}$\\
-Le \emph{niveau de criticité} du scénario $s^t$ est définit comme le plus
+Le \emph{niveau de criticité} du scénario $s^t$ est défini comme le plus
 petit entier $\ell$ pour lequel, pour chaque $s_i^t \in s^t$, $c_k^i \leq C_i(\ell)\, \forall k$
 Intuitivement, il représente le plus petit niveau de criticité dans lequel aucune tâche ne
 dépasse son coût d'exécution pire cas de niveau de criticité correspondant.
@@ -533,7 +502,7 @@ que de garantir les contraintes temporelles des tâches dont le niveau de
 criticité est supérieur ou égal au niveau de criticité du scénario.
 
 \begin{definition}
-Une politique d'ordonnancement en ligne est correct pour un ensemble de tâches
+Une politique d'ordonnancement en ligne est correcte pour un ensemble de tâches
 $\tau$ si, pour tout scénario non-erroné de $\tau$, la politique génère un
 ordonnancement faisable.
 \end{definition}
@@ -603,11 +572,11 @@ considération le mécanisme de suspension de tâche.
 \end{figure}
 
 
-Une tâche ne peut être dans un des états suivants:
+Une tâche peut être dans un des états suivants:
 \begin{itemize}
 	\item[$\bullet$] Exécutée: une tâche $\tau_i$ est exécutée lorsque
-          l'ordonnanceur choisi $\tau_i$ pour l'exécuter. Dans cet état, les
-          instructions de $\tau_i$ sont traités par le CPU. A tout moment, au
+          l'ordonnanceur choisit $\tau_i$ pour l'exécuter. Dans cet état, les
+          instructions de $\tau_i$ sont traitées par le CPU. A tout moment, au
           plus une tâche est dans un état {\it Exécutée}.
 	\item[$\bullet$] Prête: une tâche $\tau_i$ atteint l'état prêt si tous
           les prérequis fonctionnels pour une transition vers l'état {\it
@@ -617,7 +586,7 @@ Une tâche ne peut être dans un des états suivants:
           si elle n'est actuellement pas candidate à une élection par
           l'ordonnanceur.
 \end{itemize}
-Les transition ont les signification suivantes:
+Les transitions ont les significations suivantes:
 
 \begin{itemize}
 	\item[$\bullet$] Démarre: La tâche est sélectionnée par l'ordonnanceur
@@ -649,7 +618,7 @@ $\tau = \{\tau_1, \tau_2, \tau_3\}$, avec:
 	\item[$\bullet$] $\tau_3: \{0, 8, 8, 3, (1,3,7)\}$.\\
 \end{itemize}
 Tout scénario pour lesquels aucun job ne dépasse un coût d'exécution de 1 est
-de criticité 1, tandis que tout scénarios pour lequel les tâches $\tau_2$ et
+de criticité 1, tandis que tout scénario pour lequel les tâches $\tau_2$ et
 $\tau_3$ s'exécutent pour au moins 2 unités de temps et au plus 3 unités de
 temps est de criticité 2. Si tout job de la tâche $\tau_3$ s'exécute entre 4
 et 7 unités de temps, alors cela définit un scénario de criticité 3. Pour
@@ -664,16 +633,16 @@ les tâches de priorités supérieures à $\tau_i$. On a $r_i \geq C_i(\chi_i)$.
 
 \begin{definition}
   Un \emph{instant critique} pour une tâche $\tau_i$ est défini comme étant un
-  instant où $\tau_i$ instancie un job dont le temps de réponse sera le plus
-  grand parmis tous les jobs instanciés par $\tau_i$.
+  instant où $\tau_i$ instancie un travail dont le temps de réponse sera le plus
+  grand parmi tous les travaux instanciés par $\tau_i$.
 \end{definition}
 
 Liu \cite{Liu2000} a montré que, lorsque l'on considère un ensemble de tâches
-traditionnel ordonnancé en priorité fixe (FP), un instant critique pour une
+traditionnelles ordonnancées en priorité fixe (FP), un instant critique pour une
 tâche $\tau_i$ se présente à chaque fois que $\tau_i$ instancie un job de
 manière simultanée avec toutes les tâches $\tau_j$ de priorité supérieure.
 Comme montré dans le théorème \ref{theo:criticalInstant}, ce principe peut
-être étendu aux ensemble de tâches à criticté mixte.
+être étendu aux ensembles de tâches à criticité mixte.
 
 \begin{theorem}\label{theo:criticalInstant}
 Soit $\tau = \{\tau_1, \tau_2, ..., \tau_n\}$ un ensemble de tâches
@@ -701,7 +670,7 @@ on cible une condition \emph{suffisante} qui peut être vérifiée dans un temps
 polynomial.\\
 L'algorithme utilisé pour vérifier cette condition, introduit par Vestal \cite{Vestal2007},
 détermine hors ligne un ordre total des tâches dans $\tau$. Chaque tâche est
-assignée à une priorité distincte dont ses jobs héritent. L'assignation des
+assignée à une priorité fixe distincte dont ses travaux héritent. L'assignation des
 priorités est faite en utilisant l'approche d'Audsley \cite{Audsley_1991}, basée
 sur la définition suivante (la priorité $n$ est la plus basse priorité, la
 priorité 1 la plus élevée).
@@ -725,12 +694,14 @@ priorité 1 la plus élevée).
 
 %\begin{algorithm}[H]
 \begin{algorithm}
+\SetKwIF{Si}{SinonSi}{Sinon}{si}{alors}{sinon si}{alors}{finsi}
+\SetKwInOut{Sortie}{sortie}
 %\SetLine
 \KwIn{$\tau$}
 $\mathsf{pr} \leftarrow |\tau|$ \\
 \While{$\tau \neq \varnothing$}{
 	\If{aucune tâche $\tau_i \in \tau$ n'est viable à la priorité la plus basse}{
-		\textbf{return} erreur\;
+		\textbf{renvoyer} erreur\;
 	}
 	\Else{
 		Soit $\tau_i$ une tâche viable à la priorité la plus basse\;
@@ -739,16 +710,15 @@ $\mathsf{pr} \leftarrow |\tau|$ \\
 		$\mathsf{pr} \leftarrow \mathsf{pr}-1$\;
 	}
 }
-\caption{Algorithme d'assignation d'un ordre total aux tâches d'un ensemble à
+\caption{Algorithme d'attribution d'un ordre total aux tâches d'un ensemble à
   criticité mixe\label{alg:priorityAssignment}}
 \end{algorithm}
 
 \paragraph{}
-L'ordre de priorité est alors construit de manière itérative en utilisant
+L'attribution de priorité est alors construite de manière itérative en utilisant
 l'algorithme \ref{alg:priorityAssignment}.
-Si un tel ordre de priorité existe, i.e. si une tâche viable à la priorité la
-plus basse est trouvé à chaque étape (de l'ensemble restant de tâches de
-priorité non assignée), alors chaque tâche $\tau_i$ est garantie de respecter
+Si un tel ordre de priorité existe, i.e. si une tâche viable est trouvée
+à chaque niveau de priorité, alors chaque tâche $\tau_i$ est garantie de respecter
 son échéance si elle s'exécute pour au plus $C_i(\chi_i)$ unités de temps et
 qu'aucune tâche $\tau_j$ de priorité supérieure à $\tau_i$ s'exécute pendant
 plus de $C_j(\chi_i)$ unité de temps.
