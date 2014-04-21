@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
-%% Last update lun. 21 avril 2014 10:19:32 CEST phil
+%% Last update lun. 21 avril 2014 11:24:12 CEST phil
 
 \chapter{Compatibilité d'une architecture sécurisée avec des contraintes de temps réel}
 
@@ -316,7 +316,7 @@ de modifier le comportement du noyau Linux en divers points:
 
 \paragraph{}
 Dans le cadre de mes travaux, j'ai dimensionné l'impact de ce patch sur la
-variation de latence à l'initialisation d'un job de priorité maximum. Cette
+variation de latence à l'initialisation d'un travail de priorité maximum. Cette
 mesure permet de déterminer si il est effectivement possible de définir une
 borne supérieure à cette initialisation.\\
 Pour cela, je me suis appuyé sur de
@@ -427,59 +427,59 @@ $\tau_i = \{R_i, T_i, D_i, \chi_i, C_i\}$ où:
 %where the maximum criticality of a task is bound by
 %$\mathnormal{L}$. A task in a mixed-criticality system is characterized by a 5-tuple
 \begin{itemize}
-	\item[$\bullet$] $R_i \in \mathbb{N}$ est la charge associée au
-          premier job de la tâche $\tau_i$;
-	\item[$\bullet$] $T_i \in \mathbb{N}^*$ est la période de la tâche $\tau_i$;
-	\item[$\bullet$] $D_i \in \mathbb{N}^*$ est l'échéance de la tâche $\tau_i$, $D_i \leq T_i$;
-	\item[$\bullet$] $\chi_i \in \mathbb{N}$ est le niveau de criticité
+	\item $R_i \in \mathbb{N}$ est la charge associée au
+          premier travail de la tâche $\tau_i$;
+	\item $T_i \in \mathbb{N}^*$ est la période de la tâche $\tau_i$;
+	\item $D_i \in \mathbb{N}^*$ est l'échéance de la tâche $\tau_i$, $D_i \leq T_i$;
+	\item $\chi_i \in \mathbb{N}$ est le niveau de criticité
           maximum de la tâche $\tau_i$,
           $\chi_i \leq \mathnormal{L}$;
-	\item[$\bullet$] $C_i \in \mathbb{N}^{\mathnormal{L}}$ est un vecteur
+	\item $C_i \in \mathbb{N}^{\mathnormal{L}}$ est un vecteur
           de taille $L$ de coûts d'exécution pire cas, où $C_i(\ell)$ est une
           estimation du WCET de la tâche $\tau_i$ au niveau de criticité $\ell \in [1,\mathnormal{L}]$.
 \end{itemize}
 Nous considérons que $C_i(\ell)$ s'accroît de manière monotone pour un accroissement
 de $\ell$. Plus précisément, pour une tâche $\tau_i$:
 \begin{itemize}
-	\item[$\bullet$] $\forall m \in [1, \chi_i[$, $C_i(m) \leq C_i(m+1)$;
-	\item[$\bullet$] $\forall m \in [\chi_i, \mathnormal{L}[$, $C_i(m) = C_i(\chi_i)$.
+	\item $\forall m \in [1, \chi_i[$, $C_i(m) \leq C_i(m+1)$;
+	\item $\forall m \in [\chi_i, \mathnormal{L}[$, $C_i(m) = C_i(\chi_i)$.
 \end{itemize}
 Cela suppose qu'aucune tâche ne s'exécute plus longtemps que son WCET pour son
 niveau courant de criticité.
-Le $k^\text{n}$-ème job $J_k^i$ instancié par une tâche à criticité multiple $\tau_i$
+Le $k^\text{n}$-ème travail $J_k^i$ instancié par une tâche à criticité multiple $\tau_i$
 est caractérisé par un 5-uplet $\{r_k^i, d_k^i, \mathcal{X}_k^i, C_k^i,
   c_k^i\}$ où:
 \begin{itemize}
-	\item[$\bullet$] $r_k^i \in \mathbb{N}$ est l'instant où $J_k^i$ est
+	\item $r_k^i \in \mathbb{N}$ est l'instant où $J_k^i$ est
           instancié.
           Étant donné que l'on considère un ensemble de tâches sporadique, on
           a $r_k^i \geq r_{k-1}^i + T_i$, et $r_1^i = R_i$;
-	\item[$\bullet$] $d_k^i \in \mathbb{N}^*$ est l'échéance absolue de
+	\item $d_k^i \in \mathbb{N}^*$ est l'échéance absolue de
           $J_k^i$. Plus précisément: $d_k^i = r_k^i + D_i$;
-	\item[$\bullet$] $\mathcal{X}_k^i \in \mathbb{N}$ est la criticité de
+	\item $\mathcal{X}_k^i \in \mathbb{N}$ est la criticité de
           $J_k^i$, héritée de la tâche $\tau_i$: $\mathcal{X}_k^i = \mathcal{X}_i$;
-	\item[$\bullet$] $C_k^i \in \mathbb{N}^{\mathnormal{L}}$ est la taille
+	\item $C_k^i \in \mathbb{N}^{\mathnormal{L}}$ est la taille
           $L$ du vecteur de WCETs pour $J_k^i$, hérité de la tâche $\tau_i$: $C_k^i = C_i$;
-	\item[$\bullet$] $c_k^i \in \mathbb{N}^*$ est l'exact coût d'exécution
-          du job $J_k^i$. Du fait des spécifications de $\tau_i$, on peut dire
+	\item $c_k^i \in \mathbb{N}^*$ est l'exact coût d'exécution
+          du travail $J_k^i$. Du fait des spécifications de $\tau_i$, on peut dire
           que $c_k^i \leq C_i(\mathcal{X}_i)$, mais la valeur exacte de
           $c_k^i$ n'est connue que lorsque $J_k^i$ termine sont exécution.
 \end{itemize}
 
 \begin{definition}
 Une tâche $\tau_i$ de criticité minimum $\ell+1$ est sujette à un \emph{dépassement
-d'exécution de niveau $\ell$}, si un job instancié par $\tau_i$ dépasse sont
+d'exécution de niveau $\ell$}, si un travail instancié par $\tau_i$ dépasse sont
 coût d'exécution pire cas de niveau $\ell$.
 \end{definition}
 
-A tout instant $t$, on appelle le $j^\text{ème}$ job $J_j^i$ instancié par la
+A tout instant $t$, on appelle le $j^\text{ème}$ travail $J_j^i$ instancié par la
 tâche $\tau_i$ \emph{disponible} si $t \geq r_j^i$ et $J_j^i$ n'a pas encore
-terminé son exécution. Le coût d'exécution effectif du job $J_j^i$ n'est pas
+terminé son exécution. Le coût d'exécution effectif du travail $J_j^i$ n'est pas
 mesurable à partir des spécifications de $\tau_i$, mais ne sera connu qu'une
 fois que $J_j^i$ aura terminé sont exécution.
 A tout instant $t$ on appelle le \emph{scénario} $s_i^t$ de la tâche $\tau_i$
 comme l'ensemble des coûts d'exécution exacts $\{c_1^i, c_2^i, ..., c_k^i\}$
-pour chacun des $k$ jobs instanciés par $\tau_i$ qui ont déjà terminé leur
+pour chacun des $k$ travaux instanciés par $\tau_i$ qui ont déjà terminé leur
 exécution à l'instant $t$. Le scénario de l'ensemble de tâches à criticité
 mixte $\tau$ à l'instant $t$ est défini comme $s^t = \{s_1^t, s_2^t, ...,
   s_n^t\}$\\
@@ -493,7 +493,7 @@ niveau de criticité propre ($c_j^i > C_i(\chi_i)$).
 
 \begin{definition}
 Un ordonnancement pour un scénario $s^t$ de niveau de criticité $\ell$ est
-faisable si tous les jobs $J_j^i \in s_i^t$, $\forall i$, avec $\chi_i \geq \ell$,
+faisable si tous les travaux $J_j^i \in s_i^t$, $\forall i$, avec $\chi_i \geq \ell$,
 termine sont temps d'exécution $c_j^i$ entre son instanciation et son
 échéance.
 \end{definition}
@@ -507,11 +507,11 @@ $\tau$ si, pour tout scénario non-erroné de $\tau$, la politique génère un
 ordonnancement faisable.
 \end{definition}
 Du fait qu'une politique d'ordonnancement en ligne ne découvre le coût
-d'exécution exact des jobs qu'une fois que ces derniers ont terminé leur
+d'exécution exact des travaux qu'une fois que ces derniers ont terminé leur
 exécution, le niveau de criticité du scénario ne peut être connu qu'après
-coup. Les jobs instanciés sont alors ordonnancés. Dès qu'un job dépasse son
+coup. Les travaux instanciés sont alors ordonnancés. Dès qu'un travail dépasse son
 coût d'exécution pire cas de niveau $\ell-1$, la criticité du scénario est
-accrue au niveau $\ell$, les jobs instanciés de criticité inférieure à $\ell$
+accrue au niveau $\ell$, les travaux instanciés de criticité inférieure à $\ell$
 sont abandonnés, et les requêtes futures des tâches de criticité inférieure à
 $\ell$ ne sont plus considérées.
 
@@ -574,37 +574,37 @@ considération le mécanisme de suspension de tâche.
 
 Une tâche peut être dans un des états suivants:
 \begin{itemize}
-	\item[$\bullet$] Exécutée: une tâche $\tau_i$ est exécutée lorsque
+	\item Exécutée: une tâche $\tau_i$ est exécutée lorsque
           l'ordonnanceur choisit $\tau_i$ pour l'exécuter. Dans cet état, les
           instructions de $\tau_i$ sont traitées par le CPU. A tout moment, au
           plus une tâche est dans un état {\it Exécutée}.
-	\item[$\bullet$] Prête: une tâche $\tau_i$ atteint l'état prêt si tous
+	\item Prête: une tâche $\tau_i$ atteint l'état prêt si tous
           les prérequis fonctionnels pour une transition vers l'état {\it
             Exécutée} sont présents, et $\tau_i$ est en attente uniquement
           d'une élection de la part de l'ordonnanceur.
-	\item[$\bullet$] Suspendue: une tâche $\tau_i$ atteint l'état suspendu
+	\item Suspendue: une tâche $\tau_i$ atteint l'état suspendu
           si elle n'est actuellement pas candidate à une élection par
           l'ordonnanceur.
 \end{itemize}
 Les transitions ont les significations suivantes:
 
 \begin{itemize}
-	\item[$\bullet$] Démarre: La tâche est sélectionnée par l'ordonnanceur
+	\item Démarre: La tâche est sélectionnée par l'ordonnanceur
           pour être exécutée.
-	\item[$\bullet$] Préempte: La tâche est préemptée par une autre tâche.
-	\item[$\bullet$] Termine: La tâche a complété correctement sont
+	\item Préempte: La tâche est préemptée par une autre tâche.
+	\item Termine: La tâche a complété correctement sont
           exécution.
-	\item[$\bullet$] Abandonne: La criticité du système atteint un niveau
+	\item Abandonne: La criticité du système atteint un niveau
           supérieur à celui de la tâche, qui est en conséquence abandonnée.
           Cela n'arrive que lorsque $\tau_i$ est préemptée par une tâche de
           priorité et de criticité supérieure.
-	\item[$\bullet$] Active [$\ell > \chi_i$]: La tâche souhaite
+	\item Active [$\ell > \chi_i$]: La tâche souhaite
           instancier
-          un nouveau job, mais le niveau courant de criticité du système est
+          un nouveau travail, mais le niveau courant de criticité du système est
           supérieur au niveau de criticité de la tâche.
-	\item[$\bullet$] Active [$\ell \leq \chi_i$]: La tâche souhaite
+	\item Active [$\ell \leq \chi_i$]: La tâche souhaite
           instancier
-          un nouveau job, et le niveau de criticité du système est inférieur
+          un nouveau travail, et le niveau de criticité du système est inférieur
           ou égal à celui de la tâche.
 \end{itemize}
 
@@ -613,14 +613,14 @@ Considérons un ensemble de tâches à triple criticité ($\mathnormal{L} = 3$)
 $\tau = \{\tau_1, \tau_2, \tau_3\}$, avec:
   
 \begin{itemize}
-	\item[$\bullet$] $\tau_1: \{0, 5, 5, 1, (1,1,1)\}$;
-	\item[$\bullet$] $\tau_2: \{0, 7, 7, 2, (1,3,3)\}$;
-	\item[$\bullet$] $\tau_3: \{0, 8, 8, 3, (1,3,7)\}$.\\
+	\item $\tau_1: \{0, 5, 5, 1, (1,1,1)\}$;
+	\item $\tau_2: \{0, 7, 7, 2, (1,3,3)\}$;
+	\item $\tau_3: \{0, 8, 8, 3, (1,3,7)\}$.\\
 \end{itemize}
-Tout scénario pour lesquels aucun job ne dépasse un coût d'exécution de 1 est
+Tout scénario pour lesquels aucun travail ne dépasse un coût d'exécution de 1 est
 de criticité 1, tandis que tout scénario pour lequel les tâches $\tau_2$ et
 $\tau_3$ s'exécutent pour au moins 2 unités de temps et au plus 3 unités de
-temps est de criticité 2. Si tout job de la tâche $\tau_3$ s'exécute entre 4
+temps est de criticité 2. Si tout travail de la tâche $\tau_3$ s'exécute entre 4
 et 7 unités de temps, alors cela définit un scénario de criticité 3. Pour
 finir, tout autre scénario est erroné.
 \end{exmpl}
@@ -639,7 +639,7 @@ les tâches de priorités supérieures à $\tau_i$. On a $r_i \geq C_i(\chi_i)$.
 
 Liu \cite{Liu2000} a montré que, lorsque l'on considère un ensemble de tâches
 traditionnelles ordonnancées en priorité fixe (FP), un instant critique pour une
-tâche $\tau_i$ se présente à chaque fois que $\tau_i$ instancie un job de
+tâche $\tau_i$ se présente à chaque fois que $\tau_i$ instancie un travail de
 manière simultanée avec toutes les tâches $\tau_j$ de priorité supérieure.
 Comme montré dans le théorème \ref{theo:criticalInstant}, ce principe peut
 être étendu aux ensembles de tâches à criticité mixte.
@@ -648,7 +648,7 @@ Comme montré dans le théorème \ref{theo:criticalInstant}, ce principe peut
 Soit $\tau = \{\tau_1, \tau_2, ..., \tau_n\}$ un ensemble de tâches
 sporadiques à criticité mixte ordonnancé avec une politique d'ordonnancement à
 priorité fixe. L'instant critique d'une tâche $\tau_i$ se présente dès lors
-que $\tau_i$ instancie un job simultanément avec toutes les tâches $\tau_j$ de
+que $\tau_i$ instancie un travail simultanément avec toutes les tâches $\tau_j$ de
 priorité supérieure.
 \end{theorem}
 \begin{proof}
@@ -664,7 +664,7 @@ Liu \cite{Liu2000} sont réutilisable, ce qui prouve notre théorème.
 
 \paragraph{}
 Baruah et al. \cite{bbalmms} ont démontré que le problème de
-{MC-scheduling}, appliqué à un ensemble fini de jobs, est ${NP}$-complet.
+{MC-scheduling}, appliqué à un ensemble fini de travaux, est ${NP}$-complet.
 Plutôt que de s'appuyer sur les conditions exactes du {\it MC-scheduling},
 on cible une condition \emph{suffisante} qui peut être vérifiée dans un temps
 polynomial.\\
@@ -684,10 +684,10 @@ priorité 1 la plus élevée).
 		\item à toutes les autres tâches de $\tau$ peut être assignée
                   n'importe quelle priorité, du moment que cette priorité est
                   supérieure à celle assignée à $\tau_i$;
-		\item tout job instancié par $\tau_i$ respecte son échéance
+		\item tout travail instancié par $\tau_i$ respecte son échéance
                   lorsqu'il est exécuté pour au plus $C_i(\chi_i)$ unité de
                   temps et toutes les autres tâches $\tau_j \in \tau$
-                  instancient des jobs qui s'exécutent pour au plus
+                  instancient des travaux qui s'exécutent pour au plus
                   $C_j(\chi_i)$ unités de temps.
 	\end{enumerate}
 \end{definition}
@@ -723,10 +723,10 @@ plus de $C_j(\chi_i)$ unité de temps.
 
 \paragraph{}
 Parce que la priorité d'une tâche est basée sur son niveau de criticité, on
-dit qu'un ensemble de tâches ordonnançables selon une priorité basée sur
-  leur propre criticité (Own Criticality Based Priority (ou
-{\it OCPB-schedulability}) si on peut trouver un ordre complet des tâches en
-utilisant l'algorithme \ref{alg:priorityAssignment}.
+dit qu'un ensemble de tâches ordonnançable selon une priorité basée sur
+  la criticité propre des tâches ({\it Own Criticality Based Priority} (ou
+{\it OCPB-schedulability})) si on peut attribuer à chaque tâche sa priorité
+fixe en utilisant l'algorithme \ref{alg:priorityAssignment}.
 
 \begin{theorem}\label{theo:mcschedulability}
 Si un ensemble de tâches à criticité mixte $\tau$ est OCBP-ordonnançable sur
@@ -738,14 +738,14 @@ Soit $\tau$ OCBP-ordonnançable, et soit, après renommage des tâches, $\tau_1 \va
 \tau_2 \vartriangleright ... \vartriangleright \tau_n$ représentant un ordre
 complet des tâches de l'ensemble. Soit $\tau_i$ une tâche dans cet ordre de
 priorité. Afin de démontrer l'ordonnançabilité au sens de la criticité mixte, on doit pouver que chaque
-job instancié par la tâche $\tau_i$ peut avoir $C_i(\chi_i)$ unités de temps
-d'exécution entre son instanciation et son échéance dans tout scénarion de
+travail instancié par la tâche $\tau_i$ peut avoir $C_i(\chi_i)$ unités de temps
+d'exécution entre son instanciation et son échéance dans tout scénario de
 niveau de criticité $\chi_i$ ou inférieur. Mais dans n'importe lequel de ces
-scénarios, chaque job instancié par la tâche $\tau_j$ s'exécute pendant pas
+scénarios, chaque travail instancié par la tâche $\tau_j$ s'exécute pendant pas
 plus de $C_j(\chi_i)$ unités de temps. L'OCBP-ordonnançabilité de $\tau$ avec
 un ordre de priorité $\tau_1 \vartriangleright \tau_2 \vartriangleright ...
-\vartriangleright \tau_n$ implique que chaque job instancié par la tâche
-$\tau_i$ aura $C_i(\chi_i)$ unités de temps d'exécution si aucun job instancié par une tâche 
+\vartriangleright \tau_n$ implique que chaque travail instancié par la tâche
+$\tau_i$ aura $C_i(\chi_i)$ unités de temps d'exécution si aucun travail instancié par une tâche 
  $\tau_j \in \{\tau_1, \tau_2, ..., \tau_{i-1}\}$ s'exécute plus de
  $C_j(\chi_i)$ unités de temps. En conséquence, $\tau_i$ respecte
  effectivement son échéance dans tout scénario de criticité $\chi_i$ ou
@@ -759,11 +759,12 @@ est $\tau_3 \vartriangleright \tau_2 \vartriangleright \tau_1$.
 Dans ce cas, $\tau$ étant un ensemble de tâches périodique à instanciation
 simultanées, $t=0$ est un instant critique pour toutes les tâches, ce qui
 implique qu'il est nécessaire de considérer uniquement le temps de réponse du
-premier job de chaque tâche pour déterminer l'ordonnançabilité. A La tâche
+premier travail de chaque tâche pour déterminer l'ordonnançabilité (dans le
+cas préemptif et pour des tâches à échéances contraintes). \`A la tâche
 $\tau_1$ peut être assignée la plus basse priorité car son temps de réponse ne
 dépasse pas $3 < D_1$ unités de temps quand aucune des autres tâches ne
-dépasse son coût d'exécution pire cas de niveau de criticité 1. A La tâche
-$\tau_2$ peut être assignée la priorité moyenne parce que son temps de rémonse
+dépasse son coût d'exécution pire cas de niveau de criticité 1. \`A la tâche
+$\tau_2$ peut être assignée la priorité intermédiaire parce que son temps de réponse
 ne dépasse pas $6 < D_2$ unités de temps quand la tâche $\tau_3$ ne dépasse
 pas son coût d'exécution pire cas de niveau de criticité 2. Pour finir, à la
 tâche $\tau_3$ peut être assignée la plus haute priorité car son temps de
@@ -775,7 +776,7 @@ la criticité mixte.
 
 \paragraph{}
 Dans la section suivante, on considère les ensembles de tâches
-OCBP-ordonnançable. De plus, dans la Section \ref{sec:allowanceFP}, les
+OCBP-ordonnançables. De plus, dans la Section \ref{sec:allowanceFP}, les
 priorités fixes sont considérées comme assignées selon l'algorithme 
 \ref{alg:priorityAssignment}.
 
@@ -783,52 +784,53 @@ priorités fixes sont considérées comme assignées selon l'algorithme
 \subsection{Retarder l'accroissement de criticité}\label{delayingCriticalityRising}
 
 Les politiques d'ordonnancement à criticité mixte traditionnelles arrêtent un
-job dès lors que la criticité du scénario dépasse celle du job. En
+travail dès lors que la criticité du scénario dépasse celle du travail. En
 particulier, dès que le niveau de criticité du scénario atteint $\ell$, toutes
-les tâches $\tau_i$ avec $\chi_i < \ell$ sont suspendues, même si elles ont
-encore suffisamment de charge processeur pour pouvoir continuer à s'exécuter
-sans impacter les contraintes temporelles des jobs de criticité d'au moins
+les tâches $\tau_i$ avec $\chi_i < \ell$ sont suspendues, même si le
+processeur a encore suffisamment de ressources pour pouvoir continuer à exécuter
+sans impacter les contraintes temporelles des travaux de criticité d'au moins
 $\ell$.
 Cela est dû à la condition de faisabilité lié à l'OCBP-ordonnançabilité,
-présentée dans la Section~\ref{sufficientCondition} qui ne garantie plus les
+présentée dans la Section~\ref{sufficientCondition} qui ne garantit plus les
 contraintes temporelles.\\
-Nous pensons que ce principe est trop restrictif et peut être réduit sous
+Ce principe est trop restrictif et peut être amélioré sous
 certaintes conditions. Dans le cadre d'un ensemble de tâches
-OCBP-ordonnançable, le lemme suivant nous permet déjà de réduire l'ensemble
+OCBP-ordonnançables, le lemme suivant nous permet déjà de réduire l'ensemble
 des tâches à suspendre.
 
 \begin{lemma}\label{lem1}
-Soit $\tau$ un ensemble de tâche à criticité mixte OCBP-ordonnançable, et
+Soit $\tau$ un ensemble de tâches à criticité mixte OCBP-ordonnançables, et
 $\tau_i$ n'importe quelle tâche dans l'ordre de priorité définit par
-l'algorithme \ref{alg:priorityAssignment}. Quand un job instancié par
+l'algorithme \ref{alg:priorityAssignment}. Quand un travail instancié par
 $\tau_i$ atteint son coût d'exécution pire cas de niveau de criticité 
-$\ell \leq \mathcal{X}_i$, il n'est jamais nécessaire e suspendre les tâches
+$\ell \leq \mathcal{X}_i$, il n'est jamais nécessaire de suspendre les tâches
 $\tau_j$ avec $\chi_j < \ell$ qui ont une priorité supérieure à $\tau_i$.
 \end{lemma}
 
 
 \begin{proof}
 Soit $\tau_i \in \tau$ une tâche qui atteint sont coût d'exécution pire cas de
-niveau de criticité $\ell$. $\tau$ étant OCBP-ordonnançable, chaque job
+niveau de criticité $\ell$. $\tau$ étant OCBP-ordonnançable, chaque travail
 instancié par $\tau_i$ peut s'exécuter jusqu'à $C_i(\chi_i)$ unités de temps
 et respecter son échéance si aucune tâche de priorité supérieure
 $\tau_j$ s'exécute plus que $C_j(\chi_i)$. Soit $\tau_p$ une tâche de priorité
-supérieure, dont le niveau de criticité $chi_p$ est inférieur à $\chi_i$.
+supérieure, dont le niveau de criticité $\chi_p$ est inférieur à $\chi_i$.
 Etant donné que $\chi_i > \chi_p$,  $C_p(\chi_i) = C_p(\chi_p)$, et
-la condition d'OCBP-ordonnançabilité garantie que chaque job instancié par
+la condition d'OCBP-ordonnançabilité garantie que chaque travail instancié par
 $\tau_i$ peut s'exécuter jusqu'à son coût d'exécution pire cas de son propre
-niveau de criticité. En conséquence, seul les tâches de plus basse criticité
+niveau de criticité. En conséquence, seules les tâches de plus basse criticité
 qui ont une priorité inférieure à $\tau_i$ doivent être suspendues.\\
 \end{proof}
 
 %%%%%%%%%
 Le Lemme \ref{lem1} évite la désactivation des tâches de plus basse criticité
-pour lesquelles les conditions sont encore suffisantes pour permettre la
-terminaison de leur exécution. Nous pourrions néanmoins aller encore plus
-loin et et autoriser des tâches de criticité inférieure tant que les jobs que
-ces dernières instancient sont aptes à respecter leur échéance. Cela revient à
+pour lesquelles les ressources CPU disponibles sont encore suffisantes pour permettre la
+terminaison de ces tâches. Nous pourrions néanmoins aller encore plus
+loin et autoriser l'exécution de tâches de criticité inférieure tant que les travaux que
+ces dernières sont aptes à respecter leur échéance sans remettre en cause
+celles des tâches plus critiques. Cela revient à
 déterminer combien de temps les tâches $\tau_i$ de criticité d'au moins
-$\ell+1$ peuvent reporter la suspension de tâches de niveau de criticité
+$\ell+1$ peuvent supporter la suspension de tâches de niveau de criticité
 inférieur en cas de dépassement d'exécution de niveau $\ell$. On appelle cette
 durée la \emph{marge de tolérance de niveau $\ell$} de la tâche $\tau_i$,
 dénotée $A_i(\ell)$ En se basant sur cette marge de tolérance, on peut
@@ -841,18 +843,18 @@ exécutées à temps pour respecter leur échéance.
 
 La marge de tolérance dérive du concept d'analyse de sensibilité. L'analyse de
 sensibilité a été étudié par Bini et al. \cite{bini_buttazzo,Bini2006}. Ils
-discutèrent du concept d'espace de faisabilité qui nous permet de déterminer
-l'espace des valeurs possible pour un paramètre spécifique d'une tâche.
+discutèrent du concept de domaine de faisabilité qui nous permet de déterminer
+l'espace des valeurs possibles pour un paramètre spécifique d'une tâche.
 Le principe de marge de tolérance a été initialement introduit par 
 Bougueroua et al. \cite{bougueroua_george_midonnet} dans le contexte des
 ensembles de tâches traditionnels sujets au risque de dépassement de WCET.
-Leur travail a ciblé la résolution de la plus grande valeur qui peut être
+Leur travail a ciblé le calcul de la plus grande valeur qui peut être
 ajoutée au WCET d'une tâche sans pour autant impacter l'ordonnançabilité de
 l'ensemble de tâches, en considérant un modèle de fautes par fenêtre
 temporelle glissante.\\
 
-La marge de tolérance de niveau $\ell$ d'une tâche $\tau_i$ dont le niveau de
-criticité est d'au moins $\ell+1$ consiste en le calcul de la marge de son
+Dans le contexte de la criticité mixte, la marge de tolérance de niveau $\ell$ d'une tâche $\tau_i$ dont le niveau de
+criticité est d'au moins $\ell+1$ se base sur le calcul de la marge de son
 coût d'exécution pire cas de niveau $\ell$. Cela représente le coût d'exécution
 maximum qui peut être ajouté à $C_i(\ell)$ sans impacter les contraintes
 temporelles des tâches de criticité inférieure $\tau_j$ si elles s'exécutent
@@ -865,20 +867,22 @@ zéro.
 \subsubsection{Concepts et Notations}
 Au travers de cette section, les concepts et notations suivantes sont utilisés:
 \begin{itemize}
-	\item[$\bullet$] $U_{\ell} = \sum\limits_{\tau_p \, | \, \chi_p \geq \ell} \dfrac{C_p(\ell)}{T_p}$
+	\item $U_{\ell} = \sum\limits_{\tau_p \, | \, \chi_p \geq \ell} \dfrac{C_p(\ell)}{T_p}$
           est le facteur d'utilisation processeur au niveau de criticité
           $\ell$.
-	\item[$\bullet$] FP$_\text{MC}$ dénote l'algorithme préemptif à
+	\item FP$_\text{MC}$ dénote l'algorithme préemptif à
           priorité fixe (\emph{Fixed Priority Highest Priority First}), avec
           une assignation des priorités déterminée par l'algorithme
           \ref{alg:priorityAssignment}, et qui ordonnance uniquement les
-          tâches de criticité supérieure ou égale à la criticité du scénario.
-	\item[$\bullet$] Un modèle de faute dénoté $\dfrac{k}{W}$. Cela
+          tâches de criticité supérieure ou égale à la criticité courant du
+          système.
+	\item Un modèle de faute dénoté $\dfrac{k}{W}$. Cela
           correspond, pour chaque niveau de criticité $\ell \in [0, L]$,
           d'au moins $k$ tâches ($0\leq k \leq n$), au risque de dépassement
-          d'exécution de niveau de criticité $\ell$ pour une fenêtre glissante
+          d'exécution de niveau de criticité $\ell$ de $k$ tâches dans une
+          fenêtre temporelle glissante
           de taille $W$. On définit $W\leq\min\limits_i(T_i)$ pour éviter
-          à une tâche d'être sujette à de multiple démassements de coût
+          à une tâche d'être sujette à de multiple dépassements de coût
           d'exécution pire cas de niveau $\ell$ dans une même fenêtre
           temporelle. Néanmoins, cela peut être trop pessimiste pour supposer
           que chaque tâche de criticité au moins égale à $\ell+1$ sera sujette
@@ -887,26 +891,26 @@ Au travers de cette section, les concepts et notations suivantes sont utilisés:
           statistique en observant le véritable nombre de dépassements
           d'exécution de niveau de criticité $\ell$ durant l'exécution du
           système, ou au travers de contraintes de certification.
-	\item[$\bullet$] Pour toute tâche $\tau_i$ ordonnancée avec
+	\item Pour toute tâche $\tau_i$ ordonnancée avec
           FP$_\text{MC}$, et un modèle de faute $\dfrac{k}{W}$:
 		\begin{itemize}
-			\item[$\circ$] $\mathrm{hp}(i)$: l'ensemble des tâches
+			\item $\mathrm{hp}(i)$: l'ensemble des tâches
                           $\tau_j$ ayant une priorité supérieure à $\tau_i$;
-			\item[$\circ$] $\mathrm{hp}^R(i)$: l'ensemble de job
+			\item $\mathrm{hp}^R(i)$: l'ensemble de travail
                           disponibles instanciés par les tâches $\tau_j \in \mathrm{hp}(i)$;
-			\item[$\circ$] $\mathrm{hp}_{k-1}(i,\ell)$: l'ensemble
+			\item $\mathrm{hp}_{k-1}(i,\ell)$: l'ensemble
                           d'au plus $k-1$ tâches $\tau_j$ ayant une priorité
                           supérieure à $\tau_i$, et une criticité $\chi_j >
                           \ell$. Si plus de $k-1$ tâches satisfont ces
-                          conditions, on choisi les tâches les plus
+                          conditions, on choisit les tâches les plus
                           récurrentes, i.e. les $k-1$ tâches ayant les périodes
                           les plus petites;
-			\item[$\circ$] $\mathrm{lp}(i,\ell)$: l'ensemble de
+			\item $\mathrm{lp}(i,\ell)$: l'ensemble de
                           tâches $\tau_j$ ayant une priorité inférieure à
                           $\tau_i$ et une criticité $\chi_j \geq \ell$.
-			\item[$\circ$] $\mathrm{lp}^R(i,\ell)$: l'ensemble
-                          des jobs disponibles instanciés par les tâches $\tau_j \in \mathrm{lp}(i,\ell)$;
-			\item[$\circ$] L'équation suivante permet de calculer
+			\item $\mathrm{lp}^R(i,\ell)$: l'ensemble
+                          des travaux disponibles instanciés par les tâches $\tau_j \in \mathrm{lp}(i,\ell)$;
+			\item L'équation suivante permet de calculer
                           la borne supérieure du temps de réponse pire cas
                           $r_i$ de $\tau_i$:
 				\begin{equation}\label{equ:responseTime}
@@ -966,20 +970,20 @@ temps de réponse pire cas des tâches avec la marge de tolérance intégrée.
 	
 \end{theorem}
 \begin{proof}
-  L'équation \ref{equ:cond3} garanti que la marge de tolérance n'autorise
+  L'équation \ref{equ:cond3} garantit que la marge de tolérance n'autorise
   pas une tâche à s'exécuter pour plus que son coût d'exécution pire cas de
   niveau de criticité $\ell$ modifié pour prendre en compte la consommation de
   la marge de tolérance de niveau $\ell$ d'au plus $k$ tâches. On veut
   s'assurer que les tâches de criticité inférieure puissent continuer à
   respecter leur échéance en cas de dépassement d'exécution d'au plus $k$
-  tâches de criticité supérieure pour une durée limitée par la marge de
+  tâches de criticités supérieures pour une durée limitée par la marge de
   tolérance, ce qui nous mène à l'équation \ref{equ:cond2}. Cette équation
   représente le temps de réponse pire cas d'une tâche $\tau_j \in lp(i,l)$ lorsqu'elle
   s'exécute à son plus haut niveau de criticité, les tâches de plus haute
   criticité $\tau_p$ incluant $\tau_i$ s'exécutant pendant au plus
   $C_p(\chi_j)$ unités de temps et $k$ tâches de priorité supérieure $\tau_r$
   incluant $\tau_i$ consommant leur marge de tolérance.
-  Cette équation ne doit être vérifiée que pour les tachs ayant une priorité
+  Cette équation ne doit être vérifiée que pour les tâches ayant une priorité
   inférieure à $\tau_i$ du fait du Lemme \ref{lem1}.
 \end{proof}
 
@@ -1009,7 +1013,7 @@ Soit $\tau$ un ensemble de tâches à criticité mixte qui a été prouvé comme
 ordonnançable au sens de la criticité mixte dans l'exemple \ref{ex:mcTaskSet2}. La Figure
 \ref{fig:edfNotOptimal} montre que la criticité du scénario n'est pas accrue
 suffisamment pour garantir les contraintes temporelles de la tâche $\tau_3$
-quand toutes les tâches s'exécute avec leur coût d'exécution pire cas de leur
+quand toutes les tâches s'exécutent avec leur coût d'exécution pire cas de leur
 propre niveau de criticité.
 \end{proof}
 \begin{figure}[h!]
@@ -1018,18 +1022,18 @@ propre niveau de criticité.
 		\caption{Non Optimalité de l'algorithme EDF}\label{fig:edfNotOptimal}
 	\end{center}
 \end{figure}
-Etant donnée que cette étude cible les ensembles de tâches $\tau$ qui sont
-ordonnançable en priorité fixe selon le principe d'{\it
+Etant donné que cette étude cible les ensembles de tâches $\tau$ qui sont
+ordonnançables en priorité fixe selon le principe d'{\it
   OCBP-schedulability}, et parce que cette propriété ne permet pas de déterminer
 si Earliest Deadline First est une politique d'ordonnancement correcte pour
-$\tau$, il n'est pas implémenté de principe de marge de tolérance pour
+$\tau$, nous n'avons pas implémenté de principe de marge de tolérance pour
 l'algorithme EDF.
 
 %%%%%%% Allowance Domain %%%%%%%
-\subsubsection{Domaine de tolérance}\label{sec:allowanceDomain}
+\subsubsection{Domaine de marge sur les WCETs}\label{sec:allowanceDomain}
 
 %%%%%%%%%%%%%%
-La Section \ref{sec:allowanceFP} a décrit comment calculer une marge de
+La Section \ref{sec:allowanceFP} a décrie comment calculer une marge de
 tolérance de niveau $\ell$ équitablement partagée pour un ensemble de tâches
 ordonnancé en priorité fixe. Néanmoins, nous souhaitons utiliser une autre
 règle d'allocation pour la marge de tolérance de niveau $\ell$. Dans cette
@@ -1040,7 +1044,7 @@ l'espace des marges de tolérance de niveau $\ell$ faisables.
 \begin{definition}
   Soit $A(\ell) = \{A_1(\ell), A_2(\ell), ..., A_n(\ell)\}$ l'ensemble de
   marges de tolérances pour un ensemble de tâches à criticité mixte $\tau$.
-  On appelle surface de faisabilité de l'espace $A(\ell)$ l'ensemble des
+  On appelle domaine de faisabilité de l'espace $A(\ell)$ l'ensemble des
   valeurs de $A(\ell)$ pour lesquelles $\tau$ reste faisable si chaque tâche
   $\tau_i \in \tau$ consomme jusqu'à $A_i(\ell)$ unité de temps
   supplémentaires au niveau de criticité $\ell$.
@@ -1051,8 +1055,8 @@ d'ordonnançabilité pour les ensembles de tâches périodiques. Nous avons adapté
 cette condition aux ensembles de tâches à criticité mixte dans le théorème
 suivant:
 \begin{theorem}
-Un ensemble de tâches à criticité mixte $\tau$ est ordonnançable en priorités
-fixes si et seulement si:
+Un ensemble de tâches à criticité mixte $\tau$ est ordonnançable en priorité
+fixe si et seulement si:
 	\begin{multline}
 		\forall i = 1,...,n, \; \exists t \in \mathrm{schedP}_i \, \text{tel que} \, \\
 		C_i(\chi_i) + \sum_{\tau_p \in \mathrm{hp}(i)} \left\lceil \dfrac{t}{T_p} \right\rceil C_p(\chi_i) \leq t \label{eq:domain}
@@ -1076,15 +1080,15 @@ En utilisant une notation compacte et des opérateurs logiques, l'Equation
 où $n_i = \left(\left\lceil \frac{t}{T_1} \right\rceil, \left\lceil \frac{t}{T_2} \right\rceil, ..., \left\lceil \frac{t}{T_{i-1}} \right\rceil, 1\right)$ et $C_i = \left(C_1(\chi_i), C_2(\chi_i), ..., C_i(\chi_i)\right)$
 \end{theorem}
 
-Sachant que ce que nous souhaitons représenter est la surface de faisabilité
+Sachant que nous souhaitons représenter le domaine de faisabilité
 de l'espace $A(\ell)$, nous avons besoin d'introduire les variables de la marge
 de tolérance. L'Equation \ref{eq:domainCompact} doit être étendue afin de
 considérer une marge de tolérance de niveau $\ell$ pour chaque tâche de
 criticité au moins égale à $\ell$.
 
 \begin{theorem}
-Soit $\tau$ un ensemble de tâches à criticité mixte. La surface de faisabilité
-de l'espace $A(\ell)$ est calculée comme suit:
+Soit $\tau$ un ensemble de tâches à criticité mixte. Le domaine de faisabilité
+de la marge sur les WCETs de niveau $\ell$ est calculé comme suit:
 	\begin{equation}
 		\bigwedge \limits_{\tau_i \, | \, \chi_i \geq \ell} \bigvee \limits_{t \in \mathrm{schedP}_i} \left\lgroup n_i \cdot C_i^{\ell} \leq t \wedge A_i(\ell) \leq C_i(\chi_i) - C_i(\ell) \right\rgroup \label{eq:domainCompactMC}
 	\end{equation}
@@ -1106,7 +1110,7 @@ La tâche $\tau_3$ devient la tâche $\tau_1$ et la tâche $\tau_1$ devient la
 tâche $\tau_3$. La tâche $\tau_2$ reste inchangée.
 
 \begin{itemize}
-	\item[$\bullet$] l'espace de tolérance $A(1)$: L'ensemble de points
+	\item l'espace de tolérance $A(1)$: L'ensemble de points
           d'ordonnancement à considérer est donné dans la Table \ref{schedP::1}. \\
 		\begin{table}[h!]
 		\begin{center}
@@ -1144,7 +1148,7 @@ tâche $\tau_3$. La tâche $\tau_2$ reste inchangée.
 		\includegraphics[scale=0.25]{./figures/A1_space.png}
 		\caption{Espace de tolérance $A(1)$}\label{space::1}
 	\end{figure}
-	\item[$\bullet$] Espace de tolérance $A(2)$: L'ensemble de points
+	\item Espace de tolérance $A(2)$: L'ensemble de points
           d'ordonnancement à considérer est donné dans la Table \ref{schedP::2}. \\
 		\begin{table}[h!]
 		\begin{center}
@@ -1174,7 +1178,7 @@ tâche $\tau_3$. La tâche $\tau_2$ reste inchangée.
 			\right.
 		\end{equation}
 		menant à $A_1(2)=1$ et $A_2(2)=0$.
-	\item[$\bullet$] Espace de tolérance $A(3)$: L'ensemble de points
+	\item Espace de tolérance $A(3)$: L'ensemble de points
           d'ordonnancement à considérer est donné dans la Table \ref{schedP::3}. \\
 		\begin{table}[h!]
 		\begin{center}
@@ -1208,7 +1212,7 @@ de tolérance qui peut être implémenté en utilisant exclusivement des timers.
 Nous appellerons ce mécanisme LET (\emph{Latest Execution Time}).
 
 \begin{definition}
-  Soit $t_i$ l'instant de requête du $k^\text{ième}$ job instancié par la
+  Soit $t_i$ l'instant de requête du $k^\text{ième}$ travail instancié par la
   tâche $\tau_i$, avec $\chi_i \geq \ell$. $\mathsf{LET}_i^{\ell}(t_i)$ est
   défini comme le moment d'exécution au plus tard $J_k^i$ en cas de
   dépassement de coût d'exécution pire cas de niveau $\ell$, jusqu'auquel  il
@@ -1222,7 +1226,7 @@ $\tau_i$, et ce $\mathsf{LET}$ sera utilisé pour déterminer l'instant à partir
 duquel les tâches de criticité inférieure nécessitent d'être désactivées.
 
 \begin{definition}
-Soit $J_k^i$ le $k^\text{ième}$ job instancié à l'instant $t_i$ par la tâche
+Soit $J_k^i$ le $k^\text{ième}$ travail instancié à l'instant $t_i$ par la tâche
 $\tau_i$ avec une criticité $\chi_i \geq \ell$. L'instant d'exécution au plus
 tard (LET) pour $J_k^i$ au niveau de cricité $\ell$ est calculé à l'instant
 $t_i$ comme suit:
@@ -1233,28 +1237,29 @@ $t_i$ comme suit:
 			&\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad+ C_i(\ell) + A_i(\ell)
 		\end{split}
 	\end{equation}
-L'instant d'exécution au plus tard des jobs $J$ de $\mathrm{lp}^R(i,\ell)$ est
+L'instant d'exécution au plus tard des travaux $J$ de $\mathrm{lp}^R(i,\ell)$ est
 alors calculé comme suit:
 	\begin{equation}
 		\forall J \in \mathrm{lp}^R(i,\ell): \mathsf{LET}_j^{\ell}(t_j) = \mathsf{LET}_j^{\ell}(t_j) + C_i(\ell) + A_i(\ell)
 	\end{equation}
 \end{definition}
 
-Basé sur le $\mathsf{LET}_i^{\ell}(t_i)$ d'un job dont le niveau de criticité
+Basé sur le $\mathsf{LET}_i^{\ell}(t_i)$ d'un travail dont le niveau de criticité
 est supérieur à $\ell$, on peut initialiser le timer en charge de détecter un
-dépassement d'exécution pire cas de niveau $\ell$ après lequel toutes les
-tâches de criticité inférieure à $\ell$ doivent être désactivées. Nous
-n'initialisons pas de timer pour les jobs dont la criticité est égale à
+dépassement d'exécution pire cas de niveau $\ell$. Lors de la terminaison de
+ce dernier, toutes les tâches de criticité inférieure à $\ell$ et non encore
+terminées doivent être désactivées. Nous
+n'initialisons pas de timer pour les travaux dont la criticité est égale à
 $\ell$ étant donné que nous ne serons pas sujet à un dépassement de coût d'exécution
 de niveau $\ell$. Nous devons cependant calculer leur $\mathsf{LET}$ quand
-bien même il serait nécessaire de calculer le $\mathsf{LET}$ des autres jobs.\\
+même, pour calculer le $\mathsf{LET}$ des autres travaux.\\
 
 \begin{exmpl}
 L'implémentation de la marge de tolérance est illustrée en utilisant l'Exemple
 \ref{ex:mcTaskSet1}, et il est assumé que toutes les tâches de criticité au
 moins égale à $\ell+1$ peuvent être sujettes à un dépassement de coût
 d'exécution de niveau $\ell$. La marge de tolérance et
-l'instant d'excution au plus tard du premier job de chaque tâche calculés, ces
+l'instant d'excution au plus tard du premier travail de chaque tâche calculés, ces
 derniers sont représentés dans la Table \ref{ex:table}.
 \begin{table}[h!]
 	\begin{center}
@@ -1278,7 +1283,7 @@ $\tau_2$ dépassent leur coût d'exécution pire cas de niveau de criticité 1,
 mais sans nécessiter d'interruption de la tâche $\tau_1$, qui possède encore
 assez de temps pour terminer sa propre exécution. Si le mécanisme de marge de
 tolérance n'avait pas été utilisé, la criticité du scénario aurait été
-augmentée à l'instant 1, empêchant la tâche $\tau_1$ de compléter son
+augmentée à l'instant 1, empêchant la tâche $\tau_1$ de terminer son
 exécution.
 
 \begin{figure}[h!]
@@ -1289,13 +1294,13 @@ exécution.
 \end{figure}
 
 De manière similaire, la Figure \ref{ex:LET1} illustre un scénario où $\tau_3$
-dépasse son coût d'exécution pire cas de niveau de criticité 2, mais complète
+dépasse son coût d'exécution pire cas de niveau de criticité 2, mais termine
 son exécution suffisamment tôt pour éviter l'interruption de la tâche
-$\tau_2$, qui possède encore assez de temps pour compléter son exécution pour
+$\tau_2$, qui possède encore assez de temps pour terminer son exécution pour
 une durée égale à son coût d'exécution pire cas de son propre niveau de
 criticité. Si le principe de marge de tolérance n'avait pas été utilisé, la
-criticité du scénario aurait été augmenté à l'instant 3, empêchant la tâche
-$\tau_2$ de compléter son exécution.
+criticité du scénario aurait été augmentée à l'instant 3, empêchant la tâche
+$\tau_2$ de terminer son exécution.
 	
 \begin{figure}[h!]
 	\begin{center}
@@ -1304,10 +1309,11 @@ $\tau_2$ de compléter son exécution.
 	\end{center}
 \end{figure}
 
-Pour finir, la Figure  \ref{ex:allowanceReuse} illustre la récupération de la
-marge de tolérance.En effet, la tâche $\tau_3$ avait une marge de tolérance de
-une unité de temps, mais a pu compléter son exécution avant de nécessiter son
-usage. Cela a permis à la tâche $\tau_2$ de profiter de deux unités de temps
+Pour finir, la Figure \ref{ex:allowanceReuse} illustre la récaupération de la
+marge de tolérance. En effet, la tâche $\tau_3$ avait une marge de tolérance de
+une unité de temps, mais a pu terminer son exécution avec un coût inférieur à
+son WCET du niveau de criticité courant.
+Cela a permis à la tâche $\tau_2$ de profiter de deux unités de temps
 complémentaires pour terminer son exécution sans pour autant nécessiter
 l'interruption de la tâche $\tau_1$.
 	
@@ -1320,14 +1326,14 @@ l'interruption de la tâche $\tau_1$.
 \end{exmpl}
 
 %%%%%%%%%% Resetting Criticality %%%%%%%%%%
-\subsection{Réinitialiser la Criticité}\label{sec:resettingCriticality}
+\subsection{Réinitialiser la Criticité du système}\label{sec:resettingCriticality}
 
 Le mécanisme présenté en Section \ref{sec:allowanceImplementation} nous permet
 d'accroître le délai de suspension d'une tâche de criticité plus faible le
-plus possible, empêchant de désactiver des jobs qui auraient pu avoir
-suffisamment de temps pour compléter leur exécution. Néanmoins, dans certains
+plus possible, empêchant de désactiver des travaux qui auraient pu avoir
+suffisamment de temps pour terminer leur exécution. Néanmoins, dans certains
 cas et à un niveau de criticité donné, une tâche peut nécessiter plus de temps
-pour compléter son exécution que la marge de tolérance ne lui permet. Dans ce
+pour terminer son exécution que la marge de tolérance ne lui permet. Dans ce
 cas, le niveau de criticité du scénario a besoin d'être augmenté.\\
 Dans cette Section, nous étudions la pertinence de conserver les tâches de
 priorité inférieure suspendues. Nous pensons que, si il est nécessaire de
@@ -1346,13 +1352,13 @@ adaptés pour prendre en compte le Lemme \ref{lem1}.
 \begin{definition}
 Si le scénario courant est de niveau de criticité $\ell$, un instant
 d'inactivité de niveau $\ell$ (level-$l$ idle time) $t$ sur le processeur est défini comme un instant
-durant lequel aucun job de criticité au moins égale à $\ell$ n'est disponible,
+durant lequel aucun travail de criticité au moins égale à $\ell$ n'est disponible,
 en attente d'ordonnancement à l'instant $t$.
 \end{definition}
 
 \begin{theorem}\label{theo:decreaseCriticality}
 Soit $\tau$ un ensemble de tâche périodique à criticité mixte
-ordonnançable. Dès que un instant d'inactivité de niveau $\ell$ se produit
+ordonnançable. Dès qu'un instant d'inactivité de niveau $\ell$ se produit
 dans l'ordonnancement de $\tau$, le niveau de criticité du scénario peut être
 réinitialisé à sa valeur la plus basse.
 \end{theorem}
@@ -1360,52 +1366,52 @@ réinitialisé à sa valeur la plus basse.
 \begin{proof}
 Soit $t_{\text{idle}}$ le premier instant d'inactivité de niveau $\ell$ dans
 l'ordonnancement de $\tau$ (avec $t_{\text{idle}} > 0$). Cela signifie que
-tous les jobs instanciés par une tâche dont le niveau de criticité est au moins
+tous les travaux instanciés par une tâche dont le niveau de criticité est au moins
 aussi élevé que que la criticité du scénario à l'instant $t_{\text{idle}}$ ont
-complété leur exécution, et qu'aucun job n'est disponible. Soit $\tau_i$
+terminé leur exécution, et qu'aucun travail n'est disponible. Soit $\tau_i$
 n'importe quelle tâche de $\tau$ qui a été désactivée avant $t_{\text{idle}}$.
-Nous devons montrer qu'à l'instant $t_{\text{idle}}$, tous les jobs instanciés
+Nous devons montrer qu'à l'instant $t_{\text{idle}}$, tous les travaux instanciés
 par $\tau_i$ peuvent à nouveau recevoir $C_i(\chi_i)$ unités de temps pour
 leur exécution dans n'importe scénario de criticité d'au plus $\chi_i$. Soit
-$J_i$ le premier job instancié par $\tau_i$ à l'instant $t_i$ ($t_i \geq
+$J_i$ le premier travail instancié par $\tau_i$ à l'instant $t_i$ ($t_i \geq
 t_{\text{idle}}$). On distingue deux cas:
   
  \begin{enumerate}
-	\item $t_i$ est l'instant critique pour $\tau_i$: il en suit que le
-          temps de réponse de $J_i$ sera le plus grand parmis tous les jobs
-          instancié par $\tau_i$. Mais comme $\tau$ est ordonnançable au sens
+	\item $t_i$ est l'instant critique pour $\tau_i$: il s'en suit que le
+          temps de réponse de $J_i$ sera le plus grand parmi tous les travaux
+          instanciés par $\tau_i$. Mais comme $\tau$ est ordonnançable au sens
           de la criticité mixte, nous
           savons que $J_i$ respecte malgré tout son échéance si il s'exécute
           jusqu'à $C_i(\chi_i)$ unité de temps et que aucune des autres tâches $\tau_j$
-          n'instancie de job qui s'exécute pour plus de $C_j(\chi_i)$ unités
+          n'instancie de travail qui s'exécute pour plus de $C_j(\chi_i)$ unités
           de temps.
 	\item $t_i$ n'est pas un instant critique pour $\tau_i$: dans ce cas,
           nous savons que le temps de réponse de $J_i$ sera inférieur ou égal
           au coût d'exécution pire cas de la tâche $\tau_i$. Mais nous avons
           prouvé que $J_i$ peut respecter son échéance si il avait été
           instancié à un instant critique pour la tâche. Il en suit que $J_i$
-          reespectera également son échéance dans un instant non-critique.
+          respectera également son échéance dans un instant non-critique.
 \end{enumerate}
 \end{proof}
 
 \begin{exmpl}
 Considérons une nouvelle fois l'ensemble de tâches $\tau$ présenté dans
 l'Exemple \ref{ex:mcTaskSet1}, et un scénario possible pour cet ensemble de
-tâche illustré dans la Figure \ref{ex:decreaseCriticality}. Le premier job
-instancié par la tâche $\tau_3$ complète son exécution après 7 unités de
+tâche illustré dans la Figure \ref{ex:decreaseCriticality}. Le premier travail
+instancié par la tâche $\tau_3$ termine son exécution après 7 unités de
 temps. Le niveau de criticité du scénario a alors atteint le niveau 2 à
 l'instant $t = 1$, et le niveau 3 à l'instant $t = 3$. En conséquence, à la
 fois $\tau_1$ et $\tau_2$ ont été désactivées. A l'instant $t = 7$, un instant
 d'inactivité de niveau 3 se présente, donc le niveau de criticité peut alors
-être réinitialisé à 1, et les jobs instanciés par $\tau_1$ et $\tau_2$ peuvent
-être à nouveau considérés. La tâche $\tau_2$ instancie son job suivant à
+être réinitialisé à 1, et les travaux instanciés par $\tau_1$ et $\tau_2$ peuvent
+être à nouveau considérés. La tâche $\tau_2$ instancie son travail suivant à
 l'instant $t = 7$, mais il est préempté par la tâche $\tau_3$ à l'instant $t =
-8$. Etant donné que $\tau_3$ a complété son exécution, après 3 unités de temps, le
+8$. Etant donné que $\tau_3$ a terminé son exécution, après 3 unités de temps, le
 niveau de criticité du scénario atteint la valeur 2, et la tâche $\tau_1$ doit
 être désactivée. Cependant, $\tau_2$ est encore apte à respecter son échéance.
 A l'instant $t = 13$, un instant d'inactivité de niveau 2 se présente, et le
 niveau de criticité est réinitialisé à nouveau. Cela permet à toutes les
-tâches d'instancier un job de nouveau apte à respecter son échéance.
+tâches d'instancier un travail de nouveau apte à respecter son échéance.
 \begin{figure}[h!]
 	\begin{center}
 		\includegraphics[scale=0.5]{./figures/decreaseCriticality.png}
@@ -1417,8 +1423,8 @@ tâches d'instancier un job de nouveau apte à respecter son échéance.
 %%%%%%%%%% Simulations %%%%%%%%%%
 \subsection{Simulations}\label{sec:simulation}
 
-Dans cette Section, on compare les performances de trois solutions possible
-pour traiter l'accroissement de criticité lors de l'ordonnancement d'ensembles
+Dans cette Section, nous comparons les performances de trois solutions possible
+pour traiter l'accroissement de criticité lors de l'ordonnancement d'un ensemble
 de tâches à criticité mixte:
 \begin{enumerate}
 	\item L'approche traditionnelle (TA): dès qu'une tâche $\tau_i$
@@ -1427,7 +1433,7 @@ de tâches à criticité mixte:
           $\tau_j$ avec $\chi_j = \ell$ ayant une priorité inférieure à
           $\tau_i$ sont désactivées.
 	\item L'approche traditionnelle, étendue avec un mécanisme de
-          diminution de criticité (CD):dès qu'une tâche $\tau_i$ dépasse son
+          diminution de criticité (CD, pour {\it Criticality Decrease}):dès qu'une tâche $\tau_i$ dépasse son
           coût d'exécution pire cas de niveau de criticité $\ell$, la
           criticité du scénario est augmentée et toutes les tâches $\tau_j$
           avec $\chi_j = \ell$ ayant une priorité inférieure à $\tau_i$ sont
@@ -1445,9 +1451,9 @@ de tâches à criticité mixte:
           est réinitialisée à sa valeur la plus basse.
 \end{enumerate}
 
-A chaque job $J_k^i$ instancié par une tâche $\tau_i$ est assignée une durée
+A chaque travail $J_k^i$ instancié par une tâche $\tau_i$ est assignée une durée
 $c_{i,k}^e$ dans l'intervalle $[1,C_i(\chi_i)]$, en utilisant une distribution
-triangulaire. Sachant qu'un job ne termine son exécution ni après un très
+triangulaire. Sachant qu'un travail ne termine son exécution ni après un très
 court instant ni après une très longue durée mais plutôt après une durée
 intermédiaire, l'usage d'une distribution triangulaire est un moyen de
 représenter cette probabilité. Ainsi, ce qui suit permet de concentrer la
@@ -1455,7 +1461,7 @@ plupart des probabilités autour d'une valeur appelée le {\it mode}. Comme le
 montre la Figure \ref{fig:triangularDistribution}, pour une tâche $\tau_i$, la
 limite basse de la distribution est mise à 0, et la limite haute à
 $C_i(\chi_i)$, et le mode de la distribution est égal à
-$\frac{C_i(\chi_i)}{3}$. Cela signifie qu'un job va la plupart du temps
+$\frac{C_i(\chi_i)}{3}$. Cela signifie qu'un travail va la plupart du temps
 terminer son exécution après une consommation proche de 33\% de son coût
 d'exécution pire cas de son niveau de criticité propre. Nous générons alors un
 nombre aléatoire $r$ qui suit cette distribution particulière, et $c_{i,k}^e =
@@ -1468,8 +1474,8 @@ nombre aléatoire $r$ qui suit cette distribution particulière, et $c_{i,k}^e =
 	\end{center}
 \end{figure}
 
-La durée exacte de chaque job est complètement indépendante de la durée exacte
-des jobs précédents instanciés par la même tâche. Un job $J_k^i$ complètera
+La durée exacte de chaque travail est complètement indépendante de la durée exacte
+des travaux précédents instanciés par la même tâche. Un travail $J_k^i$ complètera
 son exécution dès que l'ordonnanceur lui aura fourni un total de $c_{i,k}^e$
 unités de temps, mais cette durée n'est pas connue à l'avance par
 l'ordonnanceur.\\
@@ -1481,14 +1487,14 @@ pour s'assurer que la criticité est augmentée du fait d'une tâche dépassant
 son coût d'exécution pire cas à un niveau de criticité donné plus sa marge de
 tolérance, et non parce que le nombre de tâches en faute dépasse $k$.
 
-Nous avons comparé le nombre moyen de jobs qui ont dû être supprimés par les
+Nous avons comparé le nombre moyen de travaux qui ont dû être supprimés par les
 trois méthodes. Nous avons alors généré 100 ensembles de tâches à criticité
 mixte et réitéré les simulations pour de multiples bornes supérieures sur
-chaque charge de tâche (on réfère à cette borne supérieure en tant que
+chaque charge de tâche (on note cette borne supérieure en tant que
 $U_{\text{max}}(\tau_i)$). Le Tableau \ref{fig:results} et la Figure
 \ref{fig:resultsGraphical} présentent les résultats de ces simulations. L'axe
 des X représente la charge maximum par tâche $U_{\text{max}}(\tau_i)$,
-tandis que l'axe des Y représente le pourcentage moyen de jobs ayant été
+tandis que l'axe des Y représente le pourcentage moyen de travaux ayant été
 supprimés.
 
 \begin{table}[h!]
@@ -1518,22 +1524,22 @@ supprimés.
 			\hline
 			1.0 & 50.1776\% & 26.1121\% & 21.1875\% \\
 			\hline
-		\end{tabular}\caption{Pourcentage moyen de job supprimés en fonction de  $U_{\text{max}}(\tau_i)$}\label{fig:results}
+		\end{tabular}\caption{Pourcentage moyen de travail supprimés en fonction de  $U_{\text{max}}(\tau_i)$}\label{fig:results}
 	\end{center}
 \end{table}
 
 \begin{figure}[h!]
 	\begin{center}
 		\includegraphics[scale=0.57]{./figures/resultats.png}
-		\caption{Pourcentage moyen de jobs supprimés en fonction de la charge\label{fig:resultsGraphical}}
+		\caption{Pourcentage moyen de travaux supprimés en fonction de la charge\label{fig:resultsGraphical}}
 	\end{center}
 \end{figure}
 
 Nous observons que le mécanisme de diminution de criticité peut réduire le
-nombre de jobs supprimés de 25\% dans le pire cas, tandis que cette réduction
+nombre de travaux supprimés de 25\% en pire cas, alors que cette réduction
 peut atteindre plus de 30\% lorsque la charge de chaque tâche est faible.
 Nous constatons de plus que ce mécanisme est accrût avec la marge de
-tolérance, le nombre de job supprimés étant réduit de 5\% à 9\% de plus.\\
+tolérance, le nombre de travail supprimés étant réduit de 5\% à 9\% de plus.\\
 
 Nous observons que plus la charge de chaque tâche est faible, plus le
 mécanisme de marge de tolérance est efficace. Cela est du au fait qu'une marge
@@ -1547,7 +1553,7 @@ de tolérance plus grande peut être apportée à chaque tâche.
 %relying on the worst-case response time of a task according to a criticality level, and suggested a simple
 %mechanism that implements it denoted LET. We then proved that idle times could be used to decrease the
 %overall criticality of the system. Experiments furthermore attested that the criticality decreasing mechanism 
-%Mcould reduce up to 24\% the number of jobs that had to be suspended, while the allowance could decrease
+%Mcould reduce up to 24\% the number of travaux that had to be suspended, while the allowance could decrease
 %this number by an additional 8\%.
 
 
@@ -1555,15 +1561,15 @@ de tolérance plus grande peut être apportée à chaque tâche.
 Le principe de criticité mixte peut donc être intégré dans la passerelle afin
 de pouvoir traiter au mieux l'ensemble des tâches nécessaires pour répondre au
 besoin systronique sur un environnement matériel limité, formalisé par
-l'Exigence \hyperlink{REQTEMPS002}.\\
+l'Exigence \hyperlink{REQTEMPS002}{REQ\_TEMPS\_002}.\\
 Les différents ensembles de tâches à criticité mixte, intégrés chacun dans un compartiment
-spatial et temporel autonome pour des raison de sécurité, peuvent être ordonnancés de
+spatial et temporel autonome pour des raisons de sécurité, peuvent être ordonnancés de
 manière efficace en intégrant à la fois le concept de marge de tolérance et le
 concept de réinitialisation de la criticité. Il reste cependant une limitation
 en terme d'affinité de l'ensemble de tâche, limité pour le moment à un seul
 c{\oe}ur du processeur. Dans le cadre de ma thèse, je considère que de tels ensembles de
-tâches sont seuls sur le c{\oe}ur du processeur sur lequel ils sont assignés. Néanmoins, en cas de
-partage du c{\oe}ur entre plusieurs compartiments en mode TDM parmis lesquels
-au moins un compartiment habrite un ensemble de tâches à criticté mixte, l'ordonnançabilité
-d'un tel ensemble doit être résolue.
+tâches sont seuls sur le c{\oe}ur du processeur sur lequel ils sont assignés.
+Néanmoins, il est possible d'étendre les résultats précédents dans le cadre
+d'un ordonnancement partitionné de tâches à criticité mixte sur une architecture
+multi-c{\oe}urs.
 

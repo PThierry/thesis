@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  ven. 14 juin 2013 12:52:20 CEST Philippe THIERRY
-%% Last update ven. 18 avril 2014 15:12:05 CEST phil
+%% Last update lun. 21 avril 2014 11:28:08 CEST phil
 %%
 
 \chapter{Vers une passerelle sécurisée et temps réel pour le traitement de
@@ -510,7 +510,7 @@ maquettage, la différenciation est limitée à l'affinité CPU, afin de séparer
 les tâches de supervision et de traitement sur des coeurs disjoints.
 Ainsi, les sets de tâches des conteneurs DPI, diode et Émetteur périodique
 sont tous réunis sur un seul c{\oe}ur, avec une politique d'ordonnancement de
-type POSIX SCED\_FIFO.\\
+type POSIX SCHED\_FIFO.\\
 Afin de valider le comportement temps réel souple de Linux, ce dernier a été
 validé et utilisé avec le patch Linux-RT. Ce patch permet de fortement réduire
 l'impact du système Linux sur l'ordonnancement des tâches temps réel. En effet
