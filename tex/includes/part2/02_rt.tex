@@ -6,7 +6,7 @@
 %% Login   <Philippe THIERRYreseau-libre.net>
 %%
 %% Started on  Fri Mar 12 16:36:41 2010 Philippe THIERRY
-%% Last update ven. 18 avril 2014 18:06:41 CEST phil
+%% Last update lun. 21 avril 2014 10:19:32 CEST phil
 
 \chapter{Compatibilité d'une architecture sécurisée avec des contraintes de temps réel}
 
@@ -694,16 +694,14 @@ priorité 1 la plus élevée).
 
 %\begin{algorithm}[H]
 \begin{algorithm}
-\SetKwIF{Si}{SinonSi}{Sinon}{si}{alors}{sinon si}{alors}{finsi}
-\SetKwInOut{Sortie}{sortie}
 %\SetLine
-\KwIn{$\tau$}
+\Donnees{$\tau$}
 $\mathsf{pr} \leftarrow |\tau|$ \\
-\While{$\tau \neq \varnothing$}{
-	\If{aucune tâche $\tau_i \in \tau$ n'est viable à la priorité la plus basse}{
-		\textbf{renvoyer} erreur\;
+\Tq{$\tau \neq \varnothing$}{
+	\uSi{aucune tâche $\tau_i \in \tau$ n'est viable à la priorité la plus basse}{
+		\Retour{erreur}\;
 	}
-	\Else{
+	\Sinon{
 		Soit $\tau_i$ une tâche viable à la priorité la plus basse\;
 		assigne $\tau_i$ la priorité la plus basse $\mathsf{pr}$\;
 		$\tau \leftarrow \tau\setminus\{\tau_i\}$\;
