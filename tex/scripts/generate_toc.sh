@@ -77,10 +77,10 @@ echo '
 %\ifodd\value{page}\hbox{}\newpage\fi
 %\ifodd\value{page}\hbox{}\newpage\fi
 
-\begingroup
-\let\cleardoublepage\hbox{}
-\let\clearpage\hbox{}
+%\begingroup
+%\let\cleardoublepage\hbox{}
+%\let\clearpage\hbox{}
 \input{includes/endpage.tex}
-\endgroup
+%\endgroup
 %\includepdf{includes/endpage.pdf}
 \end{document}' >> document.tex
