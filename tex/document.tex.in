@@ -272,6 +272,8 @@
 
 \cleardoublepage					% double blank page
 
+\input{includes/remerciements.tex}
+\cleardoublepage
 \input{includes/resume.tex}				% insert abstracts
 
 \cleardoublepage					% double blank page
