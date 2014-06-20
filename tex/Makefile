@@ -79,6 +79,9 @@ prepare_for_publication: compile
 	INFILE=$(TARGET).uncompressed.pdf OUTFILE=$(TARGET).uncompressed.2.pdf ./scripts/del_lastpage.sh
 	pdftk $(TARGET).uncompressed.2.pdf output $(TARGET).compressed.pdf compress
 
+testpdf:
+	$(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE)
+
 clean : 
 	$(RM) $(RMFLAGS) $(OBJS) $(TODEL)
 

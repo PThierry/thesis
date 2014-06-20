@@ -23,6 +23,7 @@
 %% Packages integration
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\usepackage{datatool}
 \usepackage[hundred]{vrsion}				% versioning support
 \usepackage[latin1]{inputenc}				% char format
 \usepackage{listings}					% lists support. Used for code
