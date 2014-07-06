@@ -129,7 +129,7 @@ KVM utilise une architecture différente, puisqu'il implique un hôte pouvant
 ordonnancer des tâches potentiellement temps réel à côté de machines
 virtuelles. Dans ce cas, les tâches natives (non virtualisées) peuvent
 impacter l'ordonnancement des machines virtuelles et des jeux
-de tâches associés, comme le décrivent T. Cucinotta, g. Anastasi et L. Abeni
+de tâches associés, comme le décrivent T. Cucinotta, G. Anastasi et L. Abeni
 dans \cite{rtvm}. Les auteurs proposent un nouvel ordonnanceur global, qu'ils dénotent
 Constant Bandwidth Server \cite{abeni1998integrating} (CBS)
 afin d'assurer une réservation stricte de charge processeur pour les
@@ -177,7 +177,7 @@ En 2007, S. Vestal\cite{vestal2007preemptive} a décrit le principe d'une tâche
 dont la criticité peut être mixte. On définit une tâche à criticité
 mixte en définissant
 plusieurs pire cas d'exécution (WCET), chaque WCET étant associé à un niveau
-de criticité. La multiplicité des coûts d'exécution pire cas viens du niveau
+de criticité. La multiplicité des coûts d'exécution pire cas vient du niveau
 d'assurance exigé par chaque niveau de criticité. Plus ce dernier est élevé,
 plus l'assurance demandée par la certification est forte. En conséquence, la
 mesure d'exécution pire cas est de plus en plus pessimiste afin de garantir
@@ -238,7 +238,7 @@ criticité mixte. Cette approche est connue sous le nom EDF-VD. Plus récemment,
 Quan et al. \cite{gpmw} ont présenté une nouvelle approche pour ordonnancer
 des systèmes à criticité mixte, qui s'appuie sur un calcul hors ligne de la
 priorité des jobs, qui est ensuite utilisée par un ordonnanceur en ligne. Au
-même moment, Baruah et al. \cite{RBaruah2011a} ont formalisé l'analyse de
+même moment, Baruah et al. \cite{RBaruah2011} ont formalisé l'analyse de
 temps de réponse de tâches à criticité mixte.
 
 \item Le second contexte dans lequel la criticité mixte est définie considère que
@@ -270,11 +270,11 @@ Les principes de la criticité mixte permettent de réagir à une infaisabilité
 temporaire de l'ordonnancement de l'ensemble des tâches. On s'appuie alors sur
 le niveau de criticité prédéterminé pour chaque tâche afin de modifier le jeu
 de tâches afin d'assurer son ordonnançabilité dans cet état à criticté
-augmenté. Néanmoins, les systèmes à criticité mixte ne permettent pas
-de diminuer le niveau de criticité d'un jeu de tâche tout en assurant
-le maintien de l'ordonnançabilité de l'ensemble de tâches. De plus, les
-systèmes à criticité mixte sont considérés dans le cadre d'une exécution d'un
-jeu de tâche sur un seul c{\oe}ur processeur.\\
+augmenté. Néanmoins, dans le cadre d'un ordonnancement de tâches périodiques
+sans dépendances entre les tâches de niveaux de criticité différents sur un seul processeur,
+les systèmes à criticité mixte ne permettent pas
+de diminuer le niveau de criticité du jeu de tâche tout en assurant
+le maintien de l'ordonnançabilité de l'ensemble de tâches.\\
 Dans le cadre de ma thèse, je m'appuie sur les principes de criticité mixte
 afin de pouvoir répondre à l'impossibilité initiale de pouvoir ordonnancer
 l'ensemble des traitements sur l'ensemble des flux si ces derniers impliquent un
@@ -283,13 +283,13 @@ impossibilité est la conséquence des contraintes liées au matériel et à la
 performance maximum de ce dernier.\\
 Afin de respecter les contraintes liées à la criticité
 mixte décrites dans ce chapitre, je considère que l'ensemble des
-tâches à criticité mixte de la passerelle est ordonnancé sur un seul c{\oe}ur
+tâches périodiques à criticité mixte de la passerelle est ordonnancé sur un seul c{\oe}ur
 processeur et qu'il n'y a pas de partage de ressources entre des tâches de
-niveaux de criticité différents. L'ensemble de ces tâches font de plus partie
-d'un même jeu de tâches.
+niveaux de criticité différents.
 Dans le Chapitre \ref{sec:mixedcrit}, je propose néanmoins une solution, dans
-laquelle nous avons cherché à déterminer un instant ou il est possible de
-réduire le niveau de criticité d'un jeu de tâches. Il devient alors possible
+laquelle nous avons cherché tout d'abord à retarder
+l'augmentation du niveau de criticité du scénario, puis à déterminer l'instant ou il est possible de
+réinitialiser le niveau de criticité d'un jeu de tâches. Il devient alors possible
 de redescendre dans un état de criticité plus faible, et donc de relancer
-l'exécution de tâches qui avait été suspendues.
+l'exécution de tâches qui avaient été suspendues.
 

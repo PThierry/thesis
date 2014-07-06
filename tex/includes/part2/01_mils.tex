@@ -46,7 +46,8 @@ domaines. Pour cela :
     de sécurité le plus bas doivent être complètement contrôlées, afin de valider que ces
     dernières peuvent être désensibilisées.
   \item Le flux transitant du niveau de sécurité le plus bas au niveau de
-    sécurité le plus élevé n'exige pas de filtrage en terme de contenu.
+    sécurité le plus élevé n'exige pas toujours de filtrage en terme de
+    contenu (en fonction du risque sécuritaire mesuré, lié au contenu du flux).
     Cependant, l'action de transmission du flux ne doit pas fournir d'information
     sur le domaine de sécurité le plus haut aux éléments émetteurs ou tout autre
     élément du niveau de sécurité le plus bas.
@@ -56,7 +57,7 @@ domaines. Pour cela :
 Afin d'être compatible avec l'exigence de colocalisation, je m'appuie sur le
 principe des systèmes MLS et MILS.
 Les mécanismes définis pour répondre aux besoins de type MLS et MILS impliquent le
-respect des exigences définies dans le Chapitre \label{sec:mils}, et
+respect des exigences définies dans le Chapitre \ref{sec:mils}, et
 formalisées initialement en 2006 \cite{alves2006mils}.
 Je m'appuie, dans le cadre de ma thèse, sur le principe de Separation Kernel,
 compatible avec les systèmes MILS et MLS, auquel j'ajoute des modules de sécurité
@@ -91,14 +92,14 @@ des architectures MLS.
 Les solutions logicielles pour du traitement télécom, incluant entre autres
 une implémentation d'une pile TCP/IP, sont trop volumineuses pour être
 compatibles avec une certification de sécurité à haut niveau. De manière générale, seul
-l'usage d'éléments logiciels à faible volumétrie de code permet de supporter
-une telle certification à coût raisonnable.\\
+l'usage d'éléments logiciels à faible volumétrie de code, de l'ordre de
+quelques milliers de lignes, permet de supporter une telle certification à coût raisonnable.\\
 Parce que l'implémentation logicielle d'un passerelle de type télécom ne peut être certifiée en
 terme de sécurité, les éléments d'implémentation de celle-ci
 sont donc considérés comme ne pouvant pas être de confiance. Il devient alors
 nécessaire de définir :
 \begin{itemize}
-  \item deux famille logicielles $Sec$ et $Unsec$, l'une étant de confiance, l'autre non
+  \item deux familles logicielles $Sec$ et $Unsec$, l'une étant de confiance, l'autre non
   \item des mécanismes permettant de pouvoir intégrer des éléments non certifiables tout en
     assurant la sécurité du système dans son ensemble
 \end{itemize}
@@ -112,13 +113,19 @@ certifiable et ce qui ne l'est pas:
 $Sec$ définit l'ensemble des éléments logiciels certifiables. Ces derniers
 sont aptes à contrôler des éléments matériels ou auditer d'autres éléments
 logiciels de la famille $Sec$ et $Unsec$. Ces éléments font partie de la TCB
-(Trusted Computing Base).
+(Trusted Computing Base). Ces éléments logiciels doivent respecter un certain
+nombre de contraintes :\\
+\begin{itemize}
+  \item faible volume de code (quelques milliers)
+  \item faible complexité cyclomatique \cite{hansen1978measurement} (de l'ordre de 8 ou 9 au maximum)
+  \item taux de couverture en tests-unitaires élevée
+\end{itemize}
 \end{property}
 
 \begin{property}
 $Unsec$ définit l'ensemble des éléments logiciels non-certifiables. Ces derniers
 ne doivent pas accéder directement à un quelconque élément matériel, en dehors
-de ma mémoire principale, dont l'accès est vérifié par la MMU.
+de la mémoire principale, dont l'accès est vérifié par la MMU.
 \end{property}
 
 \begin{property}
@@ -143,9 +150,10 @@ des architectures MLS est respectée, comme le montre la Figure
 \paragraph{}
 Il est montré dans la Section précédente que la présence d'éléments logiciels
 non certifiables est un mal nécessaire pour permettre un certain nombre de
-traitements à valeur ajoutée sur des flux télécoms. En effet, l'implémentation d'une pile
-réseau certifiable étant trop couteuse, j'ai fait le choix d'intégrer de tels
-logiciels, en prenant en compte le problème de non-certification associée dans
+traitements à valeur ajoutée sur des flux télécoms. En effet, une nouvelle implémentation d'une pile
+réseau (e.g. pile TCP/IP, pile de communication sur réseaux CAN) certifiable étant trop
+couteuse, j'ai fait le choix d'intégrer de tels logiciels, en prenant en
+compte, pour certains d'entre eux, le problème de non-certification associée dans
 l'architecture.
 
 \paragraph{}
@@ -485,9 +493,11 @@ impact sur les exigences de sécurité.
   \hline
   {\it Interne} & Modification du contenu du flux avant retransmission & X & & & \\
   \hline
-  {\it Interne} & Écoute par canal auxiliaire d'un flux transitant par un autre compartiment pour retransmission & & & & X \\
+  {\it Interne} & Écoute par canal auxiliaire d'un flux transitant par un
+  autre compartiment pour retransmission & & X & & X \\
   \hline
-  {\it Interne} & Communication entre deux compartiments au travers d'un canal caché & & & & X \\
+  {\it Interne} & Communication entre deux compartiments au travers d'un canal
+  caché & & X & & X \\
   \hline
 \end{tabular}
 \caption{Profils d'attaques et impact sur les exigences sécuritaires\label{tab:threats}}
@@ -558,8 +568,10 @@ protocolaire, seule les données de la couches applicative sont vérifiées. Ces
 deux compartiments s'intègrent en amont et en aval des compartiments télécoms et
 plus généralement des compartiments de l'ensemble $Unsec$.\\
 Le principe général est de calculer en amont et en aval la somme de contrôle
+(checksum)
 de l'ensemble des données de la couche applicative transitant par la passerelle.
-Les deux moniteurs se partagent alors une mémoire afin que le second moniteur
+Les deux moniteurs se partagent alors cette information au travers d'un canal
+de communication sécurisé, afin que le second moniteur
 vérifie l'existence de la somme de contrôle qu'il a calculé dans la liste fournie
 par le premier moniteur. Une telle architecture logicielle implique plusieurs
 exigences:
@@ -583,7 +595,7 @@ exigences:
 Dans ma thèse, je considère la problématique temps réel et cherche à
 déterminer la durée maximum de traversée d'un paquet. Ceci permet de déterminer
 la durée de présence pire cas de la somme de contrôle (e.g. md5, sha1, sha2)
-dans la mémoire partagée. En conséquence, si les flux valider en terme
+dans la mémoire partagée. En conséquence, si les flux validés en terme
 d'intégrité sont dimensionnés (taille de trame, débit, burst), on peut alors
 dimensionner la mémoire partagée nécessaire au bon fonctionnement du moniteur
 d'intégrité. On peut alors respecter l'exigence suivante:
@@ -594,7 +606,8 @@ d'y ajouter les nouvelles sommes de contrôle au fur et à mesure de la
 réception des paquets.
 \end{requirement}
 
-Bien que ce moniteur de sécurité n'a pas été validé dans le cadre de ma thèse,
+Bien que ce moniteur de sécurité n'aie pas été validé au travers d'une
+certification dans le cadre de ma thèse,
 les exigences nécessaire à son implémentation sont supportée au travers de
 l'usage d'un moniteur de sécurité décrit ci-après, dans la Section
 \ref{sec:emet_period}. Bien que ce moniteur de sécurité ne cible pas la
@@ -636,7 +649,7 @@ Pour répondre à ce besoin, j'ai contribué à la rédaction de deux brevets
 \cite{thierry2013dctrl}\cite{thierry2013daudit}
 et à l'implémentation d'un moniteur de sécurité permettant de
 répondre aux Exigences \hyperlink{REQSECUR001}{REQ\_SECUR\_006} et \hyperlink{REQSECUR001}{REQ\_SECUR\_006}, sans nécessiter l'usage de plusieurs matériels
-distinct.\\
+distinct, comme cela se fait dans l'état de l'art \cite{sstic2006diode,tsf101}.\\
 Pour répondre à ces exigences, il est nécessaire d'implémenter une fonction
 logicielle dont le comportement est prévu pour assurer une opacité forte lors
 du transit des données entre son entrée et sa sortie, quel que soit le
@@ -650,8 +663,8 @@ avec l'exigence \hyperlink{REQMAINT001}{REQ\_MAINT\_001}.
 
 \paragraph{}
 Ce moniteur de sécurité a été évalué avec succès dans le cadre d'une Cible de
-Sécurité de Premier Niveau (CSPN), suivi d'une pré-évaluation au sens des
-Critères Communs, de niveau EAL5+. De plus, ce moniteur de sécurité est
+Sécurité de Premier Niveau (CSPN), suivi d'une pré-évaluation du micro-noyau
+PikeOS sur lequel il s'exécute, au sens des Critères Communs, de niveau EAL5+. De plus, ce moniteur de sécurité est
 capable de garantir une latence de traversée maximum ainsi qu'un débit garanti
 par construction, le rendant compatible avec l'exigence
 \hyperlink{REQTEMPS001}{REQ\_TEMPS\_001}.\\
@@ -661,7 +674,7 @@ Thales. En conséquence, bien que ce moniteur de sécurité soit aujourd'hui une
 réalité, je ne peux pas donner dans le cadre de ce document plus
 d'informations sur son implémentation et son fonctionnement.
 
-\subsubsection{Réponse à la problématique des canaux cachés et auxiliaires}
+\subsubsection{Réponse à la problématique des canaux cachés}
 \label{sec:emet_period}
 
 \paragraph{}
@@ -696,12 +709,14 @@ La durée des inter-arrivées reste élevée dans les deux cas pour que la présence 
 filtres entre l'émetteur et le récepteur ne vienne pas impacter la mesure. En
 s'appuyant sur ce mécanisme, il est possible de transférer une clef symétrique
 de 128 bits dont la confidentialité est restreinte au domaine de plus haut niveau de sécurité
-en moins de deux minutes.
+en moins de 120 secondes.
 
 \paragraph{}
 Afin d'empêcher l'usage de ce canal caché, je propose dans le Chapitre
 \ref{sec:passsystronique} l'implémentation d'un
-moniteur de sécurité appelé émetteur périodique. L'automate à état de ce
+moniteur de sécurité appelé émetteur périodique. Ce moniteur de sécurité
+s'appuie sur des buffers de type FIFO (First In First Out) de profondeur fixe.
+Chaque case de ces FIFO est dénoté par la suite {\it cellule}. L'automate à état de ce
 moniteur est le suivant:
 
 \begin{figure}[h!]
@@ -734,16 +749,20 @@ identiques.
 
 \paragraph{}
 L'usage d'un tel moniteur implique des hypothèses sur le flux réordonnancé. Ce
-dernier doit en effet supporter la perte de certains paquets sans pour autant
-remettre en cause son usage. Il doit de plus supporter la possibilité de
+dernier doit en effet être dimensionné afin de rester compatible avec la
+capacité d'émission de l'émetteur périodique. A défaut, l'émetteur périodique
+peut être dans l'obligation de supprimer certains paquets en cas de surcharge
+en entrée. Les services en
+charge de la transmission de ce flux doivent donc gérer la perte de paquets.\\
+Ces services doivent de plus supporter la possibilité de
 recevoir des données dupliquées, lors de la réémission de paquet en cas de
 buffer vide. Bien que ces hypothèses soient fortes, elles correspondent à un
-certain nombre de flux utilisés dans les systèmes systroniques entre plusieurs
+certain nombre de flux de signalisation à faible débit utilisés dans les systèmes systroniques entre plusieurs
 domaines de sécurité. C'est le cas des diverses remontées de sondes comme le
 positionnement GPS, les données de température ou encore les éléments de
 positionnement géographique de plusieurs véhicules dans le cadre d'un système
 de cartographie. Ainsi, ce moniteur peut limiter l'usage de canaux cachés
-entre deux domaines de sécurité pour un grand nombre de flux spécifiques à la
+entre deux domaines de sécurité pour un certain nombre de flux spécifiques à la
 systronique.
 
 %%%%%%%%%%%%%% END
@@ -861,7 +880,7 @@ des c{\oe}urs processeurs différents pour chaque domaine de sécurité, tout en
 débrayant les caches partagés entre les c{\oe}urs. Selon l'architecture
 matérielle, la désactivation des caches partagés est plus ou moins impactante
 sur les performances du logiciel, au point de rendre ce dernier complètement
-inefficace. Dans ce cas, l'usage d'une architecture multi-CPU en lieu est
+inefficace. Dans ce cas, l'usage d'une architecture multi-CPU en lieu et
 place d'un SoC mono-CPU et multi-c{\oe}urs permet d'éviter un partage trop conséquent des
 contrôleurs de caches. Cependant, dans le cadre de ma thèse, l'usage d'une
 architecture multi-CPU est incompatible avec les exigences de consommation.\\
@@ -873,9 +892,9 @@ l'impact du flush de cache sur l'exécution de la solution.
 J'ai donc proposé un mécanisme permettant de
 supporter l'intégration, sur un même c{\oe}ur du processeur, de plusieurs domaines de sécurité tout
 en contrecarrant les attaques de type analyse de temps d'accès à la mémoire au travers du
-contrôleur de cache. La proposition cible exclusivement le sans
-permettre cache L1 data. Le cache L1 code et le TLB (Translation Lookaside
-Buffer) ne sont cependant pas pris en compte. 
+contrôleur de cache. La proposition cible exclusivement le contrôleur de cache
+L1 data. Le cache L1 code et le TLB (Translation Lookaside
+Buffer), bien que nécessitant également une solution, ne sont pas pris en compte. 
 
 \subsection{Hypothèses sur le comportement du contrôleur de cache proposé}
 
@@ -1174,7 +1193,7 @@ la taille du slot associé pour des raisons de performances, j'ai rendu la
 taille de chaque slot configurable. Néanmoins, il existe des restrictions:
 \begin{itemize}
   \item La taille d'un slot (en nombre de lignes de cache) doit être
-    compatible avec l'algorithme de substitution choisi (e.g. pseudo-LRU
+    compatible avec l'algorithme de substitution du contrôleur de cache (e.g. pseudo-LRU
     4-ways).
   \item La somme des tailles de slots actifs doit être inférieure ou égale à
     la taille totale de l'espace mémoire du contrôleur de cache.
@@ -1344,5 +1363,16 @@ Cette proposition a pour but d'éviter le flush de caches en réponse à la
 problématique d'utilisation de canaux auxiliaires basées sur les contrôleurs de
 cache. Néanmoins, pour qu'une telle solution soit efficace, il faudrait
 prévoir un partitionnement pour les caches L1 data, L1 code, mais également
-le TLB. De plus, la problématique des caches L2 et plus globalement des caches
+le TLB. De plus, le dimensionnement des partitions doit être fait en
+s'assurant que la consommation en terme de lignes de caches par chacun des
+domaines de sécurité soit telle que le nombre de lignes de caches qui lui est
+allouée est suffisante dans le cadre de son usage. Dans le cas inverse, un tel
+partitionnement augmenterait fortement le nombre de cache-miss, et aurait un
+impact plus négatif que positif. Ce dimensionnement n'est pas étudié dans le
+cadre de ma thèse. De plus, si la taille de chaque partition du cache,
+nécessaire pour éviter un accroissement des cache-miss, est telle qu'il n'est
+pas possible de déterminer une découpe valide du contrôleur de cache L1, la
+solution ne peut plus être choisie pour répondre au besoin initial de
+cloisonnement du contrôleur sans flush explicite.
+Pour terminer, la problématique des caches L2 et plus globalement des caches
 partagés reste entière.

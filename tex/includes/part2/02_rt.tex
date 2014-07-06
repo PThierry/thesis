@@ -42,11 +42,8 @@ Dans le même temps, la passerelle doit assurer une latence de traversée
 bornée, pour que les données transmises soient encore valides (confer
 Exigence \hyperlink{REQTEMPS001}{REQ\_TEMPS\_001}.
 
-\subsection{De l'ordonnancement hiérarchique à la virtualisation}
-\label{sec:hierarchicalrt}
-
-
 \subsection{Hiérarchie et Time Division Multiplexing}
+\label{sec:hierarchicalrt}
 
 \paragraph{}
 Les architectures logicielles compartimentées sont ordonnancées de façon
@@ -95,7 +92,6 @@ Multiplexing) stricte.
     \begin{minipage}{0.97\linewidth}
         Considérant $m$ compartiments, on définit:\\
         $U_{i}:$ la charge associée au compartiment $C_{i}$\\
-        $SC=\{SC_1,\ldots,SC_m\}$ la durée du slot $S_i$ associé à $C_{i}$\\
         $\tau=\{\tau_1,\ldots,\tau_m\}$ l'ensemble des ensembles tâches associés à $C_i$\\
         $ST_{i}$ La période du slot $S_{i}$\\
         $SC_{i}$ La durée du slot $S_i$\\
@@ -109,9 +105,9 @@ Multiplexing) stricte.
         Considering $n$ tâches, on définit:\\
         $\tau_{i}$ l'ensemble de tâches du compartiment $C_{i}$, $\tau_{i} = \{ \tau_i^{1},
             \ldots, \tau_i^{n} \}$\\
-            $d_{j}$ l'échéance de la tâche $\tau_{i}^{j}$ de $C_{i}$\\
-            $c_{j}$ le WCET de la tâche $\tau_{i}^{j}$ de $C_{i}$\\
-            $t_j$ la période de la tâche $\tau_{i}^{j}$ de $C_{i}$\\
+            $d_{i}^j$ l'échéance de la tâche $\tau_{i}^{j}$ de $C_{i}$\\
+            $c_{i}^j$ le WCET de la tâche $\tau_{i}^{j}$ de $C_{i}$\\
+            $t_i^j$ la période de la tâche $\tau_{i}^{j}$ de $C_{i}$\\
             \vspace{10.5mm}
     \end{minipage}
  }
@@ -172,7 +168,8 @@ dans la Table \ref{tab:contr_hier_tdm}.
         \begin{minipage}{0.52\textwidth}
                     {\small
             \begin{equation}
-                \forall i\in \{ 1, \ldots, m \}, \forall \tau_i^j \in S_i, d_j>ST_i-SC_i
+                \forall i\in \{ 1, \ldots, m \}, \forall \tau_i^j \in S_i,
+                d_i^j>ST_i-SC_i+c_i^j
                                 \label{eqn:deadline_vs_ST}
             \end{equation}
                         \begin{center}
@@ -181,7 +178,8 @@ dans la Table \ref{tab:contr_hier_tdm}.
                             h(t) \leq t - k(ST_{i} - SC_{i})
                                 \label{eqn:edf_sched}
             \end{equation}
-                        {\it avec} $h(t) = \sum_{j = 1}^{n} max (0, 1 + \lfloor \frac{t - d_{j}}{t_{j}} \rfloor)c_{j}$,
+                        {\it avec} $h(t) = \sum_{j = 1}^{n} max (0, 1 +
+                        \lfloor \frac{t - d_i^{j}}{t_i^{j}} \rfloor)c_i^{j}$,
                         \end{center}
                         }
         \end{minipage}\\
@@ -190,7 +188,8 @@ dans la Table \ref{tab:contr_hier_tdm}.
 }
 \end{minipage} \\
 \end{tabular}
-\caption{Formalisation des contraintes sur l'ordonnancement hiérarchique de tâches sur base TDM\label{tab:contr_hier_tdm}}
+\caption{Formalisation des contraintes sur l'ordonnancement hiérarchique de
+tâches en mode TDM/EDF\label{tab:contr_hier_tdm}}
 \end{table}
 
 Les contraintes globales sont les suivantes:\\
@@ -296,13 +295,7 @@ le noyau Linux étant très riche il s'appuie:
 \paragraph{}
 Malgré tous ces éléments problématiques pour le temps réel, il existe
 plusieurs patchs permettant de rétablir un peu de comportement temps réel dans
-le noyau Linux. Dans le cadre de ma thèse, je ne parle cependant
-pas des solutions RTAI ou Xenomai, qui impliquent des exigences particulières
-sur les tâches temps réel, leur interdisant l'usage des API standard Linux
-sous peine de perdre leur propriétés temps réel. Dans le cadre de la
-définition d'une passerelle pour du traitement réseau, il est nécessaire que
-ces tâches soient aptes à traiter des flux télécom, et donc à s'interfacer
-avec l'API POSIX de traitement réseau. Afin de répondre à cette problématique,
+le noyau Linux. Dans le cadre de ma thèse, afin d'avoir un maquettage rapide,
 je me suis donc appuyé sur la solution Linux-RT, qui intègre les travaux du
 patch PREEMPT\_RT d'Ingo Molnar \cite{koolwal2009myths}. Cette solution permet
 de modifier le comportement du noyau Linux en divers points:
@@ -313,6 +306,13 @@ de modifier le comportement du noyau Linux en divers points:
   \item Les {\it softirqs} ne s'exécutent plus via du vol de cycle, mais
     exclusivement dans un thread kernel spécifique appelé {\it ksoftirqd}.
 \end{itemize}
+Néanmoins, un démonstrateur plus performant aurait également pu être fait sur
+une base Xenomai, en s'appuyant sur son module
+rtNet \cite{tian2009implementation}. Néanmoins, afin d'intégrer un
+comportement temps réel performant dans un environnement Linux virtualisé sur
+le micro-noyau PikeOS, il aurait été nécessaire de porter la
+solution Xenomai sur le micro-noyau PikeOS, travail qui n'a pas été effectué
+dans le cadre de ma thèse.
 
 \paragraph{}
 Dans le cadre de mes travaux, j'ai dimensionné l'impact de ce patch sur la
@@ -423,26 +423,27 @@ $\tau = \{\tau_1, \tau_2, ..., \tau_n\}$
 où le niveau de criticité maximum d'une tâche est dénoté $\mathnormal{L}$.
 Dans un système à criticité mixte, une tâche à criticité mixte est caractérisé
 par un 5-uplet 
-$\tau_i = \{R_i, T_i, D_i, \chi_i, C_i\}$ où:
+$\tau_i = \{r_i, t_i, d_i, \chi_i, C_i\}$ où:
 %where the maximum criticality of a task is bound by
 %$\mathnormal{L}$. A task in a mixed-criticality system is characterized by a 5-tuple
 \begin{itemize}
-	\item $R_i \in \mathbb{N}$ est la charge associée au
-          premier travail de la tâche $\tau_i$;
-	\item $T_i \in \mathbb{N}^*$ est la période de la tâche $\tau_i$;
-	\item $D_i \in \mathbb{N}^*$ est l'échéance de la tâche $\tau_i$, $D_i \leq T_i$;
+	\item $r_i \in \mathbb{N}$ est le moment distanciation du premier
+        travail de la tâche $\tau_i$;
+	\item $t_i \in \mathbb{N}^*$ est la période de la tâche $\tau_i$;
+	\item $d_i \in \mathbb{N}^*$ est l'échéance de la tâche $\tau_i$, $D_i \leq T_i$;
 	\item $\chi_i \in \mathbb{N}$ est le niveau de criticité
           maximum de la tâche $\tau_i$,
           $\chi_i \leq \mathnormal{L}$;
-	\item $C_i \in \mathbb{N}^{\mathnormal{L}}$ est un vecteur
-          de taille $L$ de coûts d'exécution pire cas, où $C_i(\ell)$ est une
+	\item $C_i \in \mathbb{N}^{\mathnormal{L}}$ est le vecteur $C_i = \{
+        c_i(1),\ldots,c_i(\chi_i)\}$
+          de taille $L$ de coûts d'exécution pire cas, où $c_i(\ell)$ est une
           estimation du WCET de la tâche $\tau_i$ au niveau de criticité $\ell \in [1,\mathnormal{L}]$.
 \end{itemize}
-Nous considérons que $C_i(\ell)$ s'accroît de manière monotone pour un accroissement
+Nous considérons que $c_i(\ell)$ s'accroît de manière monotone pour un accroissement
 de $\ell$. Plus précisément, pour une tâche $\tau_i$:
 \begin{itemize}
-	\item $\forall m \in [1, \chi_i[$, $C_i(m) \leq C_i(m+1)$;
-	\item $\forall m \in [\chi_i, \mathnormal{L}[$, $C_i(m) = C_i(\chi_i)$.
+	\item $\forall m \in [1, \chi_i[$, $C_i(m) \leq c_i(m+1)$;
+	\item $\forall m \in [\chi_i, \mathnormal{L}[$, $c_i(m) = c_i(\chi_i)$.
 \end{itemize}
 Cela suppose qu'aucune tâche ne s'exécute plus longtemps que son WCET pour son
 niveau courant de criticité.
@@ -453,16 +454,16 @@ est caractérisé par un 5-uplet $\{r_k^i, d_k^i, \mathcal{X}_k^i, C_k^i,
 	\item $r_k^i \in \mathbb{N}$ est l'instant où $J_k^i$ est
           instancié.
           Étant donné que l'on considère un ensemble de tâches sporadique, on
-          a $r_k^i \geq r_{k-1}^i + T_i$, et $r_1^i = R_i$;
+          a $r_k^i \geq r_{k-1}^i + t_i$, et $r_1^i = r_i$;
 	\item $d_k^i \in \mathbb{N}^*$ est l'échéance absolue de
-          $J_k^i$. Plus précisément: $d_k^i = r_k^i + D_i$;
+          $J_k^i$. Plus précisément: $d_k^i = r_k^i + d_i$;
 	\item $\mathcal{X}_k^i \in \mathbb{N}$ est la criticité de
           $J_k^i$, héritée de la tâche $\tau_i$: $\mathcal{X}_k^i = \mathcal{X}_i$;
-	\item $C_k^i \in \mathbb{N}^{\mathnormal{L}}$ est la taille
-          $L$ du vecteur de WCETs pour $J_k^i$, hérité de la tâche $\tau_i$: $C_k^i = C_i$;
+	\item $c_k^i \in \mathbb{N}^{\mathnormal{L}}$ est la taille
+          $L$ du vecteur de WCETs pour $J_k^i$, hérité de la tâche $\tau_i$: $c_k^i = c_i$;
 	\item $c_k^i \in \mathbb{N}^*$ est l'exact coût d'exécution
           du travail $J_k^i$. Du fait des spécifications de $\tau_i$, on peut dire
-          que $c_k^i \leq C_i(\mathcal{X}_i)$, mais la valeur exacte de
+          que $c_k^i \leq c_i(\mathcal{X}_i)$, mais la valeur exacte de
           $c_k^i$ n'est connue que lorsque $J_k^i$ termine sont exécution.
 \end{itemize}
 
@@ -484,12 +485,12 @@ exécution à l'instant $t$. Le scénario de l'ensemble de tâches à criticité
 mixte $\tau$ à l'instant $t$ est défini comme $s^t = \{s_1^t, s_2^t, ...,
   s_n^t\}$\\
 Le \emph{niveau de criticité} du scénario $s^t$ est défini comme le plus
-petit entier $\ell$ pour lequel, pour chaque $s_i^t \in s^t$, $c_k^i \leq C_i(\ell)\, \forall k$
+petit entier $\ell$ pour lequel, pour chaque $s_i^t \in s^t$, $c_k^i \leq c_i(\ell)\, \forall k$
 Intuitivement, il représente le plus petit niveau de criticité dans lequel aucune tâche ne
 dépasse son coût d'exécution pire cas de niveau de criticité correspondant.
 Si cet entier $\ell$ n'existe pas, alors le scénario est dit \emph{erroné},
 car au moins une tâche dépasse son coût d'exécution pire cas de son
-niveau de criticité propre ($c_j^i > C_i(\chi_i)$).
+niveau de criticité propre ($c_j^i > c_i(\chi_i)$).
 
 \begin{definition}
 Un ordonnancement pour un scénario $s^t$ de niveau de criticité $\ell$ est
@@ -626,9 +627,9 @@ finir, tout autre scénario est erroné.
 \end{exmpl}
 
 \begin{definition}
-Le coût d'exécution pire cas $r_i$ de la tâche $\tau_i$ est la durée maximum
+Le temps de réponse pire cas $r^*_i$ de la tâche $\tau_i$ est la durée maximum
 pour exécuter la tâche $\tau_i$, en prenant en compte l'exécution de toutes
-les tâches de priorités supérieures à $\tau_i$. On a $r_i \geq C_i(\chi_i)$.
+les tâches de priorités supérieures à $\tau_i$. On a $r^*_i \geq c_i(\chi_i)$.
 \end{definition}
 
 \begin{definition}
@@ -655,7 +656,7 @@ priorité supérieure.
 Sachant que chaque tâche $\tau_i$ est certifiée pour un niveau d'assurance qui
 est égal à son niveau de criticité $\mathcal{X}_i$, on peut associer chaque
 tâche $\tau_j \in \tau$ à une tâche traditionnelle $\tau_j'$, pour laquelle le
-coût d'exécution pire cas de $\tau_j'$ est égal à $C_j(\mathcal{X}_j)$. En
+coût d'exécution pire cas de $\tau_j'$ est égal à $c_j(\mathcal{X}_j)$. En
 revenant à un ensemble de tâches traditionnel, les résultats démontrés par
 Liu \cite{Liu2000} sont réutilisable, ce qui prouve notre théorème.
 \end{proof}
@@ -685,10 +686,10 @@ priorité 1 la plus élevée).
                   n'importe quelle priorité, du moment que cette priorité est
                   supérieure à celle assignée à $\tau_i$;
 		\item tout travail instancié par $\tau_i$ respecte son échéance
-                  lorsqu'il est exécuté pour au plus $C_i(\chi_i)$ unité de
+                  lorsqu'il est exécuté pour au plus $c_i(\chi_i)$ unité de
                   temps et toutes les autres tâches $\tau_j \in \tau$
                   instancient des travaux qui s'exécutent pour au plus
-                  $C_j(\chi_i)$ unités de temps.
+                  $c_j(\chi_i)$ unités de temps.
 	\end{enumerate}
 \end{definition}
 
@@ -717,9 +718,9 @@ L'attribution de priorité est alors construite de manière itérative en utilisant
 l'algorithme \ref{alg:priorityAssignment}.
 Si un tel ordre de priorité existe, i.e. si une tâche viable est trouvée
 à chaque niveau de priorité, alors chaque tâche $\tau_i$ est garantie de respecter
-son échéance si elle s'exécute pour au plus $C_i(\chi_i)$ unités de temps et
+son échéance si elle s'exécute pour au plus $c_i(\chi_i)$ unités de temps et
 qu'aucune tâche $\tau_j$ de priorité supérieure à $\tau_i$ s'exécute pendant
-plus de $C_j(\chi_i)$ unité de temps.
+plus de $c_j(\chi_i)$ unité de temps.
 
 \paragraph{}
 Parce que la priorité d'une tâche est basée sur son niveau de criticité, on
@@ -738,14 +739,14 @@ Soit $\tau$ OCBP-ordonnançable, et soit, après renommage des tâches, $\tau_1 \va
 \tau_2 \vartriangleright ... \vartriangleright \tau_n$ représentant un ordre
 complet des tâches de l'ensemble. Soit $\tau_i$ une tâche dans cet ordre de
 priorité. Afin de démontrer l'ordonnançabilité au sens de la criticité mixte, on doit pouver que chaque
-travail instancié par la tâche $\tau_i$ peut avoir $C_i(\chi_i)$ unités de temps
+travail instancié par la tâche $\tau_i$ peut avoir $c_i(\chi_i)$ unités de temps
 d'exécution entre son instanciation et son échéance dans tout scénario de
 niveau de criticité $\chi_i$ ou inférieur. Mais dans n'importe lequel de ces
 scénarios, chaque travail instancié par la tâche $\tau_j$ s'exécute pendant pas
-plus de $C_j(\chi_i)$ unités de temps. L'OCBP-ordonnançabilité de $\tau$ avec
+plus de $c_j(\chi_i)$ unités de temps. L'OCBP-ordonnançabilité de $\tau$ avec
 un ordre de priorité $\tau_1 \vartriangleright \tau_2 \vartriangleright ...
 \vartriangleright \tau_n$ implique que chaque travail instancié par la tâche
-$\tau_i$ aura $C_i(\chi_i)$ unités de temps d'exécution si aucun travail instancié par une tâche 
+$\tau_i$ aura $c_i(\chi_i)$ unités de temps d'exécution si aucun travail instancié par une tâche 
  $\tau_j \in \{\tau_1, \tau_2, ..., \tau_{i-1}\}$ s'exécute plus de
  $C_j(\chi_i)$ unités de temps. En conséquence, $\tau_i$ respecte
  effectivement son échéance dans tout scénario de criticité $\chi_i$ ou
@@ -762,13 +763,13 @@ implique qu'il est nécessaire de considérer uniquement le temps de réponse du
 premier travail de chaque tâche pour déterminer l'ordonnançabilité (dans le
 cas préemptif et pour des tâches à échéances contraintes). \`A la tâche
 $\tau_1$ peut être assignée la plus basse priorité car son temps de réponse ne
-dépasse pas $3 < D_1$ unités de temps quand aucune des autres tâches ne
+dépasse pas $3 < d_1$ unités de temps quand aucune des autres tâches ne
 dépasse son coût d'exécution pire cas de niveau de criticité 1. \`A la tâche
 $\tau_2$ peut être assignée la priorité intermédiaire parce que son temps de réponse
-ne dépasse pas $6 < D_2$ unités de temps quand la tâche $\tau_3$ ne dépasse
+ne dépasse pas $6 < d_2$ unités de temps quand la tâche $\tau_3$ ne dépasse
 pas son coût d'exécution pire cas de niveau de criticité 2. Pour finir, à la
 tâche $\tau_3$ peut être assignée la plus haute priorité car son temps de
-rémonse ne dépasse pas $7 < D_3$ unités de temps. $\tau$ étant
+réponse ne dépasse pas $7 < d_3$ unités de temps. $\tau$ étant
 OCBP-ordonnançable, on peut alors dire, selon le théorème
 \ref{theo:mcschedulability}, que $\tau$ est également ordonnançable au sens de
 la criticité mixte.
@@ -811,11 +812,11 @@ $\tau_j$ avec $\chi_j < \ell$ qui ont une priorité supérieure à $\tau_i$.
 \begin{proof}
 Soit $\tau_i \in \tau$ une tâche qui atteint sont coût d'exécution pire cas de
 niveau de criticité $\ell$. $\tau$ étant OCBP-ordonnançable, chaque travail
-instancié par $\tau_i$ peut s'exécuter jusqu'à $C_i(\chi_i)$ unités de temps
+instancié par $\tau_i$ peut s'exécuter jusqu'à $c_i(\chi_i)$ unités de temps
 et respecter son échéance si aucune tâche de priorité supérieure
-$\tau_j$ s'exécute plus que $C_j(\chi_i)$. Soit $\tau_p$ une tâche de priorité
+$\tau_j$ s'exécute plus que $c_j(\chi_i)$. Soit $\tau_p$ une tâche de priorité
 supérieure, dont le niveau de criticité $\chi_p$ est inférieur à $\chi_i$.
-Etant donné que $\chi_i > \chi_p$,  $C_p(\chi_i) = C_p(\chi_p)$, et
+Étant donné que $\chi_i > \chi_p$,  $c_p(\chi_i) = c_p(\chi_p)$, et
 la condition d'OCBP-ordonnançabilité garantie que chaque travail instancié par
 $\tau_i$ peut s'exécuter jusqu'à son coût d'exécution pire cas de son propre
 niveau de criticité. En conséquence, seules les tâches de plus basse criticité
@@ -856,9 +857,9 @@ temporelle glissante.\\
 Dans le contexte de la criticité mixte, la marge de tolérance de niveau $\ell$ d'une tâche $\tau_i$ dont le niveau de
 criticité est d'au moins $\ell+1$ se base sur le calcul de la marge de son
 coût d'exécution pire cas de niveau $\ell$. Cela représente le coût d'exécution
-maximum qui peut être ajouté à $C_i(\ell)$ sans impacter les contraintes
+maximum qui peut être ajouté à $c_i(\ell)$ sans impacter les contraintes
 temporelles des tâches de criticité inférieure $\tau_j$ si elles s'exécutent
-jusqu'à $C_j(\chi_j)$ unités de temps et $\tau_i$ s'exécute jusqu'à $C_i(\ell)
+jusqu'à $c_j(\chi_j)$ unités de temps et $\tau_i$ s'exécute jusqu'à $c_i(\ell)
 + A_i(\ell)$ unité de temps. La marge de tolérance de niveau $\ell$ des tâches
 pour lesquelles la criticité est inférieure ou égale à $\ell$ est alors mise à
 zéro.
@@ -867,7 +868,7 @@ zéro.
 \subsubsection{Concepts et Notations}
 Au travers de cette section, les concepts et notations suivantes sont utilisés:
 \begin{itemize}
-	\item $U_{\ell} = \sum\limits_{\tau_p \, | \, \chi_p \geq \ell} \dfrac{C_p(\ell)}{T_p}$
+	\item $U_{\ell} = \sum\limits_{\tau_p \, | \, \chi_p \geq \ell} \dfrac{c_p(\ell)}{t_p}$
           est le facteur d'utilisation processeur au niveau de criticité
           $\ell$.
 	\item FP$_\text{MC}$ dénote l'algorithme préemptif à
@@ -881,7 +882,7 @@ Au travers de cette section, les concepts et notations suivantes sont utilisés:
           d'au moins $k$ tâches ($0\leq k \leq n$), au risque de dépassement
           d'exécution de niveau de criticité $\ell$ de $k$ tâches dans une
           fenêtre temporelle glissante
-          de taille $W$. On définit $W\leq\min\limits_i(T_i)$ pour éviter
+          de taille $W$. On définit $W\leq\min\limits_i(t_i)$ pour éviter
           à une tâche d'être sujette à de multiple dépassements de coût
           d'exécution pire cas de niveau $\ell$ dans une même fenêtre
           temporelle. Néanmoins, cela peut être trop pessimiste pour supposer
@@ -914,7 +915,9 @@ Au travers de cette section, les concepts et notations suivantes sont utilisés:
                           la borne supérieure du temps de réponse pire cas
                           $r_i$ de $\tau_i$:
 				\begin{equation}\label{equ:responseTime}
-					r_i = C_i(\chi_i) + \sum\limits_{\tau_p \in \mathrm{hp}(i)} \left\lceil \dfrac{r_i}{T_p} \right\rceil \times C_p(\chi_i)
+					r^*_i = c_i(\chi_i) +
+                                        \sum\limits_{\tau_p \in
+                                        \mathrm{hp}(i)} \left\lceil \dfrac{r^*_i}{t_p} \right\rceil \times c_p(\chi_i)
 				\end{equation}
 		\end{itemize}
 \end{itemize}
@@ -953,18 +956,22 @@ temps de réponse pire cas des tâches avec la marge de tolérance intégrée.
   la valeure positive minimum de $A_i(\ell)$ satisfaisant les équations
   suivantes:
 	\begin{equation}\label{equ:cond3}
-		C_i(\ell) + A_i(\ell) \leq C_i(\chi_i)
+		c_i(\ell) + A_i(\ell) \leq c_i(\chi_i)
 	\end{equation}
 	
 	\begin{equation}\label{equ:cond1}
-		U_{\ell} + \sum\limits_{\tau_p \in \mathrm{hp}_{k-1}(i,\ell) \cup \tau_i} \dfrac{A_i(\ell)}{T_p}\leq 1
+		U_{\ell} + \sum\limits_{\tau_p \in \mathrm{hp}_{k-1}(i,\ell) \cup \tau_i} \dfrac{A_i(\ell)}{t_p}\leq 1
 	\end{equation}
 		
 	\begin{equation}\label{equ:cond2}
 		\begin{split}
 			&\forall \tau_j \in \mathrm{lp}(i,\ell): \\
-			&r_j^* = C_j(\chi_j) + \sum\limits_{\tau_p \in \mathrm{hp}(j)} \left\lceil \dfrac{r_j^*}{T_p} \right\rceil \times C_p(\chi_j) \\
-			&\quad\quad\quad\quad\quad+ \sum\limits_{\tau_p \in \mathrm{hp}_{k-1}(i,\ell) \cup \tau_i} \left\lceil \dfrac{r_j^*}{T_p} \right\rceil \times A_i(\ell) \leq D_j
+			&r^*_j = c_j(\chi_j) + \sum\limits_{\tau_p \in
+                        \mathrm{hp}(j)} \left\lceil \dfrac{r^*_j}{t_p} \right\rceil \times c_p(\chi_j) \\
+			&\quad\quad\quad\quad\quad+ \sum\limits_{\tau_p \in
+                        \mathrm{hp}_{k-1}(i,\ell) \cup \tau_i} \left\lceil
+                        \dfrac{r^*_j}{t_p} \right\rceil \times A_i(\ell) \leq
+                        d_j
 		\end{split}
 	\end{equation}
 	
@@ -981,7 +988,7 @@ temps de réponse pire cas des tâches avec la marge de tolérance intégrée.
   représente le temps de réponse pire cas d'une tâche $\tau_j \in lp(i,l)$ lorsqu'elle
   s'exécute à son plus haut niveau de criticité, les tâches de plus haute
   criticité $\tau_p$ incluant $\tau_i$ s'exécutant pendant au plus
-  $C_p(\chi_j)$ unités de temps et $k$ tâches de priorité supérieure $\tau_r$
+  $c_p(\chi_j)$ unités de temps et $k$ tâches de priorité supérieure $\tau_r$
   incluant $\tau_i$ consommant leur marge de tolérance.
   Cette équation ne doit être vérifiée que pour les tâches ayant une priorité
   inférieure à $\tau_i$ du fait du Lemme \ref{lem1}.
@@ -989,7 +996,7 @@ temps de réponse pire cas des tâches avec la marge de tolérance intégrée.
 
 Il en suit que les tâches de criticité $\ell$ ne doivent pas être suspendues
 tant qu'une tâche de priorité supérieure $\tau_i$ de criticité $\chi_i > \ell$
-ne s'exécute pas plus longtemps que $C_i(\ell) + A_i(\ell)$ unités de temps.
+ne s'exécute pas plus longtemps que $c_i(\ell) + A_i(\ell)$ unités de temps.
 
 %%%%%%% Allowance with EDF %%%%%%%
 \subsubsection{Marge de tolérance avec EDF}
@@ -1059,16 +1066,16 @@ Un ensemble de tâches à criticité mixte $\tau$ est ordonnançable en priorité
 fixe si et seulement si:
 	\begin{multline}
 		\forall i = 1,...,n, \; \exists t \in \mathrm{schedP}_i \, \text{tel que} \, \\
-		C_i(\chi_i) + \sum_{\tau_p \in \mathrm{hp}(i)} \left\lceil \dfrac{t}{T_p} \right\rceil C_p(\chi_i) \leq t \label{eq:domain}
+		c_i(\chi_i) + \sum_{\tau_p \in \mathrm{hp}(i)} \left\lceil \dfrac{t}{t_p} \right\rceil c_p(\chi_i) \leq t \label{eq:domain}
 	\end{multline}
 Où $\mathrm{schedP}_i$ est un ensemble de points d'ordonnancement définis
-comme $\mathrm{schedP}_i = \mathcal{P}_{i-1}(D_i)$, et $\mathcal{P}_i(t)$
+comme $\mathrm{schedP}_i = \mathcal{P}_{i-1}(d_i)$, et $\mathcal{P}_i(t)$
 définit comme suit:
 	\begin{equation}
 		\left\{
 			\begin{split}
 				&\mathcal{P}_0(t) \\
-				&\mathcal{P}_i(t) = \mathcal{P}_{i-1}\left(\left\lfloor \frac{t}{T_i} \right\rfloor\right) \cup \mathcal{P}_{i-1}(t)
+				&\mathcal{P}_i(t) = \mathcal{P}_{i-1}\left(\left\lfloor \frac{t}{t_i} \right\rfloor\right) \cup \mathcal{P}_{i-1}(t)
 			\end{split}
 		\right.
 	\end{equation}
@@ -1077,12 +1084,12 @@ En utilisant une notation compacte et des opérateurs logiques, l'Equation
 	\begin{equation}
 		\bigwedge \limits_{i = 1,...,n} \bigvee \limits_{t \in \mathrm{schedP}_i} n_i \cdot C_i \leq t \label{eq:domainCompact}
 	\end{equation}
-où $n_i = \left(\left\lceil \frac{t}{T_1} \right\rceil, \left\lceil \frac{t}{T_2} \right\rceil, ..., \left\lceil \frac{t}{T_{i-1}} \right\rceil, 1\right)$ et $C_i = \left(C_1(\chi_i), C_2(\chi_i), ..., C_i(\chi_i)\right)$
+où $n_i = \left(\left\lceil \frac{t}{t_1} \right\rceil, \left\lceil \frac{t}{t_2} \right\rceil, ..., \left\lceil \frac{t}{t_{i-1}} \right\rceil, 1\right)$ et $C_i = \left(c_1(\chi_i), c_2(\chi_i), ..., c_i(\chi_i)\right)$
 \end{theorem}
-
+%%%%%%%%%%%%%% FIXME: REPRISE
 Sachant que nous souhaitons représenter le domaine de faisabilité
 de l'espace $A(\ell)$, nous avons besoin d'introduire les variables de la marge
-de tolérance. L'Equation \ref{eq:domainCompact} doit être étendue afin de
+de tolérance. L'Équation \ref{eq:domainCompact} doit être étendue afin de
 considérer une marge de tolérance de niveau $\ell$ pour chaque tâche de
 criticité au moins égale à $\ell$.
 

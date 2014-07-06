@@ -77,8 +77,11 @@ l'hyperviseur car ces dernières transitent par le dom0. C'est une spécificité
 de l'hyperviseur Xen, seul hyperviseur utilisant un domaine d'administration
 étant lui-même une machine virtuelle.
 L'implémentation de l'ordonnanceur S-EDF ne repose malheureusement pas sur des
-bases théoriques solides et les limites de sa compatibilité avec un
-ordonnancement temps réel ont été montrées plusieurs fois
+bases théoriques solides. En effet, cette implémentation n'a pas été validée
+sur la base des principes mathématiques de l'EDF, mais correspond à une
+implémentation générique d'un ordonnanceur prenant en compte des échéances
+pour les machines virtuelles. Les limites comportementales, en terme
+d'élection de la machine virtuelle ayant la plus petite échéance relative, ont été montrées plusieurs fois
 \cite{cucinotta_respecting_2009}\cite{cherkasova2007comparison}\cite{govindan2007xen}.\\
 De plus, Xen ne permet pas à ce jour de définir des politiques d'ordonnancement strictes
 de type Time Division Multiplexing, nécessaire pour garantir un cloisonnement
@@ -115,7 +118,7 @@ de l'émetteur puis renvoyé vers le destinataire \cite{apparao2006characterizatio
 
 \paragraph{}
 D'un point de vue sécurité, le domaine d'administration est d'ailleurs un
-élément dangereux car ayant des droits très étendus. La solution CubesOS, qui
+élément dangereux car ayant des droits très étendus. La solution QubesOS, qui
 a été maquettée sur l'hyperviseur Xen, s'appuie sur un mécanisme de
 chiffrement/déchiffrement des données entre les machines virtuelles
 utilisateur afin de limiter l'impact d'une corruption du domaine
@@ -128,7 +131,10 @@ mais au dépend de la sécurité générale du système \cite{han2011verifying}. Il es
 sortir le domaine d'administration de l'architecture logique, le rendant
 accessible exclusivement via une console locale d'administration.\\
 Enfin, cette solution n'est à ce jour pas certifiable à un coût raisonnable,
-du fait de la volumétrie de l'hyperviseur en terme de lignes de code.
+du fait de la volumétrie de l'hyperviseur en terme de lignes de code. De plus,
+il n'existe pas à ce jour de précédents connus d'implémentations natives de
+gestionnaires de tâches au dessus de l'hyperviseur Xen, autre qu'au travers
+d'une machine virtuelle hébergeant un système d'exploitation complexe.
 
 \subsubsection{Synthèse de la solution Xen}
 
@@ -323,11 +329,19 @@ et de sécurité.
 La capacité à ordonnancer à la fois des OS complexes et des tâches
 certifiables fait de cette solution logicielle un bon candidat à l'intégration
 des moniteurs de sécurité tels que nécessités par une architecture de type MLS
-ou MILS \cite{pike_baumann2009verifying}. Il est en effet compatible de
+ou MILS \cite{pike_baumann2009verifying}. Il est en effet compatible avec
 la Propriété \ref{pro:evaluable} d'un système MLS. Les trois autres propriétés
 (\ref{pro:noncontournable}, \ref{pro:validation} et \ref{pro:inviolable})
 peuvent être supportées via l'intégration d'éléments complémentaires exécutées
-au dessus du micro-noyau.
+au dessus du micro-noyau. De plus, le micro-noyau PikeOS est compatible avec
+le besoin de certification, y compris à haut niveau, du fait de son très
+faible volume de code (environ 5000 lignes de codes dans le micro-noyau et
+5000 lignes de code dans le gestionnaire de communications s'exécutant au
+dessus). Un tel volume de code implique également une consommation mémoire
+extrêmement faible de la part du micro-noyau. Ce dernier est également portable
+sur un grand nombre d'architectures (ARM, PowerPC, x86, MIPS, SH4, etc.),
+évitant ainsi toute limitation suite à un choix stratégique de la solution dans
+un ensemble de produits aux usages multiples.
 
 \section{Synthèse}
 
@@ -337,16 +351,23 @@ est un bon candidat au besoin MILS et MLS. Une telle solution permet ainsi
 d'exécuter divers environnements dont les niveaux de sécurité et de sureté de
 fonctionnement peuvent être hétérogènes. Cependant, cela implique une
 compatibilité de la solution de virtualisation logicielle avec à la fois des
-exigences de temps réel et de sécurité. Il est de plus nécessaire, afin de
+exigences de temps réel et de sécurité. Le choix d'une telle solution est
+malheureusement limitée par les différents accord internationaux, comme par
+exemple ITAR (International Traffic in Arms Regulation), limitant les accès et
+l'usage des solutions Américaines ayant atteint des niveaux d'assurance
+élevés, comme par exemples les solutions VXWorks de WindRiver et Integrity de
+GreenHiils Softwares.\\
+Il est de plus nécessaire, afin de
 permettre l'intégration de sécurité, d'avoir la possibilité de faire
-s'exécuter sur l'hyperviseurs d'autres éléments logiciels que des systèmes
+s'exécuter sur l'hyperviseur d'autres éléments logiciels que des systèmes
 virtualisés, comme je le propose pour PikeOS dans la Section
 \ref{subsub:pikesynth}. Ainsi, l'hyperviseur doit non seulement permettre l'exécution de
 systèmes d'exploitations virtualisés, mais également des threads directement
 ordonnancés par ce dernier, tout en assurant une compartimentation spatiale et
 temporelle forte.\\
 Parmi les différentes solutions de virtualisation étudiées, seule la solution
-PikeOS de Sysgo permet de répondre à l'ensemble de ces besoins. C'est cette
+PikeOS de Sysgo permet de répondre à l'ensemble de ces besoins tout en prenant
+en compte les contraintes commerciales liées à ITAR. C'est cette
 solution que je considère dans ma thèse afin de répondre à la problématique
 d'architecture de sécurité pour répondre à la fois aux exigences de temps réel et
 de sécurité. Dans le cadre de ma thèse, je définis toute une architecture de
