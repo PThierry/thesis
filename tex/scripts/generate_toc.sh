@@ -42,7 +42,7 @@ echo '
 % clearing all page headers/footers
 \renewcommand{\headrulewidth}{0pt}			% disactive header bar
 \fancyhead{}
-\fancyfoot{}
+%\fancyfoot{}
 
 \backmatter
 

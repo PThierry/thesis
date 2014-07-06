@@ -144,7 +144,9 @@ niveau de criticité de chaque travail. Dans le cadre de ma thèse, la
 solution cible le transfert de divers flux utilisant divers éléments
 d'entrée/sortie (bus CAN, Ethernet, etc). Elle ne s'appuie donc pas sur le
 principe de Qualité de Service Réseau, cette dernière étant spécifique au type
-de média et de protocole utilisé pour faire transiter les données.
+de média et de protocole utilisé pour faire transiter les données. Néanmoins,
+je prend comme hypothèse que le réseau est apte à assurer des contraintes de
+latence sur les flux, et donc supporte de tels principes.
 
 \section*{Limites de la solution et perspectives}
 
@@ -157,8 +159,8 @@ terme de sécurité, au travers d'une Cible de Sécurité de Premier Niveau (CSPN)
 et d'une pré-évaluation au sens des Critères Communs, de niveau EAL5.
 Certaines propriétés de la fonction diode dépassant le niveau 5, la
 pré-évaluation a été validé pour un niveau EAL5+. Néanmoins, le moniteur
-diode, tout comme les autres moniteurs, n'ont pas été validés au sens de
-la sûreté de fonctionnement, au travers d'une validation SIL. Cette validation
+diode, tout comme les autres moniteurs, n'ont pas été validés en terme de
+fiabilité de fonctionnement, au travers d'une validation SIL. Cette validation
 est nécessaire pour assurer la conformité de l'implémentation du moniteur avec
 les contraintes de temps réel de la passerelle dans un cadre véhiculaire.
 
@@ -173,7 +175,8 @@ certifiable, je me suis appuyé sur un noyau Linux utilisant le patch LinuxRT,
 limitant ainsi le comportement non temps réel du noyau Linux. Dans le cadre
 d'une véritable passerelle, et en fonction du niveau de certification demandé,
 il peut être nécessaire de remplacer Linux par un environnement certifiable
-sachant répondre au même besoin.\\
+sachant répondre au même besoin (comme par e.g. la personnalité POSIX du
+micro-noyau PikeOS, ou au travers de piles réseaux propriétaires).\\
 La présence d'un système d'exploitation GNU/Linux impacte également le niveau
 de sécurité du système. Dans le cadre de ma thèse, je me suis prémunis d'une
 potentielle corruption de ce dernier en m'appuyant sur des moniteurs de sécurité en

@@ -1097,9 +1097,9 @@ criticité au moins égale à $\ell$.
 Soit $\tau$ un ensemble de tâches à criticité mixte. Le domaine de faisabilité
 de la marge sur les WCETs de niveau $\ell$ est calculé comme suit:
 	\begin{equation}
-		\bigwedge \limits_{\tau_i \, | \, \chi_i \geq \ell} \bigvee \limits_{t \in \mathrm{schedP}_i} \left\lgroup n_i \cdot C_i^{\ell} \leq t \wedge A_i(\ell) \leq C_i(\chi_i) - C_i(\ell) \right\rgroup \label{eq:domainCompactMC}
+		\bigwedge \limits_{\tau_i \, | \, \chi_i \geq \ell} \bigvee \limits_{t \in \mathrm{schedP}_i} \left\lgroup n_i \cdot C_i^{\ell} \leq t \wedge A_i(\ell) \leq c_i(\chi_i) - c_i(\ell) \right\rgroup \label{eq:domainCompactMC}
 	\end{equation}
-où $C_i^{\ell} = \left(C_1(\ell) + A_1(\ell), C_2(\ell) + A_2(\ell), ..., C_i(\ell) + A_i(\ell)\right)$.
+où $C_i^{\ell} = \left(c_1(\ell) + A_1(\ell), c_2(\ell) + A_2(\ell), ..., c_i(\ell) + A_i(\ell)\right)$.
 \end{theorem}
 \begin{proof}
 L'Equation \ref{eq:domainCompactMC} étend l'Equation \ref{eq:domainCompact} en
@@ -1241,13 +1241,13 @@ $t_i$ comme suit:
 		\begin{split}
 			&\forall \ell \in [1,\mathnormal{L}]: \\
 			&\mathsf{LET}_i^{\ell}(t_i) = \max\left\lgroup t_i, \max\limits_{\tau_j \in \mathrm{hp}^R(i)} \left( \mathsf{LET}_j^\ell(t_j) \right) \right\rgroup \\
-			&\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad+ C_i(\ell) + A_i(\ell)
+			&\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad+ c_i(\ell) + A_i(\ell)
 		\end{split}
 	\end{equation}
 L'instant d'exécution au plus tard des travaux $J$ de $\mathrm{lp}^R(i,\ell)$ est
 alors calculé comme suit:
 	\begin{equation}
-		\forall J \in \mathrm{lp}^R(i,\ell): \mathsf{LET}_j^{\ell}(t_j) = \mathsf{LET}_j^{\ell}(t_j) + C_i(\ell) + A_i(\ell)
+		\forall J \in \mathrm{lp}^R(i,\ell): \mathsf{LET}_j^{\ell}(t_j) = \mathsf{LET}_j^{\ell}(t_j) + c_i(\ell) + A_i(\ell)
 	\end{equation}
 \end{definition}
 
@@ -1378,7 +1378,7 @@ aussi élevé que que la criticité du scénario à l'instant $t_{\text{idle}}$ ont
 terminé leur exécution, et qu'aucun travail n'est disponible. Soit $\tau_i$
 n'importe quelle tâche de $\tau$ qui a été désactivée avant $t_{\text{idle}}$.
 Nous devons montrer qu'à l'instant $t_{\text{idle}}$, tous les travaux instanciés
-par $\tau_i$ peuvent à nouveau recevoir $C_i(\chi_i)$ unités de temps pour
+par $\tau_i$ peuvent à nouveau recevoir $c_i(\chi_i)$ unités de temps pour
 leur exécution dans n'importe scénario de criticité d'au plus $\chi_i$. Soit
 $J_i$ le premier travail instancié par $\tau_i$ à l'instant $t_i$ ($t_i \geq
 t_{\text{idle}}$). On distingue deux cas:
@@ -1389,8 +1389,8 @@ t_{\text{idle}}$). On distingue deux cas:
           instanciés par $\tau_i$. Mais comme $\tau$ est ordonnançable au sens
           de la criticité mixte, nous
           savons que $J_i$ respecte malgré tout son échéance si il s'exécute
-          jusqu'à $C_i(\chi_i)$ unité de temps et que aucune des autres tâches $\tau_j$
-          n'instancie de travail qui s'exécute pour plus de $C_j(\chi_i)$ unités
+          jusqu'à $c_i(\chi_i)$ unité de temps et que aucune des autres tâches $\tau_j$
+          n'instancie de travail qui s'exécute pour plus de $c_j(\chi_i)$ unités
           de temps.
 	\item $t_i$ n'est pas un instant critique pour $\tau_i$: dans ce cas,
           nous savons que le temps de réponse de $J_i$ sera inférieur ou égal
@@ -1459,7 +1459,7 @@ de tâches à criticité mixte:
 \end{enumerate}
 
 A chaque travail $J_k^i$ instancié par une tâche $\tau_i$ est assignée une durée
-$c_{i,k}^e$ dans l'intervalle $[1,C_i(\chi_i)]$, en utilisant une distribution
+$c_{i,k}^e$ dans l'intervalle $[1,c_i(\chi_i)]$, en utilisant une distribution
 triangulaire. Sachant qu'un travail ne termine son exécution ni après un très
 court instant ni après une très longue durée mais plutôt après une durée
 intermédiaire, l'usage d'une distribution triangulaire est un moyen de
@@ -1467,8 +1467,8 @@ représenter cette probabilité. Ainsi, ce qui suit permet de concentrer la
 plupart des probabilités autour d'une valeur appelée le {\it mode}. Comme le
 montre la Figure \ref{fig:triangularDistribution}, pour une tâche $\tau_i$, la
 limite basse de la distribution est mise à 0, et la limite haute à
-$C_i(\chi_i)$, et le mode de la distribution est égal à
-$\frac{C_i(\chi_i)}{3}$. Cela signifie qu'un travail va la plupart du temps
+$c_i(\chi_i)$, et le mode de la distribution est égal à
+$\frac{c_i(\chi_i)}{3}$. Cela signifie qu'un travail va la plupart du temps
 terminer son exécution après une consommation proche de 33\% de son coût
 d'exécution pire cas de son niveau de criticité propre. Nous générons alors un
 nombre aléatoire $r$ qui suit cette distribution particulière, et $c_{i,k}^e =
@@ -1573,8 +1573,8 @@ Les différents ensembles de tâches à criticité mixte, intégrés chacun dans un co
 spatial et temporel autonome pour des raisons de sécurité, peuvent être ordonnancés de
 manière efficace en intégrant à la fois le concept de marge de tolérance et le
 concept de réinitialisation de la criticité. Il reste cependant une limitation
-en terme d'affinité de l'ensemble de tâche, limité pour le moment à un seul
-c{\oe}ur du processeur. Dans le cadre de ma thèse, je considère que de tels ensembles de
+en terme d'affinité de l'ensemble de tâche, limité pour le moment à un
+ordonnancement mono-processeur. Dans le cadre de ma thèse, je considère que de tels ensembles de
 tâches sont seuls sur le c{\oe}ur du processeur sur lequel ils sont assignés.
 Néanmoins, il est possible d'étendre les résultats précédents dans le cadre
 d'un ordonnancement partitionné de tâches à criticité mixte sur une architecture

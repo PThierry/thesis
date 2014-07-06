@@ -29,7 +29,7 @@ Ses sous-systèmes sont compatible d'exigences temps réel fortes, dûe à la
 problèmatique de sureté de fonctionnement qui leur est associée.\\
 Avec l'accroissement des performances des architectures embarquées basse
 consommation, de nouveaux sous-systèmes voient le jour dans l'infrastructure
-véhiculaire. C'esgt par exemple le cas des radars de reculs, parfois couplés à
+véhiculaire. C'est par exemple le cas des radars de reculs, parfois couplés à
 des caméras, ou encore de nouveaux modes d'interaction avec les terminaux
 utilisateurs, via du réseau sans-fil courte portée. C'est également le cas de
 sous-systèmes comme le {\it stop and go}, permettant de couper le moteur lors
@@ -51,12 +51,16 @@ sont habituellement basés sur une infrastructure de bus CAN ({\it Controller
 parfois à sens unique, afin d'assurer la sureté de fonctionnement de certains
 sous-systèmes.\\
 Avec l'intégration de terminaux utilisateurs dans le cadre de la gestion du
-multimédia, viennent se greffer ces réseaux IP dont le coisonnement est
-aujourd'hui de plus en plus complexe à assurer. En effet, l'utilisateur peut
-accéder, via ces derniers, à diverses informations moteurs, impliquant un
+multimédia, viennent se greffer ces réseaux IP dont le cloisonnement est
+aujourd'hui de plus en plus complexe à assurer. En effet, la complexité de
+l'ordinateur de bord est de plus en plus grande, car ce dernier fournit de
+plus en splus de service. Dans les études en cours, les constructeurs
+cherchent également à interconnecter le véhicule avec des réseaux distants, et
+l'utilisateur pourras accéder, via ces derniers, à diverses informations
+moteurs (e.g. usure des pièces, état général du véhicule, etc.), impliquant un
 média de remontée d'information. Le niveau de sûreté mais aussi de sécurité
 des passerelles d'interconnexion devient alors de plus en plus élevé.\\
-L'ordonateur de bord, élément dont l'interface utilisateur est unifié, permet
+L'ordinateur de bord, élément dont l'interface utilisateur est unifié, permet
 à la fois le paramétrage des élément non-sûrs (multimédia, gestion des
 périphériques utilisateurs) et des éléments critiques ((des)activation des
 différents sous-sytèmes d'aide à la conduite, etc). Une telle architecture
@@ -185,7 +189,10 @@ de sureté élevé. Dans ces deux cas, un débit et une latence garantis sont
 nécessaires, comme définit dans l'exigence
 \hyperlink{REQTEMPS001}{REQ\_TEMPS\_001}. C'est également le
 cas de certains flux d'alerte, comme la remonté d'alarme des différentes
-sondes moteur.\\
+sondes moteur. Cela implique également que les réseaux interconnectés soient
+aptes à assurer des délais. Ainsi, sur un réseau systronique de type Ethernet,
+on s'appuiera sur du réseau TT-Ethernet (Time Triggered Ethernet) \cite{steiner2009ttethernet} synchronisé
+temporellement via un protocole type IEEE 1588 \cite{steiner2009ttethernet}.\\
 Néanmoins, les données transmises peuvent avoir à être filtrées afin d'éviter
 le transfert non maîtrisé de données confidentielles. Parce que les système de
 sureté plus faible ne peuvent être certifiés pour le traitement de flux
@@ -236,8 +243,6 @@ dans différents secteurs, comme le médical ou la police.
 
 \section{Définition d'une architecture logicielle pour une passerelle systronique}
 \label{sec:passerelle_systronique}
-
-\subsection{Terminologie}
 
 \subsection{Définition d'une architecture de filtrage multi-fonctions pour les systèmes systroniques}
 
@@ -313,9 +318,11 @@ Si la maquette avait été faite sur base d'un ordonnancement hiérarchique,
 comme par exemple via l'usage d'un micro-noyau de virtualisation type PikeOS
 \ref{sec:pikeos}, il aurait alors nécessaire de déterminer correctement à la
 fois l'ordonnancement des différents conteneur et celles des tâches dans ces
-derniers. Pour répondre à cette problématique, j'ai défini cinq
-Équations \ref{sec:hierarchicalrt} permettant de déterminer si le système est
-alors apte à garantir l'ordonnançabilité de l'ensemble des fonctions temps réel.
+derniers. Pour répondre à cette problématique, j'ai défini dans la Table
+\ref{tab:contr_hier_tdm} cinq équations permettant de déterminer si le système est
+alors apte à garantir l'ordonnançabilité de l'ensemble des fonctions temps
+réel, dans le cadre d'un ordonnancement de type EDF sur un partitionnement
+global de type TDM.
 
 \subsubsection{A propos du conteneur de supervision}
 
@@ -362,7 +369,10 @@ Les traitements de la VE filter sont décomposés comme suit:
   \item Un récepteur de paquet, qui reçoit la donnée et valide son contenu
     auprès d'une politique de sécurité. Le WCET de cette tâche peut être très
     variant selon la complexité de la politique de sécurité et du contenu du
-    paquet.
+    paquet. Il est donc nécessaire de le mesurer soit via une étude
+    statistique sur son coût d'exécution en générant un flux réseau
+    représentatif, permettant d'avoir une valeur approchante mais non
+    garantie, soit en s'appuyant sur une analyse statique du code.
   \item Un émetteur, récupérant les paquets tagués par le recepteur comme
     valide et qui les reexpédie vers le compartiment suivant. Le WCET de cette
     tâche est assez stable, son coût étant dépendant que de la taille de
@@ -379,7 +389,12 @@ rapport à d'autres. Dans le cadre de la maquette, la politique DPI en
 elle-même n'est pas l'élément dont je souhaite démontrer la faisabilité. Cette
 dernière est donc simple et s'appuie sur un protocole TLV qui assure que
 l'information de niveau applicatif est entièrement présente dans une et une
-seule trame réseau.
+seule trame réseau. Il existe plusieurs type de contenu TLV. Bien que les
+trames soient parfois de taille identique, le système DPI cherche à étudier
+l'information qui y est stockée, afin de déterminer une action en
+conséquence. Le filtre est donc en charge d'assurer que le contenu d'une
+trame, dans le cadre d'un séquencement de trame valide (e.g. type 1, type 2,
+type 2, type 5) est bien compatible avec la politique de sécurité.
 
 \subsubsection{A propos du conteneur Diode}
 
@@ -463,7 +478,7 @@ passerelle générique.
 \paragraph{{\it Architecture et configuration}}
 
 \paragraph{}
-La configuration de la maquette est le flux d'entrée est décrit dans la Table \ref{tab:dut}.\\
+La configuration de la maquette et le flux d'entrée est décrit dans la Table \ref{tab:dut}.\\
 \begin{table}
 \begin{center}
 \begin{tabular}{|l|l|}
@@ -486,7 +501,7 @@ La configuration de la maquette est le flux d'entrée est décrit dans la Table \r
   & T ({\it champs Type}) taille de champs de 1 octet \\
   & L ({\it champs Taille}) taille de champs de 1 octet \\
   {\it nombre de types} & 5 types\\
-  {\it taille de payload} & type 0: 50B \\
+  {\it taille de payload} & type 0: 50 octets \\
    & type 1: 50 octets\\
    & type 2: 30 octets\\
    & type 3: 30 octets\\
@@ -586,7 +601,7 @@ réception de nouvelles données.
 Afin de déterminer un automate de filtrage de paquets dans la tâche Filter,
 j'ai écrit un protocole très simple, basé sur une structure TLV
 (Type/Length/Value). Ce protocole permet 5 types différents, sans récursion.
-Chaque type possède sa propre taille et son propre contenu. Un émetteur est un
+Chaque type possède sa propre taille et son propre contenu. Un émetteur et un
 récepteur ont été implémentés pour émettre le flux sur du protocole UDP vers la
 tâche Filter de la passerelle d'une part, et recevoir le flux réencapsulé dans
 du protocole UDP par la tâche Sender de la passerelle d'autre part.
@@ -594,7 +609,7 @@ L'automate de la tâche Filter a pour but de valider les différents types, et
 pour chaque vérifier la taille et la conformité du contenu par rapport à une
 politique de sécurité chargée en mémoire.\\
 Si le paquet est invalide (non conforme à la politique de sécurité) ce dernier
-est droppé et un conteur de statistiques est mis à jour. Dans un cas plus
+est droppé et un compteur de statistiques est mis à jour. Dans un cas plus
 complet, ce dernier serait lu par un conteneur de supervision pour remonter
 une alerte.
 
@@ -675,9 +690,13 @@ La Table \ref{tab:test1} décrit le premier jeu de mesures
 \end{center}
 \end{table}
 
+
 \begin{figure}
   \begin{minipage}[b]{.46\linewidth}
     \centering\includegraphics[width=9cm]{figures/measure_all.pdf}
+    %\scalebox{9cm}{
+    %\centering\input{figures/measure_all.tex}
+    %}
     \caption{Test 1: WCET mesurée pour Filtre, Diode et Émetteur périodique\label{fig:costall}}
   \end{minipage}\hfill
   \begin{minipage}[b]{.46\linewidth}
@@ -702,7 +721,7 @@ Un premier jeu de mesure a été fait en utilisant un flux d'entrée généré
 aléatoireement avec une période inter-trame de 10 millisecondes. Le profil de
 flux est donné dans la Table \ref{tab:dut}.\\
 Les Figures \ref{fig:filter_p}, \ref{fig:diode_p} et \ref{fig:sender_p}
-montrent le le profil d'exécution des trois tâches de la passerelle dans le
+montrent le profil d'exécution des trois tâches de la passerelle dans le
 cadre du traitement de ce flux. On démontre, au travers de ces mesures, que
 quel que soit le profil de flux entrant et son impact sur les tâches Filter et
 Diode, l'Émetteur périodique garantit un flux maîtrisé en sortie. La faible
@@ -743,7 +762,7 @@ d'absorbtion de la passerelle. Ce flux est décrit dans la Table
 Étant donné que la période minimum des tâches Filter et Diode n'est pas
 spécifiée, leur période minimum correspond à la plus petite période autorisée
 par le système d'exploitation, qui dans le cadre de la maquette a été
-positionnée à 1 milliseconde. Les Figure \ref{fig:filter_p_2} et
+positionnée à 1 milliseconde. Les Figures \ref{fig:filter_p_2} et
 \ref{fig:diode_p_2} le démontre. Ces Figures montrent également des anomalies
 dans la période du flux d'entrée, accroissant la période de ces deux tâches
 avec une probabilité moyenne de 0.02\% dans le cadre de la mesure. Dans le
