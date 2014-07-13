@@ -94,7 +94,7 @@ une implémentation d'une pile TCP/IP, sont trop volumineuses pour être
 compatibles avec une certification de sécurité à haut niveau. De manière générale, seul
 l'usage d'éléments logiciels à faible volumétrie de code, de l'ordre de
 quelques milliers de lignes, permet de supporter une telle certification à coût raisonnable.\\
-Parce que l'implémentation logicielle d'un passerelle de type télécom ne peut être certifiée en
+Parce que l'implémentation logicielle d'une passerelle de type télécom ne peut être certifiée en
 terme de sécurité, les éléments d'implémentation de celle-ci
 sont donc considérés comme ne pouvant pas être de confiance. Il devient alors
 nécessaire de définir :
@@ -434,11 +434,11 @@ les éléments d'interfaces à partir desquels on considère une attaque possible.
 La surface d'attaque est décomposée en trois environnements disjoints:
 \begin{enumerate}
   \item Les attaques externes initiées du coté du domaine de plus haute
-    sécurité. Je considère alors qu'un éléments de ce domaine cherche à faire
+    sécurité. Je considère alors qu'un élément de ce domaine cherche à faire
     sortir de l'information non autorisée vers le domaine de plus faible
     sécurité, avec ou sans l'aide d'un élément de ce dernier
   \item Les attaques externes initiées du coté du domaine de plus faible
-    criticité. Je considère qu'un élément du domaine de plus faible sécurité
+    sécurité. Je considère qu'un élément du domaine de plus faible sécurité
     cherche à récupérer de l'information sur le domaine de plus haute
     sécurité, sans l'aide d'un élément de ce dernier
   \item Les attaques internes, venant des éléments de la passerelle
@@ -669,7 +669,7 @@ capable de garantir une latence de traversée maximum ainsi qu'un débit garanti
 par construction, le rendant compatible avec l'exigence
 \hyperlink{REQTEMPS001}{REQ\_TEMPS\_001}.\\
 Ces travaux ont donné lieu à deux brevets \cite{thierry2013daudit}\cite{thierry2013dctrl},
-mais la majorité des éléments techniques sont aujourd'hui maintenu secrets par
+mais la majorité des éléments techniques est aujourd'hui maintenue secrète par
 Thales. En conséquence, bien que ce moniteur de sécurité soit aujourd'hui une
 réalité, je ne peux pas donner dans le cadre de ce document plus
 d'informations sur son implémentation et son fonctionnement.
@@ -691,16 +691,16 @@ période inter-trame. Le principe est le suivant:
     d'information cachées. Dans le cadre de ma thèse, je considère qu'il
     s'agit du suivant:
     \begin{itemize}
-      \item Une durée inter-trame de 500 milisecondes correspond à la valeur
+      \item Une durée inter-trame de 500 millisecondes correspond à la valeur
         \emph{0}.
-      \item Une durée inter-trame de 1000 milisecondes correspond à la valeur
+      \item Une durée inter-trame de 1000 millisecondes correspond à la valeur
         \emph{1}.
     \end{itemize}
   \item L'émetteur émet des paquets dont le contenu est compatible avec la
     politique de sécurité avec une inter-arrivée variable, afin d'émettre de
     l'information binaire.
   \item Le récepteur reçoit les paquets et calcule la durée inter-trame. Il
-    détermine si la période est proche des 500 milisecondes (la donnée est
+    détermine si la période est proche des 500 millisecondes (la donnée est
     alors 0) ou proche de la seconde (la donnée est alors 1).
 \end{itemize}
 
@@ -804,7 +804,7 @@ de la fonction DPI sur un paquet réseau donné. A ce jour, les travaux de
 l'état de l'art sur le DPI ne prennent pas en considération la contrainte
 d'exécution bornée. Dans le cadre de ma thèse je n'ai néanmoins pas étudié
 de manière détaillée la fonction DPI, cette dernière étant particulièrement
-complexe est sujet de nombreux travaux qui lui sont dédié encore aujourd'hui.
+complexe est sujet de nombreux travaux qui lui sont dédiés encore aujourd'hui.
 
 \paragraph{Fonction DPI et passerelle multi-niveaux de sécurité}
 Étant donné que la passerelle intègre un mécanisme de séparation protocolaire
@@ -911,11 +911,11 @@ Je considère que le domaine de plus faible sécurité est limité à
 un et un seul compartiment, ordonnancé dans un c{\oe}ur du processeur où deux
 domaines de sécurité sont ordonnancés.
 Le contrôleur de cache n'ayant pas une mémoire extensible, je définit un
-nombre maximum de slots limité (égal à huit dans mon étude). Chaque
+nombre maximum de slots limité (égal à huit partitions dans mon étude). Chaque
 slot se comporte de manière autonome avec un nombre de ligne de cache
 configurable, ceci afin d'avoir une plus grande liberté dans la découpe du
 contrôleur de cache. Le principe de partitionnement est décrit plus loin.
-Je prend comme hypothèse que la politique de substitution des lignes de caches de chaque
+Je prends comme hypothèse que la politique de substitution des lignes de caches de chaque
 slot reste identique à l'état de l'art. Le nombre de ligne de cache de
 chacun d'entre eux doit donc être compatible de l'algorithme de substitution
 considéré. Par exemple, dans le cas d'un algorithme pseudo-LRU de type 4-ways,

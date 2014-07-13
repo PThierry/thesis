@@ -19,14 +19,14 @@
 
 \paragraph{}
 L'intégration des systèmes d'aide à la conduite et de gestion du multimédia a
-beaucoup évolué ces dernières année. De tels systèmes intègre à la fois des
-mécanique de protection de l'usager tel que l'{\it Anti-Lock Breaking System}
+beaucoup évolué ces dernières années. De tels systèmes intègre à la fois des
+mécaniques de protection de l'usager tels que l'{\it Anti-Lock Breaking System}
 (ABS) ou l'{\it Electronic Stability Control} (ESP). De tels sous-systèmes
 fonctionnent de manière autonome et n'autorisent aucune interaction
 utilisateur dans le cadre de leur fonctionnement. Ils restent cependant
-activable ou desactivable par le conducteur via une interface de contrôle.
-Ses sous-systèmes sont compatible d'exigences temps réel fortes, dûe à la
-problèmatique de sureté de fonctionnement qui leur est associée.\\
+activables ou desactivables par le conducteur via une interface de contrôle.
+Ses sous-systèmes sont compatibles avec des exigences temps réel fortes, dûes à la
+problèmatique de sûreté de fonctionnement qui leur est associée.\\
 Avec l'accroissement des performances des architectures embarquées basse
 consommation, de nouveaux sous-systèmes voient le jour dans l'infrastructure
 véhiculaire. C'est par exemple le cas des radars de reculs, parfois couplés à
@@ -48,7 +48,7 @@ Dans \cite{invehicle_survey}, l'auteur montre à quel point les réseaux
 d'interconnexion de systèmes vétroniques peuvent être complexes. Ces réseaux
 sont habituellement basés sur une infrastructure de bus CAN ({\it Controller
   Area Network}) interconnectés au travers de gateways. Ces dernières sont
-parfois à sens unique, afin d'assurer la sureté de fonctionnement de certains
+parfois à sens unique, afin d'assurer la sûreté de fonctionnement de certains
 sous-systèmes.\\
 Avec l'intégration de terminaux utilisateurs dans le cadre de la gestion du
 multimédia, viennent se greffer ces réseaux IP dont le cloisonnement est
@@ -63,7 +63,7 @@ des passerelles d'interconnexion devient alors de plus en plus élevé.\\
 L'ordinateur de bord, élément dont l'interface utilisateur est unifié, permet
 à la fois le paramétrage des élément non-sûrs (multimédia, gestion des
 périphériques utilisateurs) et des éléments critiques ((des)activation des
-différents sous-sytèmes d'aide à la conduite, etc). Une telle architecture
+différents sous-systèmes d'aide à la conduite, etc). Une telle architecture
 implique un support à la fois des problématiques de sûreté de fonctionnement
 mais aussi de sécurité, afin de protéger les sous-systèmes critiques de toute
 attaque ou impact dû à un comportement invalide d'un sous-système non-sûr
@@ -90,10 +90,10 @@ intégrés nécessitant un cloisonnement sécuritaire fort. En effet, un véhicule
 de ce type émet et reçoit des données dont la confidentialité peut être
 restreinte au pays ou à la coalition. Une telle problématique apparaît également
 dans les véhicules de police ou encore dans les véhicule médicalisés pouvant
-interagir avec une bases de données patients centralisée, du fait des exigences
+interagir avec une base de données patients centralisée, du fait des exigences
 de confidentialité associées aux données médicales.\\
 Dans le cas des véhicules militaires, des exigences de sûreté de
-fonctionnement sont également présente sur la partie caméra, lorsque le
+fonctionnement sont également présentes sur la partie caméra, lorsque le
 véhicule possède un blindage {\it transparent} (i.e. le conducteur s'appuie
 sur des caméras et des capteurs plutôt que sur des vitres).
 
@@ -128,12 +128,12 @@ Dans les systèmes systroniques sont définit trois réseaux d'interconnexion:
 \begin{itemize}
   \item Le réseau moteur, basé sur une architecture complexe de bus CAN,
     permettant de remonter l'ensemble des informations des différentes sondes,
-    mais aussi de contrôler certains relais et fonctions électroniques
+    mais aussi de contrôler certains relais et fonctions électroniques ;
   \item Le réseau critique, ayant de forte exigences de sûreté de
     fonctionnement, mais pas d'exigence de sécurité lorsqu'il est pris seul.
-    Ce réseau gère les éléments critique du véhicule tels que les caméras ou
-    les systèmes de désactivation des mécanismes défensif en cas d'ouverture
-    de portes
+    Ce réseau gère les éléments critiques du véhicule tels que les caméras ou
+    les systèmes de désactivation des mécanismes défensifs en cas d'ouverture
+    de portes ;
   \item Le réseau d'interconnexion au système d'information et de
     commandement, qui gère les antennes, les connexions avec les terminaux
     fantassin, la gestion de la voix ou encore le GPS
@@ -183,9 +183,9 @@ subordonnés.
 
 \paragraph{}
 L'interconnexion doit être garantie en terme de bande passante afin de pouvoir
-répondre aux besoins du domaine de sureté le plus faible. C'est un besoin
+répondre aux besoins du domaine de sûreté le plus faible. C'est un besoin
 important dans le traitement de flux vidéo ou voix émis à partir d'un domaine
-de sureté élevé. Dans ces deux cas, un débit et une latence garantis sont
+de sûreté élevé. Dans ces deux cas, un débit et une latence garantis sont
 nécessaires, comme définit dans l'exigence
 \hyperlink{REQTEMPS001}{REQ\_TEMPS\_001}. C'est également le
 cas de certains flux d'alerte, comme la remonté d'alarme des différentes
@@ -195,26 +195,26 @@ on s'appuiera sur du réseau TT-Ethernet (Time Triggered Ethernet) \cite{steiner2
 temporellement via un protocole type IEEE 1588 \cite{steiner2009ttethernet}.\\
 Néanmoins, les données transmises peuvent avoir à être filtrées afin d'éviter
 le transfert non maîtrisé de données confidentielles. Parce que les système de
-sureté plus faible ne peuvent être certifiés pour le traitement de flux
-dont le niveau de sureté est supérieur, ces derniers ne peuvent émettre de
-requêtes vers un domaine de sureté supérieur sans validation préalable par un agent de
+sûreté plus faible ne peuvent être certifiés pour le traitement de flux
+dont le niveau de sûreté est supérieur, ces derniers ne peuvent émettre de
+requêtes vers un domaine de sûreté supérieur sans validation préalable par un agent de
 confiance. Il peut parfois être exigé que la communication soit garantie à
-sens unique entre deux domaines de sureté hétérogènes. Dans ce dernier cas, un
+sens unique entre deux domaines de sûreté hétérogènes. Dans ce dernier cas, un
 moniteur de sécurité de type diode logicielle doit permettre de garantir que
 le flux d'interconnexion est à sens unique. Cela peut être le cas pour les
 sondes moteurs, qui ne devrait pas recevoir de requête de la part d'un élément
-de domaine de sureté plus faible, mais plutôt émettre une information de
+de domaine de sûreté plus faible, mais plutôt émettre une information de
 manière périodique, simplifiant dans le même temps leur comportement.
 
 \paragraph{}
 Les systèmes systroniques sont basés sur une interconnexion complexe de
-systèmes de niveau de sureté et de sécurité hétérogènes avec un grand nombre
+systèmes de niveau de sûreté et de sécurité hétérogènes avec un grand nombre
 d'interactions.\\
 Ces interactions nécessite d'être filtrées, validées voire inspectée afin de
-garantir à la fois le besoin sécuritaire et le besoin de sureté des différents
+garantir à la fois le besoin sécuritaire et le besoin de sûreté des différents
 sous-systèmes présents. Afin de permettre ces différents traitement, un
 équipement d'interconnexion doit être mis en place aux différents points de
-communications inter-domaines, et doit être compatible des exigences de sureté
+communications inter-domaines, et doit être compatible des exigences de sûreté
 et de sécurité des différents domaines qu'il interconnecte.\\
 Dépendant des réseaux qu'il interconnecte, ce dernier doit pouvoir fournir
 différents services à la fois en terme de sécurité et de temps réel. Ainsi,
@@ -231,7 +231,7 @@ les données de positionnements auxquelles accède le véhicule ne doivent pas
 uniquement à ceux qui sont utilisés dans le cadre de la coalition voire
 exclusivement du pays utilisateur.\\
 On constate ainsi que les systèmes systroniques, décrit ici dans le cas
-militaires, impliquent à la fois l'interconnexion de systèmes de sureté et de
+militaires, impliquent à la fois l'interconnexion de systèmes de sûreté et de
 sécurité hétérogènes, avec des exigences variables et des données multiples.
 La définition d'un équipement d'interconnexion modulaire est donc important
 pour limiter le coût de la solution complète. Cette problématique se retrouve
@@ -247,12 +247,13 @@ dans différents secteurs, comme le médical ou la police.
 \subsection{Définition d'une architecture de filtrage multi-fonctions pour les systèmes systroniques}
 
 \paragraph{}
-La conséquence de la problématique décrite en \ref{subsec:systronic_problematique} et que
+La conséquence de la problématique décrite en
+\ref{subsec:systronic_problematique} est que
 plusieurs type de connecteurs sont nécessaires, à divers endroits du systèmes
 systronique, avec des contraintes différentes, tant en terme de service rendu
 qu'en terme de sécurité et de temps réel.\\
 Définir une solution modulaire, apte à intégrer en entrée une configuration
-extérieur lors de la production serait un atout en terme de coût dans le cadre
+extérieure lors de la production serait un atout en terme de coût dans le cadre
 de la définition du système.
 
 \paragraph{}
@@ -266,15 +267,15 @@ connecteur. Ces conteneurs ont pour but d'être réutilisables, et ce
 indépendamment des autres conteneurs déployés, afin de limiter le coût de
 réimplémentation des fonctions et de re-certification de ces dernières.\\
 Certains traitements peuvent correspondre à des besoins sécuritaire ou de
-sureté de fonctionnement, comme la diode logicielle. Dans ce cas, le conteneur
+sûreté de fonctionnement, comme la diode logicielle. Dans ce cas, le conteneur
 doit pouvoir être certifié afin de garantir la fonction. Dans ce cas, on
 souhaite considérer cette fonction comme un moniteur de sécurité (ou de
-sureté), comme je l'ai décrit dans le Chapitre \ref{chap:solution_secu}. Dans
+sûreté), comme je l'ai décrit dans le Chapitre \ref{chap:solution_secu}. Dans
 d'autre cas, comme par exemple pour le filtre DPI, il peut être nécessaire
 d'intégrer un ensemble de fonctions comme une pile réseau, impliquant un
 volume de code plus grand et accroissant fortement le coût de certification
 associée. L'intérêt des conteneurs est donc de permettre une dissociation de
-la certification des différentes fonction, si ces dernières sont garanties
+la certification des différentes fonctions, si ces dernières sont garanties
 disjointes en terme logiciel. C'est par exemple le cas lorsque l'on s'appuie
 pour la séparation spatiale et temporelle sur des compartiments PikeOS
 \ref{sec:pikeos}.\\
@@ -301,7 +302,7 @@ pour les renvoyer vers un environnement de supervision déterminé.
 Dans le cadre du besoin systronique, il est souvent demandé que le connecteur
 soit capable de fournir une garantie de coût de traversée maximum (WCTT -
 Worst Case Traversal Time) pour les flux qu'il fait transiter.
-Comme décrit dans la Figure \ref{fig:block}, j'ai implémenter un mécanisme de
+Comme décrit dans la Figure \ref{fig:block}, j'ai implémenté un mécanisme de
 mesure du coût de traversée, qui débute lorsqu'un paquet est reçu par le
 conteneur {\it VE filter} et se termine lorsqu'un paquet retransmettant cette
 même donnée est émis par le conteneur {\it VE sender}.\\
@@ -316,8 +317,8 @@ il ne s'agit pas d'un ordonnancement hiérarchique mais d'un ordonnancement
 unique par l'ordonnanceur SCHED\_FIFO du noyau Linux.\\ 
 Si la maquette avait été faite sur base d'un ordonnancement hiérarchique,
 comme par exemple via l'usage d'un micro-noyau de virtualisation type PikeOS
-\ref{sec:pikeos}, il aurait alors nécessaire de déterminer correctement à la
-fois l'ordonnancement des différents conteneur et celles des tâches dans ces
+\ref{sec:pikeos}, il aurait alors été nécessaire de déterminer correctement à la
+fois l'ordonnancement des différents conteneurs et celles des tâches dans ces
 derniers. Pour répondre à cette problématique, j'ai défini dans la Table
 \ref{tab:contr_hier_tdm} cinq équations permettant de déterminer si le système est
 alors apte à garantir l'ordonnançabilité de l'ensemble des fonctions temps
@@ -330,7 +331,7 @@ global de type TDM.
 Comme vu précédemment, le connecteur a souvent une fonction de filtrage, soit
 pour valider le contenu des flux à transiter, soit pour assurer un transit à
 sens unique. Dans ces différents cas, la fonction de filtrage doit pouvoir
-remonter des alerte en cas de non-respect de la politique de filtrage ou en
+remonter des alertes en cas de non-respect de la politique de filtrage ou en
 cas d'incapacité à exécuter correctement son traitement (e.g. dans le cas
 d'un débit trop important). Ces remontées d'alertes doivent être prises en
 compte et transmises à un équipement dédié à la supervision. C'est ce qui est
@@ -373,17 +374,17 @@ Les traitements de la VE filter sont décomposés comme suit:
     statistique sur son coût d'exécution en générant un flux réseau
     représentatif, permettant d'avoir une valeur approchante mais non
     garantie, soit en s'appuyant sur une analyse statique du code.
-  \item Un émetteur, récupérant les paquets tagués par le recepteur comme
+  \item Un émetteur, récupérant les paquets tagués par le récepteur comme
     valide et qui les reexpédie vers le compartiment suivant. Le WCET de cette
-    tâche est assez stable, son coût étant dépendant que de la taille de
+    tâche est assez stable, son coût n'étant dépendant que de la taille de
     trame.
 \end{itemize}
 Dans le cas d'un véritable système DPI avec une politique de sécurité
 complexe, l'implémentation du filtre serait beaucoup plus complexe. Il
-impliquerait entre autres un mécanisme permettant de concaténer les message
+impliquerait entre autres un mécanisme permettant de concaténer les messages
 afin de reconstituer l'information de niveau application avant de pouvoir
 déterminer sa compatibilité avec la politique de sécurité. Il impliquerait de
-plus un mécanisme de gestion de queues de message multiples couplées à une
+plus un mécanisme de gestion de queues de messages multiples couplées à une
 politique de qualité de service assurant la priorisation de certains flux par
 rapport à d'autres. Dans le cadre de la maquette, la politique DPI en
 elle-même n'est pas l'élément dont je souhaite démontrer la faisabilité. Cette
@@ -406,7 +407,7 @@ sécurité et un autre de niveau supérieur) mais aussi lorsque l'on change de
 domaine de sûreté (afin d'assurer que le domaine de moindre sûreté ne
 vient pas impacter le domaine de plus fort niveau de sûreté).\\
 Ainsi, dans les systèmes systroniques, les remontées d'informations coalitions
-vers le domaine pays ne doivent dans le même temps assurer que les données
+vers le domaine pays doivent dans le même temps assurer que les données
 pays ne sont pas renvoyées vers le domaine coalition. L'usage d'un élément
 certifiable en coupure permet d'assurer cette fonction. C'est le but du
 conteneur Diode.\\
@@ -431,7 +432,7 @@ entre autre pour but de récupérer les alertes du conteneur Diode.
 \paragraph{}
 L'émetteur périodique (nommée VE Sender) exécute une tache périodique pour
 l'émission des paquets en sortie de passerelle. Le but de ce conteneur est
-d'assurer un débit (en nombre de trame) fixe, avec une période inter-trames
+d'assurer un débit (en nombre de trames) fixe, avec une période inter-trames
 également garantie. Ce conteneur permet de répondre à plusieurs besoins:
 \begin{enumerate}
   \item En cas d'émission vers un domaine de sûreté élevé, ce conteneur
@@ -478,7 +479,7 @@ passerelle générique.
 \paragraph{{\it Architecture et configuration}}
 
 \paragraph{}
-La configuration de la maquette et le flux d'entrée est décrit dans la Table \ref{tab:dut}.\\
+La configuration de la maquette et le flux d'entrée sont décrits dans la Table \ref{tab:dut}.\\
 \begin{table}
 \begin{center}
 \begin{tabular}{|l|l|}
@@ -517,7 +518,7 @@ La configuration de la maquette et le flux d'entrée est décrit dans la Table \re
 Le maquettage initial a été construit sur l'architecture logicielle de
 conteneurisation LXC (Linux Containers). Cette architecture s'appuie sur un
 seul noyau et un seul ordonnanceur en charge de gérer les tâches des
-différents conteneur. Dans ce cadre, l'ordonnancement n'est pas de type
+différents conteneurs. Dans ce cadre, l'ordonnancement n'est pas de type
 hiérarchique, du fait de l'unicité de l'ordonnanceur. Néanmoins, ce dernier
 est apte à différentier les différents conteneurs et donc de gérer une
 politique d'ordonnancement variable par conteneur. Dans le cadre du
@@ -532,12 +533,12 @@ l'impact du système Linux sur l'ordonnancement des tâches temps réel. En effet
 ce dernier permet entre autre de :
 \begin{itemize}
   \item Supporter le mode FULL\_PREEMPT, rendant le noyau preemptible (à
-    l'exception de certains éléments comme les gestionnaires d'interruption)
+    l'exception de certains éléments comme les gestionnaires d'interruption) ;
   \item Débrayer les priorités des différents threads kernel, afin qu'ils ne
-    puissent être plus prioritaire que les tâches temps réel
+    puissent être plus prioritaire que les tâches temps réel ;
   \item Limiter l'exécution des différentes {\it softirq} Linux au contexte du
     thread ksoftirqd, afin qu'elles ne puissent s'exécuter dans un contexte
-    d'appel système
+    d'appel système.
 \end{itemize}
 La capacité du noyau Linux à supporter le temps réel souple a été mesuré dans 
 \cite{rtlinux}.\\
@@ -568,7 +569,7 @@ décrit dans la Figure \ref{fig:mockup}.
 
 \paragraph{}
 Dans le cadre de la maquette, le système a été implémenté avec une politique
-d'ordonnancement de type Rate Monothonic, avec la configuration suivante :
+d'ordonnancement de type Rate Monotonic, avec la configuration suivante :
 {\small
 \begin{table}
 \begin{center}
@@ -664,7 +665,7 @@ quel que soit le profil de flux entrant, un flux entrant dont la période
 inter-trame est aléatoire a été généré afin de valider le comportement de la
 passerelle. Pendant l'émission de ce flux, le WCET et la période des trois
 tâches ont été mesurés. Les périodes minimums de la tâche Filter et Diode
-n'ont pas été définies, ces dernière étant directement dépendantes de la période
+n'ont pas été définies, ces dernières étant directement dépendantes de la période
 inter-trame du flux entrant.
 
 La Table \ref{tab:test1} décrit le premier jeu de mesures
@@ -799,10 +800,10 @@ l'émetteur périodique. L'usage de bursts permet d'accroître le débit mais
 implique plusieurs propriétés afin d'assurer malgré tout une maîtrise du
 profil de flux en sortie du connecteur:
 \begin{itemize}
-  \item La taille du burst doit être fixe
+  \item La taille du burst doit être fixe ;
   \item Le profil de flux sortant doit conserver un débit maximum déterminé,
     afin de permettre le calcul de la profondeur des buffers de l'émetteur
-    périodique en conséquence
+    périodique en conséquence ;
   \item Les profondeurs de buffers doivent être déterminées en nombre de
     paquets et non en octets, afin de ne pas être impacté par la variation de
     la taille des paquets.

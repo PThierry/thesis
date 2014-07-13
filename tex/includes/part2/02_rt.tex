@@ -35,7 +35,7 @@ cadre d'une passerelle d'interconnexion. Elle est en effet en charge de faire
 transiter des flux plus ou moins critiques, sur lesquels elle va exécuter un
 ensemble de traitements. Ces traitements, selon leur nature, ont également des
 niveau de criticité variables, impliquant la prise en compte du principe de criticité
-mixte afin de pouvoir limiter le nombre de traitements effecutés sur chaque
+mixte afin de pouvoir limiter le nombre de traitements effectués sur chaque
 flux en fonction de la capacité qu'a la passerelle à les exécuter, comme
 le précise l'Exigence \hyperlink{REQTEMPS002}{REQ\_TEMPS\_002}.\\
 Dans le même temps, la passerelle doit assurer une latence de traversée
@@ -47,12 +47,12 @@ Exigence \hyperlink{REQTEMPS001}{REQ\_TEMPS\_001}.
 
 \paragraph{}
 Les architectures logicielles compartimentées sont ordonnancées de façon
-similaire aux systèmes temps réels à ordonnancement hiérarchique \cite{regehr_evolving_2003}. On
+similaire aux systèmes temps réel à ordonnancement hiérarchique \cite{regehr_evolving_2003}. On
 définit alors un ordonnancement dit {\it global}, correspondant à l'ordonnancement des compartiments, et un ordonnancement dit {\it local}
 correspondant à l'ordonnancement des tâches dans un compartiment donné.\\
 Un {\it slot} est associé à chaque compartiment. Ce slot est une fraction
 temporelle périodique pendant laquelle le compartiment est autorisé à être
-exécuté. L'exécution successive de l'ensemble des slots du systèmes forme un
+exécuté. L'exécution successive de l'ensemble des slots du système forme un
 motif temporel strict et prédictible définissant la période TDM.
 
 \paragraph{}
@@ -80,7 +80,7 @@ politique d'ordonnancement EDF), l'ordonnancement global est calculé hors
 ligne. C'est ce calcul qui est considéré ici.
 
 \paragraph{}
-Plusieurs variables sont introduite dans la Table \ref{tab:vars} afin de formaliser l'ordonnançabilité
+Plusieurs variables sont introduites dans la Table \ref{tab:vars} afin de formaliser l'ordonnançabilité
 d'une architecture logicelle compartimentée sur une base TDM (Time Division
 Multiplexing) stricte.
 
@@ -215,7 +215,7 @@ Pour démontrer l'Équation \ref{eqn:edf_sched}, considérons le slot $i$ et l'ense
 exécuté localement avec une politique d'ordonnancement EDF dans ce slot.\\
 \noindent
 Le Slot $i$ est exécuté de manière périodique par l'hyperviseur, avec une
-période de $ST_i$ unités de temps. Les tâches exécutées dans ce slots le sont
+période de $ST_i$ unités de temps. Les tâches exécutées dans ce slot le sont
 pour une durée contigüe de $SC_i$ unité de temps. On commence par déterminer
 le scénario pire cas en terme de faisabilité pour cet ensemble de tâches. Ce
 dernier est arrive si:
@@ -427,10 +427,10 @@ $\tau_i = \{r_i, t_i, d_i, \chi_i, C_i\}$ où:
 %where the maximum criticality of a task is bound by
 %$\mathnormal{L}$. A task in a mixed-criticality system is characterized by a 5-tuple
 \begin{itemize}
-	\item $r_i \in \mathbb{N}$ est le moment distanciation du premier
+	\item $r_i \in \mathbb{N}$ est l'instant de réveil du premier
         travail de la tâche $\tau_i$;
 	\item $t_i \in \mathbb{N}^*$ est la période de la tâche $\tau_i$;
-	\item $d_i \in \mathbb{N}^*$ est l'échéance de la tâche $\tau_i$, $D_i \leq T_i$;
+	\item $d_i \in \mathbb{N}^*$ est l'échéance de la tâche $\tau_i$, $d_i \leq t_i$;
 	\item $\chi_i \in \mathbb{N}$ est le niveau de criticité
           maximum de la tâche $\tau_i$,
           $\chi_i \leq \mathnormal{L}$;
@@ -442,7 +442,7 @@ $\tau_i = \{r_i, t_i, d_i, \chi_i, C_i\}$ où:
 Nous considérons que $c_i(\ell)$ s'accroît de manière monotone pour un accroissement
 de $\ell$. Plus précisément, pour une tâche $\tau_i$:
 \begin{itemize}
-	\item $\forall m \in [1, \chi_i[$, $C_i(m) \leq c_i(m+1)$;
+	\item $\forall m \in [1, \chi_i[$, $c_i(m) \leq c_i(m+1)$;
 	\item $\forall m \in [\chi_i, \mathnormal{L}[$, $c_i(m) = c_i(\chi_i)$.
 \end{itemize}
 Cela suppose qu'aucune tâche ne s'exécute plus longtemps que son WCET pour son
@@ -459,17 +459,17 @@ est caractérisé par un 5-uplet $\{r_k^i, d_k^i, \mathcal{X}_k^i, C_k^i,
           $J_k^i$. Plus précisément: $d_k^i = r_k^i + d_i$;
 	\item $\mathcal{X}_k^i \in \mathbb{N}$ est la criticité de
           $J_k^i$, héritée de la tâche $\tau_i$: $\mathcal{X}_k^i = \mathcal{X}_i$;
-	\item $c_k^i \in \mathbb{N}^{\mathnormal{L}}$ est la taille
+	\item $C_k^i \in \mathbb{N}^{\mathnormal{L}}$ est la taille
           $L$ du vecteur de WCETs pour $J_k^i$, hérité de la tâche $\tau_i$: $c_k^i = c_i$;
 	\item $c_k^i \in \mathbb{N}^*$ est l'exact coût d'exécution
           du travail $J_k^i$. Du fait des spécifications de $\tau_i$, on peut dire
           que $c_k^i \leq c_i(\mathcal{X}_i)$, mais la valeur exacte de
-          $c_k^i$ n'est connue que lorsque $J_k^i$ termine sont exécution.
+          $c_k^i$ n'est connue que lorsque $J_k^i$ termine son exécution.
 \end{itemize}
 
 \begin{definition}
 Une tâche $\tau_i$ de criticité minimum $\ell+1$ est sujette à un \emph{dépassement
-d'exécution de niveau $\ell$}, si un travail instancié par $\tau_i$ dépasse sont
+d'exécution de niveau $\ell$}, si un travail instancié par $\tau_i$ dépasse son
 coût d'exécution pire cas de niveau $\ell$.
 \end{definition}
 
@@ -477,7 +477,7 @@ A tout instant $t$, on appelle le $j^\text{ème}$ travail $J_j^i$ instancié par l
 tâche $\tau_i$ \emph{disponible} si $t \geq r_j^i$ et $J_j^i$ n'a pas encore
 terminé son exécution. Le coût d'exécution effectif du travail $J_j^i$ n'est pas
 mesurable à partir des spécifications de $\tau_i$, mais ne sera connu qu'une
-fois que $J_j^i$ aura terminé sont exécution.
+fois que $J_j^i$ aura terminé son exécution.
 A tout instant $t$ on appelle le \emph{scénario} $s_i^t$ de la tâche $\tau_i$
 comme l'ensemble des coûts d'exécution exacts $\{c_1^i, c_2^i, ..., c_k^i\}$
 pour chacun des $k$ travaux instanciés par $\tau_i$ qui ont déjà terminé leur
@@ -495,7 +495,7 @@ niveau de criticité propre ($c_j^i > c_i(\chi_i)$).
 \begin{definition}
 Un ordonnancement pour un scénario $s^t$ de niveau de criticité $\ell$ est
 faisable si tous les travaux $J_j^i \in s_i^t$, $\forall i$, avec $\chi_i \geq \ell$,
-termine sont temps d'exécution $c_j^i$ entre son instanciation et son
+terminent leur temps d'exécution $c_j^i$ entre son instanciation et son
 échéance.
 \end{definition}
 Cette définition implique que l'ordonnancement à criticité mixte n'a pour but
@@ -613,11 +613,21 @@ Les transitions ont les significations suivantes:
 Considérons un ensemble de tâches à triple criticité ($\mathnormal{L} = 3$) 
 $\tau = \{\tau_1, \tau_2, \tau_3\}$, avec:
   
-\begin{itemize}
-	\item $\tau_1: \{0, 5, 5, 1, (1,1,1)\}$;
-	\item $\tau_2: \{0, 7, 7, 2, (1,3,3)\}$;
-	\item $\tau_3: \{0, 8, 8, 3, (1,3,7)\}$.\\
-\end{itemize}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+tâche & $r_i$ & $t_i$ & $d_i$ & $\chi_i$ & $C_i$ \\
+\hline
+\hline
+$\tau_1$ & 0 & 5 & 5 & 1 & (1,1,1) \\
+\hline
+$\tau_2$ & 0 & 7 & 7 & 2 & (1,3,3) \\
+\hline
+$\tau_3$ & 0 & 8 & 8 & 3 & (1,3,7) \\
+\hline
+\end{tabular}
+\end{center}
+
 Tout scénario pour lesquels aucun travail ne dépasse un coût d'exécution de 1 est
 de criticité 1, tandis que tout scénario pour lequel les tâches $\tau_2$ et
 $\tau_3$ s'exécutent pour au moins 2 unités de temps et au plus 3 unités de
@@ -627,9 +637,9 @@ finir, tout autre scénario est erroné.
 \end{exmpl}
 
 \begin{definition}
-Le temps de réponse pire cas $r^*_i$ de la tâche $\tau_i$ est la durée maximum
+Le temps de réponse pire cas $\phi_i$ de la tâche $\tau_i$ est la durée maximum
 pour exécuter la tâche $\tau_i$, en prenant en compte l'exécution de toutes
-les tâches de priorités supérieures à $\tau_i$. On a $r^*_i \geq c_i(\chi_i)$.
+les tâches de priorités supérieures à $\tau_i$. On a $\phi_i \geq c_i(\chi_i)$.
 \end{definition}
 
 \begin{definition}
@@ -748,7 +758,7 @@ un ordre de priorité $\tau_1 \vartriangleright \tau_2 \vartriangleright ...
 \vartriangleright \tau_n$ implique que chaque travail instancié par la tâche
 $\tau_i$ aura $c_i(\chi_i)$ unités de temps d'exécution si aucun travail instancié par une tâche 
  $\tau_j \in \{\tau_1, \tau_2, ..., \tau_{i-1}\}$ s'exécute plus de
- $C_j(\chi_i)$ unités de temps. En conséquence, $\tau_i$ respecte
+ $c_j(\chi_i)$ unités de temps. En conséquence, $\tau_i$ respecte
  effectivement son échéance dans tout scénario de criticité $\chi_i$ ou
  inférieure.
 \end{proof}
@@ -913,11 +923,11 @@ Au travers de cette section, les concepts et notations suivantes sont utilisés:
                           des travaux disponibles instanciés par les tâches $\tau_j \in \mathrm{lp}(i,\ell)$;
 			\item L'équation suivante permet de calculer
                           la borne supérieure du temps de réponse pire cas
-                          $r_i$ de $\tau_i$:
+                          $\phi_i$ de $\tau_i$:
 				\begin{equation}\label{equ:responseTime}
-					r^*_i = c_i(\chi_i) +
+					\phi_i = c_i(\chi_i) +
                                         \sum\limits_{\tau_p \in
-                                        \mathrm{hp}(i)} \left\lceil \dfrac{r^*_i}{t_p} \right\rceil \times c_p(\chi_i)
+                                        \mathrm{hp}(i)} \left\lceil \dfrac{\phi_i}{t_p} \right\rceil \times c_p(\chi_i)
 				\end{equation}
 		\end{itemize}
 \end{itemize}
@@ -941,7 +951,7 @@ satisfaite:
 
 Le théorème suivant décrit comment calculer la marge de tolérance de niveau
 $\ell$ d'une tâche $\tau_i$ dans le cadre d'un ordonnancement à priorité fixe.
-Les priorités assignées aux tâches sont celles sont celles qui répondent au
+Les priorités assignées aux tâches sont celles qui répondent au
 conditions d'OCBP-ordonnançabilité. Le calcul de $A_i(\ell)$ est basé sur le
 temps de réponse pire cas des tâches avec la marge de tolérance intégrée.
 
@@ -966,11 +976,11 @@ temps de réponse pire cas des tâches avec la marge de tolérance intégrée.
 	\begin{equation}\label{equ:cond2}
 		\begin{split}
 			&\forall \tau_j \in \mathrm{lp}(i,\ell): \\
-			&r^*_j = c_j(\chi_j) + \sum\limits_{\tau_p \in
-                        \mathrm{hp}(j)} \left\lceil \dfrac{r^*_j}{t_p} \right\rceil \times c_p(\chi_j) \\
+			&\phi_j = c_j(\chi_j) + \sum\limits_{\tau_p \in
+                        \mathrm{hp}(j)} \left\lceil \dfrac{\phi_j}{t_p} \right\rceil \times c_p(\chi_j) \\
 			&\quad\quad\quad\quad\quad+ \sum\limits_{\tau_p \in
                         \mathrm{hp}_{k-1}(i,\ell) \cup \tau_i} \left\lceil
-                        \dfrac{r^*_j}{t_p} \right\rceil \times A_i(\ell) \leq
+                        \dfrac{\phi_j}{t_p} \right\rceil \times A_i(\ell) \leq
                         d_j
 		\end{split}
 	\end{equation}
@@ -1174,7 +1184,7 @@ tâche $\tau_3$. La tâche $\tau_2$ reste inchangée.
 		\end{table}
 	
 	
-		L'espace de tolérance $A(1)$ est alors représenté par
+		L'espace de tolérance $A(2)$ est alors représenté par
                 l'ensemble d'équations \ref{equations::2}.
 		\begin{equation}
 			\left\{
@@ -1344,7 +1354,7 @@ pour terminer son exécution que la marge de tolérance ne lui permet. Dans ce
 cas, le niveau de criticité du scénario a besoin d'être augmenté.\\
 Dans cette Section, nous étudions la pertinence de conserver les tâches de
 priorité inférieure suspendues. Nous pensons que, si il est nécessaire de
-susprendre des tâches de priorité inférieure pour garantir les contraintes
+suspendre des tâches de priorité inférieure pour garantir les contraintes
 temporelles de tâches de criticité supérieure, cette décision reste
 réversible, et qu'il existe un instant où toutes les tâches peuvent de nouveau
 s'exécuter en concurrence, quel que soit leur niveau de criticité.\\
@@ -1364,7 +1374,7 @@ en attente d'ordonnancement à l'instant $t$.
 \end{definition}
 
 \begin{theorem}\label{theo:decreaseCriticality}
-Soit $\tau$ un ensemble de tâche périodique à criticité mixte
+Soit $\tau$ un ensemble de tâches périodiques à criticité mixte
 ordonnançable. Dès qu'un instant d'inactivité de niveau $\ell$ se produit
 dans l'ordonnancement de $\tau$, le niveau de criticité du scénario peut être
 réinitialisé à sa valeur la plus basse.

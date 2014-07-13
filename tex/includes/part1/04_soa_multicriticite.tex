@@ -51,7 +51,7 @@ en fonction des besoins. On peut ainsi différencier des traitements temps réel
 de traitement non temps réel. C'est typiquement le cas de Linux qui ordonnance
 des tâches temps réel et non temps réel en concurrence, en garantissant que
 les tâches temps réel sont prioritaires sur les autres. Il est également
-possible de pouvoir ordonnancer en concurrence deux jeu de tâches en utilisant
+possible de pouvoir ordonnancer en concurrence deux jeux de tâches en utilisant
 deux politiques d'ordonnancement différentes, pouvant ainsi optimiser les
 performances selon les propriétés de chaque jeu de tâches.\\
 Aujourd'hui, la plupart des travaux \cite{methodhierarchical}
@@ -63,7 +63,7 @@ réactivité associées à ceux-ci. Ainsi, dans \cite{methodhierarchical}, les
 auteurs différencient les tâches de traitements des interruptions matérielles,
 exigeant une forte réactivité, des autres tâches.
 La Figure \ref{fig:hierarchical_sample} décrit une répartition
-implémentée dans les noyau Linux jusqu'à la version 2.6.32. Le but de cette
+implémentée dans les noyaux Linux jusqu'à la version 2.6.32. Le but de cette
 classification de jeux de tâches et de pouvoir différencier l'ordonnancement:
 \begin{itemize}
 \item de certains traitements consécutifs à des évènements asynchrones, comme les
@@ -92,7 +92,7 @@ charge n'est pas connu de l'ordonnanceur global. Le cas de l'hyperviseur Xen
 est particulier, car il est capable de déterminer une variation de charge
 d'une machine virtuelle lorsque cette variation est la conséquence de
 traitements de type entrées/sorties. Celles-ci transitant par le domaine de
-contrôle, ce dernier peut alors informer l'hypervieur afin de modifier
+contrôle, ce dernier peut alors informer l'hyperviseur afin de modifier
 l'ordonnancement des machines virtuelles en conséquence. Les solutions de
 virtualisation ne s'appuyant pas sur un domaine d'administration, comme la
 famille L4 ou PikeOS de Sysgo, ne peuvent pas détecter une variation de charge
@@ -119,7 +119,7 @@ sont ordonnancés suivant une politique de type RM.
 
 \paragraph{}
 Ainsi, dans la solution Xen, une implémentation d'un ordonnanceur global
-qui se veut temps réel, que les développeur ont appelé S-EDF, a été faite afin d'assurer
+qui se veut temps réel, que les développeurs ont appelé S-EDF, a été faite afin d'assurer
 une réservation de ressource CPU minimum dans une fenêtre temporelle aux
 différentes machines virtuelles. Cependant, cette solution a ses limitations,
 principalement lorsque les tâches temps réel impliquent un grand nombre
@@ -134,12 +134,12 @@ dans \cite{rtvm}. Les auteurs proposent un nouvel ordonnanceur global, qu'ils dé
 Constant Bandwidth Server \cite{abeni1998integrating} (CBS)
 afin d'assurer une réservation stricte de charge processeur pour les
 différentes machines virtuelles, limitant fortement l'impact des tâches
-natives. La gestion concurrentes de jeux de tâches temps réel virtualisés et
+natives. La gestion concurrente de jeux de tâches temps réel virtualisés et
 de jeux de tâches natifs (ordonnancés directement par l'hôte) est donc un
 problème complexe à résoudre. Dans le cadre des architectures MLS, ce type
 d'architecture est nécessaire afin de pouvoir traiter les
 moniteurs de sécurité comme des tâches du {\it separation kernel}, ces
-dernières ne pouvant être intégrés à un OS virtualisés sans perdre leur
+dernières ne pouvant être intégrés à un OS virtualisé sans perdre leur
 certifiabilité.
 
 \subsection{Synthèse}
@@ -242,7 +242,7 @@ même moment, Baruah et al. \cite{RBaruah2011} ont formalisé l'analyse de
 temps de réponse de tâches à criticité mixte.
 
 \item Le second contexte dans lequel la criticité mixte est définie considère que
-parmis toutes les fonctionnalités déployées sur une unique plateforme de
+parmi toutes les fonctionnalités déployées sur une unique plateforme de
 calcul, certaines peuvent être plus critiques que d'autres en terme
 d'importance pour le bon fonctionnement général de la solution. C'est le cas
 que je considère dans ma thèse, dans le cadre de la définition d'une passerelle d'interconnexion systronique.
@@ -269,8 +269,8 @@ and Criticality Ceiling Protocol).
 Les principes de la criticité mixte permettent de réagir à une infaisabilité
 temporaire de l'ordonnancement de l'ensemble des tâches. On s'appuie alors sur
 le niveau de criticité prédéterminé pour chaque tâche afin de modifier le jeu
-de tâches afin d'assurer son ordonnançabilité dans cet état à criticté
-augmenté. Néanmoins, dans le cadre d'un ordonnancement de tâches périodiques
+de tâches afin d'assurer son ordonnançabilité dans cet état à criticité
+augmentée. Néanmoins, dans le cadre d'un ordonnancement de tâches périodiques
 sans dépendances entre les tâches de niveaux de criticité différents sur un seul processeur,
 les systèmes à criticité mixte ne permettent pas
 de diminuer le niveau de criticité du jeu de tâche tout en assurant
