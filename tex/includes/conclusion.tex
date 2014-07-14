@@ -98,7 +98,8 @@ Dans le cadre de ma thèse, j'ai validé la conformité de l'architecture
 générale en terme de sécurité et de temps réel. Pour cela, je me suis appuyé sur une
 architecture de type MultiLevel Security, basée sur un micro-noyau considéré
 de confiance, compatible avec les exigences temps réel au travers d'une
-certification DO-178B DALB.
+certification DO-178B DALB, ainsi que sur une architecture logicielle basée
+sur Linux dans le cadre des maquettages.
 
 
 Les contraintes de sécurité que j'ai prises en compte dans le cadre de ma thèse
@@ -109,7 +110,7 @@ de compléter la solution pour intégrer le support des exigences associées.
 
 Aux différentes contraintes de sécurité sont associés des
 modules logiciels certifiables, visant chacun à implémenter une fonction de
-sécurité donnée. Je dénote ces modules {\it moniteurs de sécurité}. Ces moniteurs
+sécurité donnée. Ces modules sont appelés {\it moniteurs de sécurité}. Ces moniteurs
 sont autonomes et compatibles avec l'ensemble des contraintes de temps réel. La
 sécurité de l'ensemble de la solution se construit au travers du chaînage de
 ces différents modules, en fonction des exigences de sécurité requises. 
@@ -155,15 +156,12 @@ La solution que je propose permet de répondre à diverses exigences de
 sécurité et de sûreté de fonctionnement. Pour cela, je propose l'intégration
 de plusieurs moniteurs de sécurité, comme la diode logicielle ou encore
 l'émetteur périodique. Néanmoins, seule la diode logicielle a été validée en
-terme de sécurité, au travers d'une Cible de Sécurité de Premier Niveau (CSPN)
-et d'une pré-évaluation au sens des Critères Communs, de niveau EAL5.
-Certaines propriétés de la fonction diode dépassant le niveau 5, la
-pré-évaluation a été validé pour un niveau EAL5+. Néanmoins, le moniteur
+terme de sécurité, au travers d'une Cible de Sécurité de Premier Niveau (CSPN).
+Néanmoins, le moniteur
 diode, tout comme les autres moniteurs, n'ont pas été validés en terme de
 fiabilité de fonctionnement, au travers d'une validation SIL. Cette validation
 est nécessaire pour assurer la conformité de l'implémentation du moniteur avec
 les contraintes de temps réel de la passerelle dans un cadre véhiculaire.
-
 
 De plus, la présence de compartiments non-certifiable dans le
 chemin de données, pour le

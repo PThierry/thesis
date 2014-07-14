@@ -64,7 +64,7 @@ echo '
 
 % bibliography
 \addcontentsline{toc}{chapter}{Bibliographie}
-\printbibliography[title=Bibliographie,filter=notown]
+\printbibliography[title=Bibliographie,keyword=notown]
 \newpage
 
 

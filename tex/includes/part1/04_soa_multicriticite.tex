@@ -139,7 +139,7 @@ de jeux de tâches natifs (ordonnancés directement par l'hôte) est donc un
 problème complexe à résoudre. Dans le cadre des architectures MLS, ce type
 d'architecture est nécessaire afin de pouvoir traiter les
 moniteurs de sécurité comme des tâches du {\it separation kernel}, ces
-dernières ne pouvant être intégrés à un OS virtualisé sans perdre leur
+dernières ne pouvant être intégrées à un OS virtualisé sans perdre leur
 certifiabilité.
 
 \subsection{Synthèse}
@@ -273,7 +273,7 @@ de tâches afin d'assurer son ordonnançabilité dans cet état à criticité
 augmentée. Néanmoins, dans le cadre d'un ordonnancement de tâches périodiques
 sans dépendances entre les tâches de niveaux de criticité différents sur un seul processeur,
 les systèmes à criticité mixte ne permettent pas
-de diminuer le niveau de criticité du jeu de tâche tout en assurant
+de diminuer le niveau de criticité du jeu de tâches tout en assurant
 le maintien de l'ordonnançabilité de l'ensemble de tâches.\\
 Dans le cadre de ma thèse, je m'appuie sur les principes de criticité mixte
 afin de pouvoir répondre à l'impossibilité initiale de pouvoir ordonnancer
@@ -288,7 +288,7 @@ processeur et qu'il n'y a pas de partage de ressources entre des tâches de
 niveaux de criticité différents.
 Dans le Chapitre \ref{sec:mixedcrit}, je propose néanmoins une solution, dans
 laquelle nous avons cherché tout d'abord à retarder
-l'augmentation du niveau de criticité du scénario, puis à déterminer l'instant ou il est possible de
+l'augmentation du niveau de criticité du scénario, puis à déterminer l'instant où il est possible de
 réinitialiser le niveau de criticité d'un jeu de tâches. Il devient alors possible
 de redescendre dans un état de criticité plus faible, et donc de relancer
 l'exécution de tâches qui avaient été suspendues.

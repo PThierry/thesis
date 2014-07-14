@@ -155,7 +155,7 @@ il n'a pas les droits d'accès.
 La plupart des études sur le sujet sont dans le domaine de la
 cryptanalyse \cite{sidechancube}\cite{sidechan}. Ces
 différentes études démontrent la capacité, au travers de l'étude de la consommation électrique
-des différents éléments d'un processeur \cite{sidechancube} ou via l'étude de
+des différents éléments d'un processeur \cite{germain}\cite{sidechancube} ou via l'étude de
 l'impact des caches processeurs sur le comportement temporel de
 l'algorithmique \cite{sidechan}, de récupérer des données sur la clef
 de chiffrement utilisée.\\
@@ -219,12 +219,21 @@ comme par exemple les systèmes DAC (Discretionary Access Control), MAC
 
 \paragraph{}
 La complexité du système dépend du besoin de certifiabilité. On définit
-initialement une cible d'évaluation (couramment appelée Target Of Evaluation).
+initialement une Cible de Sécurité (Security Target).
+
+\PhDdefinition{st}{Security Target}{
+  On appelle Security Target (ST, CdS en français) le document qui définit de
+manière complète et rigoureuse le problème sécuritaire associant un produit.
+}
+
+A partir de la Cible de Sécurité, on définit une cible d'évaluation
+(couramment appelée Target Of Evaluation), ainsi que le niveau d'assurance à
+atteindre.
 
 \PhDdefinition{toe}{Target Of Evaluation}{
   On appelle Target Of Evaluation (TOE) l'ensemble des éléments logiciels et
-  matériels qui seront évalués dans le cadre d'une certification, ainsi que le
-  niveau d'évaluation attendu, au sens des Critères Communs.
+  matériels qui seront évalués dans le cadre d'une certification, en fonction
+  du niveau d'assurance attendu, au sens des Critères Communs.
 }
 
 Le niveau de sécurité du TOE est donc dépendant du niveau
@@ -256,14 +265,15 @@ sont rappelées dans le Chapitre \ref{sec:mils}
 Lorsque l'on s'appuie sur une architecture de type compartimentation stricte
 de fonctions exécutées de manière autonome (comme par exemple via des
 technologies de virtualisation), la solution peut être compatible avec le principe
-de certification par composition.
+de certification composite, permettant une certification par delta.
 
-\PhDdefinition{certcomp}{Certification par composition}{
-On appelle certification par composition un principe permettant, lorsque la
-TCB est non modifiée, de ne certifier que les nouveaux composants
-venant s'appuyer sur cette dernière. Il n'est alors pas nécessaire de
-certifier à nouveau l'ensemble de l'architecture logicielle, TCB comprise.
+\PhDdefinition{certcomp}{Certification composite}{
+On appelle certification par composite un principe permettant, lorsque la
+TCB est non modifiée, de s'appuyer sur les précédentes certifications
+afin de refaire une certification de l'ensemble à moindre coût
+Cela permet de faire d'incrémenter la certification d'un produit.
 }
+
 Les systèmes compartimentés peuvent intégrer des compartiments certifiables
 implémentant un algorithme simple répondant à un besoin précis. Lorsque ce
 besoin est sécuritaire, il s'agit d'une fonction de sécurité.
@@ -567,9 +577,9 @@ Lookaside Buffer), réduisant ainsi les requêtes au contrôleur mémoire.
 Le   principe   de   fonctionnement   de   la   pagination    fournit    plusieurs    avantages    :
 \begin{itemize}
 \item A chaque processus est associé un AS (espace d'adressage) qui  lui  est  propre.
-Ainsi, il se voit seul en mémoire et il ne possède plus la capacité d'accéder aux autres  processus.
-En effet, l'accès à la mémoire physique se fait via un accès à une adresse  virtuelle.   Pour  qu'un
-processus y accède, une association entre adresse physique et adresse virtuelle, locale à cet espace
+Ainsi, il se voit seul en mémoire et toute tentative d'accès à la mémoire qui
+ne lui est pas officiellement fournie sera bloquée par la MMU.
+En effet, pour  qu'un processus y accède, une association entre adresse physique et adresse virtuelle, locale à cet espace
 d'adressage doit avoir été faite par le noyau au préalable, via configuration de la MMU. Lors de la
 création d'un processus, seules les adresses physiques correspondant  à  ces  propres  données  sont
 intégrées à l'espace d'adressage, interdisant à ce dernier  d'accéder  aux  données  de  tout  autre

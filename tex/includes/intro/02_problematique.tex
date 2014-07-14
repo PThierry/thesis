@@ -23,7 +23,7 @@
 \paragraph{}
 Le client étatique français (Direction Générale de l'Armement)
 demande aujourd'hui d'interconnecter divers réseaux
-embarqués dans un véhicules. Dans le cadre des véhicules militaires, ces
+embarqués dans un véhicule. Dans le cadre des véhicules militaires, ces
 réseaux peuvent transmettre des informations ayant des contraintes de temps réel, de fiabilité mais
 également de sécurité.\\
 La contrainte sécuritaire est présente dans les véhicules militaires, mais également dans
@@ -31,7 +31,7 @@ d'autres domaines comme le médical (accès aux données médicales du patient dans 
 véhicule) ou la police (accès aux différentes bases de données). Dans le même
 temps, les exigences de temps réel et de fiabilité restent fortement présentes
 dans le cadre des véhicules militaires. Ainsi la fiabilité de la gestion du système
-d'armes, en charge de débrayer les mécanismes d'attaque lors de l'ouverture d'une
+d'arme, en charge de débrayer les mécanismes d'attaque lors de l'ouverture d'une
 des portes du véhicule, est critique, afin d'éviter tout accident. De la même
 manière, les contraintes de temps réel sont fortement présentes dans le cas du
 système de gestion du blindage transparent, en charge de remonter l'ensemble des
@@ -80,21 +80,22 @@ systèmes.
 \PhDdefinition{sys}{Système}{
   On appelle système un ensemble d'éléments matériels et logiciels
   interagissant ensemble dans le but d'effectuer une fonction ou un ensemble
-  de fonctions connexes donné(e).
+  de fonctions connexes donné.
 }
 
 \PhDdefinition{sysdesys}{Système de systèmes}{
   On appelle système de systèmes un ensemble complexe faisant s'interconnecter
   plusieurs systèmes entre eux. Une telle interconnexion peut être par exemple la
-  conséquence d'un besoin de supervision centralisé.
+  conséquence d'un besoin de supervision centralisée.
 }
 
 Dans un véhicule militaire, on retrouve un système de systèmes, en charge de
 gérer, entre autres:
 \begin{itemize}
 \item le système d'armes, en charge de gérer l'armement et le blindage ;
-\item le système de bord (appelé aussi réseau de bord du fait de son très ;
-grand nombre de liens d'interconnexion), en charge de gérer les composants moteur
+\item le système de bord (appelé aussi réseau de bord du fait de son très 
+grand nombre de liens d'interconnexion), en charge de gérer les composants
+moteur ;
 \item le système de communication, en charge de gérer les communications entre
 le véhicule et l'extérieur (autres véhicules, le quartier général, etc.).
 \end{itemize}
@@ -114,8 +115,13 @@ ports ou encore le positionnement des connecteurs. Il existe un grand nombre
 de facteurs de formes industriels, comme le microTCA \cite{walrod2008open}. 
 }
 
-Dans le cadre de ma thèse, je cible les problématiques d'interconnexions
+\noindent
+\fbox{
+\begin{minipage}{\linewidth}
+\noindent Dans le cadre de ma thèse, je cible les problématiques d'interconnexions
 internes aux systèmes systroniques.
+\end{minipage}
+}
 
 \subsection*{Notions et terminologies de sécurité}
 \label{subsec:secu}
@@ -150,7 +156,8 @@ un quelconque sujet non autorisé.
 \paragraph{}
 Dans la pratique, l'intégrité des données est le plus
 souvent vérifiée par des algorithmes de hachage ou des sommes de contrôle
-(par exemple le CRC32 des trames réseau Ethernet). On s'appuie également sur
+(par exemple le CRC32 des trames réseau Ethernet ou encore les algoritmes SHA1
+ou MD5 pour des besoins plutôt sécuritaires). On s'appuie également sur
 la cryptographie asymétrique pour générer des signatures, afin de garantir
 l'intégrité de la somme de contrôle.
 
@@ -174,7 +181,8 @@ sécurité nécessaire au respect des contraintes de sécurité du domaine.
 \paragraph{}
 Le niveau de sécurité d'un système se détermine grâce à un standard
 international : les Critères Communs (CC) pour l'évaluation sécuritaire des
-technologies de l'information \cite{cc_docs}. Ceux-ci définissent 7 niveaux, appelés EAL
+technologies de l'information \cite{cc_docs}. Ceux-ci définissent 7 niveaux
+d'assurance (confer Définition \ref{def:nivass}), appelés EAL
 (Evaluation Assurance Level), de EAL 1 (le plus faible) à EAL 7 (le plus
 élevé).
 
@@ -184,7 +192,7 @@ La fragilité d'un système en terme de sécurité dépend entre autres de sa surface
 On appelle surface d'attaque l'ensemble des portes d'entrées permettant d'impacter la
 sécurité du système. Il peut s'agir d'une interface réseau non protégée ou
 encore de processus logiciels possédant des failles exploitables. La mise en
-place de fonctions de sécurité (comme par exemple un pare-feu) permet de
+place de fonctions de sécurité (comme par exemple un pare-feu de confiance) permet de
 réduire la surface d'attaque.
 }
 
@@ -209,10 +217,11 @@ systèmes avioniques ou véhiculaires.
 }
 
 \PhDdefinition{nivass}{Niveau d'assurance}{
-On appelle niveau d'assurance le niveau de certification exigé sur les
-différents composants logiciels et matériels en terme de fiabilité ou de temps
-réel. Dans le cadre des systèmes véhiculaires, on s'appuie sur la norme SIL
-(Safety Integrity Level) \cite{smith2010safety}, graduée de 1 (niveau le plus faible)
+On appelle niveau d'assurance le niveau de certification exigé sur l'ensemble
+comprenant à la fois les différents composants logiciels et matériels. Il peut
+s'agir d'une certifiaction en terme de fiabilité ou de temps réel (e.g.
+certification SIL) ou en terme de sécurité (via les Critères Communs). Dans le cadre des systèmes véhiculaires, on s'appuie
+sur la norme SIL (Safety Integrity Level) \cite{smith2010safety}, graduée de 1 (niveau le plus faible)
 à 4 (niveau le plus fort). Cette dernière s'instancie, dans le cadre du
 logiciel embarqué véhiculaire, au travers des règles édictées par
 l'association MISRA (Motor Industry Software Reliability Association)
@@ -278,9 +287,7 @@ interconnexion d'un grand nombre de réseaux basés par exemple sur des bus série 
 CAN \cite{iso11898}, agrégeant l'ensemble des éléments d'aide à la conduite.
 Le réseau de bord est principalement basé sur des automates matériels avec une
 faible présence du logiciel. Ce réseau possède de fortes contraintes
-temps réel et de fiabilité, sans considération particulière en terme de sécurité. L'absence de
-sécurité vient du fait que l'ensemble des acteurs physiques et logiques
-composant ce réseau sont maîtrisés et certifiés.
+temps réel et de fiabilité, sans considération particulière en terme de sécurité.
 
 \paragraph{}
 Le réseau de bord n'est aujourd'hui plus le seul réseau présent dans les
@@ -296,6 +303,7 @@ multimédia fournis par le véhicule nécessitent d'être protégés d'éléments
 logiciels extérieurs non maîtrisés. Ainsi, le système multimédia du véhicule
 doit être protégé contre les terminaux mobiles s'y connectant, comme les
 téléphones portables ou les tablettes.
+
 \paragraph{}
 Dans le cadre du besoin véhiculaire militaire, le réseau multimédia fournit
 principalement des mécanismes de communication radio entre véhicules (au sein d'un
@@ -325,7 +333,7 @@ et dont la résolution reste complexe, correspond à l'intégration sur un même
 matériel de plusieurs réseaux indépendants. Il s'agit d'un partage, sur un
 unique matériel pour des raisons d'exigences de volume, de poids ou de
 consommation, de plusieurs traitements logiques dont le cloisonnement doit être
-garanti. Ce cloisonnement est exigé pour des raisons de sureté afin que le
+garanti. Ce cloisonnement est exigé pour des raisons de sûreté afin que le
 partage du matériel ne vienne pas impacter le bon fonctionnement des
 environnements logiciels.
 
@@ -345,7 +353,8 @@ coupure \cite{tsf101}. Ces solutions restent aujourd'hui difficiles à intégrer
 sur les systèmes embarqués, du fait de cette colocalisation. En effet, il s'agit la plupart du temps de
 solutions impliquant plusieurs éléments matériels disjoints, principalement
 sur des architectures de type x86 et sont en général intégrables
-sous forme d'une lame format 1U ou supérieur.
+sous forme d'une lame format 1U ou supérieur (format classique des {\it
+appliances}, pour permettre une bonne intégration dans les baies).
 %\paragraph{}
 %Le niveau de sécurité d'un système dépend de l'impact de la non-garantie d'une
 %ou plusieurs des propriétés associées à son domaine de sécurité.\\
@@ -423,8 +432,8 @@ un système complexe interconnectant des éléments:
   \item fortement temps réel (devant garantir l'échéance de l'ensemble des
   tâches) ;
   \item temps réel souple (pouvant autoriser des dépassements d'échéance si
-  ceux-ci sont ni trop combreux ni consécutifs) ;
-  \item non temps réel (sans principe d'échéance.
+  ceux-ci sont ni trop nombreux ni consécutifs) ;
+  \item non temps réel (sans principe d'échéance).
 \end{itemize}
 Aux contraintes temporelles auxquelles répondent les modèles temps réel
 s'ajoutent des contraintes de fiabilité. Elles sont présentes sur la grande
@@ -439,6 +448,7 @@ L'interconnexion de tous ces domaines (tant de sécurité que temps réel) est
 néanmoins demandée. En effet, il est nécessaire dans un véhicule muni d'un
 système systronique de:
 \begin{itemize}
+  \item cloisonner de manière efficace les domaines de sécurité et de sûreté ;
   \item transférer de l'information désensibilisée d'un domaine de haut niveau
     de sécurité à un domaine de moindre niveau de sécurité ;
   \item remonter de l'information d'un domaine de plus bas niveau de sécurité à un domaine
@@ -471,7 +481,7 @@ indépendants :
 \begin{itemize}
   \item le système de bord, en charge des éléments d'aide à la conduite et
   devant respecter des contraintes temps réel et de fiabilité ;
-  \item le système d'armes, ayant ces mêmes propriétés ;
+  \item le système d'arme, ayant ces mêmes propriétés ;
   \item le système de communication, sans propriété de sûreté mais avec un
   grand nombre de contraintes de sécurité.
 \end{itemize}
@@ -515,7 +525,7 @@ Les éléments en coupure sont malheureusement difficilement intégrables. En
 effet:
 \begin{itemize}
   \item ils sont souvent volumineux et consommateurs de courant ;
-  \item il ne sont pas certifiables pour les systèmes contraints avec
+  \item ils ne sont pas certifiables pour les systèmes contraints avec
     des exigences physiques comme la résistance aux vibrations ;
   \item leur facteur de forme n'est pas prévu pour de l'embarqué.
 \end{itemize}
@@ -663,6 +673,8 @@ effectuées \cite{thierry2013etfa}. Trois moniteurs de sécurité ont été réalisés:
 La fonction diode a également été implémentée dans le cadre d'un preuve de
 concept répondant à l'ensemble des exigences sécuritaires (architecture MLS, compartimentation
 forte, usage d'un ordonnancement TDM, nettoyage du cache lors du changement de
-domaine) et une pré-évaluation EAL5+ a été faite, associée à un dépôt de
-brevet \cite{thierry2013daudit}\cite{thierry2013dctrl}.
+domaine). Afin de valider la preuve de concept, une CSPN (Cible de Sécurité de
+Premier Niveau) a été faite, associée à un dépôt de
+brevet \cite{thierry2013daudit}\cite{thierry2013dctrl}, suivie d'une
+pré-évaluation EAL5+ du micro-noyau sous-jacent.
 

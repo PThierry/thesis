@@ -35,12 +35,12 @@ cadre d'une passerelle d'interconnexion. Elle est en effet en charge de faire
 transiter des flux plus ou moins critiques, sur lesquels elle va exécuter un
 ensemble de traitements. Ces traitements, selon leur nature, ont également des
 niveau de criticité variables, impliquant la prise en compte du principe de criticité
-mixte afin de pouvoir limiter le nombre de traitements effectués sur chaque
+mixte afin de pouvoir limiter le nombre de traitements effectué sur chaque
 flux en fonction de la capacité qu'a la passerelle à les exécuter, comme
 le précise l'Exigence \hyperlink{REQTEMPS002}{REQ\_TEMPS\_002}.\\
 Dans le même temps, la passerelle doit assurer une latence de traversée
 bornée, pour que les données transmises soient encore valides (confer
-Exigence \hyperlink{REQTEMPS001}{REQ\_TEMPS\_001}.
+Exigence \hyperlink{REQTEMPS001}{REQ\_TEMPS\_001}).
 
 \subsection{Hiérarchie et Time Division Multiplexing}
 \label{sec:hierarchicalrt}
@@ -193,10 +193,10 @@ tâches en mode TDM/EDF\label{tab:contr_hier_tdm}}
 \end{table}
 
 Les contraintes globales sont les suivantes:\\
-L'Equation \ref{eqn:vm_load_sum} garantie que la charge processeur est
+L'Equation \ref{eqn:vm_load_sum} garantit que la charge processeur est
 inférieur à 1. L'Equation \ref{eqn:slots_relative} est une condition
 nécessaire pour assurer l'usage de slots temporels périodiques. L'Equation
-\ref{eqn:slots_pgcd} est une confition suffisante pour assurer que les slots
+\ref{eqn:slots_pgcd} est une condition suffisante pour assurer que les slots
 ne se chevauchent pas, comme définit dans \cite{schedcond}.\\
 La Figure \ref{fig:hyp_global_sched} décrit un exemple de répartition
 temporelle entre différents slots.\\
@@ -218,7 +218,7 @@ Le Slot $i$ est exécuté de manière périodique par l'hyperviseur, avec une
 période de $ST_i$ unités de temps. Les tâches exécutées dans ce slot le sont
 pour une durée contigüe de $SC_i$ unité de temps. On commence par déterminer
 le scénario pire cas en terme de faisabilité pour cet ensemble de tâches. Ce
-dernier est arrive si:
+dernier arrive si:
 \begin{itemize}
 \item Toutes les tâches sont relâchées simultanément (en $t_0$)
 \item Le slot $i$ a déjà été exécuté entre $t_{-SC_i}$ et $t_0$, de telle
@@ -288,7 +288,7 @@ le noyau Linux étant très riche il s'appuie:
     pire cas pour les processus ordonnancés car leur propre exécution est impactée
     par ces fonctions. Ces dernières étant de plus en plus fréquentes avec les
     nouvelles versions du noyau, et sont difficiles à dimensionner. Néanmoins,
-    des travaux commencent à être fait pour intégrer leur impact
+    des travaux commencent à être faits pour intégrer leur impact
     dans le cadre d'analyses d'ordonnançabilité \cite{lewandowski2007modeling}.
 \end{itemize}
 
@@ -322,7 +322,7 @@ borne supérieure à cette initialisation.\\
 Pour cela, je me suis appuyé sur de
 l'outillage de test \cite{abeni2002measurement} pour simuler une forte charge à
 la fois en terme d'entrées/sorties, d'accès mémoire et de charge processeur.
-Je décrit plus précisément ces différentes mesure dans le Chapitre \ref{sec:passsystronique},
+Je décris plus précisément ces différentes mesure dans le Chapitre \ref{sec:passsystronique},
 dans le cadre d'un maquettage de la solution sur une architecture logicielle
 basée sur GNU/Linux. Les mesures ont montré qu'il est possible de garantir une
 borne supérieure à l'instanciation d'une tâche temps réel y compris en cas de
@@ -353,8 +353,8 @@ tâches nécessaire aux divers traitements. L'Exigence
 définie dans le Chapitre \ref{sec:matrix} est alors respectée.
 
 Ainsi, dans le cadre d'une passerelle multi-niveaux en charge de traitements
-réseaux, il est possible de classifier ces différents traitements en fonction
-de leur impact fonctionnel, et donc de déterminer une classification en terme
+réseaux, il est possible de classer ces différents traitements en fonction
+de leur impact fonctionnel, et donc de déterminer une classement en terme
 de criticité mixte. La Figure \ref{fig:net_multicriticity} décrit ainsi un
 ensemble de tâches $\tau$ en charge de traitements divers sur plusieurs flux.
 Le niveau de criticité n'est pas porté par le flux lui même mais par le type
@@ -668,7 +668,7 @@ est égal à son niveau de criticité $\mathcal{X}_i$, on peut associer chaque
 tâche $\tau_j \in \tau$ à une tâche traditionnelle $\tau_j'$, pour laquelle le
 coût d'exécution pire cas de $\tau_j'$ est égal à $c_j(\mathcal{X}_j)$. En
 revenant à un ensemble de tâches traditionnel, les résultats démontrés par
-Liu \cite{Liu2000} sont réutilisable, ce qui prouve notre théorème.
+Liu \cite{Liu2000} sont réutilisables, ce qui prouve notre théorème.
 \end{proof}
 
 \subsection{Ordonnançabilité d'un jeu de tâches à criticité mixte\label{sufficientCondition}}

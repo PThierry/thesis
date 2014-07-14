@@ -84,7 +84,9 @@ pour les machines virtuelles. Les limites comportementales, en terme
 d'élection de la machine virtuelle ayant la plus petite échéance relative, ont été montrées plusieurs fois
 \cite{cucinotta_respecting_2009}\cite{cherkasova2007comparison}\cite{govindan2007xen}.\\
 De plus, Xen ne permet pas à ce jour de définir des politiques d'ordonnancement strictes
-de type Time Division Multiplexing, nécessaire pour garantir un cloisonnement
+de type Time Division Multiplexing. Un tel ordonnancement est nécessaire pour
+assurer que le comportement d'une machine virtuelle ne vient jamais impacter
+temporellement les autres machines virtuelles. Cet ordonnancement est donc nécessaire pour garantir un cloisonnement
 strict en terme de sécurité. Ainsi, la variation de charge CPU liée à une machine
 virtuelle impliquera une diminution ou une augmentation de charge CPU allouée à
 une autre machine virtuelle, générant ainsi un canal auxiliaire (confer
@@ -157,7 +159,7 @@ pas être utilisé comme Separation Kernel.
 
 \paragraph{}
 QubesOS \cite{rutkowska2010qubes} est une solution logicielle ciblant les postes de travail. Les
-exigences initiales de la solution Qubes sont de pouvoir assurer la
+exigences initiales de la solution QubesOS sont de pouvoir assurer la
 confidentialité des données personnelles et professionnelles. Afin de pouvoir
 répondre à ces exigences, QubesOS s'appuie sur une architecture compartimentée
 exécutant de manière autonome des environnements
@@ -168,7 +170,7 @@ limiter l'accès au matériel pour les environnements compartimentés.
 \subsubsection{Synthèse de la solution QubesOS}
 
 \paragraph{}
-La solution Qubes s'appuie sur l'hyperviseur Xen et un mécanisme d'agrégation
+La solution QubesOS s'appuie sur l'hyperviseur Xen et un mécanisme d'agrégation
 de la sortie graphique afin de permettre un accès unifié aux applications des
 différents domaines de confidentialité. De plus, elle intègre un
 outillage complexe et des mécanismes de communication entre les compartiments
@@ -321,6 +323,12 @@ un compartiment spatial donné. C'est par l'assignation d'une compartimentation
 spatiale et temporelle à chaque entité devant être ordonnancée que la
 solution PikeOS permet à la fois de supporter des exigences en terme de temps réel
 et de sécurité.
+
+\paragraph{}
+En terme de portabilité, la solution PikeOS a déjà été portée sur un grand
+nombre d'architectures processeur (ARM, PowerPC, MIPS, x86, etc.), et est
+conçu pour simplifier (et donc limiter le coût financier) d'un portage vers
+une nouvelle architecture, selon le besoin.
 
 \subsubsection{Synthèse de la solution PikeOS}
 \label{subsub:pikesynth}

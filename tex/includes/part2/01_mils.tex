@@ -27,7 +27,7 @@ chapitre suivant.
 \label{sec:mls_gw_principle}
 
 \paragraph{}
-Dans le cadre de la problématique des systèmes systronique, il est nécessaire
+Dans le cadre de la problématique des systèmes systroniques, il est nécessaire
 de considérer la colocalisation de domaines de sûreté et de sécurité disjoints
 sur un même matériel. Cette exigence correspond à l'Exigence \hyperlink{REQSECUR005}{REQ\_SECUR\_005}
 de la matrice de conformité du Chapitre \ref{sec:matrix}. Pour répondre à cette problématique, je propose
@@ -75,7 +75,7 @@ complémentaires. L'ensemble est alors appelé Extended Secure Separation Kernel
 Au dessus du Separation Kernel, je propose l'implémentation de modules logiciels
 en charge de répondre aux mêmes besoins que les éléments de sécurité matériels
 définis dans le cadre des systèmes d'information. Ces modules sont en charge de répondre aux
-exigences fonctionnelles et sécuritaires décrite dans la Problématique.
+exigences fonctionnelles et sécuritaires décrite dans la problématique.
 L'architecture logicielle que j'ai choisie est décrite dans ce chapitre.
 
 \subsection{Présence d'éléments non certifiables}
@@ -105,7 +105,7 @@ nécessaire de définir :
 \end{itemize}
 
 \paragraph{}
-Dans un premier temps, je définit pour les familles $Sec$ et $Unsec$ les
+Dans un premier temps, je définis pour les familles $Sec$ et $Unsec$ les
 propriétés suivantes afin d'assurer un cloisonnement strict entre ce qui est
 certifiable et ce qui ne l'est pas:
 
@@ -160,7 +160,7 @@ l'architecture.
 Dans le Chapitre \ref{sec:noncert}, je montre que l'usage de tels logiciels peut
 être envisagé si des éléments certifiables extérieurs sont présents, afin de
 rester compatible avec les quatre exigences initiales des architecture MLS.
-Dans le cadre de ma solution, je définit donc des éléments logiciels autonomes
+Dans le cadre de ma solution, je définis donc des éléments logiciels autonomes
 et certifiables portant une fonction de sécurité. Par la suite, j'appelle ces éléments logiciels
 des {\bf moniteurs de sécurité}:\\
 \PhDdefinition{secumonit}{Moniteur de sécurité}{
@@ -272,8 +272,8 @@ Dans le cadre de ma thèse, je cherche à répondre au besoin d'une passerelle
 multi-domaines de sécurité et multi-domaines de criticité. La fonction de
 cette passerelle est de permettre le transfert de flux réseau entre deux
 domaines dont le niveau de sécurité et le niveau de criticité sont différents.
-Aux propriétés du MLS décrites dans le Chapitre \ref{subsec:mls}, que le logicel
-doit supporter, il faut également intégrer des exigences complémentaires liées
+Aux propriétés du MLS décrites dans le Chapitre \ref{subsec:mls}, que le
+logiciel doit supporter, il faut également intégrer des exigences complémentaires liées
 au flux de données transmis entre deux domaines de sécurité. En effet, la
 capacité à transférer des données entre deux domaines de sécurité ne doit pas
 impacter le cloisonnement général de ceux-ci. Ces exigences sont les suivantes
@@ -359,7 +359,7 @@ sécuritaires en terme de confidentialité, intégrité et disponibilité.
 La solution consiste à permettre l'interconnexion sécurisée de deux domaines
 indépendants, avec des exigences temps réel et sécuritaires.
 Dans le cadre de la définition d'une telle architecture, la gestion des plans
-d'adressage IP est problématique pour le respect de l'Exigence
+d'adressage IP est problématique pour le respect de l'Éxigence
 \ref{req:transit_up}. Il est en effet nécessaire de permettre l'interconnexion
 de deux services sur deux réseaux disjoints tout en assurant que ces derniers
 ne soient pas capables de déterminer tout ou partie des informations réseaux
@@ -436,14 +436,18 @@ La surface d'attaque est décomposée en trois environnements disjoints:
   \item Les attaques externes initiées du coté du domaine de plus haute
     sécurité. Je considère alors qu'un élément de ce domaine cherche à faire
     sortir de l'information non autorisée vers le domaine de plus faible
-    sécurité, avec ou sans l'aide d'un élément de ce dernier
+    sécurité, avec ou sans l'aide d'un élément de ce dernier. Il y a alors
+    un risque de confidentialité du domaine Haut vers le domaine Bas.
   \item Les attaques externes initiées du coté du domaine de plus faible
     sécurité. Je considère qu'un élément du domaine de plus faible sécurité
     cherche à récupérer de l'information sur le domaine de plus haute
-    sécurité, sans l'aide d'un élément de ce dernier
+    sécurité, sans l'aide d'un élément de ce dernier. Il y a alors un risque
+    de confidentialité du domaine Bas vers le domaine Haut.
   \item Les attaques internes, venant des éléments de la passerelle
     appartenant à la famille $Unsec$, telle que décrite dans la Section
-    \ref{sec:noncert}, impactantes pour l'exigence \ref{req:escape}
+    \ref{sec:noncert}, impactantes pour l'exigence \ref{req:escape}. Il y a
+    lors un risque en terme de confidentialité, d'intégrité et de
+    disponibilité.
 \end{enumerate}
 Les éléments de la TCB (appartement à la famille $Sec$) sont considérés comme
 de confiance. En conséquence, ils ne sont pas considérés comme source
@@ -481,23 +485,26 @@ impact sur les exigences de sécurité.
   \hline
 \cellcolor{blue!25}Source & \cellcolor{blue!25}Attaque & \multicolumn{4}{|c|}{\cellcolor{blue!25}Exigence} \\
   \hline
-  \multicolumn{2}{|c|}{ } & \ref{req:integrity} & \ref{req:transit_up} & \ref{req:desensibilisation} & \ref{req:escape} \\ 
+  \multicolumn{2}{|c|}{ } & \ref{req:transit_up} & \ref{req:desensibilisation} & \ref{req:integrity} & \ref{req:escape} \\ 
   \hline
-  {\it Domaine inférieur} & Étude temporelle de la vitesse de transit du flux vers le domaine supérieur & & X & & \\
+  {\it Domaine inférieur} & Étude temporelle de la vitesse de transit du flux
+  vers le domaine supérieur & X & & & \\
   \hline
-  {\it Domaine supérieur} & Émission de flux non conforme de la configuration de sécurité & & & X & \\
+  {\it Domaine supérieur} & Émission de flux non conforme de la configuration
+  de sécurité & & X & & \\
   \hline
-  {\it Domaine supérieur} & Transfert de donnée par canal caché via variation du profil de flux & & & X & \\
+  {\it Domaine supérieur} & Transfert de donnée par canal caché via variation
+  du profil de flux & & X & & \\
   \hline
   {\it Interne} & Retransmission du flux au travers d'un canal non autorisé & & & & X \\
   \hline
-  {\it Interne} & Modification du contenu du flux avant retransmission & X & & & \\
+  {\it Interne} & Modification du contenu du flux avant retransmission & & & X & \\
   \hline
   {\it Interne} & Écoute par canal auxiliaire d'un flux transitant par un
-  autre compartiment pour retransmission & & X & & X \\
+  autre compartiment pour retransmission & X & & & X \\
   \hline
   {\it Interne} & Communication entre deux compartiments au travers d'un canal
-  caché & & X & & X \\
+  caché & X & & & X \\
   \hline
 \end{tabular}
 \caption{Profils d'attaques et impact sur les exigences sécuritaires\label{tab:threats}}
@@ -877,8 +884,8 @@ transmission de données entre deux compartiments
 \cite{percival2005cache}\cite{bernstein2005cache}. Il existe différentes
 manières de répondre à ce problème. La plus simple consiste à s'appuyer sur
 des c{\oe}urs processeurs différents pour chaque domaine de sécurité, tout en
-débrayant les caches partagés entre les c{\oe}urs. Selon l'architecture
-matérielle, la désactivation des caches partagés est plus ou moins impactante
+débrayant les mémoires caches partagées entre les c{\oe}urs. Selon l'architecture
+matérielle, la désactivation des mémoires caches partagées est plus ou moins impactante
 sur les performances du logiciel, au point de rendre ce dernier complètement
 inefficace. Dans ce cas, l'usage d'une architecture multi-CPU en lieu et
 place d'un SoC mono-CPU et multi-c{\oe}urs permet d'éviter un partage trop conséquent des
@@ -886,7 +893,7 @@ contrôleurs de caches. Cependant, dans le cadre de ma thèse, l'usage d'une
 architecture multi-CPU est incompatible avec les exigences de consommation.\\
 Un autre moyen est de positionner temporellement les domaines de sécurité de
 manière à ce qu'à un instant $t$, un et un seul domaine de sécurité s'exécute.
-Lors du changement de domaine, les caches sont alors flushés afin de ne pas
+Lors du changement de domaine, les mémoires caches sont alors flushées afin de ne pas
 transmettre d'information. Il est alors nécessaire de prendre en compte
 l'impact du flush de cache sur l'exécution de la solution.
 J'ai donc proposé un mécanisme permettant de
@@ -934,8 +941,8 @@ sécurité, qui correspond, dans le cadre de l'architecture logicielle que j'ai
 choisie, au {\it Secure Separation Kernel}. Cela implique de la part de la routine de
 configuration du contrôleur certaines propriétés:
 \begin{itemize}
-  \item La routine est positionnée dans un espace mémoire non-cachable ou
-    durant un laps de temps où le cache n'est pas actif
+  \item La routine est positionnée dans un espace mémoire non-cachable, car ne
+  doit pas impacter l'état du contrôleur de cache
   \item La routine doit être la plus petite possible (pour des raisons de
     performances)
   \item La routine doit être exécutée en mode superviseur exclusivement
@@ -991,7 +998,7 @@ logiciel.
 \subsection{Description de l'interface de contrôle du partitionnement du contrôleur de cache}
 
 \paragraph{}
-Dans cette Section, je décrit une proposition d'interface matérielle
+Dans cette Section, je décris une proposition d'interface matérielle
 permettant au logiciel de gérer une décomposition du contrôleur de cache en
 plusieurs slots indépendants. Cette interface cherche à être simple d'usage
 pour l'implémentation logicielle tout en supportant un comportement générique
