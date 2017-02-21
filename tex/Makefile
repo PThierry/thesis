@@ -33,13 +33,19 @@ MAKE=make
 #############################################################################
 TARGET	     = these_doctorat
 SOURCE	     = document.tex
+BOOK         = book.tex
 SOURCE_PREFIX= document
 OBJS	     = $(SOURCE:.tex=.aux) $(SOURCE:.tex=.log) $(SOURCE:.tex=.out) $(SOURCE:.tex=.toc) \
                $(SOURCE:.tex=.ist) $(SOURCE:.tex=.glo) $(SOURCE:.tex=.idx) $(SOURCE:.tex=.lof) \
                $(SOURCE:.tex=.brf) $(SOURCE:.tex=.bmt) $(SOURCE:.tex=.ind) $(SOURCE:.tex=.ilg) \
 	       $(SOURCE:.tex=.lot) $(SOURCE:.tex=.bbl) $(SOURCE:.tex=.blg) $(SOURCE:.tex=.maf) \
 	       $(SOURCE:.tex=.glg) $(SOURCE:.tex=.gls) $(SOURCE:.tex=.xdy) $(SOURCE:.tex=.run.xml) \
-               $(SOURCE:.tex=-blx.bib) *.ps *.mlf* *.mlt* *.mtc* document-fig*.tex *.log document-fig*.pdf tmp.inputs document.tex
+               $(SOURCE:.tex=-blx.bib) $(BOOK:.tex=.log) $(BOOK:.tex=.out) $(BOOK:.tex=.toc) \
+               $(BOOK:.tex=.ist) $(BOOK:.tex=.glo) $(BOOK:.tex=.idx) $(BOOK:.tex=.lof) \
+               $(BOOK:.tex=.brf) $(BOOK:.tex=.bmt) $(BOOK:.tex=.ind) $(BOOK:.tex=.ilg) \
+	       $(BOOK:.tex=.lot) $(BOOK:.tex=.bbl) $(BOOK:.tex=.blg) $(BOOK:.tex=.maf) \
+	       $(BOOK:.tex=.glg) $(BOOK:.tex=.gls) $(BOOK:.tex=.xdy) $(BOOK:.tex=.aux) \
+               *.ps *.mlf* *.mlt* *.mtc* document-fig*.tex *.log document-fig*.pdf tmp.inputs document.tex
 TODEL	     = tags *~ .*.swp
 LANG	     = $(shell cat config/config.tex|grep "newcommand.*lang"|sed -re "s:.*\{([fe][rn])\}.*:\1:")
 
@@ -71,6 +77,10 @@ compile :
 	while [ `cat $(SOURCE:.tex=.log) | grep 'may have changed.' | wc -l` -ge 1 ]; do $(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE); done
 	$(LATEXENV) $(LATEX) $(LATEXOPT) $(SOURCE) # for bibliography backrefs
 	mv $(SOURCE:.tex=.pdf) $(TARGET).uncompressed.pdf
+
+book: pdf
+	cp $(TARGET).compressed.pdf $(TARGET).pdf
+	$(LATEX) book.tex
 
 pdf: prepare_for_publication
 

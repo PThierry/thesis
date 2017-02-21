@@ -226,7 +226,7 @@
 %% Headers and footers configuration
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\pagenumbering{roman}					% specify page numbering
+%\pagenumbering{roman}					% specify page numbering
 \fancyhf{}						% clear previous headers
 
 \patchcmd{\thebibliography}{\section*{\refname}}{Références}{}{}
@@ -234,6 +234,17 @@
 
 %opening
 \begin{document}
+
+
+\pagestyle{fancy}
+\pagenumbering{arabic}					% update page number to arabic
+\fancyhf{} % clear all header and footer fields
+\fancyhead{}
+\fancyfoot{}
+%\fancyfoot[CO]{\thepage}		% Right Odd foot
+%\fancyfoot[CE]{\thepage}		% Left Even foot
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Specific algorithm2e french traduction
@@ -248,28 +259,17 @@
 %\dominilof
 
 \renewcommand{\headrulewidth}{0pt}			% disactive header bar
+\mainmatter
 
-\fancyhead{}
-\fancyfoot{}
 
-\phdPrintTitlePage
-
-%%%%%%%%%%%%%%%%%%%%%
-
-\pagestyle{fancy}
-\fancyhf{} % clear all header and footer fields
-\fancyhead[LE,RO]{\bfseries\thepage}    % Page number (boldface) in left on even
-\fancyhead[RE]{\bfseries\nouppercase{\leftmark}}      % Chapter in the right on even pages
-\fancyhead[LO]{\bfseries\nouppercase{\rightmark}}     % Section in the left on odd pages
+%\phdPrintTitlePage
 
 %%%%%%%%%%%%%%%%%%%%%
 
-\fancyfoot[RO]{\thepage/\pageref{LastPage}}		% Right Odd foot
-\fancyfoot[RE]{}					% Right Even foot
-\fancyfoot[LE]{\thepage/\pageref{LastPage}}		% Left Even foot
-\fancyfoot[LO]{}					% Left Odd foot
+%\fancyhead[LE,RO]{\bfseries\thepage}    % Page number (boldface) in left on even
 
-\frontmatter
+%%%%%%%%%%%%%%%%%%%%%
+%\frontmatter frontmater make page numbering roman
 
 \phdPrintDedication
 
@@ -286,7 +286,6 @@
 \listoffigures
 \listoftables
 
-\pagenumbering{arabic}					% update page number to arabic
 
 \renewcommand{\headrulewidth}{1pt}			% allow header bar
 \fancyhead[LO]{\leftmark}				% Left Odd header
@@ -314,12 +313,14 @@
 \nocite{thierry2013daudit}
 \nocite{thierry2013dctrl}
 \chapter*{Liste de mes publications}
+\thispagestyle{fancy}
 \printbibliography[heading=subbibliography,title=Conférences internationales,keyword=ownpub]
 \printbibliography[heading=subbibliography,title=Workshops,keyword=ownwshop]
 \printbibliography[heading=subbibliography,title=Brevets,keyword=ownpat]
 
-\mainmatter
 
+\fancyhead[RE]{\bfseries\nouppercase{\leftmark}}      % Chapter in the right on even pages
+\fancyhead[LO]{\bfseries\nouppercase{\rightmark}}     % Section in the left on odd pages
 \renewcommand{\headrulewidth}{1.0pt}
 \input{includes/intro/01_introduction.tex}
 
