@@ -32,7 +32,7 @@
 \usepackage[T1]{fontenc} 				% caracteres norme iso-8859.
 		 					% risque de ne pas marcher avec les fichiers crees
                          				% sous windows.
-\usepackage[francais]{babel}			% french support
+\usepackage[frenchb]{babel}			% french support
 \usepackage{amsfonts}					% special fonts support (math, etc)
 \usepackage{amsmath}
 \usepackage{amssymb}					% special symbols support
@@ -55,7 +55,7 @@
 \usepackage[pdftex,
             pagebackref=false,
             colorlinks=true,
-            linkcolor=blue
+            linkcolor=black
            ]{hyperref}					% allow interal links
 \usepackage{PhDglossaries}
            						% and doc content list 
@@ -129,11 +129,6 @@
 %% Specific words hyphenation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{config/cesure.tex}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Specific algorithm2e french traduction
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{config/algorithm_french.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Watermark for draft versions
@@ -239,6 +234,13 @@
 
 %opening
 \begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Specific algorithm2e french traduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{config/algorithm_french.tex}
+
+
 
 \dominitoc
 %\mtcsetrules{*}{off}
