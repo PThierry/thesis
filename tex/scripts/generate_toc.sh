@@ -68,19 +68,19 @@ echo '
 \newpage
 
 
-\thispagestyle{empty}
-\cleardoublepage
-\hbox{}
-\cleardoublepage
-\hbox{}
-\newpage
+%\thispagestyle{empty}
+%\cleardoublepage
+%\hbox{}
+%\cleardoublepage
+%\hbox{}
+%\newpage
 %\ifodd\value{page}\hbox{}\newpage\fi
 %\ifodd\value{page}\hbox{}\newpage\fi
 
 %\begingroup
 %\let\cleardoublepage\hbox{}
 %\let\clearpage\hbox{}
-\input{includes/endpage.tex}
+%\input{includes/endpage.tex}
 %\endgroup
 %\includepdf{includes/endpage.pdf}
 \end{document}' >> document.tex

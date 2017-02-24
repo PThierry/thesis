@@ -40,7 +40,7 @@
 \usepackage{fancyhdr}					% beautiful headers support
 \usepackage{lastpage}					% \lastpage support
 \usepackage{textcomp}					%
-\usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage[left=3cm,right=3cm,top=3cm,bottom=3cm]{geometry}
 \usepackage{calc}					% counter support
 \usepackage{datetime}					% personnalize dates
 \usepackage{algorithm2e}
@@ -288,10 +288,10 @@
 
 
 \renewcommand{\headrulewidth}{1pt}			% allow header bar
-\fancyhead[LO]{\leftmark}				% Left Odd header
-\fancyhead[RE]{}					% Right Even header
-\fancyhead[RO]{}					% Right Odd header
-\fancyhead[LE]{\rightmark}				% Left Even header
+%\fancyhead[LO]{\leftmark}				% Left Odd header
+%\fancyhead[RE]{}					% Right Even header
+%\fancyhead[RO]{}					% Right Odd header
+%\fancyhead[LE]{\rightmark}				% Left Even header
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Subfiles inclusion
@@ -319,8 +319,8 @@
 \printbibliography[heading=subbibliography,title=Brevets,keyword=ownpat]
 
 
-\fancyhead[RE]{\bfseries\nouppercase{\leftmark}}      % Chapter in the right on even pages
-\fancyhead[LO]{\bfseries\nouppercase{\rightmark}}     % Section in the left on odd pages
+\fancyhead[LE]{\bfseries\nouppercase{\leftmark}}      % Chapter in the right on even pages
+\fancyhead[RO]{\bfseries\nouppercase{\rightmark}}     % Section in the left on odd pages
 \renewcommand{\headrulewidth}{1.0pt}
 \input{includes/intro/01_introduction.tex}
 

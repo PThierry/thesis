@@ -447,16 +447,25 @@ d'assurer un débit (en nombre de trames) fixe, avec une période inter-trames
     émettre. Ce comportement permet d'être compatible avec l'Exigence 
     \hyperlink{REQSECUR005}{REQ\_SECUR\_005}.
 \end{enumerate}
-La période d'émission de l'émetteur périodique définit le débit maximum
-supporté par la passerelle.
 
-
-\begin{figure}
+\begin{figure}[htbp]
 \begin{center}
 \input{figures/paquet_forward.tex}
 \caption{Contrôle du débit à l'émission de la passerelle par l'émetteur périodique\label{fig:fw}}
 \end{center}
 \end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[width=12cm]{figures/rttest.pdf}
+\caption{Latence au démarrage de la tâche de priorité la plus élevée\label{fig:rttest}}
+\end{center}
+\end{figure}
+
+
+
+La période d'émission de l'émetteur périodique définit le débit maximum
+supporté par la passerelle.
 
 \paragraph{}
 Afin d'assurer un comportement temps réel de la passerelle, cette dernière
@@ -480,9 +489,10 @@ passerelle générique.
 
 \paragraph{}
 La configuration de la maquette et le flux d'entrée sont décrits dans la Table \ref{tab:dut}.\\
-\begin{table}
+
+\begin{table}[htbp]
 \begin{center}
-\begin{tabular}{|l|l|}
+  \begin{tabular}{|l|p{9cm}|}
   \hline
   {\bf Item} & {\bf Description} \\
   \hline
@@ -514,6 +524,8 @@ La configuration de la maquette et le flux d'entrée sont décrits dans la Table \
 \end{center}
 \end{table}
 
+
+
 \paragraph{}
 Le maquettage initial a été construit sur l'architecture logicielle de
 conteneurisation LXC (Linux Containers). Cette architecture s'appuie sur un
@@ -527,6 +539,7 @@ les tâches de supervision et de traitement sur des coeurs disjoints.
 Ainsi, les sets de tâches des conteneurs DPI, diode et Émetteur périodique
 sont tous réunis sur un seul c{\oe}ur, avec une politique d'ordonnancement de
 type POSIX SCHED\_FIFO.\\
+
 Afin de valider le comportement temps réel souple de Linux, ce dernier a été
 validé et utilisé avec le patch Linux-RT. Ce patch permet de fortement réduire
 l'impact du système Linux sur l'ordonnancement des tâches temps réel. En effet
@@ -542,13 +555,6 @@ ce dernier permet entre autre de :
 \end{itemize}
 La capacité du noyau Linux à supporter le temps réel souple a été mesuré dans 
 \cite{rtlinux}.\\
-
-\begin{figure}
-\begin{center}
-  \includegraphics[width=12cm]{figures/rttest.pdf}
-\caption{Latence au démarrage de la tâche de priorité la plus élevée\label{fig:rttest}}
-\end{center}
-\end{figure}
 
 \paragraph{}
 La Figure \ref{fig:rttest} montre que la tâche de priorité la plus élevée
@@ -672,7 +678,7 @@ La Table \ref{tab:test1} décrit le premier jeu de mesures
 
 \begin{table}[h!]
   \begin{center}
-  \begin{tabular}{|l|l|}
+    \begin{tabular}{|l|p{8cm}|}
      \hline
      \multicolumn{2}{|c|}{\bf Jeu de test 1} \\
      \hline
@@ -739,7 +745,7 @@ d'absorbtion de la passerelle. Ce flux est décrit dans la Table
 
 \begin{table}[h!]
   \begin{center}
-  \begin{tabular}{|l|l|}
+    \begin{tabular}{|l|p{8cm}|}
      \hline
      \multicolumn{2}{|c|}{\bf Jeu de test 2} \\
      \hline

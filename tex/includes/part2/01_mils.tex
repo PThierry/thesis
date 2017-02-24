@@ -481,7 +481,7 @@ Le Tableau \ref{tab:threats} liste les différents types d'attaques et leur
 impact sur les exigences de sécurité.
 
 \begin{table}[h!]
-\begin{tabular}{|l|p{5.5cm}|c|c|c|c|}
+  \begin{tabular}{|p{2.1cm}|p{5cm}|c|c|c|c|}
   \hline
 \cellcolor{blue!25}Source & \cellcolor{blue!25}Attaque & \multicolumn{4}{|c|}{\cellcolor{blue!25}Exigence} \\
   \hline
@@ -1106,12 +1106,12 @@ Tableau \ref{tab:pcr}.
 %%%%%%%%%%%%%%%%%%%%% PCR register table %%%%%%%%%%%%%%%%%%%%%
 \begin{center}
 \begin{table}[h!]
-\begin{tabular}{|l|p{12cm}|c|}
+\begin{tabular}{|l|p{10cm}|c|}
 \hline
 \textsc{champ} & \textsc{signification} & \textsc{droits} \\
 \hline
 bit A/B & 
-\begin{minipage}{12cm}
+\begin{minipage}{10cm}
 \vspace{2mm}
 Bit d'activation. Positionné à 0 au boot. Doit être positionné à 1 afin
 d'activer le mécanisme de partitionnement du contrôleur de cache. L'ensemble
@@ -1125,7 +1125,7 @@ RW
 \\
 \hline
 bit H &
-\begin{minipage}{12cm}
+\begin{minipage}{10cm}
 \vspace{2mm}
 Fige la configuration du contrôleur de cache. Si positionné à 1, plus aucune
 configuration des slots du contrôleur de cache ne peut être effectuée, y
@@ -1138,7 +1138,7 @@ RW
 \\
 \hline
 Slot count & 
-\begin{minipage}{12cm}
+\begin{minipage}{10cm}
 \vspace{2mm}
 Spécifie le nombre de slots qui seront utilisés. L'hyperviseur doit spécifier
 le nombre de slots configurés dans ce
@@ -1150,7 +1150,7 @@ RW
 \\
 \hline
 HVM & 
-\begin{minipage}{12cm}
+\begin{minipage}{10cm}
 \vspace{2mm}
 Active le support HVM (Hardware Virtual Machine). Le but est de permettre une
 gestion par le mécanisme de gestion de la virtualisation plutôt que par
@@ -1162,7 +1162,7 @@ RW
 \\
 \hline
 SBF &
-\begin{minipage}{12cm}
+\begin{minipage}{10cm}
 \vspace{2mm}
 Ce bit (Status Bit Field) est renseigné par le contrôleur de cache lors du
 passage en mode partitionné. Une
@@ -1233,12 +1233,12 @@ registres ont une valeur mise à 0x0.
 %%%%%%%%%%%%%%%%%%%%% SCR register table %%%%%%%%%%%%%%%%%%%%%
 \begin{center}
 \begin{table}[h!]
-\begin{tabular}{|l|p{12cm}|c|}
+\begin{tabular}{|l|p{10cm}|c|}
 \hline
 \textsc{champ} & \textsc{signification} & \textsc{droits} \\
 \hline
 AB &
-\begin{minipage}{12cm}
+\begin{minipage}{10cm}
 \vspace{2mm}
 Bit d'activation. Sa valeur par défaut est 0. Si l'hyperviseur change sa
 valeur pour 1, le contrôleur de cache, au moment de la validation de la
@@ -1250,7 +1250,7 @@ RW
 \\
 \hline
 Slot size &
-\begin{minipage}{12cm}
+\begin{minipage}{10cm}
 \vspace{2mm}
 Définit le nombre de lignes de caches du slot. Ce nombre doit être un multiple
 de 4.
@@ -1290,12 +1290,12 @@ La Table \ref{tab:cssr} décrit les différents champs du registre CSSR.
 %%%%%%%%%%%%%%%%%%%%% CSSR register table %%%%%%%%%%%%%%%%%%%%%
 \begin{center}
 \begin{table}[h!]
-\begin{tabular}{|l|p{12cm}|c|}
+\begin{tabular}{|l|p{10cm}|c|}
 \hline
 \textsc{champ} & \textsc{signification} & \textsc{droits} \\
 \hline
 SIB &
-\begin{minipage}{12cm}
+\begin{minipage}{10cm}
 \vspace{2mm}
 définit l'identifiant du slot courant. Il s'agit d'un masque où le numéro du
 slot est calculé par rapport au numéro du bit positionné à 1. Ainsi, soit
@@ -1307,7 +1307,7 @@ RW
 \\
 \hline
 U &
-\begin{minipage}{12cm}
+\begin{minipage}{10cm}
 \vspace{2mm}
 Champ {\it update}. Quand ce champ est positionné à 1 par l'hyperviseur, le
 contrôleur de cache relit le registre et change de slot en cours. Ainsi, dans

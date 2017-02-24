@@ -1,0 +1,470 @@
+InfoBegin
+InfoKey: ModDate
+InfoValue: D:20170224125434+01'00'
+InfoBegin
+InfoKey: PTEX.Fullbanner
+InfoValue: This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) kpathsea version 6.2.1
+InfoBegin
+InfoKey: Subject
+InfoValue: These – Informatique – l'Université Paris-Est
+InfoBegin
+InfoKey: CreationDate
+InfoValue: D:20170224125434+01'00'
+InfoBegin
+InfoKey: Author
+InfoValue: Philippe Thierry
+InfoBegin
+InfoKey: Keywords
+InfoValue: temps réel, sécurité, virtualisation, vétronique, hyperviseur, MILS
+InfoBegin
+InfoKey: Title
+InfoValue: Systèmes véhiculaires à domaines de sécurité et de criticité multiples : une passerelle systronique temps réel
+InfoBegin
+InfoKey: Creator
+InfoValue: LaTeX with hyperref package
+InfoBegin
+InfoKey: Producer
+InfoValue: pdfTeX-1.40.16
+PdfID0: d71b0c4b5c820722b1e737cc1e124862
+PdfID1: d71b0c4b5c820722b1e737cc1e124862
+NumberOfPages: 202
+BookmarkBegin
+BookmarkTitle: Résumé
+BookmarkLevel: 1
+BookmarkPageNumber: 5
+BookmarkBegin
+BookmarkTitle: Abstract
+BookmarkLevel: 1
+BookmarkPageNumber: 7
+BookmarkBegin
+BookmarkTitle: I Problématique générale et concepts clefs
+BookmarkLevel: 1
+BookmarkPageNumber: 19
+BookmarkBegin
+BookmarkTitle: Contexte et Problématique générale
+BookmarkLevel: 2
+BookmarkPageNumber: 21
+BookmarkBegin
+BookmarkTitle: Problématique des systèmes véhiculaires militaires
+BookmarkLevel: 3
+BookmarkPageNumber: 21
+BookmarkBegin
+BookmarkTitle: Notions et définitions générales
+BookmarkLevel: 3
+BookmarkPageNumber: 22
+BookmarkBegin
+BookmarkTitle: Notions et terminologies véhiculaires
+BookmarkLevel: 3
+BookmarkPageNumber: 26
+BookmarkBegin
+BookmarkTitle: Généralités sur les réseaux véhiculaires
+BookmarkLevel: 4
+BookmarkPageNumber: 26
+BookmarkBegin
+BookmarkTitle: Les systèmes systroniques
+BookmarkLevel: 4
+BookmarkPageNumber: 27
+BookmarkBegin
+BookmarkTitle: Enjeux et limitations de l'existant
+BookmarkLevel: 3
+BookmarkPageNumber: 29
+BookmarkBegin
+BookmarkTitle: Les enjeux des systèmes systroniques
+BookmarkLevel: 4
+BookmarkPageNumber: 29
+BookmarkBegin
+BookmarkTitle: Limitations de l'existant
+BookmarkLevel: 4
+BookmarkPageNumber: 30
+BookmarkBegin
+BookmarkTitle: Synthèse et éléments de solution
+BookmarkLevel: 3
+BookmarkPageNumber: 32
+BookmarkBegin
+BookmarkTitle: Concepts
+BookmarkLevel: 2
+BookmarkPageNumber: 35
+BookmarkBegin
+BookmarkTitle: Principes généraux de la sécurité
+BookmarkLevel: 3
+BookmarkPageNumber: 35
+BookmarkBegin
+BookmarkTitle: Terminologie militaire de la sécurité
+BookmarkLevel: 4
+BookmarkPageNumber: 35
+BookmarkBegin
+BookmarkTitle: Fuite d'informations: Canaux cachés et canaux auxiliaires
+BookmarkLevel: 4
+BookmarkPageNumber: 38
+BookmarkBegin
+BookmarkTitle: Ce que cible la sécurité logicielle
+BookmarkLevel: 4
+BookmarkPageNumber: 39
+BookmarkBegin
+BookmarkTitle: Cibles de sécurité et certifiabilité
+BookmarkLevel: 4
+BookmarkPageNumber: 39
+BookmarkBegin
+BookmarkTitle: Principes généraux des systèmes temps réel
+BookmarkLevel: 3
+BookmarkPageNumber: 41
+BookmarkBegin
+BookmarkTitle: Rappels sur les politiques d'ordonnancement
+BookmarkLevel: 4
+BookmarkPageNumber: 41
+BookmarkBegin
+BookmarkTitle: Principes généraux de la virtualisation
+BookmarkLevel: 3
+BookmarkPageNumber: 42
+BookmarkBegin
+BookmarkTitle: Concepts liés à la virtualisation et la compartimentation
+BookmarkLevel: 4
+BookmarkPageNumber: 42
+BookmarkBegin
+BookmarkTitle: Les solutions de virtualisation type I
+BookmarkLevel: 4
+BookmarkPageNumber: 42
+BookmarkBegin
+BookmarkTitle: Les solutions de virtualisation type II
+BookmarkLevel: 4
+BookmarkPageNumber: 45
+BookmarkBegin
+BookmarkTitle: Les solutions de virtualisation applicative
+BookmarkLevel: 4
+BookmarkPageNumber: 46
+BookmarkBegin
+BookmarkTitle: Les interactions entre le matériel, la sécurité et le temps réel
+BookmarkLevel: 3
+BookmarkPageNumber: 47
+BookmarkBegin
+BookmarkTitle: Principes de base de la MMU
+BookmarkLevel: 4
+BookmarkPageNumber: 47
+BookmarkBegin
+BookmarkTitle: A propos des contrôleurs de cache
+BookmarkLevel: 4
+BookmarkPageNumber: 50
+BookmarkBegin
+BookmarkTitle: Les algorithmes de gestion de caches
+BookmarkLevel: 4
+BookmarkPageNumber: 57
+BookmarkBegin
+BookmarkTitle: II État de l'art des solutions de sécurité et de temps réel
+BookmarkLevel: 1
+BookmarkPageNumber: 61
+BookmarkBegin
+BookmarkTitle: État de l'art de l'interconnexion sécurisée de domaines de sécurité hétérogènes
+BookmarkLevel: 2
+BookmarkPageNumber: 63
+BookmarkBegin
+BookmarkTitle: Sécurisation par séparation physique des traitements
+BookmarkLevel: 3
+BookmarkPageNumber: 64
+BookmarkBegin
+BookmarkTitle: Interconnexion sécurisée par passerelle de type diode matérielle
+BookmarkLevel: 4
+BookmarkPageNumber: 64
+BookmarkBegin
+BookmarkTitle: Firewall d'interconnexion de domaines de sécurité hétérogènes
+BookmarkLevel: 4
+BookmarkPageNumber: 65
+BookmarkBegin
+BookmarkTitle: Architectures MLS (MultiLevel Security) et MILS (Multi-Independent Level of Security)
+BookmarkLevel: 3
+BookmarkPageNumber: 66
+BookmarkBegin
+BookmarkTitle: Systèmes MLS, MILS et la haute sécurité
+BookmarkLevel: 4
+BookmarkPageNumber: 66
+BookmarkBegin
+BookmarkTitle: MLS et principe de virtualisation
+BookmarkLevel: 4
+BookmarkPageNumber: 68
+BookmarkBegin
+BookmarkTitle: Interconnexion sécurisée inter-domaines de sécurité
+BookmarkLevel: 3
+BookmarkPageNumber: 69
+BookmarkBegin
+BookmarkTitle: Le contrôle de flux et les passerelles de sécurité
+BookmarkLevel: 4
+BookmarkPageNumber: 69
+BookmarkBegin
+BookmarkTitle: Synthèse
+BookmarkLevel: 3
+BookmarkPageNumber: 69
+BookmarkBegin
+BookmarkTitle: État de l'art des solutions de virtualisation
+BookmarkLevel: 2
+BookmarkPageNumber: 71
+BookmarkBegin
+BookmarkTitle: Étude de la sécurité des solutions de virtualisation existantes
+BookmarkLevel: 3
+BookmarkPageNumber: 72
+BookmarkBegin
+BookmarkTitle: Étude de la solution Xen
+BookmarkLevel: 4
+BookmarkPageNumber: 72
+BookmarkBegin
+BookmarkTitle: Étude de la solution QubesOS
+BookmarkLevel: 4
+BookmarkPageNumber: 74
+BookmarkBegin
+BookmarkTitle: Étude de la solution LXC
+BookmarkLevel: 4
+BookmarkPageNumber: 75
+BookmarkBegin
+BookmarkTitle: Étude de la famille L4
+BookmarkLevel: 4
+BookmarkPageNumber: 76
+BookmarkBegin
+BookmarkTitle: Étude de la solution PikeOS
+BookmarkLevel: 4
+BookmarkPageNumber: 77
+BookmarkBegin
+BookmarkTitle: Synthèse
+BookmarkLevel: 3
+BookmarkPageNumber: 79
+BookmarkBegin
+BookmarkTitle: Focus sur l'ordonnancement hiérarchique et la criticité mixte
+BookmarkLevel: 2
+BookmarkPageNumber: 81
+BookmarkBegin
+BookmarkTitle: Solutions pour l'ordonnancement hiérarchique de tâches
+BookmarkLevel: 3
+BookmarkPageNumber: 81
+BookmarkBegin
+BookmarkTitle: Principes généraux de l'ordonnancement hiérarchique
+BookmarkLevel: 4
+BookmarkPageNumber: 81
+BookmarkBegin
+BookmarkTitle: Synthèse
+BookmarkLevel: 4
+BookmarkPageNumber: 84
+BookmarkBegin
+BookmarkTitle: État de l'art de l'ordonnancement de tâches à criticité mixte
+BookmarkLevel: 3
+BookmarkPageNumber: 85
+BookmarkBegin
+BookmarkTitle: Principe de la criticité mixte
+BookmarkLevel: 4
+BookmarkPageNumber: 85
+BookmarkBegin
+BookmarkTitle: Synthèse
+BookmarkLevel: 4
+BookmarkPageNumber: 87
+BookmarkBegin
+BookmarkTitle: III Proposition de solution logicielle de passerelle systronique
+BookmarkLevel: 1
+BookmarkPageNumber: 89
+BookmarkBegin
+BookmarkTitle: Rappel des contraintes et hypothèses générales
+BookmarkLevel: 2
+BookmarkPageNumber: 91
+BookmarkBegin
+BookmarkTitle: Matrice de conformité de la solution proposée
+BookmarkLevel: 3
+BookmarkPageNumber: 91
+BookmarkBegin
+BookmarkTitle: Définition des hypothèses générales
+BookmarkLevel: 3
+BookmarkPageNumber: 94
+BookmarkBegin
+BookmarkTitle: Hypothèses sur l'architecture matérielle
+BookmarkLevel: 4
+BookmarkPageNumber: 94
+BookmarkBegin
+BookmarkTitle: Proposition d'une architecture logicielle sécurisée pour le MLS orientée traitement de flux
+BookmarkLevel: 2
+BookmarkPageNumber: 97
+BookmarkBegin
+BookmarkTitle: Proposition d'architecture et choix structuraux
+BookmarkLevel: 3
+BookmarkPageNumber: 98
+BookmarkBegin
+BookmarkTitle: Principe de passerelle de traitement de flux MultiLevel Security
+BookmarkLevel: 4
+BookmarkPageNumber: 98
+BookmarkBegin
+BookmarkTitle: Présence d'éléments non certifiables
+BookmarkLevel: 4
+BookmarkPageNumber: 99
+BookmarkBegin
+BookmarkTitle: Moniteurs de sécurité
+BookmarkLevel: 4
+BookmarkPageNumber: 101
+BookmarkBegin
+BookmarkTitle: Synthèse des choix structuraux
+BookmarkLevel: 4
+BookmarkPageNumber: 101
+BookmarkBegin
+BookmarkTitle: Caractérisation du risque sécuritaire
+BookmarkLevel: 3
+BookmarkPageNumber: 102
+BookmarkBegin
+BookmarkTitle: Définition des données à protéger
+BookmarkLevel: 4
+BookmarkPageNumber: 102
+BookmarkBegin
+BookmarkTitle: Intégration des problématiques réseaux
+BookmarkLevel: 4
+BookmarkPageNumber: 105
+BookmarkBegin
+BookmarkTitle: Définition des profils d'attaque
+BookmarkLevel: 4
+BookmarkPageNumber: 106
+BookmarkBegin
+BookmarkTitle: Synthèse du risque sécuritaire
+BookmarkLevel: 4
+BookmarkPageNumber: 109
+BookmarkBegin
+BookmarkTitle: Définition des moniteurs de sécurité
+BookmarkLevel: 3
+BookmarkPageNumber: 109
+BookmarkBegin
+BookmarkTitle: Protection de l'intégrité des données
+BookmarkLevel: 4
+BookmarkPageNumber: 109
+BookmarkBegin
+BookmarkTitle: Garantie de transmission de flux sans canal auxiliaire inverse
+BookmarkLevel: 4
+BookmarkPageNumber: 111
+BookmarkBegin
+BookmarkTitle: Conformité des données transmises à la politique de sécurité
+BookmarkLevel: 4
+BookmarkPageNumber: 114
+BookmarkBegin
+BookmarkTitle: Compartimentation garantie
+BookmarkLevel: 4
+BookmarkPageNumber: 116
+BookmarkBegin
+BookmarkTitle: Problématique d'exploitation des canaux auxiliaires
+BookmarkLevel: 3
+BookmarkPageNumber: 116
+BookmarkBegin
+BookmarkTitle: Caches processeurs et canaux cachés
+BookmarkLevel: 4
+BookmarkPageNumber: 116
+BookmarkBegin
+BookmarkTitle: Hypothèses sur le comportement du contrôleur de cache proposé
+BookmarkLevel: 4
+BookmarkPageNumber: 117
+BookmarkBegin
+BookmarkTitle: Formalisme de l'interface de contrôle du contrôleur de cache
+BookmarkLevel: 4
+BookmarkPageNumber: 118
+BookmarkBegin
+BookmarkTitle: Description de l'interface de contrôle du partitionnement du contrôleur de cache
+BookmarkLevel: 4
+BookmarkPageNumber: 119
+BookmarkBegin
+BookmarkTitle: Principe et automate
+BookmarkLevel: 4
+BookmarkPageNumber: 119
+BookmarkBegin
+BookmarkTitle: Compatibilité d'une architecture sécurisée avec des contraintes de temps réel
+BookmarkLevel: 2
+BookmarkPageNumber: 127
+BookmarkBegin
+BookmarkTitle: Architectures compartimentées et temps réel
+BookmarkLevel: 3
+BookmarkPageNumber: 128
+BookmarkBegin
+BookmarkTitle: Rappel des exigences de temps réel
+BookmarkLevel: 4
+BookmarkPageNumber: 128
+BookmarkBegin
+BookmarkTitle: Hiérarchie et Time Division Multiplexing
+BookmarkLevel: 4
+BookmarkPageNumber: 128
+BookmarkBegin
+BookmarkTitle: Moniteurs de sécurité, fonctions temps réel et environnements non sécurisables
+BookmarkLevel: 3
+BookmarkPageNumber: 132
+BookmarkBegin
+BookmarkTitle: Compatibilité des moniteurs de sécurité avec le temps réel
+BookmarkLevel: 4
+BookmarkPageNumber: 132
+BookmarkBegin
+BookmarkTitle: Compatibilité des environnements non certifiables avec le temps réel
+BookmarkLevel: 4
+BookmarkPageNumber: 132
+BookmarkBegin
+BookmarkTitle: Intégration du support des flux à criticité mixte
+BookmarkLevel: 3
+BookmarkPageNumber: 134
+BookmarkBegin
+BookmarkTitle: Rappels et enjeux
+BookmarkLevel: 4
+BookmarkPageNumber: 134
+BookmarkBegin
+BookmarkTitle: Modèle et Définitions
+BookmarkLevel: 4
+BookmarkPageNumber: 135
+BookmarkBegin
+BookmarkTitle: Ordonnançabilité d'un jeu de tâches à criticité mixte
+BookmarkLevel: 4
+BookmarkPageNumber: 139
+BookmarkBegin
+BookmarkTitle: Retarder l'accroissement de criticité
+BookmarkLevel: 4
+BookmarkPageNumber: 141
+BookmarkBegin
+BookmarkTitle: Marge de tolérance
+BookmarkLevel: 4
+BookmarkPageNumber: 142
+BookmarkBegin
+BookmarkTitle: Implémentation de la marge de tolérance
+BookmarkLevel: 4
+BookmarkPageNumber: 149
+BookmarkBegin
+BookmarkTitle: Réinitialiser la Criticité du système
+BookmarkLevel: 4
+BookmarkPageNumber: 152
+BookmarkBegin
+BookmarkTitle: Simulations
+BookmarkLevel: 4
+BookmarkPageNumber: 154
+BookmarkBegin
+BookmarkTitle: Conclusion
+BookmarkLevel: 4
+BookmarkPageNumber: 156
+BookmarkBegin
+BookmarkTitle: Vers une passerelle sécurisée et temps réel pour le traitement de flux multi-critiques : cas d'usage véhiculaire
+BookmarkLevel: 2
+BookmarkPageNumber: 159
+BookmarkBegin
+BookmarkTitle: Rappel du besoin vétronique
+BookmarkLevel: 3
+BookmarkPageNumber: 159
+BookmarkBegin
+BookmarkTitle: Évolution des systèmes véhiculaires
+BookmarkLevel: 4
+BookmarkPageNumber: 159
+BookmarkBegin
+BookmarkTitle: Problématiques techniques des architectures vétroniques civiles et militaires
+BookmarkLevel: 4
+BookmarkPageNumber: 161
+BookmarkBegin
+BookmarkTitle: Définition d'une architecture logicielle pour une passerelle systronique
+BookmarkLevel: 3
+BookmarkPageNumber: 165
+BookmarkBegin
+BookmarkTitle: Définition d'une architecture de filtrage multi-fonctions pour les systèmes systroniques
+BookmarkLevel: 4
+BookmarkPageNumber: 165
+BookmarkBegin
+BookmarkTitle: Limitations de la solution technique et compléments
+BookmarkLevel: 3
+BookmarkPageNumber: 178
+BookmarkBegin
+BookmarkTitle: Conclusion générale
+BookmarkLevel: 1
+BookmarkPageNumber: 181
+BookmarkBegin
+BookmarkTitle: Glossaire des termes techniques
+BookmarkLevel: 1
+BookmarkPageNumber: 187
+BookmarkBegin
+BookmarkTitle: Bibliographie
+BookmarkLevel: 1
+BookmarkPageNumber: 193

@@ -81,6 +81,7 @@ compile :
 book: pdf
 	cp $(TARGET).compressed.pdf $(TARGET).pdf
 	$(LATEX) book.tex
+	pdftk ./book.pdf update_info_utf8 data.txt output book_final.pdf
 
 pdf: prepare_for_publication
 
